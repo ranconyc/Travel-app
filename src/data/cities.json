@@ -1,0 +1,5223 @@
+[
+  {
+    "id": "bangkok-th",
+    "city": "Bangkok",
+    "countryId": "thailand",
+    "countryCode": "TH",
+    "countryName": "Thailand",
+    "imageHero": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "BTS Skytrain & MRT",
+          "note": "Fast, air‑conditioned trains across key areas",
+          "badge": {
+            "text": "฿15–60",
+            "tone": "green"
+          }
+        },
+        {
+          "name": "Grab / Bolt",
+          "note": "Ride‑hailing apps similar to Uber"
+        },
+        {
+          "name": "Tuk‑tuk",
+          "note": "Fun short hops—agree the price first",
+          "badge": {
+            "text": "Negotiate",
+            "tone": "orange"
+          }
+        },
+        {
+          "name": "Chao Phraya Boat",
+          "note": "Scenic river transport to Old Town",
+          "badge": {
+            "text": "฿10–40",
+            "tone": "green"
+          }
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Generally safe; keep an eye on belongings in tourist zones.",
+        "healthTips": "Drink bottled water. Street food is popular; choose busy stalls. Consider travel insurance.",
+        "commonScams": [
+          "Gem scam",
+          "Closed temple scam",
+          "Overpriced tuk‑tuks near Grand Palace"
+        ]
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Many nationalities receive 30–60 days visa‑free/VOA; confirm for your passport.",
+        "passportValidityNote": "At least 6 months validity recommended from entry date."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Sawasdee (ka/krap)"
+          },
+          {
+            "en": "Thank you",
+            "local": "Khob khun (ka/krap)"
+          },
+          {
+            "en": "How much?",
+            "local": "Thao rai?"
+          },
+          {
+            "en": "Delicious",
+            "local": "Aroi"
+          }
+        ],
+        "englishProficiencyNote": "Moderate in tourist areas; translation apps help elsewhere."
+      },
+      "internet": {
+        "simNote": "Tourist SIMs at airport & 7‑Eleven (AIS, TrueMove, dtac).",
+        "simPriceBadge": {
+          "text": "฿200–500 (tourist packs)",
+          "tone": "green"
+        },
+        "wifiNote": "Hotels, cafés, and malls commonly offer free Wi‑Fi."
+      },
+      "emergency": {
+        "touristPolice": "1155",
+        "emergency": "191",
+        "ambulance": "1669",
+        "fire": "199"
+      },
+      "currencyMoney": {
+        "currencyName": "Thai Baht",
+        "currencyCode": "THB",
+        "symbol": "฿",
+        "exchangeRateNote": "$1 ≈ ฿32–34 (approx.)",
+        "paymentMethodsNote": "Cash common; cards in malls/hotels; ATMs widely available (fee may apply)."
+      },
+      "borders": ["LA", "KH", "MY", "MM"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["A", "B", "C"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Nov–Apr",
+        "typicalBudget": "$–$$$"
+      }
+    }
+  },
+  {
+    "id": "istanbul-tr",
+    "city": "Istanbul",
+    "countryId": "türkiye",
+    "countryCode": "TR",
+    "countryName": "Türkiye",
+    "imageHero": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1171",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Metro, Tram & Marmaray",
+          "note": "Cover most areas with transfers via Istanbulkart"
+        },
+        {
+          "name": "Ferries",
+          "note": "Scenic Bosphorus crossings between Europe & Asia"
+        },
+        {
+          "name": "Taxi / BiTaksi",
+          "note": "Use apps or insist on the meter"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Busy and generally safe; beware pickpockets in crowded areas.",
+        "healthTips": "Tap water may taste chlorinated; many prefer bottled. Pharmacies are common.",
+        "commonScams": [
+          "Overpriced taxi detours",
+          "Street bar scams in nightlife zones"
+        ]
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Many nationalities are visa‑free or e‑Visa eligible; check official site.",
+        "passportValidityNote": "6+ months validity advised."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Merhaba"
+          },
+          {
+            "en": "Please/Thanks",
+            "local": "Lütfen / Teşekkürler"
+          },
+          {
+            "en": "How much?",
+            "local": "Ne kadar?"
+          }
+        ],
+        "englishProficiencyNote": "Tourist areas moderate; basic Turkish helps."
+      },
+      "internet": {
+        "simNote": "Turkcell, Vodafone, Türk Telekom shops widely available.",
+        "simPriceBadge": {
+          "text": "Visitor bundles available",
+          "tone": "green"
+        },
+        "wifiNote": "Hotels/cafés commonly offer Wi‑Fi."
+      },
+      "emergency": {
+        "emergency": "112"
+      },
+      "currencyMoney": {
+        "currencyName": "Turkish Lira",
+        "currencyCode": "TRY",
+        "symbol": "₺",
+        "exchangeRateNote": "$1 ≈ ₺ (varies)",
+        "paymentMethodsNote": "Cards widely accepted; carry some cash for small vendors."
+      },
+      "borders": ["BG", "GR", "GE", "AM", "IR", "IQ", "SY"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["C", "F"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Apr–Jun & Sep–Oct",
+        "typicalBudget": "$$"
+      }
+    }
+  },
+  {
+    "id": "london-gb",
+    "city": "London",
+    "countryId": "united-kingdom",
+    "countryCode": "GB",
+    "countryName": "United Kingdom",
+    "imageHero": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Tube & Rail",
+          "note": "Fast across zones; contactless/Oyster works everywhere"
+        },
+        {
+          "name": "Buses",
+          "note": "24/7 network; great for short hops"
+        },
+        {
+          "name": "Ride‑hailing & Black Cabs",
+          "note": "Ubiquitous; Black Cabs can use bus lanes"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Well‑policed; watch for pickpockets in crowds.",
+        "healthTips": "Tap water is potable. NHS 111 for non‑emergency advice."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Check visitor visa rules based on nationality.",
+        "passportValidityNote": "Recommend 6+ months validity."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Hello"
+          },
+          {
+            "en": "Thanks",
+            "local": "Cheers/Thank you"
+          }
+        ],
+        "englishProficiencyNote": "High."
+      },
+      "internet": {
+        "simNote": "EE, O2, Vodafone, Three shops citywide.",
+        "wifiNote": "Cafés and museums offer Wi‑Fi."
+      },
+      "emergency": {
+        "emergency": "999 / 112"
+      },
+      "currencyMoney": {
+        "currencyName": "Pound Sterling",
+        "currencyCode": "GBP",
+        "symbol": "£",
+        "exchangeRateNote": "$1 ≈ £ (varies)",
+        "paymentMethodsNote": "Contactless cards/phones accepted almost everywhere."
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["G"]
+        }
+      },
+      "hero": {
+        "bestSeason": "May–Sep",
+        "typicalBudget": "$$–$$$"
+      }
+    }
+  },
+  {
+    "id": "hong-kong-hk",
+    "city": "Hong Kong",
+    "countryId": "hong-kong-sar",
+    "countryCode": "HK",
+    "countryName": "Hong Kong SAR",
+    "imageHero": "https://images.unsplash.com/photo-1620015092538-e33c665fc181?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "MTR",
+          "note": "Fast metro; use Octopus card"
+        },
+        {
+          "name": "Trams & Buses",
+          "note": "Iconic double‑deckers and ding‑ding trams"
+        },
+        {
+          "name": "Ferries",
+          "note": "Star Ferry between Kowloon & Island"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Very safe; crowded at peak hours."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Many passport holders enjoy visa‑free stays."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Nei hou (Cantonese)"
+          },
+          {
+            "en": "Thank you",
+            "local": "M̀h'gōi / Dōjeh"
+          }
+        ],
+        "englishProficiencyNote": "Good in business/tourist areas."
+      },
+      "internet": {
+        "simNote": "csl., 3HK, China Mobile HK.",
+        "wifiNote": "Widespread public Wi‑Fi."
+      },
+      "emergency": {
+        "emergency": "999"
+      },
+      "currencyMoney": {
+        "currencyName": "Hong Kong Dollar",
+        "currencyCode": "HKD",
+        "symbol": "$"
+      },
+      "borders": ["CN", "MO"],
+      "utilities": {
+        "electricity": {
+          "voltage": 220,
+          "frequencyHz": 50,
+          "plugs": ["G"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Oct–Dec",
+        "typicalBudget": "$$–$$$"
+      }
+    }
+  },
+  {
+    "id": "mecca-sa",
+    "city": "Mecca",
+    "countryId": "saudi-arabia",
+    "countryCode": "SA",
+    "countryName": "Saudi Arabia",
+    "imageHero": "https://images.unsplash.com/photo-1589827577276-65d717348780?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Haramain Train (via Jeddah)",
+          "note": "High‑speed link to Jeddah & Medina"
+        },
+        {
+          "name": "Local Buses & Shuttles",
+          "note": "Seasonal capacity during Hajj/Umrah"
+        },
+        {
+          "name": "Ride‑hailing",
+          "note": "Careem / Uber available"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Very secure; extreme crowd density during pilgrimage—follow officials’ guidance.",
+        "healthTips": "Hydrate and plan around heat; medical facilities available."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Specific Hajj/Umrah visa rules; check official portals."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "As‑salāmu ʿalaykum"
+          },
+          {
+            "en": "Thank you",
+            "local": "Shukran"
+          }
+        ],
+        "englishProficiencyNote": "Basic in service sectors; Arabic predominates."
+      },
+      "internet": {
+        "simNote": "STC, Mobily, Zain stores at airports/malls."
+      },
+      "emergency": {
+        "emergency": "911"
+      },
+      "currencyMoney": {
+        "currencyName": "Saudi Riyal",
+        "currencyCode": "SAR",
+        "symbol": "ر.س"
+      },
+      "borders": ["JO", "IQ", "KW", "QA", "AE", "OM", "YE"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 60,
+          "plugs": ["G"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Nov–Mar",
+        "typicalBudget": "$$–$$$"
+      }
+    }
+  },
+  {
+    "id": "antalya-tr",
+    "city": "Antalya",
+    "countryId": "türkiye",
+    "countryCode": "TR",
+    "countryName": "Türkiye",
+    "imageHero": "https://images.unsplash.com/photo-1593238738950-01f243cac6fc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1974",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Tram & Buses",
+          "note": "Cover beaches and old town"
+        },
+        {
+          "name": "Taxis / Rides",
+          "note": "Use meter; confirm fare for out‑of‑city trips"
+        },
+        {
+          "name": "Car Hire",
+          "note": "Useful for the coast (Kaş, Kemer)"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Resort city; usual precautions suffice."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Visa‑free/e‑Visa for many nationalities."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Merhaba"
+          }
+        ]
+      },
+      "internet": {
+        "simNote": "Visitor bundles via major carriers."
+      },
+      "emergency": {
+        "emergency": "112"
+      },
+      "currencyMoney": {
+        "currencyName": "Turkish Lira",
+        "currencyCode": "TRY",
+        "symbol": "₺"
+      },
+      "borders": ["BG", "GR", "GE", "AM", "IR", "IQ", "SY"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["C", "F"]
+        }
+      },
+      "hero": {
+        "bestSeason": "May–Oct",
+        "typicalBudget": "$$"
+      }
+    }
+  },
+  {
+    "id": "dubai-ae",
+    "city": "Dubai",
+    "countryId": "united-arab-emirates",
+    "countryCode": "AE",
+    "countryName": "United Arab Emirates",
+    "imageHero": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Metro & Tram",
+          "note": "Clean, driverless metro; Nol card"
+        },
+        {
+          "name": "Taxis & Ride‑hailing",
+          "note": "Reliable and plentiful"
+        },
+        {
+          "name": "Buses & Abra",
+          "note": "Creek abras are a must‑try"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Very safe; strict local laws—be respectful."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Many passports receive visa‑free/VOA; verify beforehand."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Marhaba"
+          },
+          {
+            "en": "Thank you",
+            "local": "Shukran"
+          }
+        ],
+        "englishProficiencyNote": "High in service sectors."
+      },
+      "internet": {
+        "simNote": "du & Etisalat at airport kiosks."
+      },
+      "emergency": {
+        "emergency": "999"
+      },
+      "currencyMoney": {
+        "currencyName": "UAE Dirham",
+        "currencyCode": "AED",
+        "symbol": "د.إ"
+      },
+      "borders": ["SA", "OM"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["G"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Nov–Mar",
+        "typicalBudget": "$$–$$$"
+      }
+    }
+  },
+  {
+    "id": "macau-mo",
+    "city": "Macau",
+    "countryId": "macau-sar",
+    "countryCode": "MO",
+    "countryName": "Macau SAR",
+    "imageHero": "https://images.unsplash.com/photo-1708580175277-6c171e822f94?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=3166",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Public Buses",
+          "note": "Cover main sightseeing areas"
+        },
+        {
+          "name": "Taxis",
+          "note": "Affordable; hotel shuttles often free"
+        },
+        {
+          "name": "Walking",
+          "note": "Compact UNESCO old town"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Very safe; compact and walkable."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Many nationalities visa‑free for short stays."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Nei hou / Olá"
+          }
+        ],
+        "englishProficiencyNote": "Moderate; signs often bilingual."
+      },
+      "internet": {
+        "wifiNote": "Public Wi‑Fi and hotel networks common."
+      },
+      "emergency": {
+        "emergency": "999"
+      },
+      "currencyMoney": {
+        "currencyName": "Macanese Pataca",
+        "currencyCode": "MOP",
+        "symbol": "MOP$"
+      },
+      "borders": ["CN", "HK"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["D", "M", "G"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Oct–Dec",
+        "typicalBudget": "$$"
+      }
+    }
+  },
+  {
+    "id": "paris-fr",
+    "city": "Paris",
+    "countryId": "france",
+    "countryCode": "FR",
+    "countryName": "France",
+    "imageHero": "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "Metro & RER",
+          "note": "Dense network; Navigo/Contactless"
+        },
+        {
+          "name": "Buses",
+          "note": "Good for short distances"
+        },
+        {
+          "name": "Walking",
+          "note": "Central arrondissements are very walkable"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Tourist areas are busy—watch for pickpockets.",
+        "healthTips": "Tap water safe. Pharmacies marked by green crosses."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Schengen rules apply for EU/EEA and third‑country nationals."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Bonjour"
+          },
+          {
+            "en": "Thank you",
+            "local": "Merci"
+          }
+        ],
+        "englishProficiencyNote": "Moderate to high in tourism."
+      },
+      "internet": {
+        "simNote": "Orange/SFR/Bouygues shops widely available."
+      },
+      "emergency": {
+        "emergency": "112"
+      },
+      "currencyMoney": {
+        "currencyName": "Euro",
+        "currencyCode": "EUR",
+        "symbol": "€"
+      },
+      "borders": ["BE", "DE", "CH", "IT", "ES", "LU", "MC", "AD"],
+      "utilities": {
+        "electricity": {
+          "voltage": 230,
+          "frequencyHz": 50,
+          "plugs": ["C", "E"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Apr–Jun & Sep",
+        "typicalBudget": "$$–$$$"
+      }
+    }
+  },
+  {
+    "id": "kuala-lumpur-my",
+    "city": "Kuala Lumpur",
+    "countryId": "malaysia",
+    "countryCode": "MY",
+    "countryName": "Malaysia",
+    "imageHero": "https://images.unsplash.com/photo-1592723905426-1181bf431d3a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1975",
+    "info": {
+      "gettingAround": [
+        {
+          "name": "LRT/MRT/Monorail",
+          "note": "Connects most neighborhoods"
+        },
+        {
+          "name": "Grab",
+          "note": "Affordable ride‑hailing"
+        },
+        {
+          "name": "KTM Komuter",
+          "note": "Trains to suburbs/outskirts"
+        }
+      ],
+      "safetyHealth": {
+        "generalSafety": "Urban precautions apply; watch bags in crowds.",
+        "healthTips": "Hydrate—tropical climate; tap water is treated but many prefer bottled."
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "Many nationalities visa‑free for short stays—verify rules."
+      },
+      "languageComm": {
+        "usefulPhrases": [
+          {
+            "en": "Hello",
+            "local": "Halo / Selamat pagi"
+          },
+          {
+            "en": "Thank you",
+            "local": "Terima kasih"
+          }
+        ],
+        "englishProficiencyNote": "Good in cities."
+      },
+      "internet": {
+        "simNote": "Hotlink, Digi, U Mobile widely sold."
+      },
+      "emergency": {
+        "emergency": "999"
+      },
+      "currencyMoney": {
+        "currencyName": "Malaysian Ringgit",
+        "currencyCode": "MYR",
+        "symbol": "RM"
+      },
+      "borders": ["TH", "BN", "ID", "SG"],
+      "utilities": {
+        "electricity": {
+          "voltage": 240,
+          "frequencyHz": 50,
+          "plugs": ["G"]
+        }
+      },
+      "hero": {
+        "bestSeason": "Jun–Aug (west) / Feb–Apr (east)",
+        "typicalBudget": "$$"
+      }
+    }
+  },
+  {
+    "id": "singapore-sg",
+    "city": "Singapore",
+    "countryId": "singapore",
+    "countryCode": "SG",
+    "countryName": "Singapore",
+    "imageHero": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1952",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "new-york-city-us",
+    "city": "New York City",
+    "countryId": "united-states",
+    "countryCode": "US",
+    "countryName": "United States",
+    "imageHero": "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "tokyo-jp",
+    "city": "Tokyo",
+    "countryId": "japan",
+    "countryCode": "JP",
+    "countryName": "Japan",
+    "imageHero": "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2072",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "osaka-jp",
+    "city": "Osaka",
+    "countryId": "japan",
+    "countryCode": "JP",
+    "countryName": "Japan",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "kyoto-jp",
+    "city": "Kyoto",
+    "countryId": "japan",
+    "countryCode": "JP",
+    "countryName": "Japan",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "barcelona-es",
+    "city": "Barcelona",
+    "countryId": "spain",
+    "countryCode": "ES",
+    "countryName": "Spain",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "madrid-es",
+    "city": "Madrid",
+    "countryId": "spain",
+    "countryCode": "ES",
+    "countryName": "Spain",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "rome-it",
+    "city": "Rome",
+    "countryId": "italy",
+    "countryCode": "IT",
+    "countryName": "Italy",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "milan-it",
+    "city": "Milan",
+    "countryId": "italy",
+    "countryCode": "IT",
+    "countryName": "Italy",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "venice-it",
+    "city": "Venice",
+    "countryId": "italy",
+    "countryCode": "IT",
+    "countryName": "Italy",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "florence-it",
+    "city": "Florence",
+    "countryId": "italy",
+    "countryCode": "IT",
+    "countryName": "Italy",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "berlin-de",
+    "city": "Berlin",
+    "countryId": "germany",
+    "countryCode": "DE",
+    "countryName": "Germany",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "munich-de",
+    "city": "Munich",
+    "countryId": "germany",
+    "countryCode": "DE",
+    "countryName": "Germany",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "amsterdam-nl",
+    "city": "Amsterdam",
+    "countryId": "netherlands",
+    "countryCode": "NL",
+    "countryName": "Netherlands",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "vienna-at",
+    "city": "Vienna",
+    "countryId": "austria",
+    "countryCode": "AT",
+    "countryName": "Austria",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "lisbon-pt",
+    "city": "Lisbon",
+    "countryId": "portugal",
+    "countryCode": "PT",
+    "countryName": "Portugal",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "dublin-ie",
+    "city": "Dublin",
+    "countryId": "ireland",
+    "countryCode": "IE",
+    "countryName": "Ireland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "seoul-kr",
+    "city": "Seoul",
+    "countryId": "south-korea",
+    "countryCode": "KR",
+    "countryName": "South Korea",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "busan-kr",
+    "city": "Busan",
+    "countryId": "south-korea",
+    "countryCode": "KR",
+    "countryName": "South Korea",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "shanghai-cn",
+    "city": "Shanghai",
+    "countryId": "china",
+    "countryCode": "CN",
+    "countryName": "China",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "beijing-cn",
+    "city": "Beijing",
+    "countryId": "china",
+    "countryCode": "CN",
+    "countryName": "China",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "shenzhen-cn",
+    "city": "Shenzhen",
+    "countryId": "china",
+    "countryCode": "CN",
+    "countryName": "China",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "guangzhou-cn",
+    "city": "Guangzhou",
+    "countryId": "china",
+    "countryCode": "CN",
+    "countryName": "China",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "phuket-th",
+    "city": "Phuket",
+    "countryId": "thailand",
+    "countryCode": "TH",
+    "countryName": "Thailand",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "pattaya-th",
+    "city": "Pattaya",
+    "countryId": "thailand",
+    "countryCode": "TH",
+    "countryName": "Thailand",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "chiang-mai-th",
+    "city": "Chiang Mai",
+    "countryId": "thailand",
+    "countryCode": "TH",
+    "countryName": "Thailand",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "hanoi-vn",
+    "city": "Hanoi",
+    "countryId": "vietnam",
+    "countryCode": "VN",
+    "countryName": "Vietnam",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "ho-chi-minh-city-vn",
+    "city": "Ho Chi Minh City",
+    "countryId": "vietnam",
+    "countryCode": "VN",
+    "countryName": "Vietnam",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "bali-(denpasar)-id",
+    "city": "Bali (Denpasar)",
+    "countryId": "indonesia",
+    "countryCode": "ID",
+    "countryName": "Indonesia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "jakarta-id",
+    "city": "Jakarta",
+    "countryId": "indonesia",
+    "countryCode": "ID",
+    "countryName": "Indonesia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "manila-ph",
+    "city": "Manila",
+    "countryId": "philippines",
+    "countryCode": "PH",
+    "countryName": "Philippines",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "delhi-in",
+    "city": "Delhi",
+    "countryId": "india",
+    "countryCode": "IN",
+    "countryName": "India",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "agra-in",
+    "city": "Agra",
+    "countryId": "india",
+    "countryCode": "IN",
+    "countryName": "India",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "jaipur-in",
+    "city": "Jaipur",
+    "countryId": "india",
+    "countryCode": "IN",
+    "countryName": "India",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "goa-in",
+    "city": "Goa",
+    "countryId": "india",
+    "countryCode": "IN",
+    "countryName": "India",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "doha-qa",
+    "city": "Doha",
+    "countryId": "qatar",
+    "countryCode": "QA",
+    "countryName": "Qatar",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "muscat-om",
+    "city": "Muscat",
+    "countryId": "oman",
+    "countryCode": "OM",
+    "countryName": "Oman",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "manama-bh",
+    "city": "Manama",
+    "countryId": "bahrain",
+    "countryCode": "BH",
+    "countryName": "Bahrain",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "cairo-eg",
+    "city": "Cairo",
+    "countryId": "egypt",
+    "countryCode": "EG",
+    "countryName": "Egypt",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "marrakesh-ma",
+    "city": "Marrakesh",
+    "countryId": "morocco",
+    "countryCode": "MA",
+    "countryName": "Morocco",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "tunis-tn",
+    "city": "Tunis",
+    "countryId": "tunisia",
+    "countryCode": "TN",
+    "countryName": "Tunisia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "athens-gr",
+    "city": "Athens",
+    "countryId": "greece",
+    "countryCode": "GR",
+    "countryName": "Greece",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "santorini-(thira)-gr",
+    "city": "Santorini (Thira)",
+    "countryId": "greece",
+    "countryCode": "GR",
+    "countryName": "Greece",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "prague-cz",
+    "city": "Prague",
+    "countryId": "czechia",
+    "countryCode": "CZ",
+    "countryName": "Czechia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "budapest-hu",
+    "city": "Budapest",
+    "countryId": "hungary",
+    "countryCode": "HU",
+    "countryName": "Hungary",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "kraków-pl",
+    "city": "Kraków",
+    "countryId": "poland",
+    "countryCode": "PL",
+    "countryName": "Poland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "warsaw-pl",
+    "city": "Warsaw",
+    "countryId": "poland",
+    "countryCode": "PL",
+    "countryName": "Poland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "copenhagen-dk",
+    "city": "Copenhagen",
+    "countryId": "denmark",
+    "countryCode": "DK",
+    "countryName": "Denmark",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "stockholm-se",
+    "city": "Stockholm",
+    "countryId": "sweden",
+    "countryCode": "SE",
+    "countryName": "Sweden",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "oslo-no",
+    "city": "Oslo",
+    "countryId": "norway",
+    "countryCode": "NO",
+    "countryName": "Norway",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "helsinki-fi",
+    "city": "Helsinki",
+    "countryId": "finland",
+    "countryCode": "FI",
+    "countryName": "Finland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "zurich-ch",
+    "city": "Zurich",
+    "countryId": "switzerland",
+    "countryCode": "CH",
+    "countryName": "Switzerland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "geneva-ch",
+    "city": "Geneva",
+    "countryId": "switzerland",
+    "countryCode": "CH",
+    "countryName": "Switzerland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "brussels-be",
+    "city": "Brussels",
+    "countryId": "belgium",
+    "countryCode": "BE",
+    "countryName": "Belgium",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "bruges-be",
+    "city": "Bruges",
+    "countryId": "belgium",
+    "countryCode": "BE",
+    "countryName": "Belgium",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "reykjavík-is",
+    "city": "Reykjavík",
+    "countryId": "iceland",
+    "countryCode": "IS",
+    "countryName": "Iceland",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "st.-petersburg-ru",
+    "city": "St. Petersburg",
+    "countryId": "russia",
+    "countryCode": "RU",
+    "countryName": "Russia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "moscow-ru",
+    "city": "Moscow",
+    "countryId": "russia",
+    "countryCode": "RU",
+    "countryName": "Russia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "kyiv-ua",
+    "city": "Kyiv",
+    "countryId": "ukraine",
+    "countryCode": "UA",
+    "countryName": "Ukraine",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "bucharest-ro",
+    "city": "Bucharest",
+    "countryId": "romania",
+    "countryCode": "RO",
+    "countryName": "Romania",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "dubrovnik-hr",
+    "city": "Dubrovnik",
+    "countryId": "croatia",
+    "countryCode": "HR",
+    "countryName": "Croatia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "belgrade-rs",
+    "city": "Belgrade",
+    "countryId": "serbia",
+    "countryCode": "RS",
+    "countryName": "Serbia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "cape-town-za",
+    "city": "Cape Town",
+    "countryId": "south-africa",
+    "countryCode": "ZA",
+    "countryName": "South Africa",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "johannesburg-za",
+    "city": "Johannesburg",
+    "countryId": "south-africa",
+    "countryCode": "ZA",
+    "countryName": "South Africa",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "nairobi-ke",
+    "city": "Nairobi",
+    "countryId": "kenya",
+    "countryCode": "KE",
+    "countryName": "Kenya",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "zanzibar-(stone-town)-tz",
+    "city": "Zanzibar (Stone Town)",
+    "countryId": "tanzania",
+    "countryCode": "TZ",
+    "countryName": "Tanzania",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "addis-ababa-et",
+    "city": "Addis Ababa",
+    "countryId": "ethiopia",
+    "countryCode": "ET",
+    "countryName": "Ethiopia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "auckland-nz",
+    "city": "Auckland",
+    "countryId": "new-zealand",
+    "countryCode": "NZ",
+    "countryName": "New Zealand",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "sydney-au",
+    "city": "Sydney",
+    "countryId": "australia",
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "melbourne-au",
+    "city": "Melbourne",
+    "countryId": "australia",
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "brisbane-au",
+    "city": "Brisbane",
+    "countryId": "australia",
+    "countryCode": "AU",
+    "countryName": "Australia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "vancouver-ca",
+    "city": "Vancouver",
+    "countryId": "canada",
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "toronto-ca",
+    "city": "Toronto",
+    "countryId": "canada",
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "montreal-ca",
+    "city": "Montreal",
+    "countryId": "canada",
+    "countryCode": "CA",
+    "countryName": "Canada",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "mexico-city-mx",
+    "city": "Mexico City",
+    "countryId": "mexico",
+    "countryCode": "MX",
+    "countryName": "Mexico",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "cancún-mx",
+    "city": "Cancún",
+    "countryId": "mexico",
+    "countryCode": "MX",
+    "countryName": "Mexico",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "los-cabos-mx",
+    "city": "Los Cabos",
+    "countryId": "mexico",
+    "countryCode": "MX",
+    "countryName": "Mexico",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "rio-de-janeiro-br",
+    "city": "Rio de Janeiro",
+    "countryId": "brazil",
+    "countryCode": "BR",
+    "countryName": "Brazil",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "são-paulo-br",
+    "city": "São Paulo",
+    "countryId": "brazil",
+    "countryCode": "BR",
+    "countryName": "Brazil",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "buenos-aires-ar",
+    "city": "Buenos Aires",
+    "countryId": "argentina",
+    "countryCode": "AR",
+    "countryName": "Argentina",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "santiago-cl",
+    "city": "Santiago",
+    "countryId": "chile",
+    "countryCode": "CL",
+    "countryName": "Chile",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "cartagena-co",
+    "city": "Cartagena",
+    "countryId": "colombia",
+    "countryCode": "CO",
+    "countryName": "Colombia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "bogotá-co",
+    "city": "Bogotá",
+    "countryId": "colombia",
+    "countryCode": "CO",
+    "countryName": "Colombia",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "lima-pe",
+    "city": "Lima",
+    "countryId": "peru",
+    "countryCode": "PE",
+    "countryName": "Peru",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "cusco-pe",
+    "city": "Cusco",
+    "countryId": "peru",
+    "countryCode": "PE",
+    "countryName": "Peru",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "havana-cu",
+    "city": "Havana",
+    "countryId": "cuba",
+    "countryCode": "CU",
+    "countryName": "Cuba",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "punta-cana-do",
+    "city": "Punta Cana",
+    "countryId": "dominican-republic",
+    "countryCode": "DO",
+    "countryName": "Dominican Republic",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "montego-bay-jm",
+    "city": "Montego Bay",
+    "countryId": "jamaica",
+    "countryCode": "JM",
+    "countryName": "Jamaica",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "tel-aviv-il",
+    "city": "Tel Aviv",
+    "countryId": "israel",
+    "countryCode": "IL",
+    "countryName": "Israel",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  },
+  {
+    "id": "jerusalem-il",
+    "city": "Jerusalem",
+    "countryId": "israel",
+    "countryCode": "IL",
+    "countryName": "Israel",
+    "info": {
+      "gettingAround": [],
+      "safetyHealth": {
+        "generalSafety": "",
+        "healthTips": "",
+        "commonScams": []
+      },
+      "visaEntry": {
+        "visaOnArrivalNote": "",
+        "passportValidityNote": ""
+      },
+      "languageComm": {
+        "usefulPhrases": [],
+        "englishProficiencyNote": ""
+      },
+      "internet": {
+        "simNote": "",
+        "simPriceBadge": null,
+        "wifiNote": ""
+      },
+      "emergency": {
+        "emergency": ""
+      },
+      "currencyMoney": {
+        "currencyName": "",
+        "currencyCode": "",
+        "symbol": "",
+        "exchangeRateNote": "",
+        "paymentMethodsNote": ""
+      },
+      "borders": [],
+      "utilities": {
+        "electricity": {
+          "voltage": null,
+          "frequencyHz": null,
+          "plugs": []
+        }
+      },
+      "hero": {
+        "bestSeason": "",
+        "typicalBudget": ""
+      }
+    }
+  }
+]

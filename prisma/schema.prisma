@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+/* -------------------------- USER --------------------------- */
+model User {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String?  @unique
+  emailVerified     DateTime?
+  image            String?
+  passwordHash     String?
+  profileCompleted Boolean  @default(false)
+  languages        UserLanguage[] @relation("UserLanguages") // Many-to-many via explicit join
+  accounts      Account[]
+  sessions      Session[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+
+
+model Account {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+
+  user User @relation(fields: [userId],  references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+
+
+/* ------------------------ LANGUAGE ------------------------- */
+model Language {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  code      String   @unique   // e.g. "en"
+  name      String              // e.g. "English"
+
+  users     UserLanguage[] @relation("UserLanguages")
+}
+
+/* --------------- EXPLICIT JOIN (Mongo-friendly) ------------ */
+model UserLanguage {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId     String   @db.ObjectId
+  languageId String   @db.ObjectId
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserLanguages")
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade, name: "UserLanguages")
+
+  @@unique([userId, languageId])
+  @@index([userId])
+  @@index([languageId])
+}
+
+
+
+
+
+/* ------------------------- COUNTRY ------------------------- */
+
+model Country {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  countryId     String   @unique            // e.g. "thailand" (slug)
+  code          String                     // ISO alpha-2, e.g. "TH"
+  name          String                     // e.g. "Thailand"
+  currency      Json?                      // e.g.  {'code', 'name', 'symbol'}  = { "THB", "Thai Baht","฿"}
+  emergency     Json?                      // { emergency, fire, etc. }
+  visaEntry     Json?                      // rules/notes
+  languageComm  Json?                      // useful phrases, notes
+  utilities     Json?                      // electricity, plugs, voltage
+  internet      Json?                      // SIM, Wi-Fi notes
+  gettingAround Json?                      // Transportation Option in the country
+
+  imageHeroUrl  String?
+  images        String[] @default([])
+
+  bestSeason        String?                 // e.g. "Nov–Apr"
+  idealDuration     String?                 // e.g. "3-5 days"
+  safety            String?
+
+  regions       String[] @default([])
+
+  // Relations
+  cities        City[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model City {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  cityId        String   @unique             // e.g. "bangkok-th"
+  name          String                       // e.g. "Bangkok"
+
+  // Foreign key
+  countryRefId  String   @db.ObjectId
+  country       Country  @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+
+  // Media
+  imageHeroUrl  String?
+  images  String[] @default([])
+
+
+
+  
+  bestSeason        String?                 // e.g. "Nov–Apr"
+  idealDuration     String?                 // e.g. "3-5 days"
+  safety            String?
+
+  neighborhoods    String[] @default([])
+
+  // Typical budget in local currency (THB for Bangkok)
+  budget            Json?    // {budgetMin: x, budgetMax, act.. } in local currency per day 
+  gettingAround     Json?    // Transportation Option in the city 
+
+
+  @@index([countryRefId])
+}
