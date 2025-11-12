@@ -3,17 +3,19 @@
 import { memo, useMemo, useCallback } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { Autocomplete } from "@/app/component/form/Autocomplete";
-import languagesData from "@/data/languages.json";
 import type { Language } from "@/domain/user/user.schema";
 
-type LangOption = { value: string; label: string; full: Language };
+type LanguageOption = {
+  name: string;
+  code: string;
+};
 
 function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
     <button
       type="button"
       onClick={onRemove}
-      className="inline-flex items-center gap-2 rounded-xl  px-3 py-2 text-sm bg-gray-200 text-black"
+      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm bg-gray-200 text-black"
       aria-label={`Remove ${label}`}
     >
       {label}
@@ -22,29 +24,29 @@ function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   );
 }
 
-function LanguagesSectionInner() {
+interface LanguagesSectionProps {
+  languages: Language[] | [];
+}
+
+function LanguagesSection({ languages }: LanguagesSectionProps) {
   const { control } = useFormContext();
 
-  // RHF field = array of Language objects
   const { field, fieldState } = useController<{
     languages: Language[];
   }>({ control, name: "languages" as const });
 
-  // Build options once
-  const options = useMemo<LangOption[]>(() => {
-    return (languagesData as Language[])
-      .filter((l) => l.nativeName != null)
-      .map((l) => ({
-        value: l.code,
-        label: `${l.name} - ${l.nativeName}`,
-        full: { ...l, label: `${l.name} - ${l.nativeName}` },
-      }));
-  }, []);
+  const options = useMemo<LanguageOption[]>(() => {
+    return languages.map((l) => ({
+      name: l.name + " " + l.flag,
+      code: l.code,
+    }));
+  }, [languages]);
 
-  // Toggle add/remove by label
   const onSelect = useCallback(
-    (label: string) => {
-      const opt = options.find((o) => o.label === label);
+    (code: string, x) => {
+      console.log("selected code", code, x);
+      const opt = options.find((o: LanguageOption) => o.code === code);
+      console.log("selected opt", opt);
       if (!opt) return;
       const exists = (field.value ?? []).some((l) => l.code === opt.value);
       field.onChange(
@@ -69,15 +71,15 @@ function LanguagesSectionInner() {
         label="Languages"
         id="languages"
         name="languages"
-        options={options.map((o) => o.label)}
+        options={options.map((o) => o.name)}
         onSelect={onSelect}
         placeholder="Type a language"
         inputClassName="w-full border rounded-md p-3"
         error={fieldState.error?.message}
         clearOnSelect
+        openOnFocus
       />
 
-      {/* Chips */}
       <div className="flex flex-wrap gap-3 pt-1">
         {(field.value ?? []).map((l) => (
           <Chip
@@ -91,4 +93,4 @@ function LanguagesSectionInner() {
   );
 }
 
-export default memo(LanguagesSectionInner);
+export default memo(LanguagesSection);

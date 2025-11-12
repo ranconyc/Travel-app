@@ -1,4 +1,5 @@
 import Block from "@/app/component/Block";
+import Button from "@/app/component/Button";
 import CurrencySection from "@/app/component/sections/CurrencySection";
 import ElectricitySection from "@/app/component/sections/ElectricitySection";
 import EmergencySection from "@/app/component/sections/EmergencySection";
@@ -25,7 +26,7 @@ export default async function CountryPage({
       <header className="bg-black p-4 text-white pt-28">
         <div className="pt-4 px-4 bg-black fixed left-0 right-0 top-0">
           <div className="flex items-center justify-between">
-            <div>back</div>
+            <Button variant="back" />
             <div>add to wishlist</div>
           </div>
           <div className="flex flex-col items-center gap-1 mb-6">

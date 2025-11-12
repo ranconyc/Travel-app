@@ -21,13 +21,14 @@ import VisaSection from "@/app/component/sections/VisaSection";
 import { getCitiesWithCountry } from "@/lib/db/city";
 import Block from "@/app/component/Block";
 import Title from "@/app/component/Title";
+import Button from "@/app/component/Button";
 
 const Header = ({ city }: { city: City }) => {
   return (
     <header className="bg-black p-4 text-white pt-28">
       <div className="pt-4 px-4 bg-black fixed left-0 right-0 top-0">
         <div className="flex items-center justify-between">
-          <div>back</div>
+          <Button variant="back" />
           <div>add to wishlist</div>
         </div>
 

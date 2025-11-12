@@ -1,13 +1,15 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import React from "react";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   loading?: boolean;
-  variant?: "primary" | "outline" | "ghost";
+  variant?: "primary" | "outline" | "ghost" | "back";
 };
 
 export default function Button({
@@ -19,6 +21,18 @@ export default function Button({
   variant = "primary",
   ...props
 }: ButtonProps) {
+  const router = useRouter();
+
+  if (variant === "back") {
+    return (
+      <button
+        className="bg-transparent p-0 hover:bg-gray-800"
+        onClick={() => router.back()}
+      >
+        <ChevronLeft size={32} />
+      </button>
+    );
+  }
   return (
     <button
       className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-bold transition active:scale-[.98]", 

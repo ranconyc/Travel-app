@@ -7,20 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+}
+
 /* -------------------------- USER --------------------------- */
 model User {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  name             String?
+  /* ---- INFO ---- */
   email            String?  @unique
-  emailVerified     DateTime?
+  name             String?
+  firstName        String?
+  LastName         String?
+  hometown         String?
+  occupation       String?
+  birthday         DateTime?
+  description      String?
+  gender           Gender?
+  emailVerified    DateTime?
   image            String?
   passwordHash     String?
   profileCompleted Boolean  @default(false)
+  /* ---- LANGUAGE ---- */
   languages        UserLanguage[] @relation("UserLanguages") // Many-to-many via explicit join
-  accounts      Account[]
-  sessions      Session[]
+  /* ---- AUTH ---- */
+  accounts         Account[]
+  sessions         Session[]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  /* ---- DESTINATIONS ---- */
+
+  /* ---- TRAVEL HISTORY ---- */
+  /* ---- FRIENDSHIP ---- */
+  
+
+
 }
 
 
@@ -31,18 +55,25 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
+  refresh_token      String?  @map("refresh_token")
+  access_token       String?  @map("access_token")
+  expires_at         Int?     @map("expires_at")
   token_type         String?
   scope              String?
-  id_token           String?
-  session_state      String?
+  id_token           String?  @map("id_token")
+  session_state      String?  @map("session_state")
+  oauth_token_secret String?
+  oauth_token        String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt      @map("updated_at")
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
+
 
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -66,11 +97,13 @@ model VerificationToken {
 
 /* ------------------------ LANGUAGE ------------------------- */
 model Language {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  code      String   @unique   // e.g. "en"
-  name      String              // e.g. "English"
+ id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  code        String   @unique   // e.g. "en"
+  name        String              // e.g. "English"
+  nativeName  String?             // e.g. "Lëtzebuergesch"
+  flag        String?             // e.g. "🇱🇺" or "🌐"
 
-  users     UserLanguage[] @relation("UserLanguages")
+  users       UserLanguage[] @relation("UserLanguages")
 }
 
 /* --------------- EXPLICIT JOIN (Mongo-friendly) ------------ */
@@ -83,11 +116,12 @@ model UserLanguage {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserLanguages")
   language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade, name: "UserLanguages")
 
+  proficiency String?    @default("fluent" )// "native" | "fluent" | "conversational" | "basic"
+  
   @@unique([userId, languageId])
   @@index([userId])
   @@index([languageId])
 }
-
 
 
 
@@ -118,37 +152,95 @@ model Country {
 
   // Relations
   cities        City[]
+  activities    Activity[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
 
 model City {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  cityId        String   @unique             // e.g. "bangkok-th"
-  name          String                       // e.g. "Bangkok"
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  cityId         String   @unique              // "bangkok-th"
+  name           String
+  countryRefId   String   @db.ObjectId
+  country        Country  @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
-  // Foreign key
-  countryRefId  String   @db.ObjectId
-  country       Country  @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+  // Geo
+  coords         Json                         // { type: "Point", coordinates: [lng, lat] }
+  radiusKm       Int       @default(30)
+  timeZone       String?
 
   // Media
-  imageHeroUrl  String?
-  images  String[] @default([])
+  imageHeroUrl   String?
+  images         String[]  @default([])
 
-
-
-  
-  bestSeason        String?                 // e.g. "Nov–Apr"
-  idealDuration     String?                 // e.g. "3-5 days"
-  safety            String?
-
+  // Meta
+  bestSeason       String?
+  idealDuration    String?
+  safety           String?
   neighborhoods    String[] @default([])
+  budget          Json? 
+  gettingAround   Json?                      
 
-  // Typical budget in local currency (THB for Bangkok)
-  budget            Json?    // {budgetMin: x, budgetMax, act.. } in local currency per day 
-  gettingAround     Json?    // Transportation Option in the city 
+  activities     Activity[]
 
+  @@index([countryRefId]) 
+}
 
+/* ------------------------- ACTIVITY ------------------------- */
+
+model Activity {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  activityId     String   @unique                 // "chatuchak-weekend-market"
+  name           String
+  shortName      String?
+  slug           String   @unique
+
+  // Relations
+  cityRefId      String   @db.ObjectId
+  city           City     @relation(fields: [cityRefId], references: [id], onDelete: Cascade)
+
+  // Optional denorm for filtering/joins
+  countryRefId   String?  @db.ObjectId
+  country        Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+
+  type           String                      // enum-like in app code
+  categories     String[]                    // ["shopping","street-food"]
+
+  // Location
+  address        String?
+  coords         Json     // GeoJSON { type: "Point", coordinates: [lng, lat] }
+  timeZone       String?
+  neighborhood   String?
+
+  // Ops
+  openingHours   Json?                        // WeeklyHours (see TS)
+  bestTimeToVisit String?
+  typicalVisitDuration String?
+
+  // Price
+  entryPrice     Json?                        // { currencyCode, range, note, badges }
+
+  // UX
+  amenities      String[]
+  accessibility  String?
+  safetyNotes    String?
+  crowdLevel     String?                      // "low"|"moderate"|"busy"|"very-busy"
+  haggling       String?                      // "expected" etc.
+  photoTips      String[]
+
+  // Media
+  images         Json?                        // { heroUrl, thumbUrl, gallery }
+
+  // CMS
+  summary        String?
+  highlights     String[]
+  tags           String[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([cityRefId])
   @@index([countryRefId])
+  @@index([type])
 }

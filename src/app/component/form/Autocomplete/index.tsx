@@ -261,6 +261,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={handleKeyDown}
           onFocus={() => {
+            console.log("onFocus", openOnFocus, merged.length > 0);
             if (openOnFocus && merged.length > 0) setOpen(true);
           }}
           onBlur={onBlur}
@@ -297,33 +298,38 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             )}
             {!loading &&
               !err &&
-              merged.map((opt, idx) => (
-                <div
-                  key={opt.id}
-                  id={`${id}-option-${idx}`}
-                  role="option"
-                  aria-selected={idx === activeIndex}
-                  onMouseDown={(e) => {
-                    e.preventDefault(); // avoid input blur before click
-                    commitSelection(opt);
-                  }}
-                  onMouseEnter={() => setActiveIndex(idx)}
-                  className={
-                    optionClassName
-                      ? optionClassName(idx === activeIndex)
-                      : `cursor-pointer px-3 py-2 ${
-                          idx === activeIndex
-                            ? "bg-cyan-900/20"
-                            : "hover:bg-gray-100"
-                        }`
-                  }
-                >
-                  <div>{highlight ? renderOption(opt.label) : opt.label}</div>
-                  {opt.subtitle && (
-                    <div className="text-xs text-gray-500">{opt.subtitle}</div>
-                  )}
-                </div>
-              ))}
+              merged.map((opt, idx) => {
+                console.log("object", opt);
+                return (
+                  <div
+                    key={opt.id}
+                    id={`${id}-option-${idx}`}
+                    role="option"
+                    aria-selected={idx === activeIndex}
+                    onMouseDown={(e) => {
+                      e.preventDefault(); // avoid input blur before click
+                      commitSelection(opt);
+                    }}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                    className={
+                      optionClassName
+                        ? optionClassName(idx === activeIndex)
+                        : `cursor-pointer px-3 py-2 ${
+                            idx === activeIndex
+                              ? "bg-cyan-900/20"
+                              : "hover:bg-gray-100"
+                          }`
+                    }
+                  >
+                    <div>{highlight ? renderOption(opt.label) : opt.label}</div>
+                    {opt.subtitle && (
+                      <div className="text-xs text-gray-500">
+                        {opt.subtitle}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
           </div>
         )}
         <ErrorMessage id={`${id}-error`} error={error} />

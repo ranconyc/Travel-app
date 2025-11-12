@@ -1,21 +1,32 @@
+// domain/city/city.schema.ts
 import { z } from "zod";
 import { TransportItem } from "../country/country.schema";
 
-/** Budget per-day string ranges */
-const BudgetRangeSchema = z.object({
-  budget: z.string().optional(), // e.g. "1200–1800"
-  mid: z.string().optional(), // "2500–4300"
-  luxury: z.string().optional(), // "6000+"
+/** Budget per-day (in local currency) */
+export const BudgetSchema = z.object({
+  currency: z.string().optional(),
+  perDayMin: z.number().optional(),
+  perDayMax: z.number().optional(),
+  notes: z.string().optional(),
 });
 
-/** City Schema (matches Prisma) */
+/** GeoJSON Point */
+export const GeoPointSchema = z.object({
+  type: z.literal("Point"),
+  coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
+});
+
+/** City Schema (matches Prisma + seed JSON) */
 export const CitySchema = z.object({
-  id: z.string(), // Mongo ObjectId
-  cityId: z.string().min(1), // "bangkok-th"
+  id: z.string().optional(), // Mongo ObjectId
+  cityId: z.string().min(1),
   name: z.string(),
 
   countryRefId: z.string().min(1),
-  country: z.unknown().optional(), // When included via Prisma include
+  country: z.unknown().optional(),
+
+  coords: GeoPointSchema,
+  radiusKm: z.number(),
 
   imageHeroUrl: z.string().url().optional(),
   images: z.array(z.string().url()).default([]),
@@ -24,21 +35,11 @@ export const CitySchema = z.object({
   idealDuration: z.string().optional(),
   safety: z.string().optional(),
 
-  neighborhoods: z
-    .array(
-      z.object({
-        name: z.string(),
-        vibe: z.array(z.string()).default([]),
-        goodFor: z.array(z.string()).default([]),
-      })
-    )
-    .default([]),
+  neighborhoods: z.array(z.string()).default([]),
 
-  /** Local currency per day */
-  budget: BudgetRangeSchema.optional(),
-
-  /** City-only transport recommendations */
-  gettingAround: z.array(TransportItem).default([]),
+  budget: BudgetSchema.optional(),
+  gettingAround: z.record(z.string()).default({}), // flexible key:value
+  activities: z.array(z.unknown()).default([]),
 });
 
 export type City = z.infer<typeof CitySchema>;

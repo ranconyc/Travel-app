@@ -14,6 +14,8 @@ import {
   Heart,
   PlaneTakeoff,
 } from "lucide-react";
+import { getUserById } from "@/lib/db/user";
+import Button from "@/app/component/Button";
 
 const Avatar = ({ image, size = 32 }: { image: string; size?: number }) => (
   <div
@@ -69,42 +71,50 @@ const Title = ({
     title
   );
 };
+
+const Header = ({ user, isYou }: { user: User; isYou: boolean }) => (
+  <header className="bg-black p-4 text-white">
+    <div className="flex items-center justify-between">
+      <Button variant="back">back</Button>
+      {isYou ? <div>edit</div> : <div>follow</div>}
+    </div>
+
+    <div className="flex flex-col items-center gap-1 mb-6">
+      <h1 className="text-2xl">{user.name}</h1>
+      <div className="flex items-center gap-2">
+        <div className="h-2 w-2 bg-green-400 rounded-full" />
+        <h2 className="text-sm">San Francisco, CA</h2>
+      </div>
+    </div>
+
+    {/* match section */}
+
+    {isYou ? (
+      <div className="bg-gray-800 p-4 rounded-xl my-4">
+        <h1>your profile is 80% complete</h1>
+        <button>tell us more about yourself</button>
+      </div>
+    ) : (
+      <MatchSection user={user} />
+    )}
+    <div className="rounded-xl overflow-hidden">
+      <Image src={user.image} alt="user image" width={500} height={500} />
+    </div>
+  </header>
+);
+
 export default async function ProfilePage({ params }: any) {
   const session = await getServerSession(authOptions);
   console.log("session  ", session);
   const { id } = await params;
-  let user: User = {};
-  try {
-    user = await prisma.user.findUnique({
-      where: { id },
-    });
-    console.log("loggedUser", user);
-  } catch (error) {
-    console.log("error", error);
-  }
+
+  const user = await getUserById(id);
+
+  const isYou = session?.user?.id === user.id;
 
   return (
     <div>
-      <header className="bg-black p-4 text-white">
-        <div className="flex items-center justify-between">
-          <div>back</div>
-          <div>follow</div>
-        </div>
-
-        <div className="flex flex-col items-center gap-1 mb-6">
-          <h1 className="text-2xl">{user.name}</h1>
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 bg-green-400 rounded-full" />
-            <h2 className="text-sm">San Francisco, CA</h2>
-          </div>
-        </div>
-
-        {/* match section */}
-        <MatchSection user={user} />
-        <div className="rounded-xl overflow-hidden">
-          <Image src={user.image} alt="user image" width={500} height={500} />
-        </div>
-      </header>
+      <Header user={user} isYou={isYou} />
       <main className=" bg-gray-100 p-4 flex gap-4 flex-wrap items-stretch ">
         <Block>
           <Title>
@@ -126,7 +136,7 @@ export default async function ProfilePage({ params }: any) {
             { name: "English", flag: "🇬🇧" },
             { name: "Hebrew", flag: "🇮🇱" },
           ].map((lang: any) => (
-            <div className="flex items-center gap-2">
+            <div key={lang.name} className="flex items-center gap-2">
               <div>{lang.flag}</div>
               <div>{lang.name}</div>
             </div>
