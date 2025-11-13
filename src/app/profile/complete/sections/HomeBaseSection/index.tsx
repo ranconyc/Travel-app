@@ -4,7 +4,7 @@ import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import { Autocomplete } from "@/app/component/form/Autocomplete";
 
-function HometownSectionInner() {
+function HomeBaseSection() {
   const { control } = useFormContext();
 
   const { field, fieldState } = useController({
@@ -14,10 +14,10 @@ function HometownSectionInner() {
 
   return (
     <Autocomplete
-      label="Hometown"
+      label="Where do you currently live?"
       id="hometown"
       name="hometown"
-      placeholder="New York, USA"
+      placeholder="City, Country (New York, USA)"
       value={field.value ?? ""} // controlled
       onQueryChange={field.onChange} // typing updates RHF
       onSelect={(value) => field.onChange(value)} // selecting updates RHF
@@ -28,4 +28,4 @@ function HometownSectionInner() {
   );
 }
 
-export default memo(HometownSectionInner);
+export default memo(HomeBaseSection);

@@ -3,13 +3,14 @@ import * as z from "zod";
 export const Gender = z.enum(["male", "female", "non_binary"]);
 
 export const userSchema = z.object({
+  name: z.string().min(3).optional(),
   image: z.string(),
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  hometown: z.string().min(3),
-  occupation: z.string().min(3),
+  homeBase: z.string().min(3),
   birthday: z.string().min(3),
-  description: z.string().min(3),
+  occupation: z.string().min(3),
+  description: z.string().min(3).optional(),
   languages: z.array(
     z.object({
       code: z.string(),

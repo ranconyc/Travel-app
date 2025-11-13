@@ -3,21 +3,8 @@ import Logo from "@/app/component/Logo";
 const headerStyle = "text-4xl font-bold mb-6";
 
 export default async function TravelPreferencesPage() {
-  const CATEGORIES: {
-    id: string;
-    title: string;
-    color?: string;
-    emoji?: string;
-  }[] = [
-    { id: "shopping", title: "Shopping", emoji: "💎" },
-    { id: "wellness", title: "Wellness & Relaxation", emoji: "🧖" },
-    { id: "food", title: "Food & Drink", emoji: "🍸" },
-    { id: "adventure", title: "Sport & Adventure", emoji: "⛰️" },
-    { id: "culture", title: "Art & Culture", emoji: "🏛️" },
-    { id: "nature", title: "Nature & Hiking", emoji: "🌿" },
-    { id: "social", title: "Social & Local Experiences", emoji: "🧭" },
-  ];
-
+  // get the categories from the db
+  // get the interests from the db
   return (
     <div>
       <header className="bg-black p-4 text-white">

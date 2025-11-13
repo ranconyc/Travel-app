@@ -1,0 +1,9 @@
+[
+  { "id": "shopping", "title": "Shopping", "emoji": "💎" },
+  { "id": "wellness", "title": "Wellness & Relaxation", "emoji": "🧖" },
+  { "id": "food", "title": "Food & Drink", "emoji": "🍸" },
+  { "id": "adventure", "title": "Sport & Adventure", "emoji": "⛰️" },
+  { "id": "culture", "title": "Art & Culture", "emoji": "🏛️" },
+  { "id": "nature", "title": "Nature & Hiking", "emoji": "🌿" },
+  { "id": "social", "title": "Social & Local Experiences", "emoji": "🧭" }
+]

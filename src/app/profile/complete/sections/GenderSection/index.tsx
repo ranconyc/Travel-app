@@ -11,6 +11,7 @@ const OPTIONS = [
   { value: "non_binary", label: "Non Binary" },
 ] as const;
 
+const labelClassName = "block mb-2 text-sm font-medium";
 function GenderSectionInner() {
   const { control } = useFormContext();
 
@@ -22,7 +23,7 @@ function GenderSectionInner() {
 
   return (
     <fieldset className="mb-4">
-      <legend className="block mb-2 text-sm">Gender</legend>
+      <legend>How do you identify?</legend>
 
       <div className="flex items-center justify-between">
         {OPTIONS.map((opt) => {

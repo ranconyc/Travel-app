@@ -12,9 +12,10 @@ function OccupationSectionInner() {
 
   return (
     <Autocomplete
-      label="Occupation"
+      label="What do you do?"
       id="occupation"
       name="occupation"
+      placeholder="Type your job"
       options={opts}
       defaultValue={field.value ?? ""} // uncontrolled init
       onSelect={(val) => field.onChange(val)}

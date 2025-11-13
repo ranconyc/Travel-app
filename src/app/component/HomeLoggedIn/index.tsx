@@ -2,7 +2,7 @@
 
 import { Activity } from "@/domain/activity/activity.schema";
 import { useGeo } from "@/app/hooks/useGeo";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,19 +11,27 @@ import ActivityCard from "../ActivityCard";
 import { City } from "@/domain/city/city.schema";
 import { User } from "@/domain/user/user.schema";
 import { getDistance } from "@/app/_utils/geo";
-import { getAge } from "@/app/_utils/age";
 import MateCard from "../MateCard";
 import Logo from "../Logo";
-
+import Button from "../Button";
+import { signOut } from "next-auth/react";
 const Header = ({ user }: { user: User }) => (
   <header className="bg-black p-4 text-white">
-    <div className="flex items-center justify-around">
+    <div className="flex items-center justify-between">
       <Logo />
+      <Button
+        onClick={() => signOut({ callbackUrl: "/signin" })}
+        className="bg-transparent hover:bg-gray-800"
+      >
+        Logout
+      </Button>
     </div>
     <div className="mt-8">
-      <h1 className="text-2xl">Hello {user.name.split(" ")[0]}</h1>
+      <h1 className="text-2xl">
+        Hello {user?.name?.split(" ")[0] ?? "Traveler"}
+      </h1>
       <h2 className="text-sm">
-        Welcome to {user.currentLocation ?? "Bangkok, TH"}
+        Welcome to {user.currentCityId ?? "Bangkok, TH"}
       </h2>
     </div>
     <div className="flex items-center p-2 bg-gray-800  rounded-xl mb-4 mt-6">

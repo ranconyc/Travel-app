@@ -68,13 +68,12 @@ function LanguagesSection({ languages }: LanguagesSectionProps) {
   return (
     <div className="space-y-2">
       <Autocomplete
-        label="Languages"
+        label="Languages you speak"
         id="languages"
         name="languages"
         options={options.map((o) => o.name)}
         onSelect={onSelect}
-        placeholder="Type a language"
-        inputClassName="w-full border rounded-md p-3"
+        placeholder="Type to add a language"
         error={fieldState.error?.message}
         clearOnSelect
         openOnFocus

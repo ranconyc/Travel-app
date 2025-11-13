@@ -18,7 +18,7 @@ function NameSectionInner() {
         type="text"
         label="First Name"
         id="firstName"
-        placeholder="John"
+        placeholder="Enter your first name"
         {...first.field} // includes value, onChange, onBlur, ref
         error={first.fieldState.error?.message} // display zod validation errors
       />
@@ -28,7 +28,7 @@ function NameSectionInner() {
         type="text"
         label="Last Name"
         id="lastName"
-        placeholder="Doe"
+        placeholder="Enter your last name"
         {...last.field}
         error={last.fieldState.error?.message}
       />

@@ -24,7 +24,7 @@ export type AutocompleteProps = {
   optionClassName?: (active: boolean) => string;
   onSelect?: (value: string, option?: AutoOption) => void;
   onQueryChange?: (q: string) => void;
-  clearOnSelect: boolean;
+  clearOnSelect?: boolean;
   // NEW: allow controlled usage
   value?: string;
   defaultValue?: string;

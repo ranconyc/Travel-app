@@ -3,6 +3,7 @@
 import { useState, memo } from "react";
 import { useFormContext } from "react-hook-form";
 import { generateBio } from "@/app/profile/actions/generateBio";
+import Button from "@/app/component/Button";
 
 type BioOption = { id: string; label: string; text: string };
 
@@ -50,14 +51,22 @@ function BioSectionInner() {
 
   return (
     <div className="space-y-2">
-      <label htmlFor="description" className="block font-medium">
-        Bio
-      </label>
+      <div className="flex items-end justify-between gap-2">
+        <label htmlFor="description">Tell us about yourself</label>
+        <Button
+          type="button"
+          onClick={onGenerate}
+          disabled={pending}
+          className="text-white bg-black text-xs px-3 py-1 hover:bg-gray-800"
+        >
+          {pending ? "Generating..." : "Generate with AI"}
+        </Button>
+      </div>
 
       <textarea
         id="description"
         rows={5}
-        placeholder="Tell us about yourself"
+        placeholder="What kind of traveler are you? What do you enjoy?"
         {...register("description")}
         className="w-full rounded-md border border-gray-300 p-2"
       />
@@ -67,17 +76,6 @@ function BioSectionInner() {
           {generateBioError || error}
         </span>
       )}
-
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={onGenerate}
-          disabled={pending}
-          className="rounded-md bg-cyan-800 px-3 py-2 text-white hover:bg-cyan-700 disabled:opacity-60"
-        >
-          {pending ? "Generating..." : "Generate suggestions"}
-        </button>
-      </div>
 
       {suggestions && suggestions.length > 0 && (
         <div className="mt-2 grid gap-2">
