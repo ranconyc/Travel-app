@@ -47,3 +47,16 @@ export function getDistance(
       return km;
   }
 }
+
+export function isPointInBoundingBox(
+  lat: number,
+  lng: number,
+  bounding: [string, string, string, string]
+) {
+  const south = parseFloat(bounding[0]); // minLat
+  const north = parseFloat(bounding[1]); // maxLat
+  const west = parseFloat(bounding[2]); // minLng
+  const east = parseFloat(bounding[3]); // maxLng
+
+  return lat >= south && lat <= north && lng >= west && lng <= east;
+}

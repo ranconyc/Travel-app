@@ -5,7 +5,14 @@ export const DayHours = z.union([
   z.object({ closed: z.literal(true) }),
   z.object({
     closed: z.boolean().optional(),
-    times: z.array(z.object({ open: z.string(), close: z.string() })).min(1),
+    times: z
+      .array(
+        z.object({
+          open: z.string(), // "09:00"
+          close: z.string(), // "18:00"
+        })
+      )
+      .min(1),
   }),
 ]);
 
@@ -19,13 +26,20 @@ export const WeeklyHours = z.object({
   sun: DayHours.optional(),
 });
 
+/** Activity Schema (aligned with Prisma `Activity` model + richer JSON typing) */
 export const ActivitySchema = z.object({
+  // Identity
   id: z.string().min(1),
+  activityId: z.string().min(1), // Prisma: `activityId` unique
   slug: z.string().min(1),
   name: z.string().min(1),
   shortName: z.string().optional(),
+
+  // Relations (NOTE: Prisma uses `cityRefId` / `countryRefId`)
   cityId: z.string().min(1),
   countryId: z.string().optional(),
+
+  // Type & categories
   type: z.enum([
     "market",
     "museum",
@@ -38,15 +52,23 @@ export const ActivitySchema = z.object({
   ]),
   categories: z.array(z.string()).default([]),
 
+  // Location
   address: z.string().optional(),
-  coords: z.object({ lat: z.number(), lng: z.number() }).optional(),
+  coords: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
   timeZone: z.string().optional(),
   neighborhood: z.string().optional(),
 
-  openingHours: WeeklyHours.optional(),
+  // Ops
+  openingHours: WeeklyHours.optional(), // Prisma: Json
   bestTimeToVisit: z.string().optional(),
   typicalVisitDuration: z.string().optional(),
 
+  // Price
   entryPrice: z
     .object({
       currencyCode: z.string().min(1),
@@ -63,6 +85,7 @@ export const ActivitySchema = z.object({
     })
     .optional(),
 
+  // UX
   amenities: z.array(z.string()).default([]),
   accessibility: z.string().optional(),
   safetyNotes: z.string().optional(),
@@ -70,6 +93,7 @@ export const ActivitySchema = z.object({
   haggling: z.enum(["not-applicable", "optional", "expected"]).optional(),
   photoTips: z.array(z.string()).default([]),
 
+  // Media
   images: z
     .object({
       heroUrl: z.string().url().optional(),
@@ -78,8 +102,16 @@ export const ActivitySchema = z.object({
     })
     .optional(),
 
+  // CMS
   summary: z.string().optional(),
   highlights: z.array(z.string()).default([]),
   tags: z.array(z.string()).default([]),
+
+  // Flags + timestamps (from Prisma)
+  autoCreated: z.boolean().default(false),
+  needsReview: z.boolean().default(false),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
+
 export type Activity = z.infer<typeof ActivitySchema>;

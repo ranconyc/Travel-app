@@ -165,32 +165,46 @@ model UserLanguage {
  */
 
 model Country {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  countryId     String @unique // e.g. "thailand" (slug)
-  code          String // ISO alpha-2, e.g. "TH"
-  name          String // e.g. "Thailand"
-  currency      Json? // e.g.  {'code', 'name', 'symbol'}  = { "THB", "Thai Baht","฿"}
-  emergency     Json? // { emergency, fire, etc. }
-  visaEntry     Json? // rules/notes
-  languageComm  Json? // useful phrases, notes
-  utilities     Json? // electricity, plugs, voltage
-  internet      Json? // SIM, Wi-Fi notes
-  gettingAround Json? // Transportation Option in the country
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  countryId String @unique
+  code      String
+  name      String
 
-  imageHeroUrl String?
-  images       String[] @default([])
+  continent     String?
+  subRegion     String?
+  officialName  String?
+  capital       String?
+  regionCode    String?
+  subRegionCode String?
+  population    Int?
+  areaKm2       Float?
 
-  bestSeason    String? // e.g. "Nov–Apr"
-  idealDuration String? // e.g. "3-5 days"
+  currency      Json?
+  emergency     Json?
+  visaEntry     Json?
+  languageComm  Json?
+  utilities     Json?
+  internet      Json?
+  gettingAround Json?
+
+  imageHeroUrl  String?
+  images        String[] @default([])
+
+  bestSeason    String?
+  idealDuration String?
   safety        String?
 
   regions String[] @default([])
+
+   // Capital relation (one-to-one)
+  capitalCityRefId String? @unique @db.ObjectId
+  capitalCity      City?  @relation("CountryCapital", fields: [capitalCityRefId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
 
   // Relations
   cities     City[]
   activities Activity[]
 
-  // data for auto-created country
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
 
@@ -198,23 +212,34 @@ model Country {
   updatedAt DateTime @updatedAt
 }
 
+
+ /* ------------------------- CITY ------------------------- */
+
 model City {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  cityId       String  @unique // "bangkok-th"
+  cityId       String  @unique
   name         String
   countryRefId String  @db.ObjectId
   country      Country @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
+  // Capital inverse relation (optional but nice)
+  isCapital        Boolean  @default(false)
+  countryAsCapital Country? @relation("CountryCapital")
+
   // Geo
-  coords   Json // { type: "Point", coordinates: [lng, lat] }
-  radiusKm Int     @default(30)
-  timeZone String?
+  coords      Json
+  radiusKm    Int     @default(30)
+  timeZone    String?
+  boundingBox Json?
 
   // Media
   imageHeroUrl String?
   images       String[] @default([])
 
   // Meta
+  state       String?
+  district    String?
+  population  Int?
   bestSeason    String?
   idealDuration String?
   safety        String?
@@ -224,22 +249,18 @@ model City {
 
   activities Activity[]
 
-  // Relations from User
   usersHomeBase     User[]             @relation("HomeBase")
   usersCurrentCity  User[]             @relation("CurrentLocation")
   visitedByUsers    UserVisitedCity[]
   wishListedByUsers UserWishlistCity[]
 
-  // data for auto-created city
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
 
   @@index([countryRefId])
 }
 
-/**
- * ------------------------- ACTIVITY -------------------------
- */
+ /* ------------------------- ACTIVITY -------------------------*/
 
 model Activity {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId

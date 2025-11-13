@@ -72,25 +72,48 @@ export default async function CountryPage({
 
         <Block>
           <Title>Cities</Title>
-          <div>
+          <div className="flex gap-4 overflow-x-auto py-2 snap-x snap-mandatory">
             {country?.cities.map((city) => (
               <Link
-                href={`/city/${city.cityId}`}
                 key={city.id}
-                className="flex flex-col items-center  shadow-xs rounded-md  w-fit"
+                href={`/city/${city.cityId}`}
+                className="min-w-[220px] snap-start bg-white rounded-lg overflow-hidden  border border-gray-200"
               >
-                <div className="overflow-hidden rounded-t-sm w-fit">
-                  <Image
-                    src={city?.imageHeroUrl}
-                    alt={`${city.name}-image`}
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <h1 className="font-bold text-base p-2">{city.name}</h1>
+                <Image
+                  src={city.imageHeroUrl}
+                  alt={city.name}
+                  width={300}
+                  height={200}
+                  className="h-32 w-full object-cover"
+                />
+                <h1 className="p-2 font-semibold text-lg">{city.name}</h1>
               </Link>
             ))}
           </div>
+
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {country?.cities.map((city) => (
+              <Link
+                key={city.id}
+                href={`/city/${city.cityId}`}
+                className="rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition"
+              >
+                <div className="h-40 w-full overflow-hidden">
+                  <Image
+                    src={city.imageHeroUrl}
+                    alt={city.name}
+                    width={600}
+                    height={300}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+
+                <div className="p-3">
+                  <h1 className="font-semibold text-lg">{city.name}</h1>
+                </div>
+              </Link>
+            ))}
+          </div> */}
         </Block>
 
         <div className="w-full flex gap-4">

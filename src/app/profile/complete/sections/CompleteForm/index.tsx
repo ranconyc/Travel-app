@@ -74,7 +74,7 @@ export default function CompleteForm({
 
   return (
     <div className="h-full overflow-hidden">
-      <DevTool control={methods.control} />
+      {/* <DevTool control={methods.control} /> */}
       <FormHeader />
       <main className="p-4">
         {formState.errors &&

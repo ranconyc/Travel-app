@@ -7,7 +7,6 @@ export type AutoOption = { id: string; label: string; subtitle?: string };
 
 export type AutocompleteProps = {
   options?: string[]; // local list support
-  loadOptions?: (q: string, signal: AbortSignal) => Promise<AutoOption[]>; // async source
   id?: string;
   label?: string;
   name: string;
@@ -21,13 +20,14 @@ export type AutocompleteProps = {
   className?: string;
   inputClassName?: string;
   listClassName?: string;
+  clearOnSelect?: boolean;
+  value?: string;
+  defaultValue?: string;
+  loadOptions?: (q: string, signal: AbortSignal) => Promise<AutoOption[]>; // async source
   optionClassName?: (active: boolean) => string;
   onSelect?: (value: string, option?: AutoOption) => void;
   onQueryChange?: (q: string) => void;
-  clearOnSelect?: boolean;
-  // NEW: allow controlled usage
-  value?: string;
-  defaultValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
 };
 
@@ -48,13 +48,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       className = "",
       inputClassName = "",
       listClassName = "",
+      clearOnSelect,
+      value,
+      defaultValue,
       optionClassName,
       onSelect,
       onQueryChange,
       loadOptions,
-      clearOnSelect,
-      value,
-      defaultValue,
       onBlur,
     },
     ref

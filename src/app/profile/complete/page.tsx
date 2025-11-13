@@ -19,8 +19,8 @@ export default async function CompleteProfilePage() {
     redirect("/api/auth/signin");
   }
 
-  console.log("languages", languages);
-  console.log("sessipn", loggedUser);
+  // console.log("languages", languages);
+  // console.log("sessipn", loggedUser);
 
   return <CompleteForm languages={languages ?? []} loggedUser={loggedUser} />;
 }

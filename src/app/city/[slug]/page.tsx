@@ -50,7 +50,7 @@ const Header = ({ city }: { city: City }) => {
       <div className="grid grid-cols-3 gap-2">
         <div className="bg-gray-900 p-4 rounded-xl">
           <h1 className="text-xs uppercase">Best Season</h1>
-          <p>{city.bestSeason || "NO DATA"}</p>
+          <p>{city?.bestSeason || "NO DATA"}</p>
         </div>
         <div className="bg-gray-900 p-4 rounded-xl">
           <h1 className="text-xs uppercase">safety</h1>{" "}

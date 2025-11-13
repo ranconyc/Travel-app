@@ -16,20 +16,40 @@ export const GeoPointSchema = z.object({
   coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
 });
 
-/** City Schema (matches Prisma + seed JSON) */
+/** City Schema (aligned with Prisma `City` model) */
 export const CitySchema = z.object({
+  // Identity
   id: z.string().optional(), // Mongo ObjectId
   cityId: z.string().min(1),
-  name: z.string(),
+  name: z.string().min(1),
 
+  // Country relation
   countryRefId: z.string().min(1),
   country: z.unknown().optional(),
 
-  coords: GeoPointSchema,
-  radiusKm: z.number(),
+  // Capital meta
+  isCapital: z.boolean().default(false),
+  countryAsCapital: z.unknown().optional(),
 
+  // Geo
+  coords: GeoPointSchema,
+  radiusKm: z.number().default(30),
+  timeZone: z.string().optional(),
+  boundingBox: z.unknown().optional(),
+
+  // Climate & safety JSON blobs (can be refined later)
+  climate: z.unknown().optional(),
+  emergency: z.unknown().optional(),
+  internet: z.unknown().optional(),
+
+  // UX – images
   imageHeroUrl: z.string().url().optional(),
   images: z.array(z.string().url()).default([]),
+
+  // Meta
+  state: z.string().optional(),
+  district: z.string().optional(),
+  population: z.number().int().optional(),
 
   bestSeason: z.string().optional(),
   idealDuration: z.string().optional(),
@@ -37,9 +57,21 @@ export const CitySchema = z.object({
 
   neighborhoods: z.array(z.string()).default([]),
 
-  budget: BudgetSchema.optional(),
-  gettingAround: z.record(z.string()).default({}), // flexible key:value
+  // Money & moving around
+  budget: BudgetSchema.optional(), // Prisma: Json
+  gettingAround: z.record(z.string()).default({}), // Prisma: Json
+
+  // Relations
   activities: z.array(z.unknown()).default([]),
+
+  usersHomeBase: z.array(z.unknown()).default([]),
+  usersCurrentCity: z.array(z.unknown()).default([]),
+  visitedByUsers: z.array(z.unknown()).default([]),
+  wishListedByUsers: z.array(z.unknown()).default([]),
+
+  // CMS flags
+  autoCreated: z.boolean().default(false),
+  needsReview: z.boolean().default(false),
 });
 
 export type City = z.infer<typeof CitySchema>;

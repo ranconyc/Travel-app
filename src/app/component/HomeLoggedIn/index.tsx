@@ -15,6 +15,8 @@ import MateCard from "../MateCard";
 import Logo from "../Logo";
 import Button from "../Button";
 import { signOut } from "next-auth/react";
+import CityCard from "../CityCard";
+
 const Header = ({ user }: { user: User }) => (
   <header className="bg-black p-4 text-white">
     <div className="flex items-center justify-between">
@@ -85,54 +87,6 @@ const mates = [
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1061",
   },
 ];
-
-const CityCard = ({
-  city,
-  userLocation,
-}: {
-  city: City;
-  userLocation: { lat: number; lng: number };
-}) => {
-  return (
-    <Link href={`/city/${city.cityId}`} className="block">
-      <div className="bg-white rounded-2xl overflow-hidden min-w-60 h-75 mx-auto shadow">
-        <div className="relative h-full">
-          <Image
-            src={
-              city.imageHeroUrl ||
-              "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&q=80&w=2039"
-            }
-            alt={city.name}
-            fill
-            sizes="(max-width: 768px) 80vw, 240px"
-            className="object-cover"
-          />
-
-          {/* henglish: gradient overlay for readable text */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/55" />
-
-          {/* henglish: content overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-3">
-            {/* distance badge */}
-            <div className="bg-gray-800 text-white px-2 py-1 rounded-full text-xs w-fit mb-2">
-              {city.coords && userLocation
-                ? `${getDistance(
-                    userLocation.lat as number,
-                    userLocation.lng as number,
-                    city.coords.coordinates[1],
-                    city.coords.coordinates[0]
-                  ).toFixed()} km away`
-                : "Distance unknown"}
-            </div>
-            <h3 className="text-white font-bold leading-tight text-[clamp(14px,2.8vw,18px)] line-clamp-2 mt-2">
-              {city.name}
-            </h3>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-};
 
 const bangkokActivities = [
   {
@@ -235,6 +189,15 @@ export default function HomeLoggedIn({ session, cities }) {
 
   const NextDestinationList = ({ destinations }: { destinations: City[] }) => (
     <>
+      <div>
+        <h1>Cities</h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {cities.map((city) => (
+            <CityCard key={city.id} city={city} userLocation={userLocation} />
+          ))}
+        </div>
+      </div>
       <h1 className="font-bold my-4">Next destination ideas</h1>
       {/* TODO: calculate the distance */}
       <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory">
