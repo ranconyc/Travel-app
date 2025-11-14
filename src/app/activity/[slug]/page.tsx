@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import Button from "@/app/component/Button";
+import Button from "@/app/component/common/Button";
 import { Activity } from "@/domain/activity/activity.schema";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";

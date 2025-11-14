@@ -15,7 +15,7 @@ import {
   PlaneTakeoff,
 } from "lucide-react";
 import { getUserById } from "@/lib/db/user";
-import Button from "@/app/component/Button";
+import Button from "@/app/component/common/Button";
 
 const Avatar = ({ image, size = 32 }: { image: string; size?: number }) => (
   <div

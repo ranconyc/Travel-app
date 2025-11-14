@@ -1,4 +1,4 @@
-import Block from "@/app/component/Block";
+import Block from "@/app/component/common/Block";
 import Title from "@/app/component/Title";
 import { Wifi } from "lucide-react";
 

@@ -1,5 +1,5 @@
-import Block from "@/app/component/Block";
-import Button from "@/app/component/Button";
+import Block from "@/app/component/common/Block";
+import Button from "@/app/component/common/Button";
 import CurrencySection from "@/app/component/sections/CurrencySection";
 import ElectricitySection from "@/app/component/sections/ElectricitySection";
 import EmergencySection from "@/app/component/sections/EmergencySection";

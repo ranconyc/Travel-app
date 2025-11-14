@@ -19,9 +19,9 @@ import ConnectivitySection from "@/app/component/sections/ConnectivitySection";
 import EmergencySection from "@/app/component/sections/EmergencySection";
 import VisaSection from "@/app/component/sections/VisaSection";
 import { getCitiesWithCountry } from "@/lib/db/city";
-import Block from "@/app/component/Block";
+import Block from "@/app/component/common/Block";
 import Title from "@/app/component/Title";
-import Button from "@/app/component/Button";
+import Button from "@/app/component/common/Button";
 
 const Header = ({ city }: { city: City }) => {
   return (

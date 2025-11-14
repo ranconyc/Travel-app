@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import Button from "../Button";
+import Button from "../common/Button";
 
 export default function Nav() {
   return (

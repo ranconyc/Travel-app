@@ -3,8 +3,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Nav from "./component/Nav";
 import Link from "next/link";
-import HomeLoggedIn from "./component/HomeLoggedIn";
+import HomeLoggedIn from "./component/home/HomeLoggedIn";
 import { getAllCities } from "@/lib/db/city";
+import { getAllActivities } from "@/lib/db/activity";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -12,8 +13,12 @@ export default async function Home() {
   if (!session) redirect("/signin");
   // if (session.user?.emailVerified) redirect("/profile/complete");
   const cities = await getAllCities();
+  const activities = await getAllActivities();
 
-  if (session) return <HomeLoggedIn session={session} cities={cities} />;
+  if (session)
+    return (
+      <HomeLoggedIn session={session} cities={cities} activities={activities} />
+    );
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">

@@ -1,9 +1,11 @@
-import Logo from "@/app/component/Logo";
+import Logo from "@/app/component/common/Logo";
+import { prisma } from "@/lib/db/prisma";
 
 const headerStyle = "text-4xl font-bold mb-6";
 
 export default async function TravelPreferencesPage() {
   // get the categories from the db
+  // const categories = await prisma;
   // get the interests from the db
   return (
     <div>

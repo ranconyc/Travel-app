@@ -2,7 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import { AiFillGoogleSquare, AiFillFacebook } from "react-icons/ai";
-import Button from "../component/Button";
+import Button from "../component/common/Button";
 
 export default function SingInPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter, Sora } from "next/font/google";
 import ReactQueryProvider from "./providers/reactQueryProvider";
+import SessionProviderWrapper from "./providers/SessionProviderWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${sora.variable} ${inter.variable} antialiased`}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <SessionProviderWrapper>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isBrowser } from "@/app/_utils/env";
 
 export default function useStorageState<T>(key: string, initial: T) {
   const [value, setValue] = useState<T>(() => {
-    if (typeof window === "undefined") return initial;
+    if (!isBrowser()) return initial;
 
     try {
       const raw = window.localStorage.getItem(key);
@@ -16,7 +17,7 @@ export default function useStorageState<T>(key: string, initial: T) {
 
   // Sync TO localStorage
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!isBrowser()) return;
 
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
@@ -24,7 +25,7 @@ export default function useStorageState<T>(key: string, initial: T) {
   }, [key, value]);
 
   function clear() {
-    if (typeof window === "undefined") return;
+    if (!isBrowser()) return;
     window.localStorage.removeItem(key);
   }
 
