@@ -1,9 +1,13 @@
-import { revalidatePath } from "next/cache";
+import { Language } from "@/domain/user/user.schema";
 import { prisma } from "./prisma";
 
+/**
+ * Fetch user with relations
+ */
 export async function getUserById(id: string) {
   console.log("getUser", id);
   if (!id) return null;
+
   try {
     return await prisma.user.findUnique({
       where: { id },
@@ -16,9 +20,7 @@ export async function getUserById(id: string) {
           include: { interest: true },
         },
         languages: {
-          include: {
-            language: true,
-          },
+          include: { language: true },
         },
       },
     });
@@ -28,40 +30,57 @@ export async function getUserById(id: string) {
   }
 }
 
-type CompleteProfileFormValues = {
+/**
+ * Form values coming from the profile step
+ */
+export type CompleteProfileFormValues = {
   image: string | null;
   firstName: string;
   lastName?: string;
-  birthday: string;
-  gender: "MALE" | "FEMALE" | "NON_BINARY" | "";
-  homeBase: string;
+  birthday: string; // ISO string
+  gender: "MALE" | "FEMALE" | "NON_BINARY" | ""; // form version
+  homeBase: string; // cityId string (later map to homeBaseCityId)
   occupation?: string;
+  languages: Language[];
 };
 
 export async function CompleteProfile(
   userId: string,
   data: CompleteProfileFormValues
 ) {
-  // convert date string to Date
-  const birthdayDate = data.birthday ? new Date(data.birthday) : null;
+  if (!userId) throw new Error("User ID missing");
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      firstName: data.firstName,
-      lastName: data.lastName || null,
-      birthday: birthdayDate,
-      gender: data.gender || null,
-      occupation: data.occupation || null,
-      description: undefined, // bio later
-      image: data.image || undefined,
-      // homeBase: כרגע בתור string, בסוף נמפה ל City אמיתי:
-      // homeBaseCityId: ...
-    },
-  });
+  // Convert date string → Date
+  const birthdayDate =
+    data.birthday && data.birthday.length > 0 ? new Date(data.birthday) : null;
 
-  // optional: לא לסמן profileCompleted עדיין – רק אחרי כל השלבים
-  // await prisma.user.update({ where: { id: userId }, data: { profileCompleted: true } });
+  // Form may return "" for gender → convert to null
+  const genderEnum =
+    data.gender === ""
+      ? null
+      : (data.gender as "MALE" | "FEMALE" | "NON_BINARY");
 
-  revalidatePath("/profile/complete");
+  // Convert image: keep null → null, empty → undefined (no update)
+  const imageValue =
+    data.image === "" || data.image === null ? undefined : data.image;
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName || null,
+        birthday: birthdayDate,
+        gender: genderEnum,
+        occupation: data.occupation || null,
+        description: undefined,
+        image: imageValue,
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("CompleteProfile error:", error);
+    return { success: false, error: (error as Error).message };
+  }
 }

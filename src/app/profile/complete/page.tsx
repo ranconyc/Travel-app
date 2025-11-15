@@ -1,26 +1,34 @@
+// src/app/(profile)/complete/page.tsx
 import { getAllLanguages } from "@/lib/db/languages";
-import CompleteForm from "./sections/CompleteForm";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { getUserById } from "@/lib/db/user";
 import { redirect } from "next/navigation";
+import { Session } from "inspector/promises";
+import { User } from "@/domain/user/user.schema";
+import { CompleteProfileForm } from "./sections/CompleteProfileForm";
 
 export default async function CompleteProfilePage() {
-  const languages = await getAllLanguages();
-  const session = await getServerSession(authOptions);
+  // 1) get session
+  const session =
+    ((await getServerSession(authOptions)) as Session & { user: User }) || null;
 
   if (!session?.user?.id) {
+    // user not logged in → redirect to signin
     redirect("/api/auth/signin");
   }
 
-  const loggedUser = await getUserById(session.user.id as string);
+  // 2) load user + languages from DB
+  const [loggedUser, languages] = await Promise.all([
+    getUserById(session?.user?.id as string),
+    getAllLanguages(),
+  ]);
 
   if (!loggedUser) {
-    redirect("/api/auth/signin");
+    // optional: could redirect or show error
+    redirect("/");
   }
 
-  // console.log("languages", languages);
-  // console.log("sessipn", loggedUser);
-
-  return <CompleteForm languages={languages ?? []} loggedUser={loggedUser} />;
+  // 3) render client form with data
+  return <CompleteProfileForm loggedUser={loggedUser} />;
 }

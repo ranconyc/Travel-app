@@ -1,4 +1,4 @@
-import { User } from "@/domain/user/user.schema";
+import { User } from "@/domain/user/formUser.schema";
 import { sectionTitle } from "../HomeLoggedIn";
 import MateCard from "../../common/cards/MateCard";
 import { isResSent } from "next/dist/shared/lib/utils";

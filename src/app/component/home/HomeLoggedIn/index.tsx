@@ -5,7 +5,7 @@ import { useGeo } from "@/app/hooks/useGeo";
 import { useMemo } from "react";
 
 import { City } from "@/domain/city/city.schema";
-import { User } from "@/domain/user/user.schema";
+import { User } from "@/domain/user/formUser.schema";
 import { getDistance } from "@/app/_utils/geo";
 import MateCard from "../../common/cards/MateCard";
 import { Session } from "next-auth";

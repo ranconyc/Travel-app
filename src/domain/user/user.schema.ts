@@ -1,73 +1,87 @@
 import * as z from "zod";
 
-export const Gender = z.enum(["MALE", "FEMALE", "NON_BINARY"]);
-
-/** Optional GeoJSON-like point for currentLocation */
-export const UserLocationSchema = z
-  .object({
-    type: z.literal("Point"),
-    coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
-  })
-  .optional();
-
-/** Language item as used in your UI (based on languages.json) */
-export const UserLanguageSchema = z.object({
-  code: z.string(),
-  name: z.string(),
-  nativeName: z.string().optional(),
-  flag: z.string().optional(),
-  label: z.string().optional(),
+export const languageSchema = z.object({
+  id: z.string(), // ObjectId as string
+  code: z.string().min(2), // e.g. "en"
+  name: z.string().min(1), // "English"
+  nativeName: z.string().nullable().optional(), // "עברית", "日本語"
+  flag: z.string().nullable().optional(), // "🇮🇱" | "🇺🇸" | "🌐"
 });
 
-/** User Schema (aligned with Prisma `User` + your UI needs) */
+// TypeScript type
+export type Language = z.infer<typeof languageSchema>;
+
+export const userLanguageSchema = z.object({
+  id: z.string(), // join row id
+  userId: z.string(), // User.id (ObjectId as string)
+  languageId: z.string(), // Language.id
+  proficiency: z.string().nullable().optional(), // "native" | "fluent" | ...
+  // include nested language if loaded via include: { language: true }
+  language: languageSchema.optional(),
+});
+
+// TypeScript type
+export type UserLanguage = z.infer<typeof userLanguageSchema>;
+
+export const GenderEnum = z.enum(["MALE", "FEMALE", "NON_BINARY"]);
+export type Gender = z.infer<typeof GenderEnum>;
+
+const cityLiteSchema = z.any(); // TODO: replace with real city schema
+const accountSchema = z.any(); // TODO: replace with real account schema
+const sessionSchema = z.any(); // TODO: replace with real session schema
+const userInterestSchema = z.any(); // TODO: replace with real user interest schema
+const travelPersonaSchema = z.any(); // TODO: replace with real travel persona schema
+const userVisitedCitySchema = z.any(); // TODO: replace with real visited city schema
+const userWishlistCitySchema = z.any(); // TODO: replace with real wishlist city schema
+
 export const userSchema = z.object({
-  // Identity
-  id: z.string().optional(),
+  // ---- identifiers ----
+  id: z.string(), // ObjectId as string
 
-  // Auth / contact
-  email: z.string().email().optional(),
-  emailVerified: z.date().optional(),
-  passwordHash: z.string().optional(),
+  // ---- basic info ----
+  email: z.string().email().nullable().optional(),
+  name: z.string().nullable().optional(), // full name if you use it
+  firstName: z.string().nullable().optional(),
+  lastName: z.string().nullable().optional(),
+  occupation: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
 
-  // Names
-  name: z.string().optional(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
+  // ---- location / home base ----
+  homeBaseCityId: z.string().nullable().optional(),
+  homeBaseCity: cityLiteSchema.nullable().optional(), // populated if included
 
-  // Home base (relation to City)
-  homeBaseCityId: z.string().optional(),
-  // Optional denormalized label you might use in forms
-  homeBaseLabel: z.string().optional(),
+  // ---- dates & status ----
+  birthday: z.date().nullable().optional(),
+  emailVerified: z.date().nullable().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 
-  // Profile info
-  occupation: z.string().optional(),
-  birthday: z.date().optional(),
-  description: z.string().optional(),
-  gender: Gender.optional(),
-  image: z.string().url().optional(),
+  // ---- profile meta ----
+  gender: GenderEnum.nullable().optional(),
+  image: z.string().url().nullable().optional(),
+  passwordHash: z.string().nullable().optional(),
+  profileCompleted: z.boolean().optional(),
 
-  profileCompleted: z.boolean().default(false),
+  // ---- auth relations ----
+  accounts: z.array(accountSchema).optional(),
+  sessions: z.array(sessionSchema).optional(),
 
-  // Language many-to-many (via join table in Prisma)
-  languages: z.array(UserLanguageSchema).default([]),
+  // ---- current location / city ----
+  currentLocation: z.unknown().nullable().optional(), // Json { type: "Point", coordinates: [lng, lat] }
+  currentCityId: z.string().nullable().optional(),
+  currentCity: cityLiteSchema.nullable().optional(),
 
-  // Destinations
-  currentLocation: UserLocationSchema,
-  currentCityId: z.string().optional(),
+  // ---- languages (explicit join) ----
+  languages: z.array(userLanguageSchema).optional(),
 
-  // Relations (kept loose – can be refined later)
-  accounts: z.array(z.unknown()).optional(),
-  sessions: z.array(z.unknown()).optional(),
-  interests: z.array(z.unknown()).optional(),
-  travelPersona: z.unknown().optional(),
-  visitedCities: z.array(z.unknown()).optional(),
-  wishListCities: z.array(z.unknown()).optional(),
+  // ---- travel interests / persona ----
+  interests: z.array(userInterestSchema).optional(),
+  travelPersona: travelPersonaSchema.nullable().optional(),
 
-  // Timestamps
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  // ---- travel history ----
+  visitedCities: z.array(userVisitedCitySchema).optional(),
+  wishListCities: z.array(userWishlistCitySchema).optional(),
 });
 
+// TypeScript type for the *full* user (domain)
 export type User = z.infer<typeof userSchema>;
-export type Language = z.infer<typeof UserLanguageSchema>;
-export type GenderType = z.infer<typeof Gender>;

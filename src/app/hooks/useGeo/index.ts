@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { hasGeolocation } from "@/app/_utils/env";
 import useStorageState from "../useStorageState";
 import { getDistance } from "@/app/_utils/geo";
+import { updateUserLocationWithCityAction } from "@/app/actions/locationActions";
 
 type Coords = { lat: number; lng: number };
 
@@ -101,12 +102,25 @@ export function useGeo(options: UseGeoOptions = {}) {
     }
 
     if (!shouldSave) return;
+    // fire async logic inside effect
+    (async () => {
+      try {
+        // 1) call server action
+        const result = await updateUserLocationWithCityAction(
+          session.user.id,
+          coords
+        );
 
-    // Update our "last saved" reference locally
-    setLastSavedCoords(coords);
+        // 2) only after success -> update lastSavedCoords
+        setLastSavedCoords(coords);
 
-    // Fire server action / API – "fire and forget"
-    void updateUserLocationWithCity(session.user.id, coords);
+        // optional: debug log
+        console.log("Location synced with city:", result);
+      } catch (err) {
+        console.error("Failed to update user location with city", err);
+        // optional: you could set an error state here if you want UI feedback
+      }
+    })();
   }, [
     coords,
     lastSavedCoords,

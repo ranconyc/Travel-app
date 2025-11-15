@@ -1,7 +1,7 @@
 import { signOut } from "next-auth/react";
 import Button from "../../common/Button";
 import Logo from "../../common/Logo";
-import { User } from "@/domain/user/user.schema";
+import { User } from "@/domain/user/formUser.schema";
 import { Search } from "lucide-react";
 
 type Props = { user: User; coords?: { lat: number; lng: number } };

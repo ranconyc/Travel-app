@@ -33,6 +33,7 @@ model User {
   gender           Gender?
   emailVerified    DateTime?
   image            String?
+  imagePublicId    String?     
   passwordHash     String?
   profileCompleted Boolean        @default(false)
   /**

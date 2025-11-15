@@ -11,10 +11,25 @@
     @apply block text-sm font-semibold text-gray-900 mb-1;
   }
 
+  /* default inputs */
   input,
-  textarea,
+  textarea {
+    @apply w-full rounded-lg border border-gray-300 px-3 py-2;
+  }
+
   input[type="date"] {
-    @apply w-full rounded-lg border border-gray-300 p-2;
+    font-size: 16px;
+    padding-top: 0.35rem; /* ~5.6px */
+    padding-bottom: 0.35rem;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  @media (max-width: 640px) {
+    input[type="date"] {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
   }
 
   input:focus {
@@ -24,7 +39,6 @@
 
   button {
     @apply bg-cyan-600 px-4 py-2 rounded-md text-white font-bold hover:bg-cyan-700;
-    /* font: "arial", sans-serif; */
   }
 }
 

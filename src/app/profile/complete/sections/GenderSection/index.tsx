@@ -3,19 +3,22 @@
 
 import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import ErrorMessage from "@/app/component/form/ErrorMessage"; // adjust path if needed
+import ErrorMessage from "@/app/component/form/ErrorMessage";
+import { CompleteProfileFormValues } from "@/lib/db/user";
 
-const OPTIONS = [
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-  { value: "non_binary", label: "Non Binary" },
-] as const;
+// match Prisma enum Gender { MALE, FEMALE, NON_BINARY }
+type GenderValue = "MALE" | "FEMALE" | "NON_BINARY";
 
-const labelClassName = "block mb-2 text-sm font-medium";
+const OPTIONS: { value: GenderValue; label: string }[] = [
+  { value: "MALE", label: "Male" },
+  { value: "FEMALE", label: "Female" },
+  { value: "NON_BINARY", label: "Non Binary" },
+];
+
 function GenderSectionInner() {
-  const { control } = useFormContext();
+  const { control } = useFormContext<CompleteProfileFormValues>();
 
-  const { field, fieldState } = useController({
+  const { field, fieldState } = useController<CompleteProfileFormValues>({
     name: "gender",
     control,
     rules: { required: "Please select your gender" },
@@ -23,9 +26,11 @@ function GenderSectionInner() {
 
   return (
     <fieldset className="mb-4">
-      <legend>How do you identify?</legend>
+      <legend className="block mb-2 text-sm font-semibold">
+        How do you identify?
+      </legend>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         {OPTIONS.map((opt) => {
           const checked = field.value === opt.value;
 
@@ -33,13 +38,13 @@ function GenderSectionInner() {
             <label
               key={opt.value}
               className={[
-                "flex items-center gap-2 rounded-xl border px-4 py-2 cursor-pointer select-none",
+                "flex flex-1 items-center gap-2 rounded-xl border px-4 py-2 cursor-pointer select-none",
                 checked
                   ? "border-cyan-700 bg-cyan-50"
                   : "border-gray-300 hover:border-gray-400",
               ].join(" ")}
             >
-              {/* Native radio (screen-reader friendly). Hidden visually but still focusable via label */}
+              {/* Native radio (accessible) */}
               <input
                 type="radio"
                 className="sr-only"
@@ -50,7 +55,7 @@ function GenderSectionInner() {
                 onBlur={field.onBlur}
               />
 
-              {/* Custom radio mark */}
+              {/* Custom radio UI */}
               <span
                 aria-hidden
                 className={[

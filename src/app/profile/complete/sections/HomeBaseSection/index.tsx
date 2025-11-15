@@ -3,7 +3,6 @@
 import { memo } from "react";
 import { useFormContext, useController } from "react-hook-form";
 import { Autocomplete, AutoOption } from "@/app/component/form/Autocomplete";
-import { ar } from "zod/locales";
 
 function HomeBaseSection() {
   const { control } = useFormContext();
@@ -14,36 +13,46 @@ function HomeBaseSection() {
     name: "homeBase",
   });
 
+  // Fetch cities from /api/cities/search
   const searchCities = async (q: string, signal: AbortSignal) => {
     const res = await fetch(`/api/cities/search?q=${encodeURIComponent(q)}`, {
       signal,
     });
 
-    console.log("object", res);
+    if (!res.ok) {
+      console.error("Failed to fetch cities", res.status);
+      return [];
+    }
 
     const data = await res.json();
 
+    // data already normalized by the API:
+    // { id, cityId, label, subtitle, ... }
     if (Array.isArray(data)) {
-      return data.map((c: AutoOption) => ({
-        id: c.id,
-        label: c?.name + (c?.country ? `, ${c.country?.name}` : ""),
-        subtitle: c.country?.code, // e.g. "TH", "US", "IL"
-      }));
+      return data.map(
+        (c: any): AutoOption => ({
+          id: c.id,
+          label: c.label, // e.g. "Bangkok, Thailand"
+          subtitle: c.subtitle, // e.g. "TH"
+        })
+      );
     }
+
     return [];
   };
 
   return (
     <Autocomplete
-      label="Where do you currently live?"
       id="homeBase"
       name="homeBase"
+      label="Where do you currently live?"
       placeholder="City, Country (New York, USA)"
       loadOptions={searchCities}
       defaultValue={field.value ?? ""} // initial value for uncontrolled mode
-      onSelect={(value) => field.onChange(value)} // update RHF on selection
+      onSelect={(value) => field.onChange(value)} // store the label in RHF for now
       onBlur={field.onBlur}
       error={fieldState.error?.message}
+      minChars={2}
     />
   );
 }
