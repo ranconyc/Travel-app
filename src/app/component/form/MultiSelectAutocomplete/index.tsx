@@ -133,22 +133,25 @@ export function MultiSelectAutocomplete<T>({
         openOnFocus
         inputClassName={inputClassName}
         listClassName={listClassName}
+        /* Selected chips */
+        selectedOptions={
+          selected.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {selected.map((item) => {
+                const label = getLabel(item);
+                const value = getValue(item);
+                return (
+                  <Chip
+                    key={value}
+                    label={label}
+                    onRemove={() => handleRemove(item)}
+                  />
+                );
+              })}
+            </div>
+          )
+        }
       />
-
-      {/* Selected chips */}
-      <div className="mt-2 flex flex-wrap gap-2">
-        {selected.map((item) => {
-          const label = getLabel(item);
-          const value = getValue(item);
-          return (
-            <Chip
-              key={value}
-              label={label}
-              onRemove={() => handleRemove(item)}
-            />
-          );
-        })}
-      </div>
     </div>
   );
 }

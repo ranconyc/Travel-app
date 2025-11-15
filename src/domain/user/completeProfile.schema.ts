@@ -11,9 +11,9 @@ const birthdaySchema = z
     return d <= now;
   }, "Please enter a valid date in the past");
 
-export const languageFormSchema = z.object({
-  code: z.string().min(1, "Language code is required"),
-});
+export const languageFormSchema = z
+  .string()
+  .min(1, "Language code is required");
 
 export const completeProfileSchema = z.object({
   image: z.string().url().nullable().optional(),

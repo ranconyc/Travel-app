@@ -42,10 +42,15 @@ export function CompleteProfileForm({ loggedUser }: { loggedUser: User }) {
   const methods = useForm<CompleteProfileFormValues>({
     resolver: zodResolver(completeProfileSchema),
     defaultValues: mapUserToDefaults(loggedUser),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
   const { handleSubmit, formState, control } = methods;
-  const { clearDraft } = useProfileDraft(methods, loggedUser.id);
+  const { clearDraft } = useProfileDraft<CompleteProfileFormValues>(
+    methods,
+    loggedUser.id
+  );
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
     const res = await updateProfile(values);

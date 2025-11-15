@@ -32,6 +32,7 @@ export type AutocompleteProps = {
   value?: string;
   defaultValue?: string;
   cacheResults?: boolean;
+  selectedOptions?: React.ReactNode;
   loadOptions?: (q: string, signal: AbortSignal) => Promise<AutoOption[]>;
   optionClassName?: (active: boolean) => string;
   onSelect?: (value: string, option?: AutoOption) => void;
@@ -61,6 +62,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       value,
       defaultValue,
       cacheResults = true,
+      selectedOptions,
       optionClassName,
       onSelect,
       onQueryChange,
@@ -175,6 +177,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             {label}
           </label>
         )}
+        {selectedOptions && <div className="mb-2">{selectedOptions}</div>}
 
         {/* input + clear button */}
         <div className="relative">

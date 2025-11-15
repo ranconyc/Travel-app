@@ -1,14 +1,17 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useFormContext, useController } from "react-hook-form";
 import { Autocomplete, AutoOption } from "@/app/component/form/Autocomplete";
 
-function HomeBaseSection() {
-  const { control } = useFormContext();
+type FormValues = {
+  homeBase: string;
+};
 
-  // connect this field to RHF
-  const { field, fieldState } = useController({
+function HomeBaseSection() {
+  const { control } = useFormContext<FormValues>();
+
+  const { field, fieldState } = useController<FormValues>({
     control,
     name: "homeBase",
   });
@@ -26,14 +29,12 @@ function HomeBaseSection() {
 
     const data = await res.json();
 
-    // data already normalized by the API:
-    // { id, cityId, label, subtitle, ... }
     if (Array.isArray(data)) {
       return data.map(
         (c: any): AutoOption => ({
           id: c.id,
-          label: c.label, // e.g. "Bangkok, Thailand"
-          subtitle: c.subtitle, // e.g. "TH"
+          label: c.label, // e.g. "Tel Aviv, Israel"
+          subtitle: c.subtitle,
         })
       );
     }
@@ -48,11 +49,12 @@ function HomeBaseSection() {
       label="Where do you currently live?"
       placeholder="City, Country (New York, USA)"
       loadOptions={searchCities}
-      defaultValue={field.value ?? ""} // initial value for uncontrolled mode
-      onSelect={(value) => field.onChange(value)} // store the label in RHF for now
+      value={field.value ?? ""} // always reflect RHF value
+      onQueryChange={field.onChange} // typing + selection update RHF
       onBlur={field.onBlur}
-      error={fieldState.error?.message}
+      error={fieldState?.error?.message}
       minChars={2}
+      clearOnSelect={false}
     />
   );
 }

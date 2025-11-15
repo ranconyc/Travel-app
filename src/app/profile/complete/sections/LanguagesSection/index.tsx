@@ -54,6 +54,8 @@ function LanguagesSection() {
     [allLanguages, selectedCodes]
   );
 
+  console.log("lang", fieldState.error?.message);
+
   return (
     <div className="space-y-2">
       <MultiSelectAutocomplete<FormLanguage>
