@@ -26,6 +26,7 @@ const completeProfileSchema = z.object({
   homeBase: z.string().optional(),
   occupation: z.string().optional(),
   description: z.string().optional(),
+  languages: z.array(z.string()).optional(),
 });
 
 export type CompleteProfileInput = z.infer<typeof completeProfileSchema>;
@@ -40,7 +41,7 @@ export async function updateProfile(formData: CompleteProfileInput) {
     // transform on `birthday` ensures a date object becomes a string and
     // uppercases `gender` if necessary.  Unknown keys are stripped.
     const parsed = completeProfileSchema.safeParse({
-      ...data,
+      ...formData,
       gender:
         typeof data.gender === "string"
           ? data.gender.toUpperCase()
@@ -62,7 +63,6 @@ export async function updateProfile(formData: CompleteProfileInput) {
 
     // Call the Prisma helper to update the user.  Note: CompleteProfile
     // currently expects a `homeBase` string but you may change this to
-    // `homeBaseCityId` in the future once cities are implemented.
     await CompleteProfile(values.id, {
       image: values.image ?? null,
       firstName: values.firstName,
@@ -71,6 +71,7 @@ export async function updateProfile(formData: CompleteProfileInput) {
       gender: values.gender ?? "",
       homeBase: values.homeBase ?? "",
       occupation: values.occupation ?? undefined,
+      languages: values.languages ?? [],
     });
     return { success: true as const };
   } catch (error) {

@@ -2,7 +2,7 @@
 "use client";
 
 import { FormProvider, useForm } from "react-hook-form";
-import type { User } from "@prisma/client";
+import { DevTool } from "@hookform/devtools";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,6 +21,7 @@ import LanguagesSection from "../LanguagesSection";
 import BirthdaySection from "../BirthdaySection";
 import GenderSection from "../GenderSection";
 import OccupationSection from "../OccupationSection";
+import { User } from "@/domain/user/user.schema";
 
 function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
   return {
@@ -31,7 +32,7 @@ function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
       ? new Date(user.birthday).toISOString().slice(0, 10)
       : "",
     gender: (user?.gender as any) ?? "",
-    homeBase: "",
+    homeBase: user?.homeBase ?? "",
     occupation: user?.occupation ?? "",
     languages: [],
   };
@@ -43,17 +44,20 @@ export function CompleteProfileForm({ loggedUser }: { loggedUser: User }) {
     defaultValues: mapUserToDefaults(loggedUser),
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, formState, control } = methods;
   const { clearDraft } = useProfileDraft(methods, loggedUser.id);
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
     const res = await updateProfile(values);
+    console.log("onSubmit", res);
     if (res.success) {
       clearDraft();
     } else {
       console.error("updateProfile failed", res.error);
     }
   };
+
+  console.log("errors", formState.errors);
 
   return (
     <FormProvider {...methods}>
@@ -73,6 +77,7 @@ export function CompleteProfileForm({ loggedUser }: { loggedUser: User }) {
           Complete Profile
         </button>
       </form>
+      <DevTool control={control} />
     </FormProvider>
   );
 }

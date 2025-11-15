@@ -19,9 +19,6 @@ export async function getUserById(id: string) {
         interests: {
           include: { interest: true },
         },
-        languages: {
-          include: { language: true },
-        },
       },
     });
   } catch (error) {

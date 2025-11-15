@@ -39,7 +39,7 @@ model User {
   /**
    * ---- LANGUAGE ----
    */
-  languages        UserLanguage[] @relation("UserLanguages") // Many-to-many via explicit join
+  languages String[] @default([]) // ['en','es']
   /**
    * ---- AUTH ----
    */
@@ -129,37 +129,8 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-/**
- * ------------------------ LANGUAGE -------------------------
- */
-model Language {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  code       String  @unique // e.g. "en"
-  name       String // e.g. "English"
-  nativeName String? // e.g. "Lëtzebuergesch"
-  flag       String? // e.g. "🇱🇺" or "🌐"
 
-  users UserLanguage[] @relation("UserLanguages")
-}
 
-/**
- * --------------- EXPLICIT JOIN (Mongo-friendly) ------------
- */
-model UserLanguage {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  userId     String @db.ObjectId
-  languageId String @db.ObjectId
-
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserLanguages")
-  language Language @relation(fields: [languageId], references: [id], onDelete: Cascade, name: "UserLanguages")
-
-  proficiency String? @default("fluent") // "native" | "fluent" | "conversational" | "basic"
-
-  @@unique([userId, languageId])
-  @@index([userId])
-  @@index([languageId])
-}
 
 /**
  * ------------------------- COUNTRY -------------------------

@@ -42,7 +42,6 @@ export default function CityCard({ city, userLocation, index }: CityCardProps) {
       <div className="h-full flex items-end">
         <div>
           {distanceLabel && <DistanceBadge distanceLabel={distanceLabel} />}
-
           <h3 className="text-white font-bold leading-tight text-[clamp(14px,2.8vw,18px)] line-clamp-2">
             {city.name}
           </h3>

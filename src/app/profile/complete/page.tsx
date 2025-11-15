@@ -1,5 +1,3 @@
-// src/app/(profile)/complete/page.tsx
-import { getAllLanguages } from "@/lib/db/languages";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { getUserById } from "@/lib/db/user";
@@ -19,10 +17,8 @@ export default async function CompleteProfilePage() {
   }
 
   // 2) load user + languages from DB
-  const [loggedUser, languages] = await Promise.all([
-    getUserById(session?.user?.id as string),
-    getAllLanguages(),
-  ]);
+  const loggedUser = await getUserById(session?.user?.id as string);
+  console.log(" loggedUser", loggedUser);
 
   if (!loggedUser) {
     // optional: could redirect or show error
