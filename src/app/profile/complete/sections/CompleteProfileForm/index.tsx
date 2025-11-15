@@ -20,6 +20,7 @@ import HomeBaseSection from "../HomeBaseSection";
 import LanguagesSection from "../LanguagesSection";
 import BirthdaySection from "../BirthdaySection";
 import GenderSection from "../GenderSection";
+import OccupationSection from "../OccupationSection";
 
 function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
   return {
@@ -56,11 +57,12 @@ export function CompleteProfileForm({ loggedUser }: { loggedUser: User }) {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="p-3 md:p-6 space-y-4">
-        <FormHeader />
+      <FormHeader />
+      <form onSubmit={handleSubmit(onSubmit)} className="p-3 md:p-6 ">
         <AvatarSection previewUrl={loggedUser?.image} />
         <NameSection />
         <HomeBaseSection />
+        <OccupationSection />
         <LanguagesSection />
         <BirthdaySection />
         <GenderSection />

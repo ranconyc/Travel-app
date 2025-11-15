@@ -1,38 +1,40 @@
-"use client";
+import { useEffect, useCallback } from "react";
+import type { UseFormReturn } from "react-hook-form";
 
-import { useEffect } from "react";
-import type { UseFormReturn, FieldValues } from "react-hook-form";
-import useStorageState from "@/app/hooks/useStorageState";
+const KEY_PREFIX = "profile.v1.user-";
 
-// generic so it works with any form type
-export function useProfileDraft<TFormValues extends FieldValues>(
-  form: UseFormReturn<TFormValues>,
-  userId: string
-) {
-  const storageKey = `profile.v1.user-${userId}`;
+export function useProfileDraft(form: UseFormReturn<any>, userId: string) {
+  const key = KEY_PREFIX + userId;
 
-  // localStorage state: we store a *partial* form value
-  const [draft, setDraft, clearDraft] =
-    useStorageState<Partial<TFormValues> | null>(storageKey, null);
-
-  // 1) Load draft AFTER hydration / when it exists
   useEffect(() => {
-    if (!draft) return; // nothing to load
+    if (typeof window === "undefined") return;
 
-    // merge current values with draft from localStorage
-    const current = form.getValues();
-    form.reset({ ...current, ...draft });
-  }, [draft, form]);
+    try {
+      const raw = window.localStorage.getItem(key);
+      if (!raw) return;
 
-  // 2) Save form to draft automatically on every change
+      const draft = JSON.parse(raw);
+      form.reset(draft);
+    } catch (err) {
+      console.error("Failed to load draft", err);
+    }
+  }, [form, key]);
+
   useEffect(() => {
     const subscription = form.watch((values) => {
-      // save partial values into localStorage
-      setDraft(values as Partial<TFormValues>);
+      try {
+        window.localStorage.setItem(key, JSON.stringify(values));
+      } catch (err) {
+        console.error("Failed to save draft", err);
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, [form, setDraft]);
+  }, [form, key]);
+
+  const clearDraft = useCallback(() => {
+    window.localStorage.removeItem(key);
+  }, [key]);
 
   return { clearDraft };
 }

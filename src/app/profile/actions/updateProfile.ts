@@ -14,11 +14,14 @@ const completeProfileSchema = z.object({
   image: z.string().nullable().optional(),
   firstName: z.string().min(1),
   lastName: z.string().optional(),
-  birthday: z.union([z.string(), z.date()]).optional().transform((val) => {
-    if (!val) return "";
-    if (val instanceof Date) return val.toISOString().split("T")[0];
-    return val;
-  }),
+  birthday: z
+    .union([z.string(), z.date()])
+    .optional()
+    .transform((val) => {
+      if (!val) return "";
+      if (val instanceof Date) return val.toISOString().split("T")[0];
+      return val;
+    }),
   gender: z.enum(["MALE", "FEMALE", "NON_BINARY", ""]).optional(),
   homeBase: z.string().optional(),
   occupation: z.string().optional(),
@@ -31,7 +34,7 @@ export type CompleteProfileInput = z.infer<typeof completeProfileSchema>;
  * Server action used by the profile completion form.  It normalises and
  * validates the incoming data and then calls the Prisma update helper.
  */
-export async function updateProfile(data: User) {
+export async function updateProfile(formData: CompleteProfileInput) {
   try {
     // First parse and normalise the incoming data against our schema.  The
     // transform on `birthday` ensures a date object becomes a string and

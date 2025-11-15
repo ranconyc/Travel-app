@@ -65,6 +65,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       onSelect,
       onQueryChange,
       loadOptions,
+      onChange,
       onBlur,
     },
     ref
