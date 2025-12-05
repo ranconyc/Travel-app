@@ -1,30 +1,21 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
-import { getUserById } from "@/lib/db/user";
 import { redirect } from "next/navigation";
-import { Session } from "inspector/promises";
-import { User } from "@/domain/user/user.schema";
-import { CompleteProfileForm } from "./sections/CompleteProfileForm";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getUserById } from "@/lib/db/user.repo";
+import CompleteProfileShell from "./CompleteProfileShell";
 
 export default async function CompleteProfilePage() {
-  // 1) get session
-  const session =
-    ((await getServerSession(authOptions)) as Session & { user: User }) || null;
+  const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
-    // user not logged in → redirect to signin
     redirect("/api/auth/signin");
   }
 
-  // 2) load user + languages from DB
-  const loggedUser = await getUserById(session?.user?.id as string);
-  console.log(" loggedUser", loggedUser);
+  const user = await getUserById(session.user.id as string);
 
-  if (!loggedUser) {
-    // optional: could redirect or show error
+  if (!user) {
     redirect("/");
   }
 
-  // 3) render client form with data
-  return <CompleteProfileForm loggedUser={loggedUser} />;
+  return <CompleteProfileShell user={user} />;
 }

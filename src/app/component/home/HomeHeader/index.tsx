@@ -1,11 +1,15 @@
+"use client";
+
 import { signOut } from "next-auth/react";
 import Button from "../../common/Button";
 import Logo from "../../common/Logo";
-import { User } from "@/domain/user/formUser.schema";
+import { User } from "@/domain/user/user.schema";
 import { Search } from "lucide-react";
+import { useLocationStore } from "@/store/locationStore";
 
-type Props = { user: User; coords?: { lat: number; lng: number } };
-export default function HomeHeader({ user, coords }: Props) {
+type Props = { user: User };
+export default function HomeHeader({ user }: Props) {
+  const { coords } = useLocationStore();
   return (
     <header className="bg-black p-4 text-white">
       <div className="flex items-center justify-between">
@@ -19,7 +23,10 @@ export default function HomeHeader({ user, coords }: Props) {
       </div>
       <div className="mt-8">
         <h1 className="text-2xl">
-          Hello {user?.name?.split(" ")[0] ?? "Traveler"}
+          Hello{" "}
+          {user.firstName
+            ? user.firstName
+            : user?.name?.split(" ")[0] ?? "Traveler"}
         </h1>
         <h2 className="text-sm">
           Welcome to {user.currentCityId && coords && "Bangkok, TH"}

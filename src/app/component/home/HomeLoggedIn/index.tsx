@@ -5,14 +5,15 @@ import { useGeo } from "@/app/hooks/useGeo";
 import { useMemo } from "react";
 
 import { City } from "@/domain/city/city.schema";
-import { User } from "@/domain/user/formUser.schema";
+import { User } from "@/domain/user/user.schema";
 import { getDistance } from "@/app/_utils/geo";
-import MateCard from "../../common/cards/MateCard";
-import { Session } from "next-auth";
+
 import HomeHeader from "../HomeHeader";
 import NextDestinationList from "../NextDestinationList";
 import NearbyAttractionsList from "../NearbyAttractionsList";
 import NearbyMateList from "../NearbyMateList";
+import { Country } from "@/domain/country/country.schema";
+import CityCard from "../../common/cards/CityCard";
 
 export const sectionTitle = "font-bold text-xl my-4";
 
@@ -45,18 +46,54 @@ function UserLocationDisplay({
   );
 }
 
+/*
+function CountriesList({
+  countries,
+  userLocation,
+}: {
+  countries: Country[];
+  userLocation?: { lat: number; lng: number };
+}) {
+  console.log("countries", countries);
+  return (
+    <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory">
+      {countries.map((countries, index) => (
+        <div className="snap-start" key={countries.id}>
+          <CityCard
+            index={index}
+            city={countries}
+            userLocation={userLocation}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+*/
+
 type HomeLoggedInProps = {
-  session: Session;
+  countries: Country[];
   cities: City[];
   activities: Activity[];
+  users: User[];
+  loggedUser: User;
 };
 
 export default function HomeLoggedIn({
-  session,
   cities,
+  countries,
   activities,
+  loggedUser,
+  users,
 }: HomeLoggedInProps) {
-  const { coords, error, loading: locationLoading } = useGeo();
+  const {
+    coords,
+    error,
+    loading: locationLoading,
+  } = useGeo({
+    persistToDb: true,
+    distanceThresholdKm: 1, // Save to DB if user moves more than 1km
+  });
 
   const fakeLocationInBkk = { lat: 13.7563, lng: 100.5018 };
 
@@ -84,41 +121,38 @@ export default function HomeLoggedIn({
       return distA - distB;
     });
   }, [cities, fakeLocationInBkk]);
-
+  console.log("countries", countries);
   return (
     <div>
-      <HomeHeader user={session?.user} coords={coords} />
+      <HomeHeader user={loggedUser} />
+      {/* <CountriesList countries={countries} /> */}
       <main className="p-4">
         <UserLocationDisplay
-          coords={coords}
-          error={error}
+          coords={coords ?? undefined}
+          error={error ?? undefined}
           locationLoading={locationLoading}
         />
-        <NearbyAttractionsList /> // pass activities if needed
-        <NextDestinationList
-          destinations={sortedCities}
-          userLocation={coords}
-        />
+        <NearbyAttractionsList />
+        <NextDestinationList destinations={sortedCities} />
         <NearbyMateList
-          mates={[
-            {
-              ...session.user,
-              location: "Bangkok, TH",
-              isLocal: true,
-              dob: "1991-09-06",
-              isOnline: true,
-            },
-            {
-              ...session.user,
-              image:
-                "https://images.unsplash.com/photo-1563127830-b94f0c127c52?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1974",
-              name: "Alex Johnson",
-              location: "Pattaya, TH",
-              isLocal: false,
-              dob: "1996-09-06",
-              isOnline: false,
-            },
-          ]}
+          loggedUser={loggedUser}
+          mates={users.map((user) => ({
+            userId: user.id,
+            name: `${
+              user.firstName ? `${user.firstName} ${user.lastName}` : user.name
+            }`,
+            image: user.image,
+            isOnline: Math.random() > 0.5, // TODO: implement real online status
+            location: user.homeBaseCity
+              ? `${user.homeBaseCity.name}, ${
+                  user.homeBaseCity.country?.name === "United States of America"
+                    ? "USA"
+                    : user.homeBaseCity.country?.name || ""
+                }`
+              : "Location not set",
+            isResident: Math.random() > 0.5, // TODO: implement real resident status
+            birthday: user.birthday,
+          }))}
         />
       </main>
     </div>

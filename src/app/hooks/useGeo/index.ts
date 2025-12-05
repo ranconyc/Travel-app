@@ -1,16 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { hasGeolocation } from "@/app/_utils/env";
-import useStorageState from "../useStorageState";
 import { getDistance } from "@/app/_utils/geo";
 import { updateUserLocationWithCityAction } from "@/app/actions/locationActions";
-
-type Coords = { lat: number; lng: number };
-
-const LAST_LOCATION_KEY = "lastLocation";
-const LAST_SAVED_LOCATION_KEY = "lastSavedLocation";
+import { useLocationStore } from "@/store/locationStore";
 
 type UseGeoOptions = {
   persistToDb?: boolean;
@@ -18,26 +13,25 @@ type UseGeoOptions = {
 };
 
 export function useGeo(options: UseGeoOptions = {}) {
+  // Options
   const { persistToDb = false, distanceThresholdKm = 1 } = options;
 
+  // Get session to know the logged user id
   const { data: session } = useSession();
 
-  // Persist current coords in localStorage
-  const [coords, setCoords] = useStorageState<Coords | null>(
-    LAST_LOCATION_KEY,
-    null
-  );
+  // Get location state and actions from store
+  const {
+    coords,
+    lastSavedCoords,
+    loading,
+    error,
+    setCoords,
+    setLastSavedCoords,
+    setLoading,
+    setError,
+  } = useLocationStore();
 
-  // Persist last coords that were synced to DB
-  const [lastSavedCoords, setLastSavedCoords] = useStorageState<Coords | null>(
-    LAST_SAVED_LOCATION_KEY,
-    null
-  );
-
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  // debugging useGeo
+  // Debugging useGeo (ONLY FOR DEVELOPMENT)
   useEffect(() => {
     console.log("useGeo debug", {
       session,
@@ -46,7 +40,7 @@ export function useGeo(options: UseGeoOptions = {}) {
     });
   }, [session, coords, lastSavedCoords]);
 
-  // 1) Get current location from browser
+  // EFFECT 1: Get current location from browser
   useEffect(() => {
     if (!hasGeolocation()) {
       setError("Geolocation not supported");
@@ -54,29 +48,31 @@ export function useGeo(options: UseGeoOptions = {}) {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const next: Coords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        };
+    // On success get the coords and update store
+    const onSuccess = (pos: GeolocationPosition) => {
+      const next = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      };
+      setCoords(next);
+      setLoading(false);
+    };
 
-        setCoords(next); // updates state + localStorage
-        setLoading(false);
-      },
-      (err) => {
-        setError(err.message);
-        setLoading(false);
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 60_000, // 1 min cache
-        timeout: 10_000,
-      }
-    );
-  }, [setCoords]);
+    // On error set error and loading to false
+    const onError = (err: GeolocationPositionError) => {
+      setError(err.message);
+      setLoading(false);
+    };
 
-  // 2) Optionally persist to DB if user moved enough
+    // Get the current position from the browser
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+      enableHighAccuracy: true,
+      maximumAge: 60_000, // 1 min cache
+      timeout: 10_000,
+    });
+  }, [setCoords, setError, setLoading]);
+
+  // EFFECT 2: Optionally persist to DB if user moved enough
   useEffect(() => {
     if (!persistToDb) return;
     if (!coords) return;
@@ -85,7 +81,7 @@ export function useGeo(options: UseGeoOptions = {}) {
     let shouldSave = false;
 
     if (!lastSavedCoords) {
-      // first time ever – save
+      console.log("first time ever – save");
       shouldSave = true;
     } else {
       const distKm = getDistance(
@@ -93,7 +89,7 @@ export function useGeo(options: UseGeoOptions = {}) {
         lastSavedCoords.lng,
         coords.lat,
         coords.lng,
-        "KM" // explicit, even though it's default
+        "KM"
       );
 
       if (distKm >= distanceThresholdKm) {
@@ -102,23 +98,23 @@ export function useGeo(options: UseGeoOptions = {}) {
     }
 
     if (!shouldSave) return;
-    // fire async logic inside effect
+
+    // Fire async logic inside effect
     (async () => {
       try {
-        // 1) call server action
+        // 1) Call server action
         const result = await updateUserLocationWithCityAction(
           session.user.id,
           coords
         );
 
-        // 2) only after success -> update lastSavedCoords
+        // 2) Only after success -> update lastSavedCoords
         setLastSavedCoords(coords);
 
-        // optional: debug log
+        // Optional: debug log
         console.log("Location synced with city:", result);
       } catch (err) {
         console.error("Failed to update user location with city", err);
-        // optional: you could set an error state here if you want UI feedback
       }
     })();
   }, [
@@ -131,11 +127,4 @@ export function useGeo(options: UseGeoOptions = {}) {
   ]);
 
   return { coords, error, loading };
-}
-
-// TODO: implement this server-side (server action / route)
-async function updateUserLocationWithCity(userId: string, coords: Coords) {
-  // 1) resolve city based on coords
-  // 2) if not found -> create city
-  // 3) prisma.user.update({ currentLocation, currentCityId })
 }

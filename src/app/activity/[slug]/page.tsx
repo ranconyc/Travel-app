@@ -4,7 +4,7 @@ import Button from "@/app/component/common/Button";
 import { Activity } from "@/domain/activity/activity.schema";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
-import { getActivity } from "@/lib/db/activity";
+import { getActivityById } from "@/lib/db/activity.repo";
 import Link from "next/link";
 
 const Header = ({ activity }: { activity: Activity }) => {
@@ -23,12 +23,18 @@ const Header = ({ activity }: { activity: Activity }) => {
       </div>
 
       <div className="overflow-hidden rounded-xl my-4">
-        <Image
-          src={activity?.images?.heroUrl}
-          alt="activity image"
-          width={500}
-          height={500}
-        />
+        {activity?.images?.heroUrl ? (
+          <Image
+            src={activity.images.heroUrl}
+            alt="activity image"
+            width={500}
+            height={500}
+          />
+        ) : (
+          <div className="w-[500px] h-[500px] bg-gray-200 flex items-center justify-center">
+            No Image
+          </div>
+        )}
       </div>
 
       {/* <div className="grid grid-cols-3 gap-2">
@@ -66,7 +72,8 @@ export default async function ActivityPage({ params }: any) {
 
   const { slug } = await params;
 
-  const activity: Activity = await getActivity(slug);
+  const activity = (await getActivityById(slug)) as unknown as Activity;
+  if (!activity) return <div>Activity not found</div>;
 
   console.log("activity", activity);
   return (

@@ -1,14 +1,20 @@
 import BaseCard from "../BaseCard";
 import { AvatarList } from "../../AvatarList";
+import { Activity } from "@/domain/activity/activity.schema";
+
+
+type ActivityCardProps = {
+  activity: { id: string | number; name: string; image: string; mates: any[]; }
+  // activity: Pick<Activity, "id" | "name" | "images"| 'mates' >;
+  index: number;
+};
 
 export default function ActivityCard({
   activity,
+
   index,
-}: {
-  activity: { id: string; name: string; image: string; mates: any[] };
-  index: number;
-}) {
-  const { id, name, image, mates } = activity;
+}: ActivityCardProps) {
+  const { id, name, image, mates  } = activity;
 
   return (
     <BaseCard

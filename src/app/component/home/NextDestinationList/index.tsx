@@ -1,15 +1,15 @@
+"use client";
+
 import { City } from "@/domain/city/city.schema";
 import { sectionTitle } from "../HomeLoggedIn";
 import CityCard from "../../common/cards/CityCard";
+import { useLocationStore } from "@/store/locationStore";
 
 type Props = {
   destinations: City[];
-  userLocation?: { lat: number; lng: number } | null;
 };
-export default function NextDestinationList({
-  destinations,
-  userLocation,
-}: Props) {
+export default function NextDestinationList({ destinations }: Props) {
+  const { coords } = useLocationStore();
   return (
     <>
       <h1 className={sectionTitle}>Next destination ideas</h1>
@@ -19,7 +19,7 @@ export default function NextDestinationList({
           .filter((city: City) => city.cityId !== "bangkok-th")
           .map((city: City, index: number) => (
             <div className="snap-start" key={city.id}>
-              <CityCard index={index} city={city} userLocation={userLocation} />
+              <CityCard index={index} city={city} userLocation={coords} />
             </div>
           ))}
       </div>

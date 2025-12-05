@@ -1,0 +1,153 @@
+"use client";
+
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/app/component/common/Button";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import NameSectionShell from "./sections/NameSection/NameSectionShell";
+import {
+  CompleteProfileFormValues,
+  completeProfileSchema,
+} from "@/domain/user/completeProfile.schema";
+
+import { updateProfile } from "../actions/updateProfile";
+import HomeBaseSectionShell from "./sections/HomeBaseSection/HomeBaseSectionShell";
+import GenderSectionShell from "./sections/GenderSection/GenderSectionShell";
+import OccupationSectionShell from "./sections/OccupationSection/OccupationSectionShell";
+import LanguagesSectionShell from "./sections/LanguagesSection/LanguagesSectionShell";
+import BirthdaySectionShell from "./sections/BirthdaySection/BirthdaySectionShell";
+import AvatarSectionShell from "./sections/AvatarSection/AvatarSectionShell";
+
+import dynamic from "next/dynamic";
+
+const DevTool = dynamic(
+  () => import("@hookform/devtools").then((mod) => ({ default: mod.DevTool })),
+  {
+    ssr: false,
+  }
+);
+import { useProfileDraft } from "@/app/hooks/useProfileDraft";
+import type { User } from "@prisma/client";
+
+type PrismaUser = User;
+
+// sections
+
+function mapUserToDefaults(user: PrismaUser | null): CompleteProfileFormValues {
+  return {
+    image: user?.image ?? null,
+    firstName: user?.firstName ?? "",
+    lastName: user?.lastName ?? "",
+    birthday: user?.birthday
+      ? new Date(user.birthday).toISOString().slice(0, 10)
+      : "",
+    gender: (user?.gender as any) ?? "",
+    homeBase: user?.homeBaseCity?.name
+      ? `${user.homeBaseCity.name}${
+          user.homeBaseCity.country?.name
+            ? `, ${user.homeBaseCity.country.name}`
+            : ""
+        }`
+      : "",
+    homeBaseCityId: user?.homeBaseCityId ?? null,
+    occupation: user?.occupation ?? "",
+    languages: user?.languages ?? [],
+  };
+}
+
+type Props = {
+  user: PrismaUser;
+};
+
+export default function CompleteProfileFormClient({ user }: Props) {
+  const defaultValues = useMemo(() => mapUserToDefaults(user), [user]);
+
+  const methods = useForm<CompleteProfileFormValues>({
+    resolver: zodResolver(completeProfileSchema),
+    defaultValues,
+    mode: "onBlur",
+  });
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = methods;
+
+  useEffect(() => {
+    console.log("formState", errors);
+  }, [errors]);
+
+  const { clearDraft } = useProfileDraft(methods, user.id);
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleSubmit(onSubmit)(e);
+  };
+
+  const onSubmit = async (values: CompleteProfileFormValues) => {
+    console.log("submit starting", values);
+    const result = await updateProfile({ ...values, id: user.id });
+
+    if (!result.success) {
+      console.error("updateProfile failed:", result);
+
+      // Handle field-specific validation errors
+      if (result.fieldErrors) {
+        // Set field errors for each field
+        Object.entries(result.fieldErrors).forEach(([field, message]) => {
+          methods.setError(field as any, { message });
+        });
+      }
+
+      // Show general error toast or alert
+      alert(
+        result.error === "VALIDATION_ERROR"
+          ? "Please fix the errors in the form"
+          : "Something went wrong. Please try again."
+      );
+      return;
+    }
+
+    clearDraft();
+
+    // Small delay to ensure storage is cleared before redirect
+    setTimeout(() => {
+      window.location.href = `/profile/${user.id}`;
+    }, 100);
+  };
+
+  return (
+    <FormProvider {...methods}>
+      <form
+        onSubmit={handleFormSubmit}
+        className=" border border-gray-300 px-2 py-4 md:px-6 md:max-w-1/3 lg:max-w-1/2 md:mx-auto space-y-4 pb-10 "
+        noValidate
+      >
+        <div className="w-full lg:flex ">
+          <AvatarSectionShell />
+          <div>
+            <NameSectionShell />
+            <HomeBaseSectionShell />
+            <OccupationSectionShell />
+            <LanguagesSectionShell />
+            <BirthdaySectionShell />
+            <GenderSectionShell />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="mt-4 w-full rounded-xl bg-cyan-700 py-3 text-sm font-semibold text-white hover:bg-cyan-800 disabled:opacity-60"
+        >
+          {isSubmitting ? "Saving..." : "Complete Profile"}
+        </button>
+      </form>
+      {process.env.NODE_ENV === "development" && (
+        <DevTool control={methods.control} />
+      )}
+    </FormProvider>
+  );
+}

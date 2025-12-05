@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter, Sora } from "next/font/google";
 import ReactQueryProvider from "./providers/reactQueryProvider";
 import SessionProviderWrapper from "./providers/SessionProviderWrapper";
+import Navbar from "./component/Navbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,10 +30,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://locationiq.org" />
+      </head>
       <body className={`${sora.variable} ${inter.variable} antialiased`}>
         <SessionProviderWrapper>
           <ReactQueryProvider>{children}</ReactQueryProvider>
         </SessionProviderWrapper>
+        <Navbar />
       </body>
     </html>
   );

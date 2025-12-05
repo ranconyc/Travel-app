@@ -1,8 +1,8 @@
 import { getAge } from "@/app/_utils/age";
 import StatusIndicator from "../../StatusIndicator";
 import BaseCard from "../BaseCard";
-import { Avatar } from "../../Avatar";
 import { AvatarList } from "../../AvatarList";
+import { User } from "@/domain/user/user.schema";
 
 const ResidentOrVisitorBadge = ({ isResident }: { isResident: boolean }) => (
   <div
@@ -20,12 +20,16 @@ const LocationBadge = ({ location }: { location: string }) => (
 
 export default function MateCard({
   mate,
+  loggedUser,
   priority,
 }: {
   mate: any;
+  loggedUser: User;
   priority: boolean;
 }) {
-  const { userId, image, name, isOnline, location, isResident, dob } = mate;
+  const { userId, image, name, isOnline, location, isResident, birthday } =
+    mate;
+
   return (
     <BaseCard
       linkHref={`/profile/${userId}`}
@@ -36,7 +40,11 @@ export default function MateCard({
         <AvatarList
           list={[
             { id: userId, image: image, name: name },
-            { id: 3, image: image, name: name },
+            {
+              id: loggedUser?.id === userId ? "ddddd" : loggedUser?.id,
+              image: loggedUser?.image,
+              name: loggedUser?.name,
+            },
           ]}
           matchPercentage={56}
           showMatch
@@ -48,7 +56,7 @@ export default function MateCard({
             <ResidentOrVisitorBadge isResident={isResident} />
           </div>
           <h3 className="text-white font-bold leading-tight text-[clamp(18px,2.8vw,24px)] line-clamp-2 mt-2">
-            {mate.name}, {getAge(dob)}
+            {mate.name}, {getAge(birthday)}
           </h3>
         </div>
       </div>

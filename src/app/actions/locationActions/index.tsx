@@ -2,35 +2,69 @@
 "use server";
 
 import { prisma } from "@/lib/db/prisma";
-import { detectCityFromCoords } from "@/lib/db/city";
+import {
+  findNearestCityFromCoords,
+  getAllCities,
+} from "@/lib/db/cityLocation.repo";
+import { getAllCountries } from "@/lib/db/country.repo";
 
 type Coords = {
   lat: number;
   lng: number;
 };
 
-// Server action to update user's location + city
+export async function getAllCitiesAction() {
+  return await getAllCities();
+}
+
+export async function getAllCountriesAction() {
+  return await getAllCountries();
+}
+
 export async function updateUserLocationWithCityAction(
   userId: string,
   coords: Coords
-) {
-  if (!userId) return;
+): Promise<
+  | {
+      success: true;
+      detected: Awaited<ReturnType<typeof findNearestCityFromCoords>>;
+    }
+  | { success: false; error: string }
+> {
+  if (!userId) {
+    return { success: false, error: "Missing userId" };
+  }
 
-  // 1) detect city from coordinates (DB + LocationIQ fallback)
-  const detected = await detectCityFromCoords(coords.lat, coords.lng);
+  if (
+    typeof coords.lat !== "number" ||
+    typeof coords.lng !== "number" ||
+    Number.isNaN(coords.lat) ||
+    Number.isNaN(coords.lng)
+  ) {
+    return { success: false, error: "Invalid coordinates" };
+  }
 
-  // 2) update user document – adjust field names to your schema
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      currentLat: coords.lat,
-      currentLng: coords.lng,
-      currentCityId: detected.cityId ?? undefined,
-      currentCityLabel: detected.label ?? undefined,
-      // you can also store "lastLocationSource" if you want:
-      // locationSource: detected.source,
-    },
-  });
+  try {
+    const detected = await findNearestCityFromCoords(coords.lat, coords.lng, {
+      createIfMissing: true,
+    });
 
-  return detected;
+    console.log("findNearestCityFromCoords detected", detected);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        currentLocation: {
+          type: "Point",
+          coordinates: [coords.lng, coords.lat],
+        },
+        currentCityId: detected.cityId ?? undefined,
+      },
+    });
+
+    return { success: true, detected };
+  } catch (error) {
+    console.error("updateUserLocationWithCityAction error:", error);
+    return { success: false, error: "Failed to update user location" };
+  }
 }

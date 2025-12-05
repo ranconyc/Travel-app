@@ -11,7 +11,11 @@ import { useAutocompleteOptions } from "@/app/hooks/autocomplete/useAutocomplete
 import Button from "../../common/Button";
 import { X } from "lucide-react";
 
-export type AutoOption = { id: string; label: string; subtitle?: string };
+export type AutoOption = {
+  id: string;
+  label: string;
+  subtitle?: string;
+};
 
 export type AutocompleteProps = {
   options?: string[]; // local list support
@@ -24,6 +28,7 @@ export type AutocompleteProps = {
   minChars?: number;
   openOnFocus?: boolean;
   noResultsText?: string;
+  enableRemoteOnType?: boolean;
   highlight?: boolean;
   className?: string;
   inputClassName?: string;
@@ -54,6 +59,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       minChars = 0,
       openOnFocus = true,
       noResultsText = "No results found",
+      enableRemoteOnType = false,
       highlight = true,
       className = "",
       inputClassName = "",
@@ -92,13 +98,22 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     const [open, setOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
 
+   
     // 3) remote options via hook
+    const [hasTyped, setHasTyped] = useState(false);
+    const effectiveLoadOptions =
+  enableRemoteOnType
+    ? hasTyped
+      ? loadOptions
+      : undefined   // block remote until user types
+    : loadOptions;  // old behavior when the prop is false
+
     const { remote, loading, err, skipNextFetch, resetRemote } =
       useAutocompleteRemote<AutoOption>({
         query: qVal,
         minChars,
         maxResults,
-        loadOptions,
+        loadOptions: effectiveLoadOptions,
         cacheResults,
       });
 
@@ -134,6 +149,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
     // 7) query setter used by typing
     const setQ = (val: string) => {
+       if (!hasTyped) setHasTyped(true);
       setInnerValue(val);
       onQueryChange?.(val);
     };
@@ -166,7 +182,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     });
 
     // 10) close on click outside
-    useClickOutside(containerRef, () => {
+    useClickOutside(containerRef as React.RefObject<HTMLElement>, () => {
       setOpen(false);
     });
 

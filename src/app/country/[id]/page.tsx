@@ -1,16 +1,16 @@
 import Block from "@/app/component/common/Block";
 import Button from "@/app/component/common/Button";
 import CurrencySection from "@/app/component/sections/CurrencySection";
-import ElectricitySection from "@/app/component/sections/ElectricitySection";
-import EmergencySection from "@/app/component/sections/EmergencySection";
-import LanguageSection from "@/app/component/sections/LanguageSection";
-import TimeZoneSection from "@/app/component/sections/TimeZoneSection";
-import VisaSection from "@/app/component/sections/VisaSection";
 import Title from "@/app/component/Title";
 import { Country } from "@/domain/country/country.schema";
-import { getCountryWithCities } from "@/lib/db/country";
+import {
+  findBorderCountries,
+  getCountryWithCities,
+} from "@/lib/db/country.repo";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { formatNumberShort } from "@/app/_utils/formatNumber";
 
 export default async function CountryPage({
   params,
@@ -18,8 +18,14 @@ export default async function CountryPage({
   params: { id: string };
 }) {
   const { id } = await params;
-  console.log(id);
-  const country: Country | null = await getCountryWithCities(id);
+  const country = (await getCountryWithCities(id)) as unknown as Country;
+  const borderCountries = await findBorderCountries(country?.meta?.borders);
+  // console.log("CCCCCCC", country);
+  // console.log("BBBBBB", borderCountries);
+
+  if (!country) {
+    notFound();
+  }
 
   return (
     <div>
@@ -30,14 +36,17 @@ export default async function CountryPage({
             <div>add to wishlist</div>
           </div>
           <div className="flex flex-col items-center gap-1 mb-6">
-            <h2 className="text-sm capitalize">south east asia</h2>
+            <h2 className="text-sm capitalize">{country?.continent}</h2>
             <h1 className="text-2xl">{country?.name}</h1>
           </div>
         </div>
 
         <div className="overflow-hidden rounded-xl my-4">
           <Image
-            src={country?.imageHeroUrl}
+            src={
+              country?.imageHeroUrl ||
+              "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&q=80&w=2039"
+            }
             alt={`${country?.name}-image`}
             width={500}
             height={500}
@@ -61,67 +70,116 @@ export default async function CountryPage({
       </header>
       <main className=" bg-gray-100 p-4 flex gap-4 flex-wrap items-stretch ">
         <Block>
-          <Title>{country?.name}</Title>
-          <p>
-            Thailand is a vibrant Southeast Asian country known for beautiful
-            islands, rich culture, Buddhist temples, delicious street food, and
-            warm hospitality. From Bangkok’s energy to peaceful beaches, it
-            offers unforgettable travel experiences.
-          </p>
+          <Title>images</Title>
+          <div className="flex items-center gap-2">
+            {country?.images.length > 0 &&
+              country?.images.map((image, index) => (
+                <div key={image}>
+                  <Image
+                    src={image}
+                    alt={`${country?.name}-image-${index + 1}`}
+                    width={150}
+                    height={300}
+                  />
+                </div>
+              ))}
+          </div>
         </Block>
 
         <Block>
-          <Title>Cities</Title>
-          <div className="flex gap-4 overflow-x-auto py-2 snap-x snap-mandatory">
-            {country?.cities.map((city) => (
-              <Link
-                key={city.id}
-                href={`/city/${city.cityId}`}
-                className="min-w-[220px] snap-start bg-white rounded-lg overflow-hidden  border border-gray-200"
-              >
-                <Image
-                  src={city.imageHeroUrl}
-                  alt={city.name}
-                  width={300}
-                  height={200}
-                  className="h-32 w-full object-cover"
-                />
-                <h1 className="p-2 font-semibold text-lg">{city.name}</h1>
-              </Link>
-            ))}
-          </div>
-
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {country?.cities.map((city) => (
-              <Link
-                key={city.id}
-                href={`/city/${city.cityId}`}
-                className="rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition"
-              >
-                <div className="h-40 w-full overflow-hidden">
+          <Title>{country?.name}</Title>
+          <p>Population: {formatNumberShort(country?.population)}</p>
+          <p>Capital: {country?.capital}</p>
+        </Block>
+        {country?.cities.length > 0 && (
+          <Block>
+            <Title>Cities</Title>
+            <div className="flex gap-4 overflow-x-auto py-2 snap-x snap-mandatory">
+              {country?.cities.map((city: any) => (
+                <Link
+                  key={city?.id}
+                  href={`/city/${city?.cityId}`}
+                  className="min-w-[220px] snap-start bg-white rounded-lg overflow-hidden  border border-gray-200"
+                >
                   <Image
-                    src={city.imageHeroUrl}
-                    alt={city.name}
-                    width={600}
-                    height={300}
-                    className="h-full w-full object-cover"
+                    src={city?.imageHeroUrl}
+                    alt={city?.name}
+                    width={300}
+                    height={200}
+                    className="h-32 w-full object-cover"
                   />
-                </div>
+                  <h1 className="p-2 font-semibold text-lg">{city.name}</h1>
+                </Link>
+              ))}
+            </div>
 
-                <div className="p-3">
-                  <h1 className="font-semibold text-lg">{city.name}</h1>
-                </div>
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {country?.cities.map((city) => (
+              <Link
+              key={city.id}
+              href={`/city/${city.cityId}`}
+              className="rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition"
+              >
+              <div className="h-40 w-full overflow-hidden">
+              <Image
+              src={city.imageHeroUrl}
+              alt={city.name}
+              width={600}
+              height={300}
+              className="h-full w-full object-cover"
+              />
+              </div>
+              
+              <div className="p-3">
+              <h1 className="font-semibold text-lg">{city.name}</h1>
+              </div>
               </Link>
-            ))}
-          </div> */}
+              ))}
+              </div> */}
+          </Block>
+        )}
+
+        <Block>
+          <Title>Border Countries</Title>
+          {borderCountries.length > 0 && (
+            <div className="flex gap-4 overflow-x-auto py-2 snap-x snap-mandatory">
+              {borderCountries.map((country) => (
+                <Link
+                  key={country?.id}
+                  href={`/country/${country?.countryId}`}
+                  className="min-w-[220px] snap-start bg-white rounded-lg overflow-hidden  border border-gray-200"
+                >
+                  <Image
+                    src={
+                      country?.imageHeroUrl ||
+                      "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&q=80&w=2039"
+                    }
+                    alt={country?.name}
+                    width={150}
+                    height={100}
+                    className="h-32 w-full object-cover"
+                  />
+                  <h1 className="p-2 font-semibold text-lg">{country.name}</h1>
+                </Link>
+              ))}
+            </div>
+          )}
         </Block>
 
-        <div className="w-full flex gap-4">
-          <ElectricitySection
-            voltage={country?.utilities.electricity.voltage}
-            frequencyHz={country?.utilities.electricity.frequencyHz}
-            plugs={country?.utilities.electricity.plugs}
-          />
+        <CurrencySection
+          name={(Object.values(country?.currency || {}) as any)[0]?.name}
+          symbol={(Object.values(country?.currency || {}) as any)[0]?.symbol}
+          // code={country?.currency?.code}
+        />
+
+        {/* <div className="w-full flex gap-4">
+          {country?.utilities.electricity && (
+            <ElectricitySection
+              voltage={country?.utilities.electricity.voltage}
+              frequencyHz={country?.utilities.electricity.frequencyHz}
+              plugs={country?.utilities.electricity.plugs}
+            />
+          )}
           <TimeZoneSection timeZone="UTC+7" />
         </div>
         <VisaSection
@@ -129,11 +187,6 @@ export default async function CountryPage({
           passportValidityNote={country?.visaEntry.passportValidityNote}
         />
         <div className="w-full flex gap-4">
-          <CurrencySection
-            name={country?.currency?.name}
-            symbol={country?.currency?.symbol}
-            code={country?.currency?.code}
-          />
           <EmergencySection
             touristPolice={country?.emergency.touristPolice}
             fire={country?.emergency.fire}
@@ -146,7 +199,7 @@ export default async function CountryPage({
           englishProficiencyNote={country?.languageComm.englishProficiencyNote}
           languageNative="ภาษาไทย"
           languagesEnglish="Thai"
-        />
+        /> */}
       </main>
     </div>
   );

@@ -199,3 +199,28 @@ export function formatDistanceWithFlightHint(
   const flight = formatFlightTimeLabelFromDistance(distance, unit);
   return flight ? `${base} (${flight})` : base;
 }
+
+
+
+export function radiusFromBoundingBox(bounding: string[] | number[]) {
+  if (!bounding || bounding.length < 4) return null;
+
+  const south = parseFloat(String(bounding[0]));
+  const north = parseFloat(String(bounding[1]));
+  const west  = parseFloat(String(bounding[2]));
+  const east  = parseFloat(String(bounding[3]));
+
+  const centerLat = (south + north) / 2;
+  const centerLng = (west + east) / 2;
+
+  // distance from center → north edge = radius
+  const radiusKm = getDistance(
+    centerLat,
+    centerLng,
+    north,
+    centerLng,
+    "KM"
+  );
+
+  return radiusKm;
+}

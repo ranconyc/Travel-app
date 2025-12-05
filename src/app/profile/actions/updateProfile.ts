@@ -1,4 +1,3 @@
-// src/app/profile/actions/updateProfile.ts
 "use server";
 
 import { prisma } from "@/lib/db/prisma";
@@ -7,7 +6,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import {
   completeProfileSchema,
   type CompleteProfileFormValues,
+  type HomeBaseLocationMeta,
 } from "@/domain/user/completeProfile.schema";
+import { findOrCreateCity } from "@/lib/db/cityLocation.repo";
 
 type UpdateProfileResult =
   | { success: true }
@@ -32,7 +33,6 @@ export async function updateProfile(
   if (!parsed.success) {
     const flat = parsed.error.flatten();
 
-    // Map Zod errors -> { [fieldName]: "message" }
     const fieldErrors: Record<string, string> = {};
     for (const [name, messages] of Object.entries(flat.fieldErrors)) {
       if (messages && messages[0]) {
@@ -48,8 +48,32 @@ export async function updateProfile(
   }
 
   const values = parsed.data;
+  console.log("updating profile...", values);
+  // Resolve or create home base city
+  let homeBaseCityId: string | null = values.homeBaseCityId ?? null;
 
-  console.log("updateProfile", values);
+  if (!homeBaseCityId && values.homeBaseLocation) {
+    console.log("Creating new city from location:", values.homeBaseLocation);
+    const city = await findOrCreateCity(
+      values.homeBaseLocation.city ||
+        values.homeBaseLocation.displayName ||
+        "Unknown City",
+      values.homeBaseLocation.countryCode,
+      {
+        coords: {
+          lat: values.homeBaseLocation.lat,
+          lng: values.homeBaseLocation.lon,
+        },
+      }
+    );
+    homeBaseCityId = city.id;
+    console.log(
+      "Created city with ID:",
+      city.id,
+      "Setting homeBaseCityId to:",
+      homeBaseCityId
+    );
+  }
 
   const birthdayDate = values.birthday ? new Date(values.birthday) : null;
 
@@ -63,8 +87,8 @@ export async function updateProfile(
       occupation: values.occupation || null,
       birthday: birthdayDate,
       gender: values.gender === "" ? null : values.gender,
-      languages: values.languages, // ["en","he"]
-
+      languages: values.languages, // ["en", "he"]
+      homeBaseCityId, // <-- connected to City
       profileCompleted: true,
     },
   });

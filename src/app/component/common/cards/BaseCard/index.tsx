@@ -46,7 +46,7 @@ export default function BaseCard({
   const card = (
     <div
       className={
-        "bg-white rounded-2xl overflow-hidden min-w-[240px] h-[300px] mx-auto shadow " +
+        "bg-white rounded-2xl overflow-hidden w-[240px] h-[300px] mx-auto shadow " +
         (className ?? "")
       }
     >

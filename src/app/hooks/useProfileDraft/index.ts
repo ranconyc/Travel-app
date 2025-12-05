@@ -17,7 +17,7 @@ export function useProfileDraft<TFormValues>(
 ) {
   const { reset, watch } = methods;
 
-  // 1) Load draft AFTER hydration
+  // 1) Load draft AFTER hydration (only if it has meaningful data)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -25,8 +25,24 @@ export function useProfileDraft<TFormValues>(
       const raw = window.localStorage.getItem(STORAGE_KEY_PREFIX + userId);
       if (!raw) return;
 
-      const draft = JSON.parse(raw) as TFormValues;
-      reset(draft); // restore full form: homeBase, languages, etc.
+      const parsed = JSON.parse(raw);
+      
+      // Ensure homeBase is always a string to prevent type issues
+      if (parsed.homeBase && typeof parsed.homeBase !== 'string') {
+        parsed.homeBase = String(parsed.homeBase);
+      }
+      
+      const draft = parsed as TFormValues;
+      
+      // Only reset if draft has actual data (not empty defaults)
+      const hasData = Object.values(draft).some(
+        value => value !== null && value !== undefined && value !== "" && 
+                (!Array.isArray(value) || value.length > 0)
+      );
+      
+      if (hasData) {
+        reset(draft); // restore full form: homeBase, languages, etc.
+      }
     } catch (e) {
       console.error("Failed to load profile draft", e);
     }
@@ -62,3 +78,4 @@ export function useProfileDraft<TFormValues>(
 
   return { clearDraft };
 }
+

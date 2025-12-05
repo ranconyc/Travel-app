@@ -4,7 +4,7 @@ import { CircleDollarSign } from "lucide-react";
 
 type CurrencyProps = {
   name: string;
-  code: string;
+  code?: string;
   symbol: string;
   paymentMethodsNote?: string;
 };
@@ -21,7 +21,7 @@ export default function CurrencySection({
       <div className="flex items-center justify-between gap-4">
         {/* <h1 className="text-sm font-medium capitalize mb-1">Currency Name</h1> */}
         <p className="text-xs">
-          {name} {symbol} {code}
+          {name} {symbol} {code && `(${code})`}
         </p>
       </div>
 

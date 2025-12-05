@@ -18,9 +18,7 @@ enum Gender {
  */
 model User {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
-  /**
-   * ---- INFO ----
-   */
+  /* ---- INFO ---- */
   email            String?        @unique
   name             String?
   firstName        String?
@@ -33,47 +31,41 @@ model User {
   gender           Gender?
   emailVerified    DateTime?
   image            String?
-  imagePublicId    String?     
+  imagePublicId    String?
   passwordHash     String?
   profileCompleted Boolean        @default(false)
-  /**
-   * ---- LANGUAGE ----
-   */
+
+   /* ---- LANGUAGE ---- */
   languages String[] @default([]) // ['en','es']
-  /**
-   * ---- AUTH ----
-   */
+
+   /* ---- AUTH ---- */
   accounts         Account[]
   sessions         Session[]
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-  /**
-   * ---- DESTINATIONS ----
-   */
+  
+  /** ---- DESTINATIONS ---- */
+ 
   currentLocation  Json? // { type: "Point", coordinates: [lng, lat] }? 
   currentCityId    String?        @db.ObjectId
   currentCity      City?          @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
-  /**
-   * ---- TRAVEL INTERESTS ----
-   */
+  /* ---- TRAVEL INTERESTS ---- */
   interests     UserInterest[]
-  /**
-   * ---- TRAVEL PERSONA ----
-   */
+  /* ---- TRAVEL PERSONA ---- */
   travelPersona TravelPersona?
-
-  /**
-   * ---- TRAVEL HISTORY ----
-   */
+  /* ---- TRAVEL HISTORY ---- */
   visitedCities  UserVisitedCity[]
-  /**
-   * ---- WISHLIST ----
-   */
+  /* ---- WISHLIST ---- */
   wishListCities UserWishlistCity[]
-  /**
-   * ---- FRIENDSHIP ----
-   */
+  /* ---- FRIENDSHIP ---- */
+
+  friendshipsRequested Friendship[] @relation("FriendshipsRequested")
+  friendshipsReceived Friendship[] @relation("FriendshipsReceived")
+
+  // --- CHAT FEATURE ADDITIONS ---
+  chats            ChatMember[] // Links user to all their chats
+  sentMessages     Message[]    @relation("SentMessages") // Messages sent by the user
 }
 
 model TravelPersona {
@@ -92,13 +84,13 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String? @map("refresh_token")
-  access_token       String? @map("access_token")
-  expires_at         Int?    @map("expires_at")
+  refresh_token      String?        @map("refresh_token")
+  access_token       String?        @map("access_token")
+  expires_at         Int?           @map("expires_at")
   token_type         String?
   scope              String?
-  id_token           String? @map("id_token")
-  session_state      String? @map("session_state")
+  id_token           String?        @map("id_token")
+  session_state      String?        @map("session_state")
   oauth_token_secret String?
   oauth_token        String?
 
@@ -150,7 +142,6 @@ model Country {
   subRegionCode String?
   population    Int?
   areaKm2       Float?
-
   currency      Json?
   emergency     Json?
   visaEntry     Json?
@@ -158,7 +149,6 @@ model Country {
   utilities     Json?
   internet      Json?
   gettingAround Json?
-
   imageHeroUrl  String?
   images        String[] @default([])
 
@@ -166,11 +156,12 @@ model Country {
   idealDuration String?
   safety        String?
 
+  meta Json?
   regions String[] @default([])
 
    // Capital relation (one-to-one)
-  capitalCityRefId String? @unique @db.ObjectId
-  capitalCity      City?  @relation("CountryCapital", fields: [capitalCityRefId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  capitalCityRefId String?        @unique @db.ObjectId
+  capitalCity      City?          @relation("CountryCapital", fields: [capitalCityRefId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
 
   // Relations
@@ -196,7 +187,7 @@ model City {
 
   // Capital inverse relation (optional but nice)
   isCapital        Boolean  @default(false)
-  countryAsCapital Country? @relation("CountryCapital")
+  countryAsCapital Country?        @relation("CountryCapital")
 
   // Geo
   coords      Json
@@ -246,8 +237,8 @@ model Activity {
   city      City   @relation(fields: [cityRefId], references: [id], onDelete: Cascade)
 
   // Optional denorm for filtering/joins
-  countryRefId String?  @db.ObjectId
-  country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+  countryRefId String?        @db.ObjectId
+  country      Country?        @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
   type       String // enum-like in app code
   categories String[] // ["shopping","street-food"]
@@ -294,12 +285,14 @@ model Activity {
   @@index([type])
 }
 
+
+ /* ------------------------- INTERESTS -------------------------*/
 model InterestCategory {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   slug      String     @unique
   title     String
   order     Int        @default(0)
-  interests Interest[]
+  interests    Interest[]
 }
 
 model Interest {
@@ -325,6 +318,10 @@ model UserInterest {
   @@index([userId])
   @@index([interestId])
 }
+
+
+ /* ------------------------- TRAVEL HISTORY -------------------------*/
+
 
 model UserVisitedCity {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -352,4 +349,95 @@ model UserWishlistCity {
   @@unique([userId, cityId])
   @@index([userId])
   @@index([cityId])
+}
+
+
+/* ------------------------- FRIENDSHIP -------------------------*/
+enum FriendStatus {
+  PENDING   // request sent, waiting for response
+  ACCEPTED  // you are friends
+  DENIED    // request was rejected
+  BLOCKED   // one side blocked the other
+}
+
+model Friendship {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+
+  requesterId String       @db.ObjectId   // user who sent the request
+  addresseeId String       @db.ObjectId   // user who receives the request
+  status      FriendStatus @default(PENDING)
+
+  // who blocked whom (only used when status = BLOCKED)
+  blockedById String?      @db.ObjectId
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  requester   User @relation("FriendshipsRequested", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee   User @relation("FriendshipsReceived", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@index([requesterId])
+  @@index([addresseeId])
+  @@index([status])
+}
+
+/**
+ * ---------------------------- CHAT -----------------------------
+ */
+
+model Chat {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  isGroup         Boolean        @default(false)
+  groupName       String?        // Name for group chats
+  groupImage      String?        // Optional image URL for group chats
+  
+  // Relations
+  members         ChatMember[]   // Links to users in this chat
+  messages        Message[]      @relation("ChatMessages") // All messages in this chat
+
+  // Last message for quick list display
+  lastMessageId   String?        @db.ObjectId
+  lastMessage     Message?       @relation("ChatLastMessage", fields: [lastMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model ChatMember {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  chatId          String    @db.ObjectId
+  userId          String    @db.ObjectId
+  
+  // To track where a user last left off (useful for unread counts)
+  lastReadAt      DateTime? 
+  
+  // Relations
+  chat            Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([chatId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  chatId          String    @db.ObjectId
+  senderId        String    @db.ObjectId
+  content         String    // The message text
+  
+  // Array of user IDs who have read the message
+  readBy          String[]  @db.ObjectId 
+  
+  // Relations
+  chat            Chat      @relation("ChatMessages", fields: [chatId], references: [id], onDelete: Cascade)
+  sender          User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  createdAt       DateTime  @default(now())
+
+  // For the `lastMessage` relationship on the Chat model
+  chatLastMessage Chat[]    @relation("ChatLastMessage")
+  
+  @@index([chatId])
+  @@index([senderId])
 }

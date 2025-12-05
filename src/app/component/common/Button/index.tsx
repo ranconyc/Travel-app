@@ -35,12 +35,13 @@ export default function Button({
   }
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-bold transition active:scale-[.98]", 
-  
-       ${
-         variant === "outline" &&
-         "border border-gray-300 text-gray-800 hover:bg-gray-50"
-       }  ${
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-bold transition active:scale-[.98] ${
+        variant === "primary" &&
+        "bg-blue-500 hover:bg-blue-600 text-white"
+      } ${
+        variant === "outline" &&
+        "border border-gray-300 text-gray-800 hover:bg-gray-50"
+      } ${
         variant === "ghost" && "text-gray-600 hover:bg-gray-100"
       } ${className}`}
       disabled={loading || props.disabled}

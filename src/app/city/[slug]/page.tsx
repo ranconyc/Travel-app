@@ -18,10 +18,11 @@ import CurrencySection from "@/app/component/sections/CurrencySection";
 import ConnectivitySection from "@/app/component/sections/ConnectivitySection";
 import EmergencySection from "@/app/component/sections/EmergencySection";
 import VisaSection from "@/app/component/sections/VisaSection";
-import { getCitiesWithCountry } from "@/lib/db/city";
+import { getCitiesWithCountry } from "@/lib/db/cityLocation.repo";
 import Block from "@/app/component/common/Block";
 import Title from "@/app/component/Title";
 import Button from "@/app/component/common/Button";
+import Link from "next/link";
 
 const Header = ({ city }: { city: City }) => {
   return (
@@ -33,18 +34,26 @@ const Header = ({ city }: { city: City }) => {
         </div>
 
         <div className="flex flex-col items-center gap-1 mb-6">
-          <h2 className="text-sm">{city?.country.name}</h2>
+          <Link href={`/country/${(city?.country as any)?.name}`} className="text-sm">
+            {(city?.country as any)?.name}
+          </Link>
           <h1 className="text-2xl">{city?.name}</h1>
         </div>
       </div>
 
       <div className="overflow-hidden rounded-xl my-4">
-        <Image
-          src={city?.imageHeroUrl}
-          alt="city image"
-          width={500}
-          height={500}
-        />
+        {city?.imageHeroUrl ? (
+          <Image
+            src={city.imageHeroUrl}
+            alt="city image"
+            width={500}
+            height={500}
+          />
+        ) : (
+          <div className="w-[500px] h-[500px] bg-gray-200 flex items-center justify-center">
+            No Image
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -79,10 +88,10 @@ export default async function CityPage({ params }: any) {
   const { slug } = await params;
   // find the city from the json file
 
-  const city: City = await getCitiesWithCountry(slug);
+  const city = (await getCitiesWithCountry(slug)) as unknown as City;
   console.log("city", city);
 
-  console.log("city", city?.info);
+  // console.log("city", city?.info);
   return (
     <div>
       <Header city={city} />

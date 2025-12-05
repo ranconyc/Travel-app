@@ -1,0 +1,46 @@
+"use client";
+
+import { memo, useMemo } from "react";
+import { useFormContext, useController } from "react-hook-form";
+import occupationsData from "@/data/occupations.json";
+import { Autocomplete } from "@/app/component/form/Autocomplete";
+import { useLazyLoad } from "@/app/hooks/useLazyLoad";
+
+type FormValues = {
+  occupation: string;
+};
+
+function OccupationSectionClient() {
+  const { control } = useFormContext<FormValues>();
+
+  const { field, fieldState } = useController<FormValues>({
+    control,
+    name: "occupation",
+  });
+
+  // Use lazy loading hook for occupations data
+  const { sectionRef, data: occupationsData } = useLazyLoad<string[]>(() => 
+    import('@/data/occupations.json').then(module => module.default.filter(Boolean))
+  );
+  
+  // Options are the filtered occupations
+  const options = occupationsData || [];
+
+  return (
+    <Autocomplete
+      id="occupation"
+      name="occupation"
+      label="What do you do?"
+      placeholder="Type your job"
+      options={options}
+      value={field.value ?? ""}
+      onQueryChange={field.onChange}
+      onBlur={field.onBlur}
+      error={fieldState.error?.message}
+      clearOnSelect={false}
+      openOnFocus
+    />
+  );
+}
+
+export default memo(OccupationSectionClient);
