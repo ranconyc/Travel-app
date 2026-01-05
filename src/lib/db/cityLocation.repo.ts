@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/db/prisma";
 import type { HomeBaseLocationMeta } from "@/domain/user/completeProfile.schema";
-import { NearestCityResult, ReverseGeocodeResult } from "@/types/city";
+import {
+  DetectedCity,
+  NearestCityResult,
+  ReverseGeocodeResult,
+} from "@/types/city";
 
 function slugify(input: string): string {
   return input
@@ -62,6 +66,7 @@ export async function findNearbyCities(
       { $limit: limit },
       {
         $project: {
+          _id: 1, // Include the ObjectId
           cityId: 1,
           name: 1,
           countryCode: 1,
@@ -74,7 +79,8 @@ export async function findNearbyCities(
   });
 
   return (res as unknown as any[]).map(
-    (row): NearestCityResult => ({
+    (row): NearestCityResult & { id: string } => ({
+      id: row._id?.["$oid"] || row._id, // Handle Mongo raw result often being {_id: {$oid: "..."}}
       cityId: row.cityId ?? null,
       name: row.name ?? null,
       countryCode: row.countryCode ?? null,
@@ -111,6 +117,7 @@ export async function reverseGeocodeLocationIQ(
     url.searchParams.set("lat", lat.toString());
     url.searchParams.set("lon", lng.toString());
     url.searchParams.set("format", "json");
+    url.searchParams.set("accept-language", "en");
 
     const res = await fetch(url.toString());
 
@@ -120,6 +127,8 @@ export async function reverseGeocodeLocationIQ(
 
     const data = await res.json();
     const address = data.address ?? {};
+
+    console.log("reverseGeocodeLocationIQ ---------> ", data);
 
     const city =
       address.city ||
@@ -167,7 +176,7 @@ export async function findNearestCityFromCoords(
   const createIfMissing = options?.createIfMissing ?? false;
 
   const nearest = await findNearestCity(lng, lat, searchRadiusKm);
-  console.log("nearest", nearest);
+  // console.log("nearest", nearest);
 
   if (
     nearest &&
@@ -181,6 +190,7 @@ export async function findNearestCityFromCoords(
         : nearest.name ?? null;
 
     return {
+      id: nearest.id, // Return valid ObjectId
       cityId: nearest.cityId,
       cityName: nearest.name,
       countryCode: nearest.countryCode,
@@ -199,10 +209,12 @@ export async function findNearestCityFromCoords(
         external.city,
         external.countryCode,
         lat,
-        lng
+        lng,
+        external.boundingbox
       );
 
       return {
+        id: newCity.id, // Return valid ObjectId
         cityId: newCity.cityId,
         cityName: newCity.name,
         countryCode: newCity.countryCode,
@@ -217,6 +229,7 @@ export async function findNearestCityFromCoords(
   }
 
   return {
+    id: null,
     cityId: null,
     cityName: external.city,
     countryCode: external.countryCode,
@@ -231,7 +244,8 @@ async function createCityFromAPI(
   cityName: string,
   countryCode: string,
   lat: number,
-  lng: number
+  lng: number,
+  boundingbox?: [number, number, number, number]
 ) {
   const meta = {
     city: cityName,
@@ -240,6 +254,7 @@ async function createCityFromAPI(
     countryCode,
     lat,
     lon: lng,
+    boundingbox,
     provider: "api-created",
     placeId: "unknown",
   };
@@ -364,4 +379,9 @@ export async function ensureCountryAndCityFromLocation(
       }`
     );
   }
+}
+
+export async function isCityExists(cityId: string) {
+  const city = await prisma.city.findUnique({ where: { cityId } });
+  return !!city;
 }

@@ -29,7 +29,7 @@ function AvatarSectionClient() {
     const sigRes = await fetch("/api/profile/upload", { method: "POST" });
     if (!sigRes.ok) throw new Error("Failed to get Cloudinary signature");
 
-    const { cloudName, apiKey, timestamp, folder, signature } =
+    const { cloudName, apiKey, timestamp, folder, signature, transformation } =
       await sigRes.json();
 
     const formData = new FormData();
@@ -38,6 +38,9 @@ function AvatarSectionClient() {
     formData.append("timestamp", String(timestamp));
     formData.append("folder", folder);
     formData.append("signature", signature);
+    if (transformation) {
+      formData.append("transformation", transformation);
+    }
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,

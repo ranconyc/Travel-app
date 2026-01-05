@@ -8,7 +8,7 @@ type Props = {
 
 export default function CompleteProfileShell({ user }: Props) {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen ">
       <FormHeader />
       <CompleteProfileFormClient user={user} />
     </main>

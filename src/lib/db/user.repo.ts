@@ -1,59 +1,26 @@
 import { prisma } from "./prisma";
+import type { Coordinates, NearbyUserResult } from "@/types/user";
+import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
-export type CompleteProfileFormValues = {
-  image: string | null;
-  firstName: string;
-  lastName?: string;
-  birthday: string; // ISO string
-  gender: "MALE" | "FEMALE" | "NON_BINARY" | ""; // form version
-  homeBase: string; // cityId string (later map to homeBaseCityId)
-  occupation?: string;
-  languages: Language[];
-};
-
-// adjust to your real Language type
-export type Language = {
-  code: string;
-  name: string;
-  nativeName?: string;
-  flag?: string;
-};
-
-export async function getUserById(id: string): Promise<{
-  id: string;
-  email: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  image: string | null;
-  birthday: Date | null;
-  gender: string | null;
-  occupation: string | null;
-  homeBaseCityId: string | null;
-  languages: unknown; // adjust to your type
-  homeBaseCity: {
-    id: string;
-    name: string;
-    country: {
-      id: string;
-      name: string;
-    } | null;
-  } | null;
-} | null> {
+export async function getUserById(id: string) {
   if (!id) return null;
-
   try {
     return await prisma.user.findUnique({
       where: { id },
       select: {
+        currentLocation: true,
         id: true,
         email: true,
+        role: true,
         firstName: true,
         lastName: true,
         image: true,
         birthday: true,
         gender: true,
         occupation: true,
+        description: true,
         homeBaseCityId: true,
+        profileCompleted: true,
         languages: true,
         homeBaseCity: {
           select: {
@@ -67,6 +34,39 @@ export async function getUserById(id: string): Promise<{
             },
           },
         },
+        currentCityId: true,
+        currentCity: {
+          select: {
+            id: true,
+            name: true,
+            country: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        trips: {
+          select: {
+            startDate: true,
+            endDate: true,
+            id: true,
+          },
+        },
+        interests: {
+          select: {
+            interest: {
+              select: {
+                id: true,
+                label: true,
+                slug: true,
+              },
+            },
+          },
+        },
+        createdAt: true,
+        updatedAt: true,
       },
     });
   } catch (error) {
@@ -106,6 +106,8 @@ export async function completeProfile(
         description: undefined, // leave untouched
         image: imageValue,
         // TODO: homeBaseCityId + languages update if needed
+        homeBaseCityId: data.homeBaseCityId,
+        languages: data.languages,
       },
     });
   } catch (error) {
@@ -142,6 +144,19 @@ export async function getAllUsers() {
             },
           },
         },
+        currentCityId: true,
+        currentCity: {
+          select: {
+            id: true,
+            name: true,
+            country: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         createdAt: true,
         updatedAt: true,
       },
@@ -156,32 +171,6 @@ export async function getAllUsers() {
     throw new Error("Unable to fetch users at this time");
   }
 }
-
-type Coordinates = { lat: number; lng: number };
-
-export type NearbyUserResult = {
-  id: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  name: string | null;
-  email: string | null;
-  image: string | null;
-  birthday: Date | null;
-  gender: string | null;
-  occupation: string | null;
-  description: string | null;
-  languages: unknown;
-  homeBaseCityId: string | null;
-  homeBaseCity?: {
-    id: string | null;
-    name: string | null;
-    country?: {
-      id: string | null;
-      name: string | null;
-    } | null;
-  } | null;
-  distanceKm: number | null;
-};
 
 export async function getNearbyUsers(
   coords: Coordinates,
@@ -237,4 +226,9 @@ export async function getNearbyUsers(
 
     return [];
   }
+}
+
+export async function isUserExists(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  return !!user;
 }

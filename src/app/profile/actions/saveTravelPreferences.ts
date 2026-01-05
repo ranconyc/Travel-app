@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/db/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 // This is the expected shape of the React Hook Form submission
 export type TravelPreferencesFormValues = {

@@ -2,9 +2,8 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/app/component/common/Button";
-import { useState, useMemo, useEffect } from "react";
+
+import { useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import NameSectionShell from "./sections/NameSection/NameSectionShell";
 import {
@@ -31,7 +30,14 @@ const DevTool = dynamic(
 import { useProfileDraft } from "@/app/hooks/useProfileDraft";
 import type { User } from "@prisma/client";
 
-type PrismaUser = User;
+type PrismaUser = User & {
+  homeBaseCity?: {
+    name: string;
+    country?: {
+      name: string;
+    } | null;
+  } | null;
+};
 
 // sections
 
@@ -62,6 +68,7 @@ type Props = {
 };
 
 export default function CompleteProfileFormClient({ user }: Props) {
+  const router = useRouter();
   const defaultValues = useMemo(() => mapUserToDefaults(user), [user]);
 
   const methods = useForm<CompleteProfileFormValues>({
@@ -76,18 +83,21 @@ export default function CompleteProfileFormClient({ user }: Props) {
   } = methods;
 
   useEffect(() => {
-    console.log("formState", errors);
+    // console.log("form errors", errors);
   }, [errors]);
 
   const { clearDraft } = useProfileDraft(methods, user.id);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleSubmit(onSubmit)(e);
+    // console.log("submitting", e);
+    // e.preventDefault(); // handleSubmit handles preventDefault
+    // const values = getValues();
+    // console.log("values", values);
+    return handleSubmit(onSubmit)(e);
   };
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
-    console.log("submit starting", values);
+    // console.log("submit starting", values);
     const result = await updateProfile({ ...values, id: user.id });
 
     if (!result.success) {
@@ -112,20 +122,20 @@ export default function CompleteProfileFormClient({ user }: Props) {
 
     clearDraft();
 
-    // Small delay to ensure storage is cleared before redirect
-    setTimeout(() => {
-      window.location.href = `/profile/${user.id}`;
-    }, 100);
+    // Refresh to update server components with new data
+    router.refresh();
+    // Smooth client-side navigation
+    router.push(`/profile/${user.id}`);
   };
 
   return (
     <FormProvider {...methods}>
       <form
         onSubmit={handleFormSubmit}
-        className=" border border-gray-300 px-2 py-4 md:px-6 md:max-w-1/3 lg:max-w-1/2 md:mx-auto space-y-4 pb-10 "
+        className=" border border-red-500 px-2 py-4 md:px-6 md:max-w-1/3 lg:max-w-1/2 md:mx-auto space-y-4 pb-10 "
         noValidate
       >
-        <div className="w-full lg:flex ">
+        <div className="w-full">
           <AvatarSectionShell />
           <div>
             <NameSectionShell />

@@ -54,7 +54,7 @@
   }
 
   button {
-    @apply bg-cyan-600 px-4 py-2 rounded-md text-white font-bold hover:bg-cyan-700;
+    @apply px-4 py-2 rounded-md text-white font-bold;
   }
 }
 
@@ -74,7 +74,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #2b2c45;
     --foreground: #ededed;
   }
 }
@@ -96,4 +96,13 @@ body {
 
 html {
   -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.lucide {
+  font-size: 16px;
 }

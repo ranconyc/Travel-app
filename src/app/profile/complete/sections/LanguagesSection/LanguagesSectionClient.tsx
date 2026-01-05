@@ -33,20 +33,22 @@ function LanguagesSectionClient() {
   // Load languages data with optimized strategy
   const [allLanguages, setAllLanguages] = useState<FormLanguage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     const loadStart = performance.now();
-    
+
     // Use requestIdleCallback for non-blocking loading
     const loadLanguages = () => {
       import("@/data/languages.json").then((module) => {
         const loadEnd = performance.now();
-        console.log(`Languages JSON load took: ${(loadEnd - loadStart).toFixed(2)}ms`);
-        
+        // console.log(
+        //   `Languages JSON load took: ${(loadEnd - loadStart).toFixed(2)}ms`
+        // );
+
         // Optimize mapping with batch processing
         const mapStart = performance.now();
         const languageData = module.default as LanguageJson[];
-        
+
         // Use more efficient mapping
         const languages = languageData.map((l) => ({
           code: l.code,
@@ -56,15 +58,17 @@ function LanguagesSectionClient() {
           label: l.flag ? `${l.name} ${l.flag}` : l.name,
           proficiency: "fluent",
         }));
-        
+
         const mapEnd = performance.now();
-        console.log(`Languages mapping took: ${(mapEnd - mapStart).toFixed(2)}ms`);
-        
+        // console.log(
+        //   `Languages mapping took: ${(mapEnd - mapStart).toFixed(2)}ms`
+        // );
+
         setAllLanguages(languages);
         setIsLoading(false);
       });
     };
-    
+
     // Use requestIdleCallback if available, otherwise fallback to setTimeout
     if (window.requestIdleCallback) {
       window.requestIdleCallback(loadLanguages, { timeout: 100 });
@@ -75,22 +79,14 @@ function LanguagesSectionClient() {
 
   // Codes currently stored in the form, e.g. ["en","he"]
   const selectedCodes = field.value ?? [];
-  console.log("LanguagesSection - selectedCodes:", selectedCodes);
 
   // Map codes -> full FormLanguage objects for the UI (chips, labels)
-  const selectedLanguages: FormLanguage[] = useMemo(
-    () => {
-      const filtered = allLanguages.filter((lang) => selectedCodes.includes(lang.code));
-      console.log("selectedLanguages mapping:", { 
-        allLanguagesCount: allLanguages.length, 
-        selectedCodes, 
-        filteredCount: filtered.length,
-        filtered: filtered.map(l => ({ code: l.code, name: l.name }))
-      });
-      return filtered;
-    },
-    [allLanguages, selectedCodes]
-  );
+  const selectedLanguages: FormLanguage[] = useMemo(() => {
+    const filtered = allLanguages.filter((lang) =>
+      selectedCodes.includes(lang.code)
+    );
+    return filtered;
+  }, [allLanguages, selectedCodes]);
 
   return (
     <div className="space-y-2">

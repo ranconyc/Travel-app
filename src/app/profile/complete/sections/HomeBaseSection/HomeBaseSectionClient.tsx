@@ -16,14 +16,14 @@ type CityAutoOption = AutoOption & {
     countryCode: string;
     lat: number;
     lng: number;
-    
+
     // LocationIQ specific fields
     placeId?: string;
     osmId?: string;
     osmType?: string;
     display_place?: string;
     display_name?: string;
-    
+
     // Address components
     address?: {
       city?: string;
@@ -32,7 +32,7 @@ type CityAutoOption = AutoOption & {
       country?: string;
       country_code?: string;
     };
-    
+
     // Geographic data
     boundingbox?: string[] | number[];
   };
@@ -40,7 +40,8 @@ type CityAutoOption = AutoOption & {
 
 function HomeBaseSection() {
   // Access full form so we can also set homeBaseCityId + homeBaseLocation
-  const { control, setValue, watch } = useFormContext<CompleteProfileFormValues>();
+  const { control, setValue, watch } =
+    useFormContext<CompleteProfileFormValues>();
 
   // Connect "homeBase" text field to RHF
   const { field, fieldState } = useController<CompleteProfileFormValues>({
@@ -94,7 +95,7 @@ function HomeBaseSection() {
 
   // Handle selection from autocomplete
   const handleSelect = (label: string, opt?: AutoOption) => {
-    console.log('handleSelect', label, opt);
+    // console.log("handleSelect", label, opt);
     // Update visible text in the input
     field.onChange(label);
 
@@ -109,32 +110,42 @@ function HomeBaseSection() {
 
     if (cityOpt.source === "db" && cityOpt.dbCityId) {
       // Existing city in DB
-      console.log('Selected existing city from DB:', cityOpt.dbCityId);
+      // console.log("Selected existing city from DB:", cityOpt.dbCityId);
       setValue("homeBaseCityId", cityOpt.dbCityId, { shouldDirty: true });
       setValue("homeBaseLocation", null, { shouldDirty: true });
     } else if (cityOpt.source === "external" && cityOpt.meta) {
       // City from external provider – store meta for later creation
-      console.log('Selected external city, will create in DB:', cityOpt.meta);
+      // console.log("Selected external city, will create in DB:", cityOpt.meta);
       // Store the external metadata that will be used to create the city
       setValue("homeBaseCityId", null, { shouldDirty: true });
-      setValue("homeBaseLocation", {
-        provider: "locationiq",
-        placeId: cityOpt.meta.placeId || `${cityOpt.meta.name}-${cityOpt.meta.countryCode}`,
-        osmId: cityOpt.meta.osmId,
-        osmType: cityOpt.meta.osmType,
-        lat: cityOpt.meta.lat,
-        lon: cityOpt.meta.lng, // Note: schema expects 'lon', not 'lng'
-        city: cityOpt.meta.display_place || cityOpt.meta.name,
-        state: cityOpt.meta.address?.state,
-        postcode: cityOpt.meta.address?.postcode,
-        country: cityOpt.meta.address?.country || cityOpt.meta.countryName,
-        countryCode: cityOpt.meta.address?.country_code || cityOpt.meta.countryCode,
-        displayName: cityOpt.meta.display_name,
-        boundingBox: cityOpt.meta.boundingbox,
-      }, { shouldDirty: true });
+      setValue(
+        "homeBaseLocation",
+        {
+          provider: "locationiq",
+          placeId:
+            cityOpt.meta.placeId ||
+            `${cityOpt.meta.name}-${cityOpt.meta.countryCode}`,
+          lat: cityOpt.meta.lat,
+          lon: cityOpt.meta.lng, // Note: schema expects 'lon', not 'lng'
+          city: cityOpt.meta.display_place || cityOpt.meta.name,
+          country: cityOpt.meta.address?.country || cityOpt.meta.countryName,
+          countryCode:
+            cityOpt.meta.address?.country_code || cityOpt.meta.countryCode,
+          displayName: cityOpt.meta.display_name,
+          boundingBox: cityOpt.meta.boundingbox
+            ? (cityOpt.meta.boundingbox.map(Number) as [
+                number,
+                number,
+                number,
+                number
+              ])
+            : undefined,
+        },
+        { shouldDirty: true }
+      );
     } else {
       // Fallback: unknown state
-      console.log('Unknown city option, resetting fields');
+      // console.log("Unknown city option, resetting fields");
       setValue("homeBaseCityId", null, { shouldDirty: true });
       setValue("homeBaseLocation", null, { shouldDirty: true });
     }

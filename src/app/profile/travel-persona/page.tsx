@@ -61,11 +61,21 @@ const AREA_OPTIONS: PersonaOption[] = [
 ];
 
 const ACCOMMODATION_OPTIONS: PersonaOption[] = [
-  { id: "guesthouse", title: "Guesthouse / Homestay", subtitle: "", icon: "🏡" },
+  {
+    id: "guesthouse",
+    title: "Guesthouse / Homestay",
+    subtitle: "",
+    icon: "🏡",
+  },
   { id: "hostel", title: "Hostel", subtitle: "", icon: "🛏️" },
   { id: "hotel", title: "Hotel", subtitle: "", icon: "🏨" },
   { id: "luxury", title: "Luxury", subtitle: "", icon: "⭐️" },
-  { id: "all_inclusive", title: "All Inclusive Resorts", subtitle: "", icon: "🍸" },
+  {
+    id: "all_inclusive",
+    title: "All Inclusive Resorts",
+    subtitle: "",
+    icon: "🍸",
+  },
   { id: "friends", title: "Friends", subtitle: "", icon: "👥" },
   { id: "longterm", title: "Longterm / Monthly", subtitle: "", icon: "📆" },
 ];
@@ -280,7 +290,7 @@ export default function TravelPersonaPage() {
 
   const onSubmit: SubmitHandler<TravelPersonaFormValues> = (values) => {
     // כאן מחברים ל-server action / API
-    console.log("Travel persona values", values);
+    // console.log("Travel persona values", values);
   };
 
   return (

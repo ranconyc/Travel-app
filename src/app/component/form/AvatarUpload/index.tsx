@@ -47,16 +47,27 @@ export default function AvatarUpload({
           }`}
           style={{ width: size, height: size }}
         >
-          <Image
-            src={src || "/placeholder-avatar.png"}
-            alt="avatar"
-            width={size}
-            height={size}
-            className="h-full w-full object-cover"
-            sizes="(max-width: 768px) 80px, 120px"
-            priority={size > 100}
-            loading={size > 100 ? "eager" : "lazy"}
-          />
+          {src ? (
+            <Image
+              src={src}
+              alt="Avatar"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority // detected as LCP in profile forms
+            />
+          ) : (
+            <Image
+              src="/placeholder-avatar.png"
+              alt="avatar"
+              width={size}
+              height={size}
+              className="h-full w-full object-cover"
+              sizes="(max-width: 768px) 80px, 120px"
+              priority={size > 100}
+              loading={size > 100 ? "eager" : "lazy"}
+            />
+          )}
         </div>
 
         {/* Edit button */}

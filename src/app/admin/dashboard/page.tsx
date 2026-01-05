@@ -1,0 +1,140 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import {
+  getAdminStats,
+  getItemsNeedingReview,
+  getTopSearches,
+  Timeframe,
+} from "@/lib/db/admin.repo";
+import StatCard from "@/app/component/admin/StatCard";
+import ReviewItemsList from "@/app/component/admin/ReviewItemsList";
+import TopSearchesList from "@/app/component/admin/TopSearchesList";
+import { Users, Globe, Building2 } from "lucide-react";
+
+interface AdminDashboardProps {
+  searchParams: Promise<{
+    timeframe?: string;
+  }>;
+}
+
+export default async function AdminDashboardPage({
+  searchParams,
+}: AdminDashboardProps) {
+  const session = await getServerSession(authOptions);
+
+  // 1. Access Control
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  if (session.user.role !== "ADMIN") {
+    redirect("/");
+  }
+
+  const { timeframe: rawTimeframe } = await searchParams;
+  const timeframe = (rawTimeframe as Timeframe) || "all";
+
+  // 2. Fetch Data
+  const [stats, reviewItems, topSearches] = await Promise.all([
+    getAdminStats(),
+    getItemsNeedingReview(),
+    getTopSearches(5, timeframe),
+  ]);
+
+  return (
+    <div className="p-4 pb-20 max-w-7xl mx-auto space-y-6">
+      <header className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Admin Dashboard
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400">
+          Overview of platform statistics and content moderation
+        </p>
+      </header>
+
+      {/* Statistics Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard
+          label="Total Users"
+          value={stats.totalUsers}
+          icon={Users}
+          color="text-blue-500"
+        />
+        <StatCard
+          label="Total Countries"
+          value={stats.totalCountries}
+          icon={Globe}
+          color="text-green-500"
+        />
+        <StatCard
+          label="Total Cities"
+          value={stats.totalCities}
+          icon={Building2}
+          color="text-purple-500"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Main Content Area (2/3 width on large screens) */}
+        <div className="xl:col-span-2 space-y-6">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Content Review
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ReviewItemsList
+              title="Countries Needing Review"
+              items={reviewItems.countries.map((c: any) => ({
+                id: c.id,
+                name: c.name,
+                type: "country",
+                entityId: c.countryId,
+                subtitle: c.code,
+                autoCreated: c.autoCreated,
+                createdAt: c.createdAt,
+              }))}
+            />
+
+            <ReviewItemsList
+              title="Cities Needing Review"
+              items={reviewItems.cities.map((c: any) => ({
+                id: c.id,
+                name: c.name,
+                type: "city",
+                entityId: c.cityId,
+                subtitle: c.country?.name,
+                autoCreated: c.autoCreated,
+                createdAt: undefined, // City doesn't have createdAt yet
+              }))}
+            />
+
+            <ReviewItemsList
+              title="Activities Needing Review"
+              items={reviewItems.activities.map((a: any) => ({
+                id: a.id,
+                name: a.name,
+                type: "activity",
+                slug: a.slug,
+                subtitle: a.city?.name,
+                autoCreated: a.autoCreated,
+                createdAt: a.createdAt,
+              }))}
+            />
+          </div>
+        </div>
+
+        {/* Sidebar Area (1/3 width on large screens) */}
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Analytics
+          </h2>
+          <TopSearchesList
+            searches={topSearches}
+            currentTimeframe={timeframe}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

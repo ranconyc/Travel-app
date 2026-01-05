@@ -13,6 +13,11 @@ enum Gender {
   NON_BINARY
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 /**
  * -------------------------- USER ---------------------------
  */
@@ -20,6 +25,7 @@ model User {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
   /* ---- INFO ---- */
   email            String?        @unique
+  role             Role           @default(USER)
   name             String?
   firstName        String?
   lastName         String?
@@ -46,7 +52,7 @@ model User {
   
   /** ---- DESTINATIONS ---- */
  
-  currentLocation  Json? // { type: "Point", coordinates: [lng, lat] }? 
+  currentLocation  Json?
   currentCityId    String?        @db.ObjectId
   currentCity      City?          @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
@@ -55,9 +61,7 @@ model User {
   /* ---- TRAVEL PERSONA ---- */
   travelPersona TravelPersona?
   /* ---- TRAVEL HISTORY ---- */
-  visitedCities  UserVisitedCity[]
-  /* ---- WISHLIST ---- */
-  wishListCities UserWishlistCity[]
+  trips Trip[] @relation("UserTrips")
   /* ---- FRIENDSHIP ---- */
 
   friendshipsRequested Friendship[] @relation("FriendshipsRequested")
@@ -134,6 +138,8 @@ model Country {
   code      String
   name      String
 
+  coords    Json?
+
   continent     String?
   subRegion     String?
   officialName  String?
@@ -160,8 +166,8 @@ model Country {
   regions String[] @default([])
 
    // Capital relation (one-to-one)
-  capitalCityRefId String?        @unique @db.ObjectId
-  capitalCity      City?          @relation("CountryCapital", fields: [capitalCityRefId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  capitalCityRefId String?        @db.ObjectId
+  // capitalCity      City?          @relation("CountryCapital", fields: [capitalCityRefId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
 
   // Relations
@@ -182,12 +188,12 @@ model City {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
   cityId       String  @unique
   name         String
-  countryRefId String  @db.ObjectId
-  country      Country @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+  countryRefId String?  @db.ObjectId
+  country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
   // Capital inverse relation (optional but nice)
   isCapital        Boolean  @default(false)
-  countryAsCapital Country?        @relation("CountryCapital")
+  // countryAsCapital Country?        @relation("CountryCapital")
 
   // Geo
   coords      Json
@@ -214,8 +220,7 @@ model City {
 
   usersHomeBase     User[]             @relation("HomeBase")
   usersCurrentCity  User[]             @relation("CurrentLocation")
-  visitedByUsers    UserVisitedCity[]
-  wishListedByUsers UserWishlistCity[]
+  tripStops         TripStop[]
 
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
@@ -280,6 +285,9 @@ model Activity {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Relations
+  tripActivities TripActivity[]
+
   @@index([cityRefId])
   @@index([countryRefId])
   @@index([type])
@@ -320,36 +328,85 @@ model UserInterest {
 }
 
 
- /* ------------------------- TRAVEL HISTORY -------------------------*/
+ /* ------------------------- Trip -------------------------*/
+enum TripType {
+  VISITED   // Historical travel (replaces UserVisitedCity)
+  WISHLIST  // Future aspiration (replaces UserWishlistCity)
+  PLANNED   // Detailed future itinerary
+}
+
+enum TripStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  PUBLISHED
+}
+
+model Trip {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String      @db.ObjectId
+  type        TripType
+  status      TripStatus  @default(DRAFT)
+
+  name        String?
+  imageUrl    String?
+
+  startDate   DateTime?
+  endDate     DateTime?
+
+  user        User        @relation("UserTrips", fields: [userId], references: [id], onDelete: Cascade)
+  stops       TripStop[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId, type])
+}
 
 
-model UserVisitedCity {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  cityId    String   @db.ObjectId
-  visitedAt DateTime @default(now())
+model TripStop {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  tripId          String   @db.ObjectId
+  cityId          String   @db.ObjectId
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  city City @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  arrivalDate     DateTime?
+  departureDate   DateTime?
+  title           String?
+  notes           String?
 
-  @@unique([userId, cityId])
-  @@index([userId])
+  trip            Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  city            City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+
+  activities      TripActivity[]
+
+  @@index([tripId])
   @@index([cityId])
 }
 
-model UserWishlistCity {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId  String   @db.ObjectId
-  cityId  String   @db.ObjectId
-  addedAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  city City @relation(fields: [cityId], references: [id], onDelete: Cascade)
+model TripActivity {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
 
-  @@unique([userId, cityId])
-  @@index([userId])
-  @@index([cityId])
+  tripStopId String   @db.ObjectId
+  tripStop   TripStop @relation(fields: [tripStopId], references: [id], onDelete: Cascade)
+
+  // Optional catalog link
+  activityId String?    @db.ObjectId
+  activity   Activity?  @relation(fields: [activityId], references: [id])
+
+  name        String
+  date        DateTime
+  startTime   String?
+  notes       String?
+  duration    String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tripStopId])
 }
+
+
 
 
 /* ------------------------- FRIENDSHIP -------------------------*/
@@ -382,9 +439,7 @@ model Friendship {
   @@index([status])
 }
 
-/**
- * ---------------------------- CHAT -----------------------------
- */
+/* ---------------------------- CHAT ----------------------------- */
 
 model Chat {
   id              String         @id @default(auto()) @map("_id") @db.ObjectId
@@ -440,4 +495,19 @@ model Message {
   
   @@index([chatId])
   @@index([senderId])
+}
+
+
+
+
+/* ---------------------------- SEARCH ----------------------------- */
+model SearchEvent {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String?   // User's ID if logged in (optional)
+  sessionId         String    // Session identifier
+  searchQuery       String
+  timestamp         DateTime  @default(now())
+  resultCount       Int
+  clickedResultIndex Int?     // Null if no result was clicked
+  pagePath          String?
 }

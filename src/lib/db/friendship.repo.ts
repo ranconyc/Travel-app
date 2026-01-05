@@ -27,7 +27,7 @@ export async function sendFriendRequest(
 
   const existing = await findFriendshipBetween(requesterId, addresseeId);
 
-  console.log("sending Friend Request...", existing);
+  // console.log("sending Friend Request...", existing);
 
   // If there's already a relationship, handle depending on the state
   if (existing) {
@@ -127,10 +127,35 @@ export async function denyFriendRequest(
  */
 export async function removeFriend(userA: string, userB: string) {
   const existing = await findFriendshipBetween(userA, userB);
+
   if (!existing) return null;
 
   if (existing.status !== FriendStatus.ACCEPTED) {
     throw new Error("Not friends");
+  }
+
+  return prisma.friendship.delete({
+    where: { id: existing.id },
+  });
+}
+
+/**
+ * Cancel a pending friend request (only requester can cancel)
+ */
+export async function cancelFriendRequest(
+  requesterId: string,
+  addresseeId: string
+) {
+  const existing = await findFriendshipBetween(requesterId, addresseeId);
+
+  if (!existing) return null;
+
+  if (existing.status !== FriendStatus.PENDING) {
+    throw new Error("Request is not pending");
+  }
+
+  if (existing.requesterId !== requesterId) {
+    throw new Error("You did not send this request");
   }
 
   return prisma.friendship.delete({

@@ -11,17 +11,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatNumberShort } from "@/app/_utils/formatNumber";
+import { City } from "@/domain/city/city.schema";
 
 export default async function CountryPage({
   params,
 }: {
-  params: { id: string };
+  params: { slug: string };
 }) {
-  const { id } = await params;
-  const country = (await getCountryWithCities(id)) as unknown as Country;
+  const { slug } = await params;
+  console.log("slug", slug);
+  const country = (await getCountryWithCities(slug)) as unknown as Country;
+  console.log("country", country);
   const borderCountries = await findBorderCountries(country?.meta?.borders);
-  // console.log("CCCCCCC", country);
-  // console.log("BBBBBB", borderCountries);
 
   if (!country) {
     notFound();
@@ -29,15 +30,17 @@ export default async function CountryPage({
 
   return (
     <div>
-      <header className="bg-black p-4 text-white pt-28">
-        <div className="pt-4 px-4 bg-black fixed left-0 right-0 top-0">
+      <header className="bg-gray-900 p-4 text-white pt-28">
+        <div className="pt-4 px-4 bg-gray-900 fixed left-0 right-0 top-0 z-10">
           <div className="flex items-center justify-between">
             <Button variant="back" />
             <div>add to wishlist</div>
           </div>
           <div className="flex flex-col items-center gap-1 mb-6">
-            <h2 className="text-sm capitalize">{country?.continent}</h2>
-            <h1 className="text-2xl">{country?.name}</h1>
+            <h2 className="text-sm capitalize text-gray-400">
+              {country?.continent}
+            </h2>
+            <h1 className="text-2xl font-bold">{country?.name}</h1>
           </div>
         </div>
 
@@ -54,21 +57,30 @@ export default async function CountryPage({
         </div>
 
         <div className="grid grid-cols-3 gap-2">
-          <div className="bg-gray-900 p-4 rounded-xl">
-            <h1 className="text-xs uppercase">Best Season</h1>
-            <p>{country?.bestSeason || "not provided"} </p>
+          <div className="bg-gray-800 p-4 rounded-xl">
+            <h1 className="text-xs uppercase text-gray-400 mb-1">
+              Best Season
+            </h1>
+            <p className="text-white">
+              {country?.bestSeason || "not provided"}{" "}
+            </p>
           </div>
-          <div className="bg-gray-900 p-4 rounded-xl">
-            <h1 className="text-xs uppercase">ideal duration</h1>
-            <p> {country?.idealDuration || "not provided"}</p>
+          <div className="bg-gray-800 p-4 rounded-xl">
+            <h1 className="text-xs uppercase text-gray-400 mb-1">
+              ideal duration
+            </h1>
+            <p className="text-white">
+              {" "}
+              {country?.idealDuration || "not provided"}
+            </p>
           </div>
-          <div className="bg-gray-900 p-4 rounded-xl">
-            <h1 className="text-xs uppercase">Safety</h1>
-            <p>{country?.safety || "not provided"}</p>
+          <div className="bg-gray-800 p-4 rounded-xl">
+            <h1 className="text-xs uppercase text-gray-400 mb-1">Safety</h1>
+            <p className="text-white">{country?.safety || "not provided"}</p>
           </div>
         </div>
       </header>
-      <main className=" bg-gray-100 p-4 flex gap-4 flex-wrap items-stretch ">
+      <main className="bg-gray-100 dark:bg-gray-400 p-4 flex gap-4 flex-wrap items-stretch">
         <Block>
           <Title>images</Title>
           <div className="flex items-center gap-2">

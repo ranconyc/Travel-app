@@ -25,9 +25,8 @@ const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
 
 export default function TravelPreferencesPage() {
   const onSubmit = (data: FormValues, ...rest) => {
-    console.log("travel preferences submitted", data.preferences);
-    console.log("travel preferences submitted", rest);
-
+    // console.log("travel preferences submitted", data.preferences);
+    // console.log("travel preferences submitted", rest);
     // TODO: send to API
   };
 

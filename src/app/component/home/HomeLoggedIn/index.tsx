@@ -14,6 +14,9 @@ import NearbyAttractionsList from "../NearbyAttractionsList";
 import NearbyMateList from "../NearbyMateList";
 import { Country } from "@/domain/country/country.schema";
 import CityCard from "../../common/cards/CityCard";
+import { useSocket } from "@/lib/socket/socket-context";
+import { Trip } from "@prisma/client";
+import TripCard from "@/app/(home)/_components/TripCard";
 
 export const sectionTitle = "font-bold text-xl my-4";
 
@@ -77,9 +80,11 @@ type HomeLoggedInProps = {
   activities: Activity[];
   users: User[];
   loggedUser: User;
+  trips: Trip[];
 };
 
 export default function HomeLoggedIn({
+  trips,
   cities,
   countries,
   activities,
@@ -93,26 +98,28 @@ export default function HomeLoggedIn({
   } = useGeo({
     persistToDb: true,
     distanceThresholdKm: 1, // Save to DB if user moves more than 1km
+    initialUser: loggedUser,
   });
-
-  const fakeLocationInBkk = { lat: 13.7563, lng: 100.5018 };
+  const { isUserOnline } = useSocket();
+  const isResident = loggedUser.currentCityId === loggedUser.homeBaseCityId;
 
   const sortedCities = useMemo(() => {
-    if (!fakeLocationInBkk) return cities;
+    if (!loggedUser.currentLocation) return cities;
+    console.log("isResident", loggedUser);
 
     return [...cities].sort((a, b) => {
       const distA = a.coords
         ? getDistance(
-            fakeLocationInBkk.lat,
-            fakeLocationInBkk.lng,
+            loggedUser?.currentLocation?.coordinates[1],
+            loggedUser?.currentLocation?.coordinates[0],
             a.coords.coordinates[1],
             a.coords.coordinates[0]
           )
         : Infinity;
       const distB = b.coords
         ? getDistance(
-            fakeLocationInBkk.lat,
-            fakeLocationInBkk.lng,
+            loggedUser?.currentLocation?.coordinates[1],
+            loggedUser?.currentLocation?.coordinates[0],
             b.coords.coordinates[1],
             b.coords.coordinates[0]
           )
@@ -120,13 +127,22 @@ export default function HomeLoggedIn({
 
       return distA - distB;
     });
-  }, [cities, fakeLocationInBkk]);
-  console.log("countries", countries);
+  }, [cities, loggedUser.currentLocation]);
   return (
     <div>
       <HomeHeader user={loggedUser} />
       {/* <CountriesList countries={countries} /> */}
-      <main className="p-4">
+      <main className="p-4 pb-20">
+        <div className="mt-8">
+          <h2 className="text-md font-semibold font-display mb-4 text-gray-400 uppercase tracking-widest">
+            Trips
+          </h2>
+          <div className="flex gap-4 overflow-x-scroll snap-x snap-mandatory">
+            {trips.map((trip) => (
+              <TripCard trip={trip} key={trip.id} />
+            ))}
+          </div>
+        </div>
         <UserLocationDisplay
           coords={coords ?? undefined}
           error={error ?? undefined}
@@ -134,26 +150,7 @@ export default function HomeLoggedIn({
         />
         <NearbyAttractionsList />
         <NextDestinationList destinations={sortedCities} />
-        <NearbyMateList
-          loggedUser={loggedUser}
-          mates={users.map((user) => ({
-            userId: user.id,
-            name: `${
-              user.firstName ? `${user.firstName} ${user.lastName}` : user.name
-            }`,
-            image: user.image,
-            isOnline: Math.random() > 0.5, // TODO: implement real online status
-            location: user.homeBaseCity
-              ? `${user.homeBaseCity.name}, ${
-                  user.homeBaseCity.country?.name === "United States of America"
-                    ? "USA"
-                    : user.homeBaseCity.country?.name || ""
-                }`
-              : "Location not set",
-            isResident: Math.random() > 0.5, // TODO: implement real resident status
-            birthday: user.birthday,
-          }))}
-        />
+        <NearbyMateList loggedUser={loggedUser} mates={users} />
       </main>
     </div>
   );

@@ -15,7 +15,7 @@ function BioSectionInner() {
   const error = formState.errors?.description?.message as string | undefined;
 
   async function onGenerate() {
-    console.log("onGenerate");
+    // console.log("onGenerate");
     setPending(true);
     setSuggestions(null);
     try {
@@ -30,7 +30,7 @@ function BioSectionInner() {
       });
 
       if (!res.ok) {
-        console.log("onGenerate", res.error);
+        // console.log("onGenerate", res.error);
         if (res.error) {
           setGenerateBioError(res.error);
         } else {

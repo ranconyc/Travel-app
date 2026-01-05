@@ -22,6 +22,17 @@ export async function getActivityById(activityId: string) {
         typicalVisitDuration: true,
         entryPrice: true,
         images: true,
+        highlights: true,
+        city: {
+          select: {
+            name: true,
+            country: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
   } catch (error) {
@@ -54,5 +65,16 @@ export async function getAllActivities() {
   } catch (error) {
     console.error("getAllActivities error:", error);
     throw new Error("Failed to fetch activities");
+  }
+}
+
+export async function createActivity(data: any) {
+  try {
+    return await prisma.activity.create({
+      data,
+    });
+  } catch (error) {
+    console.error("createActivity error:", error);
+    throw new Error("Failed to create activity");
   }
 }

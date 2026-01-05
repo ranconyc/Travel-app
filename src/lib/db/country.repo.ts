@@ -137,12 +137,12 @@ export async function getAllCountries(): Promise<Country[]> {
 }
 
 //  get country with cities
-export async function getCountryWithCities(countryId: string) {
-  if (!countryId) return null;
+export async function getCountryWithCities(slug: string) {
+  if (!slug) return null;
 
   try {
     return await prisma.country.findUnique({
-      where: { countryId },
+      where: { countryId: slug },
       include: {
         // all cities, ordered by name
         cities: {
@@ -162,7 +162,7 @@ export async function getCountryWithCities(countryId: string) {
 
 // find the 10 nearest countries
 export async function findBorderCountries(bordersCCA3: string[]) {
-  console.log("bordersCCA3", bordersCCA3);
+  // console.log("bordersCCA3", bordersCCA3);
   if (!bordersCCA3?.length) return [];
 
   // 1) Load all countries that have meta (or just all countries)
