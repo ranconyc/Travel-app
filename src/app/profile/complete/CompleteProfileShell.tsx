@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { User } from "@/domain/user/user.schema";
 import CompleteProfileFormClient from "./CompleteProfileFormClient";
 import FormHeader from "./sections/FormHeader";
 

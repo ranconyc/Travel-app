@@ -1,15 +1,15 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getAllUsers, getNearbyUsers, getUserById } from "@/lib/db/user.repo";
-import { redirect } from "next/navigation";
+import { getAllUsers, getUserById } from "@/lib/db/user.repo";
 import NearbyMatesClient from "../component/home/HomeLoggedIn/NearbyMatesClient";
+import { MOCK_USER } from "@/lib/auth/mock-user";
 
 export default async function NearbyMatesPage() {
   const session = await getServerSession(authOptions);
-  if (!session) return redirect("/signin");
+  const user = session?.user || MOCK_USER;
 
-  const loggedUser = (await getUserById(session.user.id)) as User;
-  if (!loggedUser) redirect("/signin");
+  const loggedUser = (await getUserById(user.id)) || MOCK_USER;
+  // if (!loggedUser) redirect("/signin");
 
   const userLocation = loggedUser.currentLocation;
 

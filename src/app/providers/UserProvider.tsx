@@ -2,6 +2,7 @@
 
 import { User } from "@/domain/user/user.schema";
 import { createContext, useContext } from "react";
+import { MOCK_USER } from "@/lib/auth/mock-user";
 
 const UserContext = createContext<User | null>(null);
 
@@ -12,7 +13,12 @@ export function UserProvider({
   children: React.ReactNode;
   user: User | null;
 }) {
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  const effectiveUser = user || MOCK_USER;
+  return (
+    <UserContext.Provider value={effectiveUser}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export function useUser() {

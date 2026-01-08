@@ -17,22 +17,23 @@ import CategorySection from "./components/CategorySection";
 export type Category = (typeof CATEGORIES)[number];
 export type InterestsByCategory = typeof INTERESTS;
 export type CategoryId = keyof InterestsByCategory;
-export type Interest = InterestsByCategory[CategoryId][number];
+export type Interest = InterestsByCategory[CategoryId][number] & {
+  emoji?: string;
+};
 
 const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
 
 /* -------------------- PAGE -------------------- */
 
 export default function TravelPreferencesPage() {
-  const onSubmit = (data: FormValues, ...rest) => {
+  const onSubmit = (data: FormValues) => {
     // console.log("travel preferences submitted", data.preferences);
-    // console.log("travel preferences submitted", rest);
     // TODO: send to API
   };
 
   const {
     methods,
-    handleSubmit,
+    handleFormSubmit,
     activeCategoryId,
     toggleCategory,
     toggleInterest,
@@ -53,7 +54,7 @@ export default function TravelPreferencesPage() {
           />
 
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleFormSubmit}
             className="relative flex flex-col gap-4 px-4 pb-28 pt-4"
           >
             {CATEGORIES.map((category: Category) => {

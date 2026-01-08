@@ -37,6 +37,10 @@ export default async function ChatPage({ params }: Props) {
   const { id } = await params;
   const session = await getServerSession(authOptions);
 
+  // TODO: check if user is in chat
+  // if not, redirect to chat list
+  // if yes, continue
+
   if (!session?.user?.id) {
     redirect("/signin");
   }

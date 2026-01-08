@@ -18,9 +18,9 @@ export default function AdminLayout({
     return currentPath === path;
   };
 
-  const styles = isActive()
-    ? "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
-    : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
+const styles = isActive("users")
+  ? "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
+  : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
 
   return (
     <div className="flex h-screen bg-gray-50">

@@ -1,5 +1,6 @@
 import { Country } from "@/domain/country/country.schema";
 import { prisma } from "@/lib/db/prisma";
+import { Prisma } from "@prisma/client";
 import { Glegoo } from "next/font/google";
 
 type RestCountry = {
@@ -92,6 +93,13 @@ type RestCountry = {
   };
 };
 
+type LocationIqCountry = {
+  lat: string;
+  lon: string;
+  display_name: string;
+  boundingbox: string[];
+};
+
 /**
  * Optional mapping from region/subregion name to internal codes.
  * You can expand / tweak as you like.
@@ -151,7 +159,6 @@ export async function getCountryWithCities(slug: string) {
         // include activities for this country
         activities: true,
         // include capital city relation if set
-        capitalCity: true,
       },
     });
   } catch (error) {

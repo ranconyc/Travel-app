@@ -3,21 +3,19 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getTripsByUserId } from "@/lib/db/trip.repo";
 import Link from "next/link";
+import { MOCK_USER } from "@/lib/auth/mock-user";
 
-type Props = {};
+export default async function page() {
+  const session = await getServerSession(authOptions);
+  const user = session?.user || MOCK_USER;
 
-export default async function page({}: Props) {
-  const { user } = await getServerSession(authOptions);
-  if (!user) {
-    return redirect("/login");
-  }
   const trips = await getTripsByUserId(user.id);
-  console.log("trips", trips);
+
   return (
     <div className="p-2">
       <h1>Trips</h1>
       <ul>
-        {trips.map((trip) => (
+        {trips.map((trip: any) => (
           <li
             key={trip.id}
             className="flex items-center gap-2 border border-gray-200 py-2"

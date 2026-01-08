@@ -1,6 +1,5 @@
-// domain/city/city.schema.ts
 import { z } from "zod";
-import { TransportItem } from "../country/country.schema";
+import { CountrySchema } from "../country/country.schema";
 
 /** Budget per-day (in local currency) */
 export const BudgetSchema = z.object({
@@ -25,7 +24,7 @@ export const CitySchema = z.object({
 
   // Country relation
   countryRefId: z.string().min(1),
-  country: z.unknown().optional(),
+  country: CountrySchema.optional(),
 
   // Capital meta
   isCapital: z.boolean().default(false),
@@ -59,7 +58,7 @@ export const CitySchema = z.object({
 
   // Money & moving around
   budget: BudgetSchema.optional(), // Prisma: Json
-  gettingAround: z.record(z.string()).default({}), // Prisma: Json
+  gettingAround: z.record(z.string(), z.any()).default({}), // Prisma: Json
 
   // Relations
   activities: z.array(z.unknown()).default([]),

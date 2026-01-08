@@ -17,7 +17,8 @@ export function MessageList({
 
   // Listen for new messages via WebSocket
   useEffect(() => {
-    const handleNewMessage = (newMessage: Message) => {
+    const handleNewMessage = (...args: unknown[]) => {
+      const newMessage = args[0] as Message;
       console.log("📨 Received new message:", newMessage);
 
       setMessages((prev) => {

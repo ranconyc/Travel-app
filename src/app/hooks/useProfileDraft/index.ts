@@ -11,7 +11,9 @@ const STORAGE_KEY_PREFIX = "profile.v1.user-";
  * - Saves on any form change via watch.
  * - Exposes clearDraft() to remove the saved state after successful submit.
  */
-export function useProfileDraft<TFormValues>(
+import type { FieldValues } from "react-hook-form";
+
+export function useProfileDraft<TFormValues extends FieldValues>(
   methods: UseFormReturn<TFormValues>,
   userId: string
 ) {

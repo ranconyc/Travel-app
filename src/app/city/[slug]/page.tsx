@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { getCitiesWithCountry } from "@/lib/db/cityLocation.repo";
+import { MOCK_USER } from "@/lib/auth/mock-user";
 import Block from "@/app/component/common/Block";
 import Title from "@/app/component/Title";
 import Button from "@/app/component/common/Button";
@@ -31,7 +32,7 @@ const Header = ({ city, user }: { city: City; user: User }) => {
       className="bg-black p-4 text-white pt-28"
     >
       <div className="flex flex-col items-center gap-1 mb-6">
-        <Link href={`/country/${city?.country?.name}`} className="text-sm">
+        <Link href={`/country/${city?.country?.countryId}`} className="text-sm">
           {city?.country?.name === "United States of America"
             ? "United States"
             : city?.country?.name}
@@ -81,8 +82,9 @@ const MatchSection = (user: User) => {
 };
 
 export default async function CityPage({ params }: any) {
-  const { user } = await getServerSession(authOptions);
-  //   console.log("session  ", session);
+  const session = await getServerSession(authOptions);
+  // Provide a fallback user object with the required shape if session.user is undefined
+  const user = (session?.user as any) ?? (MOCK_USER as any);
   const { slug } = await params;
   // find the city from the json file
 

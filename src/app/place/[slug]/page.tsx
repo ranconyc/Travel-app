@@ -2,6 +2,13 @@ import Image from "next/image";
 
 import Button from "@/app/component/common/Button";
 import { Activity } from "@/domain/activity/activity.schema";
+
+// Extend Activity type to include cityName
+
+interface ExtendedActivity extends Activity {
+  cityName: string;
+  countryName: string;
+}
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getActivityById } from "@/lib/db/activity.repo";
@@ -10,7 +17,11 @@ import HeaderWrapper from "@/app/component/common/Header";
 import { CalendarPlus, Users } from "lucide-react";
 import Title from "@/app/component/Title";
 
-const Header = ({ activity }: { activity: Activity }) => {
+const Header = ({
+  activity,
+}: {
+  activity: Activity & { city: { name: string; country: { name: string } } };
+}) => {
   return (
     <HeaderWrapper backButton rightComponent={<CalendarPlus size={22} />}>
       <div className="flex flex-col items-center gap-1">
@@ -85,14 +96,16 @@ export default async function ActivityPage({ params }: any) {
   const session = await getServerSession(authOptions);
 
   const { slug } = await params;
+  console.log("slug", slug);
 
-  const activity = (await getActivityById(slug)) as unknown as Activity;
+  const activity = (await getActivityById(slug)) as unknown as ExtendedActivity;
   if (!activity) return <div>Activity not found</div>;
 
   console.log("activity", activity);
+
   return (
     <div>
-      <Header activity={activity} />
+      <Header activity={{ ...activity, city: { name: activity.cityName, country: { name: activity.countryName } } }} />
       <main className="p-4 bg-gray-100">
         <div className="bg-white p-4 grid gap-4 rounded-xl mb-4">
           <div className="flex items-start justify-between">

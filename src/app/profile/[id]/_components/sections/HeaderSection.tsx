@@ -42,8 +42,9 @@ export const HeaderSection = ({
           <h2 className="text-base">
             {profileUser?.currentCity?.name
               ? profileUser.currentCity.name +
-                ", " +
-                profileUser.currentCity.country.name
+                (profileUser.currentCity.country
+                  ? ", " + profileUser.currentCity.country.name
+                  : "")
               : "Unknown location"}
           </h2>
         </div>

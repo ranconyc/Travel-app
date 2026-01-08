@@ -20,6 +20,8 @@ type ProfilePageProps = {
   };
 };
 
+// Existing Props type removed as it was unused
+
 // SSR
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { id } = await params;
@@ -53,7 +55,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         <LanguagesSection user={profileUser} />
         <TravelPartnersSection user={profileUser} />
         <InterestsSection />
-        <VisitedDestinationsSection visitedCities={profileUser.visitedCities} />
+        {/* <VisitedDestinationsSection visitedCities={profileUser.visitedCities} /> */}
         <NextDestinationsSection
           nextDestinations={[]}
           isYourProfile={isYourProfile}

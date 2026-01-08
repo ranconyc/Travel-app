@@ -103,31 +103,34 @@ export default function HomeLoggedIn({
   const { isUserOnline } = useSocket();
   const isResident = loggedUser.currentCityId === loggedUser.homeBaseCityId;
 
-  const sortedCities = useMemo(() => {
-    if (!loggedUser.currentLocation) return cities;
-    console.log("isResident", loggedUser);
+  // const sortedCities = useMemo(() => {
+  //   if (!loggedUser.currentLocation) return cities;
 
-    return [...cities].sort((a, b) => {
-      const distA = a.coords
-        ? getDistance(
-            loggedUser?.currentLocation?.coordinates[1],
-            loggedUser?.currentLocation?.coordinates[0],
-            a.coords.coordinates[1],
-            a.coords.coordinates[0]
-          )
-        : Infinity;
-      const distB = b.coords
-        ? getDistance(
-            loggedUser?.currentLocation?.coordinates[1],
-            loggedUser?.currentLocation?.coordinates[0],
-            b.coords.coordinates[1],
-            b.coords.coordinates[0]
-          )
-        : Infinity;
+  //   return [...cities].sort((a, b) => {
+  //     const distA =
+  //       a.coords &&
+  //       loggedUser?.currentLocation &&
+  //       Array.isArray(loggedUser?.currentLocation?.coordinates)
+  //         ? getDistance(
+  //             loggedUser.currentLocation?.coordinates[0],
+  //             loggedUser.currentLocation?.coordinates[1],
+  //             a.coords[0]!,
+  //             a.coords[1]!
+  //           )
+  //         : Infinity;
+  //     const distB = b.coords
+  //       ? getDistance(
+  //           loggedUser?.currentLocation?.coordinates[1],
+  //           loggedUser?.currentLocation?.coordinates[0],
+  //           b.coords[1],
+  //           b.coords[0]
+  //         )
+  //       : Infinity;
 
-      return distA - distB;
-    });
-  }, [cities, loggedUser.currentLocation]);
+  //     return distA - distB;
+  //   });
+  // }, [cities, loggedUser.currentLocation]);
+
   return (
     <div>
       <HomeHeader user={loggedUser} />
@@ -154,7 +157,7 @@ export default function HomeLoggedIn({
           locationLoading={locationLoading}
         />
         <NearbyAttractionsList />
-        <NextDestinationList destinations={sortedCities} />
+        <NextDestinationList destinations={cities} />
         <NearbyMateList loggedUser={loggedUser} mates={users} />
       </main>
     </div>

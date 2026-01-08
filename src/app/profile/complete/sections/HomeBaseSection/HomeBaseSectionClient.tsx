@@ -159,7 +159,7 @@ function HomeBaseSection() {
       placeholder="City, Country (New York, USA)"
       enableRemoteOnType={true}
       loadOptions={searchCities}
-      value={field.value ?? ""}
+      value={(field.value as any) ?? ""}
       onQueryChange={field.onChange}
       onSelect={handleSelect}
       onBlur={field.onBlur}

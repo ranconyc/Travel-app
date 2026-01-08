@@ -22,7 +22,10 @@ export default async function CountryPage({
   console.log("slug", slug);
   const country = (await getCountryWithCities(slug)) as unknown as Country;
   console.log("country", country);
-  const borderCountries = await findBorderCountries(country?.meta?.borders);
+  const borderCountries =
+    country?.meta && country?.meta?.borders
+      ? await findBorderCountries(country.meta.borders)
+      : [];
 
   if (!country) {
     notFound();
@@ -103,7 +106,7 @@ export default async function CountryPage({
           <p>Population: {formatNumberShort(country?.population)}</p>
           <p>Capital: {country?.capital}</p>
         </Block>
-        {country?.cities.length > 0 && (
+        {country?.cities && country.cities.length > 0 && (
           <Block>
             <Title>Cities</Title>
             <div className="flex gap-4 overflow-x-auto py-2 snap-x snap-mandatory">

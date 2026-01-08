@@ -3,6 +3,9 @@ import * as z from "zod";
 export const GenderEnum = z.enum(["MALE", "FEMALE", "NON_BINARY"]);
 export type Gender = z.infer<typeof GenderEnum>;
 
+export const RoleEnum = z.enum(["USER", "ADMIN"]);
+export type Role = z.infer<typeof RoleEnum>;
+
 // You can replace these with real schemas later
 const cityLiteSchema = z.any();
 const accountSchema = z.any();
@@ -16,6 +19,7 @@ export const userSchema = z.object({
   id: z.string(), // ObjectId as string
 
   // ---- basic info ----
+  role: RoleEnum.default("USER"),
   email: z.string().email().nullable().optional(),
   name: z.string().nullable().optional(),
   firstName: z.string().nullable().optional(),
@@ -26,6 +30,14 @@ export const userSchema = z.object({
   // ---- location / home base ----
   homeBaseCityId: z.string().nullable().optional(),
   homeBaseCity: cityLiteSchema.nullable().optional(),
+
+  // ---- current location / city ----
+  currentLocation: z.unknown().nullable().optional(),
+  currentCityId: z.string().nullable().optional(),
+  currentCity: cityLiteSchema.nullable().optional(),
+
+  // ---- travel history & planning ----
+  trips: z.array(tripSchema).optional(),
 
   // ---- dates & status ----
   birthday: z.date().nullable().optional(),
@@ -43,20 +55,12 @@ export const userSchema = z.object({
   accounts: z.array(accountSchema).optional(),
   sessions: z.array(sessionSchema).optional(),
 
-  // ---- current location / city ----
-  currentLocation: z.unknown().nullable().optional(),
-  currentCityId: z.string().nullable().optional(),
-  currentCity: cityLiteSchema.nullable().optional(),
-
   // ---- languages (string[] from Prisma) ----
   languages: z.array(z.string().min(2)).optional(), // e.g. ["en", "he"]
 
   // ---- travel interests / persona ----
   interests: z.array(userInterestSchema).optional(),
   travelPersona: travelPersonaSchema.nullable().optional(),
-
-  // ---- travel history & planning ----
-  trips: z.array(tripSchema).optional(),
 });
 
 export type User = z.infer<typeof userSchema>;

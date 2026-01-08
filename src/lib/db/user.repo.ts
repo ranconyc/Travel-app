@@ -11,6 +11,7 @@ export async function getUserById(id: string) {
         currentLocation: true,
         id: true,
         email: true,
+        name: true,
         role: true,
         firstName: true,
         lastName: true,
@@ -210,9 +211,19 @@ export async function getNearbyUsers(
       ],
     });
 
-    return (res as any[]).map((row) => ({
-      id: row._id?.$oid ?? null,
+    return (res as unknown as any[]).map((row) => ({
+      id: row._id?.$oid ?? row._id ?? null,
       firstName: row.firstName ?? null,
+      lastName: row.lastName ?? null,
+      name: row.name ?? null,
+      email: row.email ?? null,
+      image: row.image ?? null,
+      birthday: row.birthday ? new Date(row.birthday) : null,
+      gender: row.gender ?? null,
+      occupation: row.occupation ?? null,
+      description: row.description ?? null,
+      languages: row.languages ?? [],
+      homeBaseCityId: row.homeBaseCityId?.$oid ?? row.homeBaseCityId ?? null,
       distanceKm: row.dist_m ? row.dist_m / 1000 : null,
     }));
   } catch (error: any) {

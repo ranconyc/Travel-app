@@ -4,7 +4,7 @@
 import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import ErrorMessage from "@/app/component/form/ErrorMessage";
-import { CompleteProfileFormValues } from "@/lib/db/user.repo";
+import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
 // match Prisma enum Gender { MALE, FEMALE, NON_BINARY }
 type GenderValue = "MALE" | "FEMALE" | "NON_BINARY";
@@ -49,7 +49,7 @@ function GenderSectionClient() {
                 type="radio"
                 className="sr-only"
                 name={field.name}
-                value={opt.value}
+                value={(field.value as any) ?? ""}
                 checked={checked}
                 onChange={() => field.onChange(opt.value)}
                 onBlur={field.onBlur}

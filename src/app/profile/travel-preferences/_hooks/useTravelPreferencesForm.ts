@@ -78,7 +78,8 @@ export function useTravelPreferencesForm(onSubmit?: SubmitHandler<FormValues>) {
 
   return {
     methods,
-    handleSubmit: onSubmit ? handleSubmit(onSubmit) : handleSubmit,
+    handleSubmit,
+    handleFormSubmit: onSubmit ? handleSubmit(onSubmit) : undefined,
     activeCategoryId,
     toggleCategory,
     toggleInterest,

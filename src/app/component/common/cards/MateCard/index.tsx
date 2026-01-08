@@ -41,7 +41,7 @@ export default function MateCard({
   return (
     <BaseCard
       linkHref={`/profile/${userId}`}
-      image={{ src: image, alt: name }}
+      image={{ src: image ?? undefined, alt: name ?? undefined }}
       priority={priority}
     >
       <div className="h-full flex flex-col justify-between">
@@ -75,7 +75,7 @@ export default function MateCard({
           </div>
           <h3 className="text-white font-bold leading-tight text-[clamp(18px,2.8vw,24px)] line-clamp-2 mt-2">
             {mate.name}
-            {birthday && `, ${getAge(birthday)}`}
+{birthday && `, ${getAge(birthday.toISOString())}`}
           </h3>
         </div>
       </div>

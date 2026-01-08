@@ -28,9 +28,9 @@ const DevTool = dynamic(
   }
 );
 import { useProfileDraft } from "@/app/hooks/useProfileDraft";
-import type { User } from "@prisma/client";
+import type { User as DomainUser } from "@/domain/user/user.schema";
 
-type PrismaUser = User & {
+type PrismaUser = DomainUser & {
   homeBaseCity?: {
     name: string;
     country?: {
@@ -72,7 +72,7 @@ export default function CompleteProfileFormClient({ user }: Props) {
   const defaultValues = useMemo(() => mapUserToDefaults(user), [user]);
 
   const methods = useForm<CompleteProfileFormValues>({
-    resolver: zodResolver(completeProfileSchema),
+    resolver: zodResolver(completeProfileSchema) as any,
     defaultValues,
     mode: "onBlur",
   });
@@ -98,7 +98,7 @@ export default function CompleteProfileFormClient({ user }: Props) {
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
     // console.log("submit starting", values);
-    const result = await updateProfile({ ...values, id: user.id });
+    const result = await updateProfile({ ...values });
 
     if (!result.success) {
       console.error("updateProfile failed:", result);
@@ -155,9 +155,9 @@ export default function CompleteProfileFormClient({ user }: Props) {
           {isSubmitting ? "Saving..." : "Complete Profile"}
         </button>
       </form>
-      {process.env.NODE_ENV === "development" && (
+      {/* {process.env.NODE_ENV === "development" && (
         <DevTool control={methods.control} />
-      )}
+      )} */}
     </FormProvider>
   );
 }

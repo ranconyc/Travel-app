@@ -1,6 +1,7 @@
 import Block from "@/app/component/common/Block";
 import Button from "@/app/component/common/Button";
 import Title from "@/app/component/Title";
+import { City } from "@/domain/city/city.schema";
 import { PlaneTakeoff } from "lucide-react";
 
 type NextDestination = {

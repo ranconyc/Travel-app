@@ -31,7 +31,7 @@ export type ReverseGeocodeResult = {
   city: string | null;
   countryCode: string | null;
   label: string | null;
-  boundingbox: [number, number, number, number];
+  boundingbox?: [number, number, number, number];
 };
 
 /**

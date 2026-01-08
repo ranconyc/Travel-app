@@ -43,7 +43,8 @@ export async function updateTripAction(
   const updatedTrip = await prisma.trip.update({
     where: { id: tripId },
     data: {
-      ...data,
+      startDate: data.startDate,
+      endDate: data.endDate,
     },
   });
 
@@ -53,14 +54,15 @@ export async function updateTripAction(
 
 export async function updateTripStopAction(
   tripStopId: string,
-  data: { startDate?: Date; endDate?: Date }
+  data: { arrivalDate?: Date; departureDate?: Date }
 ) {
   if (!tripStopId) throw new Error("Trip Stop ID required");
-
+  // console.log("updateTripStopAction", tripStopId, data);
   const updatedTripStop = await prisma.tripStop.update({
     where: { id: tripStopId },
     data: {
-      ...data,
+      arrivalDate: data.arrivalDate,
+      departureDate: data.departureDate,
     },
   });
 

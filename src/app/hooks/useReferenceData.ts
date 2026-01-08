@@ -12,7 +12,7 @@ export function useLanguages() {
     queryKey: ["languages"],
     queryFn: async () => {
       const { default: languagesData } = await import(
-        "../../../data/languages.json"
+        "@/data/languages.json"
       );
       return languagesData as LanguageItem[];
     },

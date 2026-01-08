@@ -10,6 +10,14 @@ export type ProfileUser = User & {
       name: string;
     } | null;
   } | null;
+  currentCity: {
+    id: string;
+    name: string;
+    country: {
+      id: string;
+      name: string;
+    } | null;
+  } | null;
   visitedCities: {
     city: {
       id: string;

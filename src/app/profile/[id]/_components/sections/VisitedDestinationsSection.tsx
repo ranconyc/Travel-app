@@ -9,7 +9,7 @@ type Visit = {
   departureDate: string;
 };
 type Props = {
-  visitedCities: Visit[];
+  trips: Visit[];
 };
 
 export const VisitedDestinationsSection = ({ trips }: Props) => {

@@ -64,7 +64,7 @@ export async function saveTravelPreferences(data: TravelPreferencesFormValues) {
         interestId,
         weight: 1, // Can be extended in future for scoring
       })),
-      skipDuplicates: true,
+      // skipDuplicates: true,
     });
 
     return { createdCount: createResult.count };

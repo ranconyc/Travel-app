@@ -40,7 +40,7 @@ const SimilaritiesSection = () => (
 );
 
 type Props = {
-  friendStatus: "NONE" | "PENDING" | "ACCEPTED" | "BLOCKED";
+  friendStatus: "NONE" | "PENDING" | "ACCEPTED" | "BLOCKED" | "DENIED";
   isRequester: boolean;
   profileUser: ProfileUser;
   handleConnect: () => void;
