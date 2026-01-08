@@ -56,15 +56,20 @@ export async function getDashboardStats() {
 export async function getTopCities() {
   await checkAdminAuth();
 
-  // Aggregate user visits by city
-  const topCities = await prisma.userVisitedCity.groupBy({
+  // Aggregate user visits by city via TripStops belonging to VISITED trips
+  const topCities = await prisma.tripStop.groupBy({
     by: ["cityId"],
+    where: {
+      trip: {
+        type: "VISITED",
+      },
+    },
     _count: {
-      userId: true,
+      tripId: true,
     },
     orderBy: {
       _count: {
-        userId: "desc",
+        tripId: "desc",
       },
     },
     take: 5,
@@ -82,7 +87,7 @@ export async function getTopCities() {
         name: city?.name || "Unknown",
         country: city?.country?.name || "",
         countryCode: city?.country?.code || "",
-        visitors: item._count.userId,
+        visitors: item._count.tripId,
       };
     })
   );

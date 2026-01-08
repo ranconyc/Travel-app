@@ -118,7 +118,6 @@ export default function SearchAutocomplete({
         id="global-search"
         name="search"
         placeholder="Search destinations, activities..."
-        enableRemoteOnType
         loadOptions={loadSearchResults}
         value={searchQuery}
         onQueryChange={setSearchQuery}
@@ -136,8 +135,8 @@ export default function SearchAutocomplete({
           }`
         }
       />
-      <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-        <div className="p-1 bg-black rounded-lg">
+      <div className="border border-green-700 absolute inset-y-0 right-0 flex items-center justify-center pointer-events-none">
+        <div className="p-2 bg-black rounded-lg">
           <Search size={24} className="text-white" />
         </div>
       </div>

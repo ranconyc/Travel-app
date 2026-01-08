@@ -23,15 +23,15 @@
 
 Mapped relations between Prisma Schema, Types, Repositories, and Actions.
 
-| Model               | Schema / Types        | Repository (`src/lib/db`)      | Server Actions              |
-| :------------------ | :-------------------- | :----------------------------- | :-------------------------- |
-| **User**            | `src/domain/user`     | `user.repo.ts`                 | ( Auth via NextAuth )       |
-| **UserVisitedCity** | `src/domain/user`     | (Managed in `locationActions`) | `locationActions`           |
-| **City**            | `src/domain/city`     | `cityLocation.repo.ts`         | `locationActions`           |
-| **Country**         | `src/domain/country`  | `country.repo.ts`              | `locationActions`           |
-| **Activity**        | `src/domain/activity` | `activity.repo.ts`             | -                           |
-| **Chat / Message**  | `src/domain/chat`     | `chat.repo.ts`                 | `chat.actions.ts` (implied) |
-| **Friendship**      | (In Prisma)           | `friendship.repo.ts`           | `friendship.actions.ts`     |
+| Model              | Schema / Types        | Repository (`src/lib/db`) | Server Actions              |
+| :----------------- | :-------------------- | :------------------------ | :-------------------------- |
+| **User**           | `src/domain/user`     | `user.repo.ts`            | ( Auth via NextAuth )       |
+| **Trip**           | `src/domain/trip`     | `trip.repo.ts`            | `itinerary.actions.ts`      |
+| **City**           | `src/domain/city`     | `cityLocation.repo.ts`    | `locationActions`           |
+| **Country**        | `src/domain/country`  | `country.repo.ts`         | `locationActions`           |
+| **Activity**       | `src/domain/activity` | `activity.repo.ts`        | -                           |
+| **Chat / Message** | `src/domain/chat`     | `chat.repo.ts`            | `chat.actions.ts` (implied) |
+| **Friendship**     | (In Prisma)           | `friendship.repo.ts`      | `friendship.actions.ts`     |
 
 ## Key Directories
 

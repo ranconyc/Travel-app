@@ -131,8 +131,13 @@ export default function HomeLoggedIn({
   return (
     <div>
       <HomeHeader user={loggedUser} />
+
       {/* <CountriesList countries={countries} /> */}
       <main className="p-4 pb-20">
+        <div>
+          You are:
+          {isUserOnline(loggedUser.id) ? <p>Online</p> : <p>Loading...</p>}
+        </div>
         <div className="mt-8">
           <h2 className="text-md font-semibold font-display mb-4 text-gray-400 uppercase tracking-widest">
             Trips

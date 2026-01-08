@@ -9,8 +9,7 @@ const accountSchema = z.any();
 const sessionSchema = z.any();
 const userInterestSchema = z.any();
 const travelPersonaSchema = z.any();
-const userVisitedCitySchema = z.any();
-const userWishlistCitySchema = z.any();
+const tripSchema = z.any(); // Replace with real Trip schema later
 
 export const userSchema = z.object({
   // ---- identifiers ----
@@ -56,9 +55,8 @@ export const userSchema = z.object({
   interests: z.array(userInterestSchema).optional(),
   travelPersona: travelPersonaSchema.nullable().optional(),
 
-  // ---- travel history ----
-  visitedCities: z.array(userVisitedCitySchema).optional(),
-  wishListCities: z.array(userWishlistCitySchema).optional(),
+  // ---- travel history & planning ----
+  trips: z.array(tripSchema).optional(),
 });
 
 export type User = z.infer<typeof userSchema>;
