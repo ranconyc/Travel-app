@@ -2,7 +2,7 @@
 
 import { useState, memo } from "react";
 import { useFormContext } from "react-hook-form";
-import { generateBio } from "@/app/profile/actions/generateBio";
+import { generateBio } from "@/domain/user/user.actions";
 import Button from "@/app/component/common/Button";
 
 type BioOption = { id: string; label: string; text: string };

@@ -10,7 +10,7 @@ import {
   cancelFriendRequestAction,
   denyFriendRequestAction,
   sendFriendRequestAction,
-} from "../../actions/friendship.actions";
+} from "@/domain/friendship/friendship.actions";
 import { AvatarList } from "@/app/component/common/AvatarList";
 
 const SimilaritiesSection = () => (

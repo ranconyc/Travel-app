@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTravelPartnersAction } from "@/app/actions/friendshipActions";
+import { getTravelPartnersAction } from "@/domain/friendship/friendship.actions";
 
 // React Query hook to fetch travel partners
 export function useTravelPartners(userId: string) {

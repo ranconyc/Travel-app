@@ -1,13 +1,16 @@
+import { redirect } from "next/navigation";
 import React from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getTripsByUserId } from "@/lib/db/trip.repo";
 import Link from "next/link";
-import { MOCK_USER } from "@/lib/auth/mock-user";
 
 export default async function page() {
   const session = await getServerSession(authOptions);
-  const user = session?.user || MOCK_USER;
+  if (!session?.user) {
+    redirect("/signin");
+  }
+  const user = session.user;
 
   const trips = await getTripsByUserId(user.id);
 

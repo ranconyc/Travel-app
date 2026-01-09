@@ -1,6 +1,6 @@
 "use client";
 
-import { getFriendshipStatusAction } from "@/app/profile/actions/friendship.actions";
+import { getFriendshipStatusAction } from "@/domain/friendship/friendship.actions";
 import { useQuery } from "@tanstack/react-query";
 
 export type FriendshipStatus =

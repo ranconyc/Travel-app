@@ -32,7 +32,7 @@ const birthdaySchema = z
  * in your DB and will be created on submit.
  */
 export const homeBaseLocationMetaSchema = z.object({
-  provider: z.string().default("locationiq"),
+  provider: z.string().optional(),
   placeId: z.string(),
   lat: z.number(),
   lon: z.number(),

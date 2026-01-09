@@ -1,7 +1,13 @@
 import Header from "@/app/mates/_components/Header";
 import MateCard from "../../common/cards/MateCard";
 
-export default function NearbyMatesClient({ mates }: { mates: any[] }) {
+export default function NearbyMatesClient({
+  mates,
+  loggedUser,
+}: {
+  mates: any[];
+  loggedUser: any;
+}) {
   console.log(mates);
   return (
     <div>
@@ -12,7 +18,7 @@ export default function NearbyMatesClient({ mates }: { mates: any[] }) {
             <MateCard
               key={mate.id}
               mate={mate}
-              loggedUser={mates[0]}
+              loggedUser={loggedUser}
               priority={false}
             />
           ))}

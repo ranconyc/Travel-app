@@ -12,12 +12,13 @@ import { getAllCountries } from "@/lib/db/country.repo";
 import { Country } from "@/domain/country/country.schema";
 import { getAllTrips } from "@/lib/db/trip.repo";
 import { Trip } from "@prisma/client";
-import { MOCK_USER } from "@/lib/auth/mock-user";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const loggedUser = ((await getCurrentUser()) as User | null) || MOCK_USER;
-  console.log("loggedUser", loggedUser);
-
+  const loggedUser = (await getCurrentUser()) as User | null;
+  if (!loggedUser) {
+    redirect("/signin");
+  }
   const cities = (await getAllCities()) as City[];
   const activities = (await getAllActivities()) as Activity[];
   const users = (await getAllUsers()) as User[];

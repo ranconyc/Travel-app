@@ -11,7 +11,7 @@ import {
   completeProfileSchema,
 } from "@/domain/user/completeProfile.schema";
 
-import { updateProfile } from "../actions/updateProfile";
+import { updateProfile } from "@/domain/user/user.actions";
 import HomeBaseSectionShell from "./sections/HomeBaseSection/HomeBaseSectionShell";
 import GenderSectionShell from "./sections/GenderSection/GenderSectionShell";
 import OccupationSectionShell from "./sections/OccupationSection/OccupationSectionShell";
@@ -19,16 +19,9 @@ import LanguagesSectionShell from "./sections/LanguagesSection/LanguagesSectionS
 import BirthdaySectionShell from "./sections/BirthdaySection/BirthdaySectionShell";
 import AvatarSectionShell from "./sections/AvatarSection/AvatarSectionShell";
 
-import dynamic from "next/dynamic";
-
-const DevTool = dynamic(
-  () => import("@hookform/devtools").then((mod) => ({ default: mod.DevTool })),
-  {
-    ssr: false,
-  }
-);
 import { useProfileDraft } from "@/app/hooks/useProfileDraft";
 import type { User as DomainUser } from "@/domain/user/user.schema";
+import type { Gender } from "@/domain/user/user.schema";
 
 type PrismaUser = DomainUser & {
   homeBaseCity?: {
@@ -49,7 +42,7 @@ function mapUserToDefaults(user: PrismaUser | null): CompleteProfileFormValues {
     birthday: user?.birthday
       ? new Date(user.birthday).toISOString().slice(0, 10)
       : "",
-    gender: (user?.gender as any) ?? "",
+    gender: (user?.gender as Gender | "") ?? "",
     homeBase: user?.homeBaseCity?.name
       ? `${user.homeBaseCity.name}${
           user.homeBaseCity.country?.name
@@ -86,14 +79,14 @@ export default function CompleteProfileFormClient({ user }: Props) {
     // console.log("form errors", errors);
   }, [errors]);
 
-  const { clearDraft } = useProfileDraft(methods, user.id);
+  const { clearDraft } = useProfileDraft(methods as any, user.id);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     // console.log("submitting", e);
     // e.preventDefault(); // handleSubmit handles preventDefault
     // const values = getValues();
     // console.log("values", values);
-    return handleSubmit(onSubmit)(e);
+    return handleSubmit(onSubmit as any)(e);
   };
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
@@ -107,7 +100,9 @@ export default function CompleteProfileFormClient({ user }: Props) {
       if (result.fieldErrors) {
         // Set field errors for each field
         Object.entries(result.fieldErrors).forEach(([field, message]) => {
-          methods.setError(field as any, { message });
+          methods.setError(field as keyof CompleteProfileFormValues, {
+            message,
+          });
         });
       }
 
@@ -155,9 +150,6 @@ export default function CompleteProfileFormClient({ user }: Props) {
           {isSubmitting ? "Saving..." : "Complete Profile"}
         </button>
       </form>
-      {/* {process.env.NODE_ENV === "development" && (
-        <DevTool control={methods.control} />
-      )} */}
     </FormProvider>
   );
 }

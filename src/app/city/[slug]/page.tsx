@@ -12,9 +12,9 @@ import {
   PlaneTakeoff,
   CalendarPlus,
 } from "lucide-react";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import { getCitiesWithCountry } from "@/lib/db/cityLocation.repo";
-import { MOCK_USER } from "@/lib/auth/mock-user";
 import Block from "@/app/component/common/Block";
 import Title from "@/app/component/Title";
 import Button from "@/app/component/common/Button";
@@ -83,8 +83,11 @@ const MatchSection = (user: User) => {
 
 export default async function CityPage({ params }: any) {
   const session = await getServerSession(authOptions);
-  // Provide a fallback user object with the required shape if session.user is undefined
-  const user = (session?.user as any) ?? (MOCK_USER as any);
+  if (!session?.user) {
+    redirect("/signin");
+  }
+  const user = session.user as any;
+
   const { slug } = await params;
   // find the city from the json file
 
