@@ -21,11 +21,19 @@ const sora = Sora({
 
 export const viewport: Viewport = {
   themeColor: "#343a40",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export const metadata: Metadata = {
   title: "Travel App",
   description: "Your personalized travel companion",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
 };
 
 import { getCurrentUser } from "@/lib/auth/get-current-user";
@@ -41,19 +49,6 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://locationiq.org" />
-      </head>
       <body
         className={`${sora.variable} ${inter.variable} antialiased`}
         suppressHydrationWarning
