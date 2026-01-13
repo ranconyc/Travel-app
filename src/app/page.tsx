@@ -126,6 +126,11 @@ export default function Home() {
         <Input placeholder="Search destination" type="text" />
       </HeaderWrapper>
       <main className="p-4 overflow-y-scroll h-[calc(100vh-10rem)]">
+        <div className="mb-4">
+          <Link href="/interests" className="text-xs text-secondary">
+            Select Interests
+          </Link>
+        </div>
         <ListOne />
         <ListTwo />
         <ListThree />
