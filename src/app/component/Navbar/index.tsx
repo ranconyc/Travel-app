@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed bottom-4 left-20 right-20">
-      <ul className="flex items-center justify-around bg-white px-2 py-4 rounded-full shadow-xl">
+      <ul className="flex items-center justify-around bg-surface px-2 py-4 rounded-full shadow-xl">
         <li>
           <Link href="/">
             <Binoculars size={iconsSize} />

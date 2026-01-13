@@ -2,7 +2,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { LearningReasonSchema } from "../page";
+import { LearningReasonSchema } from "../oldPage";
 
 export async function updateLearningReason(data: unknown) {
   // validate data

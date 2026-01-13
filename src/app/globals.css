@@ -1,82 +1,53 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-app-bg: var(--background);
+  --color-app-text: var(--foreground);
+  --color-brand: var(--brand);
+  --color-surface: var(--surface);
+  --color-secondary: var(--secondary);
+  --color-blur: var(--blur);
 
-@layer base {
-  /* Form labels and legends */
-  label,
-  legend {
-    @apply block text-[14px] font-bold text-gray-900 mb-1;
-  }
-
-  /* Form field containers */
-  .form-field {
-    @apply space-y-1;
-  }
-
-  /* Error states */
-  .form-error {
-    @apply text-sm text-red-600 mt-1;
-  }
-
-  /* Hint text */
-  .form-hint {
-    @apply text-sm text-gray-500 -mt-1 mb-1;
-  }
-
-  /* default inputs */
-  input,
-  textarea {
-    @apply w-full rounded-lg border border-gray-300 px-3 py-2;
-  }
-
-  input[type="date"] {
-    font-size: 16px;
-    padding-top: 0.35rem; /* ~5.6px */
-    padding-bottom: 0.35rem;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  @media (max-width: 640px) {
-    input[type="date"] {
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-    }
-  }
-
-  input:focus {
-    outline: none;
-    border-color: rgb(5, 58, 58);
-  }
-
-  button {
-    @apply px-4 py-2 rounded-md text-white font-bold;
-  }
-}
-
-@layer components {
-  /* Custom form label component class */
-  .form-label {
-    @apply block text-sm font-semibold text-gray-900 mb-1;
-  }
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sora: var(--font-sora);
   --font-inter: var(--font-inter);
 }
 
+/* Light Mode */
+:root {
+  --background: rgb(244, 245, 247);
+  --foreground: rgb(15, 23, 42);
+  --secondary: rgb(94, 100, 112);
+  --brand: rgb(123, 166, 14);
+  --surface: rgb(255, 255, 255);
+  --blur: rgba(161, 165, 173, 0.5);
+}
+
+/* Dark Mode */
+
+.dark {
+  --background: rgb(8, 12, 20);
+  --foreground: rgb(255, 255, 255);
+  --secondary: rgb(166, 173, 187);
+  --brand: rgb(65, 181, 226);
+  --surface: rgb(30, 41, 59);
+  --blur: rgba(161, 165, 173, 0.5);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #2b2c45;
-    --foreground: #ededed;
+    --background: rgb(8, 12, 20);
+    --foreground: rgb(255, 255, 255);
+    --secondary: rgb(166, 173, 187);
+    --brand: rgb(65, 181, 226);
+    --surface: rgb(30, 41, 59);
+    --blur: rgba(161, 165, 173, 0.5);
   }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter);
 }
 
 h1,
@@ -88,9 +59,8 @@ h6 {
   font-family: var(--font-sora);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+p {
+  line-height: 150%;
   font-family: var(--font-inter);
 }
 
@@ -101,8 +71,4 @@ html {
 html,
 body {
   height: 100%;
-}
-
-.lucide {
-  font-size: 16px;
 }

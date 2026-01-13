@@ -2,7 +2,7 @@
 
 import { Activity } from "@/domain/activity/activity.schema";
 import { useGeo } from "@/app/hooks/useGeo";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { City } from "@/domain/city/city.schema";
 import { User } from "@/domain/user/user.schema";
@@ -136,6 +136,7 @@ export default function HomeLoggedIn({
       <HomeHeader user={loggedUser} />
 
       {/* <CountriesList countries={countries} /> */}
+      <div></div>
       <main className="p-4 pb-20">
         <div>
           You are:

@@ -13,6 +13,8 @@ export default function ConditionalNavbar() {
     pathname !== "/profile/complete" &&
     pathname !== "/profile/travel-persona" &&
     pathname !== "/profile/travel-preferences" &&
+    pathname !== "/style" &&
+    pathname !== "/interests" &&
     !pathname?.startsWith("/admin");
 
   if (!showNavbar) {

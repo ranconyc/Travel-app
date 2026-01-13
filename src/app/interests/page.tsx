@@ -1,164 +1,270 @@
 "use client";
-
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { updateLearningReason } from "./_actions/FormActions";
-import { FiCheck, FiArrowRight, FiAlertCircle } from "react-icons/fi";
-import { Loader2 } from "lucide-react";
+import * as z from "zod";
+import { Checkbox, Button } from "../mode/page";
 
-export const LearningReasonSchema = z.object({
-  reason: z.enum(
-    [
-      "career",
-      "fun",
-      "productivity",
-      "education",
-      "travel",
-      "people",
-      "other",
-    ] as const,
-    {
-      message: "Please select an option",
-    }
-  ),
+const interestsSchema = z.object({
+  interests: z.array(z.string()),
 });
 
-export type LearningReasonType = z.infer<typeof LearningReasonSchema>;
+type InterestsFormValues = z.infer<typeof interestsSchema>;
 
-const REASONS = [
-  { id: "career", label: "Career Growth", emoji: "💼" },
-  { id: "fun", label: "Just for Fun", emoji: "🥳" },
-  { id: "productivity", label: "Productivity", emoji: "🚀" },
-  { id: "education", label: "Education", emoji: "🎓" },
-  { id: "travel", label: "Travel & Culture", emoji: "✈️" },
-  { id: "people", label: "Connect with People", emoji: "👥" },
-  { id: "other", label: "Other", emoji: "✨" },
-] as const;
+interface CategoryRowProps {
+  title: string;
+  selectedCount: number;
+  onClick: () => void;
+}
+
+export const CategoryRow = ({
+  title,
+  selectedCount,
+  onClick,
+}: CategoryRowProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className="text-left border-2 border-surface hover:border-brand transition-colors rounded-xl px-3 py-2 flex justify-between items-center group"
+      //   className="w-full flex items-center justify-between p-4 rounded-xl border border-border bg-surface hover:bg-white/5 transition-colors group"
+    >
+      <div className="">
+        <h1 className="">{title}</h1>
+        <p className="text-xs text-secondary">
+          {selectedCount > 0 ? `${selectedCount} selected` : "Tap to select"}
+        </p>
+      </div>
+
+      <ChevronRight
+        className="text-secondary group-hover:text-brand transition-colors"
+        size={20}
+      />
+    </button>
+  );
+};
+
+const categories: { [key: string]: string[] } = {
+  Shopping: [
+    "Local markets",
+    "Designer boutiques",
+    "Shopping malls",
+    "Souvenir hunting",
+    "Night bazaars",
+    "Street shopping",
+  ],
+  "Sport & Adventure": [
+    "Surfing",
+    "Snorkeling",
+    "Scuba diving",
+    "Kayaking",
+    "Jet skiing",
+    "Rock climbing",
+    "Zip-lining",
+    "Cycling tours",
+    "Skiing",
+    "Golfing",
+    "Paragliding",
+    "Skydiving",
+  ],
+  "Art & Culture": [
+    "Museums",
+    "Art galleries",
+    "Historic landmarks",
+    "Temples or churches",
+    "Cultural festivals",
+    "Live performances",
+    "Cooking classes",
+    "Craft workshops",
+  ],
+  "Nature & Hiking": [
+    "National park hiking",
+    "Waterfall visits",
+    "Cave exploration",
+    "Mountain trekking",
+    "Nature walks",
+    "Wildlife safaris",
+    "Camping",
+    "Stargazing",
+  ],
+  "Wellness & Relaxation": [
+    "Spa treatments",
+    "Yoga retreats",
+    "Meditation",
+    "Beach lounging",
+    "Hot springs",
+    "Wellness resorts",
+    "Detox programs",
+  ],
+  "Food & Drink": [
+    "Street food tours",
+    "Fine dining",
+    "Wine tasting",
+    "Brewery tours",
+    "Cooking classes",
+    "Nightlife",
+    "Bars & clubs",
+  ],
+  "Sightseeing & Experiences": [
+    "City tours",
+    "Sunset cruises",
+    "Island hopping",
+    "Scenic train rides",
+    "Boat tours",
+    "Theme parks",
+    "Local festivals",
+    "Markets",
+  ],
+  "Social & Local Experiences": [
+    "Volunteering",
+    "Meeting locals",
+    "Joining group tours",
+    "Homestays",
+    "Cultural exchanges",
+    "Travel meetups",
+  ],
+};
+
+const categoryNames = Object.keys(categories);
+
+const ProgressBar = () => {
+  return (
+    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+      <div className="h-full bg-brand w-1/3" />
+    </div>
+  );
+};
+
+const Modal = ({
+  category = "Shopping",
+  onClose,
+  selectedInterests,
+  onOptionToggle,
+}: {
+  category: string;
+  onClose: () => void;
+  selectedInterests: string[];
+  onOptionToggle: (option: string) => void;
+}) => {
+  return (
+    <div className="fixed inset-0 bg-blur flex items-end  z-50">
+      <div className="w-full h-fit bg-app-bg m-3 p-6 rounded-3xl">
+        <div className="flex justify-end">
+          <X className="cursor-pointer" size={20} onClick={onClose} />
+        </div>
+        <h1 className="text-xl font-bold mb-2">{category}</h1>
+        <p className="mb-4 text-sm font-bold text-secondary">
+          Tap to select / deselect
+        </p>
+        <div className="grid gap-2 overflow-y-scroll max-h-[400px]">
+          {categories[category].map((option) => (
+            <Checkbox
+              key={option}
+              id={option}
+              label={option}
+              isSelected={selectedInterests.includes(option)}
+              onChange={() => onOptionToggle(option)}
+            />
+          ))}
+        </div>
+        <div className="mt-6">
+          <Button className="w-full" onClick={onClose}>
+            Done
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function InterestsFormPage() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const {
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<LearningReasonType>({
-    resolver: zodResolver(LearningReasonSchema),
+  const { setValue, watch, handleSubmit } = useForm<InterestsFormValues>({
+    resolver: zodResolver(interestsSchema),
+    defaultValues: {
+      interests: [],
+    },
   });
 
-  const selectedReason = watch("reason");
+  const selectedInterests = watch("interests");
 
-  const onSubmit = async (data: LearningReasonType) => {
-    setError(null);
-    setLoading(true);
-    try {
-      const result = await updateLearningReason(data);
-      if (result.success) {
-        // Handle success (e.g., redirect or next step)
-        console.log("Success!");
-      } else {
-        setError(result.error || "Something went wrong");
-      }
-    } catch {
-      setError("An unexpected error occurred");
-    } finally {
-      setLoading(false);
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category);
+    setShowModal(true);
+  };
+
+  const handleOptionToggle = (option: string) => {
+    const isSelected = selectedInterests.includes(option);
+    if (isSelected) {
+      setValue(
+        "interests",
+        selectedInterests.filter((i) => i !== option)
+      );
+    } else {
+      setValue("interests", [...selectedInterests, option]);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#f7f7f2] flex flex-col items-center justify-center p-6">
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-50 rounded-full blur-3xl opacity-60" />
-      <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-50 rounded-full blur-3xl opacity-60" />
+  const getSelectedCountForCategory = (category: string) => {
+    const options = categories[category];
+    return selectedInterests.filter((interest) => options.includes(interest))
+      .length;
+  };
 
-      <div className="relative z-10 w-full max-w-md">
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-3 font-sora tracking-tight">
-            What brings you here?
-          </h1>
-          <p className="text-gray-500 font-medium">
-            Select the primary reason you&apos;re joining us
-          </p>
+  const onSubmit = (data: InterestsFormValues) => {
+    console.log("Form Data:", data);
+  };
+
+  return (
+    <div className="min-h-screen bg-app-bg p-4 pb-24">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="fixed top-0 left-0 right-0 bg-app-bg/80 backdrop-blur-md z-40 p-4 pt-8">
+          <div className="flex items-center gap-2">
+            <ChevronLeft className="cursor-pointer" />
+            <ProgressBar />
+          </div>
         </div>
 
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-600">
-            <FiAlertCircle className="text-xl flex-shrink-0" />
-            <p className="text-sm font-semibold">{error}</p>
-          </div>
-        )}
+        <div className="mb-4 pt-20">
+          <h1 className="text-xl font-bold mb-3">
+            What do you enjoy when traveling?
+          </h1>
+          <p className="mb-8 font-medium">
+            Help us personalize your trip recommendations
+          </p>
+          <h2 className="text-xs font-bold text-secondary">
+            Select all that interest you
+          </h2>
+        </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          <div className="grid gap-3">
-            {REASONS.map((item) => {
-              const isActive = selectedReason === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() =>
-                    setValue(
-                      "reason",
-                      item.id as LearningReasonType["reason"],
-                      { shouldValidate: true }
-                    )
-                  }
-                  className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-200 active:scale-[0.98] ${
-                    isActive
-                      ? "border-cyan-600 bg-white shadow-lg shadow-cyan-900/5 ring-4 ring-cyan-500/5"
-                      : "border-gray-100 bg-white/80 hover:border-gray-200"
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl">{item.emoji}</span>
-                    <span
-                      className={`font-bold ${
-                        isActive ? "text-cyan-900" : "text-gray-700"
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                  </div>
-                  <div
-                    className={`h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      isActive
-                        ? "border-cyan-600 bg-cyan-600 text-white"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    {isActive && <FiCheck strokeWidth={3} size={14} />}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+        <div className="grid grid-cols-1 gap-2">
+          {categoryNames.map((category) => (
+            <CategoryRow
+              key={category}
+              title={category}
+              selectedCount={getSelectedCountForCategory(category)}
+              onClick={() => handleCategoryClick(category)}
+            />
+          ))}
+        </div>
 
-          {errors.reason && (
-            <p className="text-red-500 text-xs font-bold uppercase tracking-wider ml-2">
-              {errors.reason.message}
-            </p>
-          )}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-app-bg border-t border-surface">
+          <Button type="submit" className="w-full">
+            Continue
+          </Button>
+        </div>
+      </form>
 
-          <button
-            type="submit"
-            disabled={loading || !selectedReason}
-            className="w-full mt-8 bg-cyan-700 hover:bg-cyan-800 disabled:opacity-50 disabled:cursor-not-allowed text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-cyan-900/10 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <>
-                <span>Continue</span>
-                <FiArrowRight size={20} />
-              </>
-            )}
-          </button>
-        </form>
-      </div>
+      {showModal && (
+        <Modal
+          category={selectedCategory || ""}
+          onClose={() => setShowModal(false)}
+          selectedInterests={selectedInterests}
+          onOptionToggle={handleOptionToggle}
+        />
+      )}
     </div>
   );
 }
