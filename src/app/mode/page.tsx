@@ -132,7 +132,12 @@ export const Checkbox = ({
 interface CheckboxGroupProps {
   description?: string;
   selectedIds?: string[];
-  options?: { id: string; label: string; description?: string; icon?: React.ComponentType<{ size: number }> }[];
+  options?: {
+    id: string;
+    label: string;
+    description?: string;
+    icon?: React.ComponentType<{ size: number }>;
+  }[];
   onChange?: (id: string) => void;
 }
 
@@ -193,6 +198,23 @@ export const CheckboxGroup = ({
   );
 };
 
+export const SelectInterests = ({
+  item,
+  onClick,
+}: {
+  item: string;
+  onClick?: () => void;
+}) => (
+  <li
+    key={item}
+    className="flex items-center gap-2 border border-brand px-2 py-[6px] text-sm w-fit rounded bg-brand/10 cursor-pointer capitalize"
+    onClick={onClick}
+  >
+    <X size={16} className="text-brand" />
+    {item}
+  </li>
+);
+
 const options = [
   { id: "1", label: "Option 1", description: "Description 1", icon: Sun },
   { id: "2", label: "Option 2", description: "Description 2", icon: Moon },
@@ -246,13 +268,7 @@ export default function Mode() {
         <h1 className="font-bold text-2xl capitalize">selected interests</h1>
         <ul className="flex gap-2 flex-wrap">
           {selectedInterests.map((item) => (
-            <li
-              key={item}
-              className="flex items-center gap-2 border border-brand px-2 py-[6px] text-sm w-fit rounded bg-brand/10 cursor-pointer capitalize"
-            >
-              <X size={16} className="text-brand" />
-              {item}
-            </li>
+            <SelectInterests key={item} item={item} />
           ))}
         </ul>
         <form onSubmit={handleSubmit} className="grid gap-2">

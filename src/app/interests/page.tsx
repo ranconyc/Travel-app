@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Checkbox, Button } from "../mode/page";
+import { Checkbox, Button, SelectInterests } from "../mode/page";
 
 const interestsSchema = z.object({
   interests: z.array(z.string()),
@@ -27,18 +27,22 @@ export const CategoryRow = ({
     <button
       onClick={onClick}
       className="text-left border-2 border-surface hover:border-brand transition-colors rounded-xl px-3 py-2 flex justify-between items-center group"
-      //   className="w-full flex items-center justify-between p-4 rounded-xl border border-border bg-surface hover:bg-white/5 transition-colors group"
     >
       <div className="">
         <h1 className="">{title}</h1>
-        <p className="text-xs text-secondary">
+        {/* check y isnt working */}
+        <p
+          className={`text-xs ${
+            selectedCount > 0 ? "text-brand" : "text-secondary"
+          }`}
+        >
           {selectedCount > 0 ? `${selectedCount} selected` : "Tap to select"}
         </p>
       </div>
 
       <ChevronRight
         className="text-secondary group-hover:text-brand transition-colors"
-        size={20}
+        size={24}
       />
     </button>
   );
@@ -127,10 +131,10 @@ const categories: { [key: string]: string[] } = {
 
 const categoryNames = Object.keys(categories);
 
-const ProgressBar = () => {
+const ProgressBar = ({ percentage }: { percentage: number }) => {
   return (
     <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-      <div className="h-full bg-brand w-1/3" />
+      <div className={`h-full bg-brand w-[${percentage * 100}%]`} />
     </div>
   );
 };
@@ -219,14 +223,15 @@ export default function InterestsFormPage() {
 
   return (
     <div className="min-h-screen bg-app-bg p-4 pb-24">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="fixed top-0 left-0 right-0 bg-app-bg/80 backdrop-blur-md z-40 p-4 pt-8">
-          <div className="flex items-center gap-2">
-            <ChevronLeft className="cursor-pointer" />
-            <ProgressBar />
-          </div>
+      <div className="fixed top-0 left-0 right-0 bg-app-bg/80 backdrop-blur-md z-40 p-4 pt-8">
+        <div className="flex items-center gap-2">
+          <ChevronLeft className="cursor-pointer" />
+          <ProgressBar
+            percentage={selectedInterests.length / categoryNames.length}
+          />
         </div>
-
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 pt-20">
           <h1 className="text-xl font-bold mb-3">
             What do you enjoy when traveling?
@@ -234,12 +239,27 @@ export default function InterestsFormPage() {
           <p className="mb-8 font-medium">
             Help us personalize your trip recommendations
           </p>
+        </div>
+
+        {selectedInterests.length > 0 && (
+          <div className="mb-8">
+            <h1 className="text-xl font-bold mb-4">You&apos;re into:</h1>
+            <ul className="flex flex-wrap gap-2">
+              {selectedInterests.map((interest) => (
+                <SelectInterests
+                  key={interest}
+                  item={interest}
+                  onClick={() => handleOptionToggle(interest)}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 gap-2">
           <h2 className="text-xs font-bold text-secondary">
             Select all that interest you
           </h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-2">
           {categoryNames.map((category) => (
             <CategoryRow
               key={category}
@@ -260,7 +280,10 @@ export default function InterestsFormPage() {
       {showModal && (
         <Modal
           category={selectedCategory || ""}
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            // console.log("close", selectedInterests);
+            setShowModal(false);
+          }}
           selectedInterests={selectedInterests}
           onOptionToggle={handleOptionToggle}
         />

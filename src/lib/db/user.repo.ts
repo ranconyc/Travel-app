@@ -55,17 +55,6 @@ export async function getUserById(id: string) {
             id: true,
           },
         },
-        interests: {
-          select: {
-            interest: {
-              select: {
-                id: true,
-                label: true,
-                slug: true,
-              },
-            },
-          },
-        },
         createdAt: true,
         updatedAt: true,
       },

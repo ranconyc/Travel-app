@@ -57,7 +57,8 @@ model User {
   currentCity      City?          @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
   /* ---- TRAVEL INTERESTS ---- */
-  interests     UserInterest[]
+  interestsData     Json?  //{ "Shopping": ["id1", "id2"] }
+ 
   /* ---- TRAVEL PERSONA ---- */
   travelPersona TravelPersona?
   /* ---- TRAVEL HISTORY ---- */
@@ -293,39 +294,6 @@ model Activity {
   @@index([type])
 }
 
-
- /* ------------------------- INTERESTS -------------------------*/
-model InterestCategory {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  slug      String     @unique
-  title     String
-  order     Int        @default(0)
-  interests    Interest[]
-}
-
-model Interest {
-  id         String           @id @default(auto()) @map("_id") @db.ObjectId
-  slug       String           @unique
-  label      String
-  category   InterestCategory @relation(fields: [categoryId], references: [id])
-  categoryId String           @db.ObjectId
-  users      UserInterest[]
-}
-
-model UserInterest {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @db.ObjectId
-  interestId String   @db.ObjectId
-  weight     Float    @default(1)
-  createdAt  DateTime @default(now())
-
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  interest Interest @relation(fields: [interestId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, interestId])
-  @@index([userId])
-  @@index([interestId])
-}
 
 
  /* ------------------------- Trip -------------------------*/

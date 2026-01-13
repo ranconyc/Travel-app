@@ -100,59 +100,59 @@ export async function deleteAccount() {
 /*                            TRAVEL PREFERENCES                              */
 /* -------------------------------------------------------------------------- */
 
-export type TravelPreferencesFormValues = {
-  preferences: Record<string, string[]>;
-};
+// export type TravelPreferencesFormValues = {
+//   preferences: Record<string, string[]>;
+// };
 
-export async function saveTravelPreferences(data: TravelPreferencesFormValues) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    throw new Error("User not authenticated");
-  }
+// export async function saveTravelPreferences(data: TravelPreferencesFormValues) {
+//   const session = await getServerSession(authOptions);
+//   if (!session?.user?.id) {
+//     throw new Error("User not authenticated");
+//   }
 
-  const userId = session.user.id;
-  const preferences = data.preferences ?? {};
-  const interestSlugs = Array.from(new Set(Object.values(preferences).flat()));
+//   const userId = session.user.id;
+//   const preferences = data.preferences ?? {};
+//   const interestSlugs = Array.from(new Set(Object.values(preferences).flat()));
 
-  if (interestSlugs.length === 0) {
-    await prisma.userInterest.deleteMany({
-      where: { userId },
-    });
-    return { ok: true, removedAll: true, created: 0 };
-  }
+//   if (interestSlugs.length === 0) {
+//     await prisma.userInterest.deleteMany({
+//       where: { userId },
+//     });
+//     return { ok: true, removedAll: true, created: 0 };
+//   }
 
-  const interests = await prisma.interest.findMany({
-    where: { slug: { in: interestSlugs } },
-    select: { id: true, slug: true },
-  });
+//   const interests = await prisma.interest.findMany({
+//     where: { slug: { in: interestSlugs } },
+//     select: { id: true, slug: true },
+//   });
 
-  if (interests.length === 0) {
-    await prisma.userInterest.deleteMany({
-      where: { userId },
-    });
-    return { ok: true, removedAll: true, created: 0 };
-  }
+//   if (interests.length === 0) {
+//     await prisma.userInterest.deleteMany({
+//       where: { userId },
+//     });
+//     return { ok: true, removedAll: true, created: 0 };
+//   }
 
-  const interestIds = interests.map((i) => i.id);
+//   const interestIds = interests.map((i) => i.id);
 
-  const result = await prisma.$transaction(async (tx) => {
-    await tx.userInterest.deleteMany({ where: { userId } });
-    const createResult = await tx.userInterest.createMany({
-      data: interestIds.map((interestId) => ({
-        userId,
-        interestId,
-        weight: 1,
-      })),
-    });
-    return { createdCount: createResult.count };
-  });
+//   const result = await prisma.$transaction(async (tx) => {
+//     await tx.userInterest.deleteMany({ where: { userId } });
+//     const createResult = await tx.userInterest.createMany({
+//       data: interestIds.map((interestId) => ({
+//         userId,
+//         interestId,
+//         weight: 1,
+//       })),
+//     });
+//     return { createdCount: createResult.count };
+//   });
 
-  return {
-    ok: true,
-    created: result.createdCount,
-    interestIds,
-  };
-}
+//   return {
+//     ok: true,
+//     created: result.createdCount,
+//     interestIds,
+//   };
+// }
 
 /* -------------------------------------------------------------------------- */
 /*                               BIO GENERATION                               */
