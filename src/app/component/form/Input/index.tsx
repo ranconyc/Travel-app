@@ -47,7 +47,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         className={[
           "w-full rounded-lg border p-2 transition-all",
           "focus:outline-none focus:border-cyan-600",
-          error ? "border-red-500" : "border-gray-300",
+          "border-2",
+          error ? "border-red-500" : "border-surface",
+
           className,
         ].join(" ")}
         {...rest}

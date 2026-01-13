@@ -1,62 +1,80 @@
 {
-  "shopping": [
-    { "id": "local_markets", "label": "Local Markets" },
-    { "id": "designer_boutiques", "label": "Designer Boutiques" },
-    { "id": "shopping_malls", "label": "Shopping Malls" },
-    { "id": "souvenir_hunting", "label": "Souvenir Hunting" },
-    { "id": "night_bazaars", "label": "Night Bazaars" },
-    { "id": "flea_markets", "label": "Flea Markets" },
-    { "id": "street_shopping", "label": "Street Shopping" }
+  "Shopping": [
+    "Local markets",
+    "Designer boutiques",
+    "Shopping malls",
+    "Souvenir hunting",
+    "Night bazaars",
+    "Street shopping"
   ],
-  "wellness": [
-    { "id": "spa", "label": "Spa Treatments" },
-    { "id": "yoga", "label": "Yoga Retreats" },
-    { "id": "resorts", "label": "Wellness Resorts" },
-    { "id": "detox", "label": "Detox Programs" },
-    { "id": "hot_springs", "label": "Hot Springs" },
-    { "id": "beach_lounging", "label": "Beach Lounging" },
-    { "id": "meditation", "label": "Meditation" }
+  "Sport & Adventure": [
+    "Surfing",
+    "Snorkeling",
+    "Scuba diving",
+    "Kayaking",
+    "Jet skiing",
+    "Rock climbing",
+    "Zip-lining",
+    "Cycling tours",
+    "Skiing",
+    "Golfing",
+    "Paragliding",
+    "Skydiving"
   ],
-  "food": [
-    { "id": "street_food", "label": "Street Food Tours" },
-    { "id": "fine_dining", "label": "Fine Dining" },
-    { "id": "wine", "label": "Wine Tasting" },
-    { "id": "brewery", "label": "Brewery Tours" },
-    { "id": "cooking", "label": "Cooking Classes" },
-    { "id": "bars", "label": "Bars & Clubs" },
-    { "id": "nightlife", "label": "Nightlife" }
+  "Art & Culture": [
+    "Museums",
+    "Art galleries",
+    "Historic landmarks",
+    "Temples or churches",
+    "Cultural festivals",
+    "Live performances",
+    "Cooking classes",
+    "Craft workshops"
   ],
-  "adventure": [
-    { "id": "surfing", "label": "Surfing" },
-    { "id": "snorkeling", "label": "Snorkeling" },
-    { "id": "scuba", "label": "Scuba Diving" },
-    { "id": "kayaking", "label": "Kayaking" },
-    { "id": "rock_climbing", "label": "Rock Climbing" },
-    { "id": "ziplining", "label": "Zip-Lining" },
-    { "id": "skydiving", "label": "Skydiving" }
+  "Nature & Hiking": [
+    "National park hiking",
+    "Waterfall visits",
+    "Cave exploration",
+    "Mountain trekking",
+    "Nature walks",
+    "Wildlife safaris",
+    "Camping",
+    "Stargazing"
   ],
-  "culture": [
-    { "id": "museums", "label": "Museums" },
-    { "id": "galleries", "label": "Art Galleries" },
-    { "id": "landmarks", "label": "Historic Landmarks" },
-    { "id": "temples", "label": "Temples or Churches" },
-    { "id": "festivals", "label": "Cultural Festivals" },
-    { "id": "live", "label": "Live Performances" },
-    { "id": "cooking_culture", "label": "Cooking Classes" }
+  "Wellness & Relaxation": [
+    "Spa treatments",
+    "Yoga retreats",
+    "Meditation",
+    "Beach lounging",
+    "Hot springs",
+    "Wellness resorts",
+    "Detox programs"
   ],
-  "nature": [
-    { "id": "parks", "label": "National Park Hiking" },
-    { "id": "waterfalls", "label": "Waterfall Visits" },
-    { "id": "caves", "label": "Cave Exploration" },
-    { "id": "mountain", "label": "Mountain Trekking" },
-    { "id": "walks", "label": "Nature Walks" },
-    { "id": "safaris", "label": "Wildlife Safaris" },
-    { "id": "camping", "label": "Camping" }
+  "Food & Drink": [
+    "Street food tours",
+    "Fine dining",
+    "Wine tasting",
+    "Brewery tours",
+    "Cooking classes",
+    "Nightlife",
+    "Bars & clubs"
   ],
-  "social": [
-    { "id": "meetups", "label": "Local Meetups" },
-    { "id": "community", "label": "Community Events" },
-    { "id": "workshops", "label": "Workshops" },
-    { "id": "volunteering", "label": "Volunteering" }
+  "Sightseeing & Experiences": [
+    "City tours",
+    "Sunset cruises",
+    "Island hopping",
+    "Scenic train rides",
+    "Boat tours",
+    "Theme parks",
+    "Local festivals",
+    "Markets"
+  ],
+  "Social & Local Experiences": [
+    "Volunteering",
+    "Meeting locals",
+    "Joining group tours",
+    "Homestays",
+    "Cultural exchanges",
+    "Travel meetups"
   ]
 }

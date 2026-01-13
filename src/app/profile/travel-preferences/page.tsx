@@ -14,12 +14,10 @@ import PreferencesHeader from "./components/PreferencesHeader";
 import SelectedPreferencesList from "./components/SelectedPreferencesList";
 import CategorySection from "./components/CategorySection";
 
-export type Category = (typeof CATEGORIES)[number];
-export type InterestsByCategory = typeof INTERESTS;
-export type CategoryId = keyof InterestsByCategory;
-export type Interest = InterestsByCategory[CategoryId][number] & {
-  emoji?: string;
-};
+export type Category = { id: string; title: string };
+export type InterestsByCategory = Record<string, string[]>;
+export type CategoryId = string;
+export type Interest = string;
 
 const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
 

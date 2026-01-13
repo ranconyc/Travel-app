@@ -23,7 +23,6 @@ export default function CategorySection({
   return (
     <section className="rounded-3xl bg-white p-4 shadow-sm">
       <CategoryHeader
-        emoji={category.emoji}
         title={category.title}
         isActive={isActive}
         selectedCount={selectedIds.length}
@@ -42,7 +41,6 @@ export default function CategorySection({
 }
 
 type CategoryHeaderProps = {
-  emoji: string;
   title: string;
   isActive: boolean;
   selectedCount: number;
@@ -50,7 +48,6 @@ type CategoryHeaderProps = {
 };
 
 function CategoryHeader({
-  emoji,
   title,
   isActive,
   selectedCount,
@@ -69,7 +66,6 @@ function CategoryHeader({
     >
       <div className="w-full flex items-center justify-between text-gray-900">
         <div className="flex items-center gap-4">
-          <span className="text-2xl">{emoji}</span>
           <div>
             <h1 className="text-base font-medium">{title}</h1>
 

@@ -1,9 +1,10 @@
 [
-  { "id": "shopping", "title": "Shopping", "emoji": "💎" },
-  { "id": "wellness", "title": "Wellness & Relaxation", "emoji": "🧖" },
-  { "id": "food", "title": "Food & Drink", "emoji": "🍸" },
-  { "id": "adventure", "title": "Sport & Adventure", "emoji": "⛰️" },
-  { "id": "culture", "title": "Art & Culture", "emoji": "🏛️" },
-  { "id": "nature", "title": "Nature & Hiking", "emoji": "🌿" },
-  { "id": "social", "title": "Social & Local Experiences", "emoji": "🧭" }
+  { "id": "Shopping", "title": "Shopping" },
+  { "id": "Sport & Adventure", "title": "Sport & Adventure" },
+  { "id": "Art & Culture", "title": "Art & Culture" },
+  { "id": "Nature & Hiking", "title": "Nature & Hiking" },
+  { "id": "Wellness & Relaxation", "title": "Wellness & Relaxation" },
+  { "id": "Food & Drink", "title": "Food & Drink" },
+  { "id": "Sightseeing & Experiences", "title": "Sightseeing & Experiences" },
+  { "id": "Social & Local Experiences", "title": "Social & Local Experiences" }
 ]

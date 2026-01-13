@@ -7,10 +7,10 @@ import INTERESTS from "@/data/interests.json";
 
 const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
 
-type Category = (typeof CATEGORIES)[number];
-type InterestsByCategory = typeof INTERESTS;
-type CategoryId = keyof InterestsByCategory;
-type Interest = InterestsByCategory[CategoryId][number];
+type Category = { id: string; title: string };
+type InterestsByCategory = Record<string, string[]>;
+type CategoryId = string;
+type Interest = string;
 
 export type FormValues = {
   preferences: Record<string, string[]>;
@@ -60,13 +60,13 @@ export function useTravelPreferencesForm(onSubmit?: SubmitHandler<FormValues>) {
 
         return selectedIds
           .map((id) => {
-            const interest = categoryInterests.find((i) => i.id === id);
+            const interest = categoryInterests.find((i) => i === id);
             if (!interest) return null;
             return {
               categoryId: category.id,
               categoryTitle: category.title,
               interestId: id,
-              label: interest.label,
+              label: interest,
             };
           })
           .filter(Boolean) as SelectedPreference[];

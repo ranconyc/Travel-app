@@ -60,7 +60,8 @@ model User {
   interestsData     Json?  //{ "Shopping": ["id1", "id2"] }
  
   /* ---- TRAVEL PERSONA ---- */
-  travelPersona TravelPersona?
+  dailyRhythm     String?  // "early_riser", "night_owl"
+  travelStyle     String?  // "relaxed", "adventurous"
   /* ---- TRAVEL HISTORY ---- */
   trips Trip[] @relation("UserTrips")
   /* ---- FRIENDSHIP ---- */
@@ -73,15 +74,6 @@ model User {
   sentMessages     Message[]    @relation("SentMessages") // Messages sent by the user
 }
 
-model TravelPersona {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @unique @db.ObjectId
-  areaPriorities     String[] // ["convenience", "nightlife"]
-  accommodationTypes String[] // ["hostel", "hotel"]
-  dailyRhythm        String? // "night_owl"
-  travelStyle        String? // "balanced"
-  user               User     @relation(fields: [userId], references: [id])
-}
 
 model Account {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId

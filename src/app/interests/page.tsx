@@ -1,203 +1,117 @@
 "use client";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Checkbox, Button, SelectInterests } from "../mode/page";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-const interestsSchema = z.object({
-  interests: z.array(z.string()),
+import {
+  Sunrise,
+  Sunset,
+  Sun,
+  Moon,
+  SunMoon,
+  TreePalm,
+  Activity,
+  Binoculars,
+  Compass,
+  CableCar,
+} from "lucide-react";
+import StepTwo from ".";
+import StepOne from "./_components/StepOne";
+import StepThree from "./_components/StepThree";
+import ProgressBar from "./_components/ProgressBar";
+
+// STEP HOOK
+
+const useStep = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const step = Number(searchParams.get("step")) || 1;
+
+  const handleContinue = () => {
+    if (step < 3) {
+      router.push(`${pathname}?step=${step + 1}`, { scroll: false });
+    }
+  };
+
+  const handleBack = () => {
+    console.log("back");
+    router.push(`${pathname}?step=${step - 1}`, { scroll: false });
+    if (step === 1) {
+      router.back();
+    }
+  };
+
+  // //only on mount
+  // useEffect(() => {
+  //   const stepFromUrl = Number(searchParams.get("step"));
+  //   if (stepFromUrl && stepFromUrl !== step) {
+  //     router.push(`${pathname}?step=${stepFromUrl}`, { scroll: false });
+  //   }
+  // }, [searchParams]);
+
+  //on step change
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("step", step.toString());
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [step]);
+
+  return { step, handleContinue, handleBack };
+};
+
+// THE FORM PAGE
+
+const formSchema = z.object({
+  interests: z.array(z.string()).min(1, "Please select at least one interest"),
+  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
+  travelStyle: z.string().min(1, "Please select a travel style"), // Added this
 });
 
-type InterestsFormValues = z.infer<typeof interestsSchema>;
+type InterestsFormValues = z.infer<typeof formSchema>;
 
-interface CategoryRowProps {
-  title: string;
-  selectedCount: number;
-  onClick: () => void;
-}
-
-export const CategoryRow = ({
-  title,
-  selectedCount,
-  onClick,
-}: CategoryRowProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className="text-left border-2 border-surface hover:border-brand transition-colors rounded-xl px-3 py-2 flex justify-between items-center group"
-    >
-      <div className="">
-        <h1 className="">{title}</h1>
-        {/* check y isnt working */}
-        <p
-          className={`text-xs ${
-            selectedCount > 0 ? "text-brand" : "text-secondary"
-          }`}
-        >
-          {selectedCount > 0 ? `${selectedCount} selected` : "Tap to select"}
-        </p>
-      </div>
-
-      <ChevronRight
-        className="text-secondary group-hover:text-brand transition-colors"
-        size={24}
-      />
-    </button>
-  );
-};
-
-const categories: { [key: string]: string[] } = {
-  Shopping: [
-    "Local markets",
-    "Designer boutiques",
-    "Shopping malls",
-    "Souvenir hunting",
-    "Night bazaars",
-    "Street shopping",
-  ],
-  "Sport & Adventure": [
-    "Surfing",
-    "Snorkeling",
-    "Scuba diving",
-    "Kayaking",
-    "Jet skiing",
-    "Rock climbing",
-    "Zip-lining",
-    "Cycling tours",
-    "Skiing",
-    "Golfing",
-    "Paragliding",
-    "Skydiving",
-  ],
-  "Art & Culture": [
-    "Museums",
-    "Art galleries",
-    "Historic landmarks",
-    "Temples or churches",
-    "Cultural festivals",
-    "Live performances",
-    "Cooking classes",
-    "Craft workshops",
-  ],
-  "Nature & Hiking": [
-    "National park hiking",
-    "Waterfall visits",
-    "Cave exploration",
-    "Mountain trekking",
-    "Nature walks",
-    "Wildlife safaris",
-    "Camping",
-    "Stargazing",
-  ],
-  "Wellness & Relaxation": [
-    "Spa treatments",
-    "Yoga retreats",
-    "Meditation",
-    "Beach lounging",
-    "Hot springs",
-    "Wellness resorts",
-    "Detox programs",
-  ],
-  "Food & Drink": [
-    "Street food tours",
-    "Fine dining",
-    "Wine tasting",
-    "Brewery tours",
-    "Cooking classes",
-    "Nightlife",
-    "Bars & clubs",
-  ],
-  "Sightseeing & Experiences": [
-    "City tours",
-    "Sunset cruises",
-    "Island hopping",
-    "Scenic train rides",
-    "Boat tours",
-    "Theme parks",
-    "Local festivals",
-    "Markets",
-  ],
-  "Social & Local Experiences": [
-    "Volunteering",
-    "Meeting locals",
-    "Joining group tours",
-    "Homestays",
-    "Cultural exchanges",
-    "Travel meetups",
-  ],
-};
-
-const categoryNames = Object.keys(categories);
-
-const ProgressBar = ({ percentage }: { percentage: number }) => {
-  return (
-    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
-      <div className={`h-full bg-brand w-[${percentage * 100}%]`} />
-    </div>
-  );
-};
-
-const Modal = ({
-  category = "Shopping",
-  onClose,
-  selectedInterests,
-  onOptionToggle,
-}: {
-  category: string;
-  onClose: () => void;
-  selectedInterests: string[];
-  onOptionToggle: (option: string) => void;
-}) => {
-  return (
-    <div className="fixed inset-0 bg-blur flex items-end  z-50">
-      <div className="w-full h-fit bg-app-bg m-3 p-6 rounded-3xl">
-        <div className="flex justify-end">
-          <X className="cursor-pointer" size={20} onClick={onClose} />
-        </div>
-        <h1 className="text-xl font-bold mb-2">{category}</h1>
-        <p className="mb-4 text-sm font-bold text-secondary">
-          Tap to select / deselect
-        </p>
-        <div className="grid gap-2 overflow-y-scroll max-h-[400px]">
-          {categories[category].map((option) => (
-            <Checkbox
-              key={option}
-              id={option}
-              label={option}
-              isSelected={selectedInterests.includes(option)}
-              onChange={() => onOptionToggle(option)}
-            />
-          ))}
-        </div>
-        <div className="mt-6">
-          <Button className="w-full" onClick={onClose}>
-            Done
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default function InterestsFormPage() {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+export default function MultiStepForm() {
+  const steps = [
+    {
+      title: "Interests",
+      header: "What do you enjoy when traveling?",
+      description: "Help us personalize your trip recommendations",
+    },
+    {
+      title: "Step Two",
+      header: "What's your natural travel rhythm?",
+      description: "Select the option that match you the most",
+    },
+    {
+      title: "Step Three",
+      header: "Which travel style feels most like you?",
+      description: "Select the option that match you the most",
+    },
+  ];
 
   const { setValue, watch, handleSubmit } = useForm<InterestsFormValues>({
-    resolver: zodResolver(interestsSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       interests: [],
+      dailyRhythm: "Night Owl",
+      travelStyle: "Relaxed",
     },
   });
 
-  const selectedInterests = watch("interests");
+  const { step, handleContinue, handleBack } = useStep();
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
-    setShowModal(true);
+  const onSubmit = (data: InterestsFormValues) => {
+    console.log("Form Data:", data);
   };
+
+  const selectedDailyRhythm = watch("dailyRhythm");
+  const selectedTravelStyle = watch("travelStyle");
+  const selectedInterests = watch("interests");
 
   const handleOptionToggle = (option: string) => {
     const isSelected = selectedInterests.includes(option);
@@ -211,83 +125,62 @@ export default function InterestsFormPage() {
     }
   };
 
-  const getSelectedCountForCategory = (category: string) => {
-    const options = categories[category];
-    return selectedInterests.filter((interest) => options.includes(interest))
-      .length;
+  const selectDailyRhythm = (value: string) => {
+    setValue("dailyRhythm", value);
   };
 
-  const onSubmit = (data: InterestsFormValues) => {
-    console.log("Form Data:", data);
+  const selectTravelStyle = (value: string) => {
+    setValue("travelStyle", value);
   };
 
   return (
     <div className="min-h-screen bg-app-bg p-4 pb-24">
       <div className="fixed top-0 left-0 right-0 bg-app-bg/80 backdrop-blur-md z-40 p-4 pt-8">
         <div className="flex items-center gap-2">
-          <ChevronLeft className="cursor-pointer" />
-          <ProgressBar
-            percentage={selectedInterests.length / categoryNames.length}
-          />
+          <ChevronLeft className="cursor-pointer" onClick={handleBack} />
+          <ProgressBar currentStep={step} totalSteps={3} />
         </div>
       </div>
+      <div className="mb-4 pt-20">
+        <h1 className="text-xl font-bold mb-3">{steps[step - 1].header}</h1>
+        <p className="mb-8 font-medium">{steps[step - 1].description}</p>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4 pt-20">
-          <h1 className="text-xl font-bold mb-3">
-            What do you enjoy when traveling?
-          </h1>
-          <p className="mb-8 font-medium">
-            Help us personalize your trip recommendations
-          </p>
-        </div>
-
-        {selectedInterests.length > 0 && (
-          <div className="mb-8">
-            <h1 className="text-xl font-bold mb-4">You&apos;re into:</h1>
-            <ul className="flex flex-wrap gap-2">
-              {selectedInterests.map((interest) => (
-                <SelectInterests
-                  key={interest}
-                  item={interest}
-                  onClick={() => handleOptionToggle(interest)}
-                />
-              ))}
-            </ul>
-          </div>
+        {step === 1 && (
+          <StepOne
+            handleOptionToggle={handleOptionToggle}
+            selectedInterests={selectedInterests}
+          />
         )}
-
-        <div className="grid grid-cols-1 gap-2">
-          <h2 className="text-xs font-bold text-secondary">
-            Select all that interest you
-          </h2>
-          {categoryNames.map((category) => (
-            <CategoryRow
-              key={category}
-              title={category}
-              selectedCount={getSelectedCountForCategory(category)}
-              onClick={() => handleCategoryClick(category)}
-            />
-          ))}
-        </div>
-
+        {step === 2 && (
+          <StepTwo
+            handleRadioChange={selectDailyRhythm}
+            selected={selectedDailyRhythm}
+          />
+        )}
+        {step === 3 && (
+          <StepThree
+            handleRadioChange={selectTravelStyle}
+            selected={selectedTravelStyle}
+          />
+        )}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-app-bg border-t border-surface">
-          <Button type="submit" className="w-full">
-            Continue
-          </Button>
+          {step < 3 ? (
+            <Button
+              type="button"
+              disabled={step === 1 && !watch("interests").length}
+              onClick={handleContinue}
+              className="w-full"
+            >
+              Continue
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full">
+              Submit
+            </Button>
+          )}
         </div>
       </form>
-
-      {showModal && (
-        <Modal
-          category={selectedCategory || ""}
-          onClose={() => {
-            // console.log("close", selectedInterests);
-            setShowModal(false);
-          }}
-          selectedInterests={selectedInterests}
-          onOptionToggle={handleOptionToggle}
-        />
-      )}
     </div>
   );
 }

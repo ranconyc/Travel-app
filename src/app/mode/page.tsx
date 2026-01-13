@@ -79,8 +79,10 @@ export const Checkbox = ({
   icon: Icon,
   isSelected,
   onChange,
+  type = "checkbox",
   ...props
 }: {
+  type?: "checkbox" | "radio";
   id: string;
   label: string;
   description?: string;
@@ -96,7 +98,7 @@ export const Checkbox = ({
       } `}
     >
       <input
-        type="checkbox"
+        type={type}
         className="sr-only"
         checked={isSelected}
         onChange={() => onChange?.(id)}

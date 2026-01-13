@@ -14,12 +14,12 @@ export default function InterestsGrid({
   return (
     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
       {interests.map((interest) => {
-        const selected = selectedIds.includes(interest.id);
+        const selected = selectedIds.includes(interest);
 
         return (
           <label
-            key={interest.id}
-            htmlFor={interest.id}
+            key={interest}
+            htmlFor={interest}
             className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-sm cursor-pointer transition
               ${
                 selected
@@ -28,11 +28,8 @@ export default function InterestsGrid({
               }`}
           >
             <div className="flex items-center gap-3">
-              {interest.emoji && (
-                <span className="text-xl leading-none">{interest.emoji}</span>
-              )}
               <span className="text-[15px] font-medium text-gray-900">
-                {interest.label}
+                {interest}
               </span>
             </div>
 
@@ -49,11 +46,11 @@ export default function InterestsGrid({
             </span>
 
             <input
-              id={interest.id}
+              id={interest}
               type="checkbox"
               className="sr-only"
               checked={selected}
-              onChange={() => onToggleInterest(interest.id)}
+              onChange={() => onToggleInterest(interest)}
             />
           </label>
         );

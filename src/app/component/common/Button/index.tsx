@@ -33,20 +33,20 @@ export default function Button({
   if (variant === "back") {
     return (
       <button
-        className="bg-transparent p-0 hover:bg-gray-800"
+        className="text-app-text bg-transparent p-0 hover:bg-gray-800"
         onClick={() => router.back()}
       >
-        <ChevronLeft size={32} />
+        <ChevronLeft size={24} />
       </button>
     );
   }
   return (
     <button
       className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-bold transition active:scale-[.98] ${
-        variant === "primary" && "bg-blue-500 hover:bg-blue-600 text-white"
+        variant === "primary" && "bg-brand hover:bg-brand/80 text-app-text"
       } ${
         variant === "outline" &&
-        "border border-gray-300 text-gray-800 hover:bg-gray-50"
+        "border-2 border-surface text-app-text hover:bg-surface"
       } ${variant === "ghost" && "text-gray-600 hover:bg-gray-100"} ${
         variant === "teal" &&
         "bg-[#1A5F70] hover:bg-[#237082] text-white border border-[#2A7F90]"
