@@ -66,7 +66,7 @@ const Modal = ({
 }) => {
   return (
     <div className="fixed inset-0 bg-blur flex items-end  z-50">
-      <div className="w-full h-fit bg-app-bg m-3 p-6 rounded-3xl">
+      <div className="w-full h-fit bg-app-bg m-3 mb-8 px-4 py-6 rounded-3xl">
         <div className="flex justify-end">
           <X className="cursor-pointer" size={20} onClick={onClose} />
         </div>
@@ -74,7 +74,7 @@ const Modal = ({
         <p className="mb-4 text-sm font-bold text-secondary">
           Select all that interest you
         </p>
-        <div className="grid gap-2 overflow-y-scroll max-h-[400px]">
+        <div className="grid gap-2 overflow-y-scroll max-h-[600px]">
           {categories[category].map((option) => (
             <Checkbox
               key={option}
