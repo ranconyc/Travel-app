@@ -9,40 +9,35 @@ export default function useStep() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const step = Number(searchParams.get("step")) || 1;
-
-  // TODO: if user jusr type /interests, redirect to /interests?step=1
-  // if user type /interests?step=2, redirect to /interests?step=1 if step 1 is not completed
-  // if user type /interests?step=3, redirect to /interests?step=2 if step 2 is not completed
+  // Ensure step is within valid range (1-3)
+  const step = Math.min(Math.max(Number(searchParams.get("step")) || 1, 1), 3);
 
   const handleContinue = () => {
     if (step < 3) {
-      router.push(`${pathname}?step=${step + 1}`, { scroll: false });
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("step", (step + 1).toString());
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
     }
   };
 
   const handleBack = () => {
     if (step > 1) {
-      router.push(`${pathname}?step=${step - 1}`, { scroll: false });
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("step", (step - 1).toString());
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
     } else {
       router.push("/", { scroll: false });
     }
   };
 
-  // //only on mount
+  // Sync step with URL on mount if missing
   useEffect(() => {
-    const stepFromUrl = Number(searchParams.get("step"));
-    if (stepFromUrl && stepFromUrl !== step) {
-      router.push(`${pathname}?step=${stepFromUrl}`, { scroll: false });
+    if (!searchParams.has("step")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("step", "1");
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
-  }, [searchParams]);
-
-  //on step change
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("step", step.toString());
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [step]);
+  }, [pathname, router, searchParams]);
 
   return { step, handleContinue, handleBack };
 }

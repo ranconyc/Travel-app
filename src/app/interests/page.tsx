@@ -62,14 +62,19 @@ const FormHeader = ({
 export default function MultiStepForm() {
   const methods = useForm<InterestsFormValues>({
     resolver: zodResolver(formSchema),
+    mode: "onChange", // Enable real-time validation for button states
     defaultValues: {
       interests: [],
-      dailyRhythm: "Night Owl",
-      travelStyle: "Relaxed",
+      dailyRhythm: "",
+      travelStyle: "",
     },
   });
 
-  const { watch, handleSubmit } = methods;
+  const {
+    watch,
+    handleSubmit,
+    formState: { isValid },
+  } = methods;
 
   // URL State Managment for the ?step='1' | ?step='2' | ?step='3'
   const { step, handleContinue, handleBack } = useStep();
@@ -92,6 +97,13 @@ export default function MultiStepForm() {
     }
   };
 
+  const isStepValid = () => {
+    if (step === 1) return watch("interests").length > 0;
+    if (step === 2) return watch("dailyRhythm") !== "";
+    if (step === 3) return watch("travelStyle") !== "";
+    return isValid;
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="min-h-screen bg-app-bg p-4 pb-24">
@@ -102,18 +114,18 @@ export default function MultiStepForm() {
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stepContent(step)}
-          <div className="fixed bottom-0 left-0 right-0 p-4 pb-6 bg-app-bg border-t border-surface">
+          <div className="fixed bottom-0 left-0 right-0 p-4 pb-12 bg-app-bg border-t border-surface">
             {step < 3 ? (
               <Button
                 type="button"
-                disabled={step === 1 && !watch("interests").length}
+                disabled={!isStepValid()}
                 onClick={handleContinue}
                 className="w-full"
               >
                 Continue
               </Button>
             ) : (
-              <Button type="submit" className="w-full">
+              <Button type="submit" disabled={!isValid} className="w-full">
                 Submit
               </Button>
             )}

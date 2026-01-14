@@ -7,7 +7,13 @@ export default function ProgressBar({
 }) {
   const percentage = (currentStep / totalSteps) * 100;
   return (
-    <div className="w-full h-2 bg-surface rounded-full overflow-hidden">
+    <div
+      role="progressbar"
+      aria-valuenow={currentStep}
+      aria-valuemin={1}
+      aria-valuemax={totalSteps}
+      className="w-full h-2 bg-surface rounded-full overflow-hidden"
+    >
       <div
         className="h-full bg-brand transition-all duration-300"
         style={{ width: `${percentage}%` }}
