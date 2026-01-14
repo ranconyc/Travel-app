@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +12,7 @@ import StepThree from "./_components/StepThree";
 import ProgressBar from "./_components/ProgressBar";
 import useStep from "./_hooks/useStep";
 import { formSchema, InterestsFormValues } from "./_types/form";
+import { saveInterests } from "@/domain/user/user.actions";
 
 const steps = [
   {
@@ -17,7 +20,7 @@ const steps = [
     description: "Help us personalize your trip recommendations",
   },
   {
-    header: "What’s your natural travel rhythm?",
+    header: "What's your natural travel rhythm?",
     description: "Select the option that match you the most",
   },
   {
@@ -52,6 +55,9 @@ const FormHeader = ({
 
 // THE FORM PAGE
 export default function MultiStepForm() {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const methods = useForm<InterestsFormValues>({
     resolver: zodResolver(formSchema),
     mode: "onChange", // Enable real-time validation for button states
@@ -72,8 +78,21 @@ export default function MultiStepForm() {
   const { step, handleContinue, handleBack } = useStep();
 
   // Form Submission
-  const onSubmit = (data: InterestsFormValues) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data: InterestsFormValues) => {
+    setIsSubmitting(true);
+    try {
+      const result = await saveInterests(data);
+      if (result.success) {
+        router.push("/profile");
+      } else {
+        console.error("Failed to save interests:", result.error);
+        // You could add toast notification here
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const stepContent = (step: number) => {
@@ -117,8 +136,12 @@ export default function MultiStepForm() {
                 Continue
               </Button>
             ) : (
-              <Button type="submit" disabled={!isValid} className="w-full">
-                Submit
+              <Button
+                type="submit"
+                disabled={!isValid || isSubmitting}
+                className="w-full"
+              >
+                {isSubmitting ? "Saving..." : "Submit"}
               </Button>
             )}
           </div>

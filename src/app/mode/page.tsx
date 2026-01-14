@@ -201,7 +201,7 @@ export const CheckboxGroup = ({
   );
 };
 
-export const SelectInterests = ({
+export const SelectedItem = ({
   item,
   onClick,
 }: {
@@ -213,8 +213,8 @@ export const SelectInterests = ({
     className="flex items-center gap-2 border border-brand px-2 py-[6px] text-sm w-fit rounded bg-brand/10 cursor-pointer capitalize"
     onClick={onClick}
   >
-    <X size={16} className="text-brand" />
     {item}
+    <X size={16} className="text-brand" />
   </li>
 );
 
@@ -271,7 +271,7 @@ export default function Mode() {
         <h1 className="font-bold text-2xl capitalize">selected interests</h1>
         <ul className="flex gap-2 flex-wrap">
           {selectedInterests.map((item) => (
-            <SelectInterests key={item} item={item} />
+            <SelectedItem key={item} item={item} />
           ))}
         </ul>
         <form onSubmit={handleSubmit} className="grid gap-2">

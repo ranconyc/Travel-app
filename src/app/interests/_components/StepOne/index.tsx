@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectInterests } from "@/app/mode/page";
+import { SelectedItem } from "@/app/mode/page";
 import { useMemo, useState } from "react";
 import interests from "@/data/interests.json";
 import { ChevronRight } from "lucide-react";
@@ -93,7 +93,7 @@ export default function StepOne() {
           <h1 className="text-xl font-bold mb-4">You&apos;re into:</h1>
           <ul className="flex flex-wrap gap-2">
             {selectedInterests.map((interest) => (
-              <SelectInterests
+              <SelectedItem
                 key={interest}
                 item={interest}
                 onClick={() => handleOptionToggle(interest)}

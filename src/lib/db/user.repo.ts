@@ -232,3 +232,30 @@ export async function isUserExists(userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   return !!user;
 }
+
+export async function saveUserInterests(
+  userId: string,
+  data: {
+    interests: string[];
+    dailyRhythm: string;
+    travelStyle: string;
+  }
+): Promise<void> {
+  if (!userId) {
+    throw new Error("User ID missing");
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        interestsData: data.interests,
+        dailyRhythm: data.dailyRhythm,
+        travelStyle: data.travelStyle,
+      },
+    });
+  } catch (error) {
+    console.error("saveUserInterests error:", error);
+    throw new Error("Failed to save user interests");
+  }
+}

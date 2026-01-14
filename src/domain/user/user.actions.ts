@@ -100,59 +100,62 @@ export async function deleteAccount() {
 /*                            TRAVEL PREFERENCES                              */
 /* -------------------------------------------------------------------------- */
 
-// export type TravelPreferencesFormValues = {
-//   preferences: Record<string, string[]>;
-// };
+import { saveUserInterests } from "@/lib/db/user.repo";
 
-// export async function saveTravelPreferences(data: TravelPreferencesFormValues) {
-//   const session = await getServerSession(authOptions);
-//   if (!session?.user?.id) {
-//     throw new Error("User not authenticated");
-//   }
+const saveInterestsSchema = z.object({
+  interests: z.array(z.string()).min(1, "Please select at least one interest"),
+  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
+  travelStyle: z.string().min(1, "Please select a travel style"),
+});
 
-//   const userId = session.user.id;
-//   const preferences = data.preferences ?? {};
-//   const interestSlugs = Array.from(new Set(Object.values(preferences).flat()));
+export type SaveInterestsFormValues = z.infer<typeof saveInterestsSchema>;
 
-//   if (interestSlugs.length === 0) {
-//     await prisma.userInterest.deleteMany({
-//       where: { userId },
-//     });
-//     return { ok: true, removedAll: true, created: 0 };
-//   }
+export type SaveInterestsResult =
+  | { success: true }
+  | {
+      success: false;
+      error: string;
+      fieldErrors?: Record<string, string>;
+    };
 
-//   const interests = await prisma.interest.findMany({
-//     where: { slug: { in: interestSlugs } },
-//     select: { id: true, slug: true },
-//   });
+export async function saveInterests(
+  rawValues: SaveInterestsFormValues
+): Promise<SaveInterestsResult> {
+  const session = await getServerSession(authOptions);
 
-//   if (interests.length === 0) {
-//     await prisma.userInterest.deleteMany({
-//       where: { userId },
-//     });
-//     return { ok: true, removedAll: true, created: 0 };
-//   }
+  if (!session?.user?.id) {
+    return { success: false, error: "UNAUTHENTICATED" };
+  }
 
-//   const interestIds = interests.map((i) => i.id);
+  const parsed = saveInterestsSchema.safeParse(rawValues);
 
-//   const result = await prisma.$transaction(async (tx) => {
-//     await tx.userInterest.deleteMany({ where: { userId } });
-//     const createResult = await tx.userInterest.createMany({
-//       data: interestIds.map((interestId) => ({
-//         userId,
-//         interestId,
-//         weight: 1,
-//       })),
-//     });
-//     return { createdCount: createResult.count };
-//   });
+  if (!parsed.success) {
+    const flat = parsed.error.flatten();
+    const fieldErrors: Record<string, string> = {};
+    for (const [name, messages] of Object.entries(flat.fieldErrors)) {
+      if (messages && messages[0]) {
+        fieldErrors[name] = messages[0];
+      }
+    }
 
-//   return {
-//     ok: true,
-//     created: result.createdCount,
-//     interestIds,
-//   };
-// }
+    return {
+      success: false,
+      error: "VALIDATION_ERROR",
+      fieldErrors,
+    };
+  }
+
+  try {
+    await saveUserInterests(session.user.id, parsed.data);
+    return { success: true };
+  } catch (error) {
+    console.error("saveInterests action error:", error);
+    return {
+      success: false,
+      error: "INTERNAL_SERVER_ERROR",
+    };
+  }
+}
 
 /* -------------------------------------------------------------------------- */
 /*                               BIO GENERATION                               */

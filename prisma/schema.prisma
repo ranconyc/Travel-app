@@ -63,6 +63,7 @@ model User {
   dailyRhythm     String?  // "early_riser", "night_owl"
   travelStyle     String?  // "relaxed", "adventurous"
   /* ---- TRAVEL HISTORY ---- */
+  visitedCountries String[] @default([])
   trips Trip[] @relation("UserTrips")
   /* ---- FRIENDSHIP ---- */
 
