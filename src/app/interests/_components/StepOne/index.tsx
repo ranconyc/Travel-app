@@ -1,10 +1,10 @@
 "use client";
 
-import { Checkbox, SelectInterests } from "@/app/mode/page";
+import { Button, SelectionCard, SelectInterests } from "@/app/mode/page";
 import { useState } from "react";
 import interests from "@/data/interests.json";
-import Button from "@/app/component/common/Button";
 import { ChevronRight, X } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 
 // CATEGORIES
 const categories: { [key: string]: string[] } = interests;
@@ -65,8 +65,8 @@ const Modal = ({
   onOptionToggle: (option: string) => void;
 }) => {
   return (
-    <div className="fixed inset-0 bg-blur flex items-end  z-50">
-      <div className="w-full h-fit bg-app-bg m-3 mb-8 px-4 py-6 rounded-3xl">
+    <div className="fixed inset-0 bg-blur flex items-end z-50 animate-fade-in">
+      <div className="w-full h-fit max-h-[600px] bg-app-bg m-3 mb-4 px-3 py-6 rounded-4xl animate-slide-up">
         <div className="flex justify-end">
           <X className="cursor-pointer" size={20} onClick={onClose} />
         </div>
@@ -74,9 +74,9 @@ const Modal = ({
         <p className="mb-4 text-sm font-bold text-secondary">
           Select all that interest you
         </p>
-        <div className="grid gap-2 overflow-y-scroll max-h-[600px]">
+        <div className="grid gap-2 h-fit  overflow-y-scroll">
           {categories[category].map((option) => (
-            <Checkbox
+            <SelectionCard
               key={option}
               id={option}
               label={option}
@@ -95,17 +95,24 @@ const Modal = ({
   );
 };
 
-interface StepOneProps {
-  handleOptionToggle: (option: string) => void;
-  selectedInterests: string[];
-}
-
-export default function StepOne({
-  handleOptionToggle,
-  selectedInterests,
-}: StepOneProps) {
+export default function StepOne() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const { watch, setValue } = useFormContext();
+  const selectedInterests = watch("interests");
+
+  const handleOptionToggle = (option: string) => {
+    const isSelected = selectedInterests.includes(option);
+    if (isSelected) {
+      setValue(
+        "interests",
+        selectedInterests.filter((i: string) => i !== option)
+      );
+    } else {
+      setValue("interests", [...selectedInterests, option]);
+    }
+  };
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -114,12 +121,14 @@ export default function StepOne({
 
   const getSelectedCountForCategory = (category: string) => {
     const options = categories[category];
-    return selectedInterests.filter((interest) => options.includes(interest))
-      .length;
+    return selectedInterests.filter((interest: string) =>
+      options.includes(interest)
+    ).length;
   };
 
   return (
     <div className="mb-4">
+      {/* show selected interests */}
       {selectedInterests?.length > 0 && (
         <div className="mb-8">
           <h1 className="text-xl font-bold mb-4">You&apos;re into:</h1>
@@ -135,6 +144,7 @@ export default function StepOne({
         </div>
       )}
 
+      {/* show categories */}
       <div className="grid grid-cols-1 gap-2">
         <h2 className="text-xs font-bold text-secondary">
           Select all that interest you
@@ -149,13 +159,11 @@ export default function StepOne({
         ))}
       </div>
 
+      {/* modal */}
       {showModal && (
         <Modal
           category={selectedCategory || ""}
-          onClose={() => {
-            // console.log("close", selectedInterests);
-            setShowModal(false);
-          }}
+          onClose={() => setShowModal(false)}
           selectedInterests={selectedInterests}
           onOptionToggle={handleOptionToggle}
         />

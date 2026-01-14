@@ -127,7 +127,10 @@ export default function Home() {
       </HeaderWrapper>
       <main className="p-4 overflow-y-scroll h-[calc(100vh-10rem)]">
         <div className="mb-4">
-          <Link href="/interests" className="text-xs text-secondary">
+          <Link
+            href="/interests?step=1"
+            className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
+          >
             Select Interests
           </Link>
         </div>

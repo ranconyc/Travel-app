@@ -1,5 +1,5 @@
 import { Sunrise, Sun, SunMoon, Sunset, Moon } from "lucide-react";
-import { Checkbox } from "../mode/page";
+import SelectionStep from "../SelectionStep";
 
 const dailyRhythm: {
   icon: React.ComponentType<{ size: number }>;
@@ -34,27 +34,6 @@ const dailyRhythm: {
 ];
 
 // STEP TWO
-export default function StepTwo({
-  handleRadioChange,
-  selected,
-}: {
-  handleRadioChange: (value: string) => void;
-  selected: string;
-}) {
-  return (
-    <div className="grid grid-cols-1 gap-2">
-      {dailyRhythm.map((item) => (
-        <Checkbox
-          key={item.label}
-          type="radio"
-          icon={item.icon}
-          id={item.label}
-          label={item.label}
-          description={item.description}
-          isSelected={selected === item.label}
-          onChange={handleRadioChange}
-        />
-      ))}
-    </div>
-  );
+export default function StepTwo() {
+  return <SelectionStep fieldName="dailyRhythm" options={dailyRhythm} />;
 }

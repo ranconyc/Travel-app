@@ -72,7 +72,8 @@ const Input = ({
   );
 };
 
-export const Checkbox = ({
+//change name to SelectionCard
+export const SelectionCard = ({
   id,
   label,
   description,

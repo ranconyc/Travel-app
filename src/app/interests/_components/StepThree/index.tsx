@@ -1,4 +1,3 @@
-import { Checkbox } from "@/app/mode/page";
 import {
   TreePalm,
   Compass,
@@ -6,6 +5,7 @@ import {
   Binoculars,
   CableCar,
 } from "lucide-react";
+import SelectionStep from "../SelectionStep";
 
 const travelStyles: {
   icon: React.ComponentType<{ size: number }>;
@@ -44,33 +44,6 @@ const travelStyles: {
 ];
 
 // STEP THREE
-export default function StepThree({
-  handleRadioChange,
-  selected,
-}: {
-  handleRadioChange: (value: string) => void;
-  selected: string;
-}) {
-  return (
-    <div className="grid grid-cols-1 gap-2">
-      {travelStyles.map(
-        (item: {
-          label: string;
-          icon: React.ComponentType<{ size: number }>;
-          description: string;
-        }) => (
-          <Checkbox
-            key={item.label}
-            type="radio"
-            icon={item.icon}
-            id={item.label}
-            label={item.label}
-            description={item.description}
-            isSelected={selected === item.label}
-            onChange={handleRadioChange}
-          />
-        )
-      )}
-    </div>
-  );
+export default function StepThree() {
+  return <SelectionStep fieldName="travelStyle" options={travelStyles} />;
 }
