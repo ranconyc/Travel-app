@@ -2,7 +2,6 @@
 import { ChevronLeft } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button } from "../mode/page";
 
 import StepTwo from "./_components/StepTwo";
@@ -10,14 +9,7 @@ import StepOne from "./_components/StepOne";
 import StepThree from "./_components/StepThree";
 import ProgressBar from "./_components/ProgressBar";
 import useStep from "./_hooks/useStep";
-
-const formSchema = z.object({
-  interests: z.array(z.string()).min(1, "Please select at least one interest"),
-  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
-  travelStyle: z.string().min(1, "Please select a travel style"), // Added this
-});
-
-type InterestsFormValues = z.infer<typeof formSchema>;
+import { formSchema, InterestsFormValues } from "./_types/form";
 
 const steps = [
   {

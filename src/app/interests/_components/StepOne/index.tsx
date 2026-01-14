@@ -1,19 +1,18 @@
 "use client";
 
-import { Button, SelectionCard, SelectInterests } from "@/app/mode/page";
-import { useState } from "react";
+import { SelectInterests } from "@/app/mode/page";
+import { useMemo, useState } from "react";
 import interests from "@/data/interests.json";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+import { InterestsFormValues } from "../../_types/form";
+import InterestsModal from "../InterestsModal";
 
 // CATEGORIES
 const categories: { [key: string]: string[] } = interests;
-
 const categoryNames = Object.keys(categories);
 
-// components
-// CategoryRow
-
+// CategoryRow Component
 interface CategoryRowProps {
   title: string;
   selectedCount: number;
@@ -31,9 +30,8 @@ export const CategoryRow = ({
       onClick={onClick}
       className="text-left border-2 border-surface hover:border-brand transition-colors rounded-xl px-3 py-2 flex justify-between items-center group"
     >
-      <div className="">
-        <h1 className="">{title}</h1>
-        {/* check y isnt working */}
+      <div>
+        <h1>{title}</h1>
         <p
           className={`text-xs ${
             selectedCount > 0 ? "text-brand" : "text-secondary"
@@ -51,55 +49,12 @@ export const CategoryRow = ({
   );
 };
 
-// Modal
-// MODAL
-const Modal = ({
-  category = "Shopping",
-  onClose,
-  selectedInterests,
-  onOptionToggle,
-}: {
-  category: string;
-  onClose: () => void;
-  selectedInterests: string[];
-  onOptionToggle: (option: string) => void;
-}) => {
-  return (
-    <div className="fixed inset-0 bg-blur flex items-end z-50 animate-fade-in">
-      <div className="w-full h-fit max-h-[600px] bg-app-bg m-3 mb-4 px-3 py-6 rounded-4xl animate-slide-up">
-        <div className="flex justify-end">
-          <X className="cursor-pointer" size={20} onClick={onClose} />
-        </div>
-        <h1 className="text-xl font-bold mb-2">{category}</h1>
-        <p className="mb-4 text-sm font-bold text-secondary">
-          Select all that interest you
-        </p>
-        <div className="grid gap-2 h-fit  overflow-y-scroll">
-          {categories[category].map((option) => (
-            <SelectionCard
-              key={option}
-              id={option}
-              label={option}
-              isSelected={selectedInterests.includes(option)}
-              onChange={() => onOptionToggle(option)}
-            />
-          ))}
-        </div>
-        <div className="mt-6">
-          <Button className="w-full" onClick={onClose}>
-            Done
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
+// Main StepOne Component
 export default function StepOne() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useFormContext<InterestsFormValues>();
   const selectedInterests = watch("interests");
 
   const handleOptionToggle = (option: string) => {
@@ -107,7 +62,7 @@ export default function StepOne() {
     if (isSelected) {
       setValue(
         "interests",
-        selectedInterests.filter((i: string) => i !== option)
+        selectedInterests.filter((i) => i !== option)
       );
     } else {
       setValue("interests", [...selectedInterests, option]);
@@ -119,21 +74,25 @@ export default function StepOne() {
     setShowModal(true);
   };
 
-  const getSelectedCountForCategory = (category: string) => {
-    const options = categories[category];
-    return selectedInterests.filter((interest: string) =>
-      options.includes(interest)
-    ).length;
-  };
+  // Memoize category counts for performance
+  const categoryCounts = useMemo(() => {
+    return categoryNames.reduce((acc, category) => {
+      const options = categories[category];
+      acc[category] = selectedInterests.filter((interest) =>
+        options.includes(interest)
+      ).length;
+      return acc;
+    }, {} as Record<string, number>);
+  }, [selectedInterests]);
 
   return (
     <div className="mb-4">
-      {/* show selected interests */}
-      {selectedInterests?.length > 0 && (
+      {/* Show selected interests */}
+      {selectedInterests.length > 0 && (
         <div className="mb-8">
           <h1 className="text-xl font-bold mb-4">You&apos;re into:</h1>
           <ul className="flex flex-wrap gap-2">
-            {selectedInterests?.map((interest: string) => (
+            {selectedInterests.map((interest) => (
               <SelectInterests
                 key={interest}
                 item={interest}
@@ -144,7 +103,7 @@ export default function StepOne() {
         </div>
       )}
 
-      {/* show categories */}
+      {/* Show categories */}
       <div className="grid grid-cols-1 gap-2">
         <h2 className="text-xs font-bold text-secondary">
           Select all that interest you
@@ -153,16 +112,16 @@ export default function StepOne() {
           <CategoryRow
             key={category}
             title={category}
-            selectedCount={getSelectedCountForCategory(category)}
+            selectedCount={categoryCounts[category]}
             onClick={() => handleCategoryClick(category)}
           />
         ))}
       </div>
 
-      {/* modal */}
-      {showModal && (
-        <Modal
-          category={selectedCategory || ""}
+      {/* Modal */}
+      {showModal && selectedCategory && (
+        <InterestsModal
+          category={selectedCategory}
           onClose={() => setShowModal(false)}
           selectedInterests={selectedInterests}
           onOptionToggle={handleOptionToggle}
