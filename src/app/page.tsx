@@ -126,8 +126,8 @@ export default function Home() {
         <Input placeholder="Search destination" type="text" />
       </HeaderWrapper>
       <main className="p-4 overflow-y-scroll h-[calc(100vh-10rem)]">
-        <div className="flex gap-4">
-          <div className="mb-4">
+        <div className="flex gap-2">
+          <div className="">
             <Link
               href="/interests?step=1"
               className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
