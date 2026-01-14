@@ -141,6 +141,8 @@ export default function Travel() {
     if (selectedSubContinent) {
       setSelectedSubContinent("");
       setSelectedContinent("");
+    } else if (selectedContinent) {
+      setSelectedContinent("");
     } else {
       router.back();
     }
