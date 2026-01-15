@@ -17,19 +17,19 @@ export async function addActivityToTripAction(
   if (!data.name) throw new Error("Activity name required");
 
   // Create new TripActivity
-  const newActivity = await prisma.tripActivity.create({
+  const newActivity = (await prisma.tripActivity.create({
     data: {
-      tripStopId: tripStopId,
+      tripStop: { connect: { id: tripStopId } },
       name: data.name,
       date: data.date,
       startTime: data.startTime,
       notes: data.notes,
-      placeId: data.placeId,
+      place: data.placeId ? { connect: { id: data.placeId } } : undefined,
     },
     include: {
       tripStop: true,
     },
-  });
+  })) as any;
 
   revalidatePath(`/trip/${newActivity.tripStop.tripId}`);
   return { success: true, activity: newActivity };

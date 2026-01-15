@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import type { Coordinates, NearbyUserResult } from "@/types/user";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
