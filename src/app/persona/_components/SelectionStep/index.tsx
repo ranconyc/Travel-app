@@ -19,7 +19,7 @@ export default function SelectionStep({
 
   return (
     <div className="grid grid-cols-1 gap-2">
-      {options.map((item) => (
+      {options.map((item: SelectionStepProps["options"][number]) => (
         <SelectionCard
           key={item.label}
           type="radio"
@@ -28,7 +28,9 @@ export default function SelectionStep({
           label={item.label}
           description={item.description}
           isSelected={selectedValue === item.label}
-          onChange={(val: string) => setValue(fieldName, val)}
+          onChange={(val) => {
+            setValue(fieldName, val);
+          }}
         />
       ))}
     </div>

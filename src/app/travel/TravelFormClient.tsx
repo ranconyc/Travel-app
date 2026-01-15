@@ -6,12 +6,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import worldData from "@/data/world.json";
 
-import { SelectedItem, Button } from "../mode/page";
-import { CategoryRow } from "../interests/_components/StepOne";
+import { SelectedItem } from "../mode/page";
+import Button from "@/app/component/common/Button";
+import { CategoryRow } from "../persona/_components/InterestsStep";
 import Modal from "./_components/Modal";
 import { travelFormSchema, TravelFormValues } from "./_types/form";
 import { TravelFormHeader } from "./_components/TravelFormHeader";
 import { CountrySelection } from "./_components/CountrySelection";
+import { saveVisitedCountries } from "@/domain/user/user.actions";
 
 // Type assertion for the world data
 type WorldData = Record<string, Record<string, string[]>>;
@@ -68,9 +70,14 @@ export default function TravelFormClient({
   const onSubmit = async (data: TravelFormValues) => {
     setIsSubmitting(true);
     try {
-      console.log("Selected countries:", data.countries);
-      // TODO: Call server action to save countries
-      router.push(`/profile/${initialUser?.id}`);
+      const result = await saveVisitedCountries(data);
+      if (result.success) {
+        router.push(`/profile/${result.userId}`);
+        router.refresh();
+      } else {
+        console.error("Failed to save countries:", result.error);
+        // We could add a local error state here if needed
+      }
     } catch (error) {
       console.error("Unexpected error:", error);
     } finally {
@@ -210,7 +217,8 @@ export default function TravelFormClient({
           <div className="fixed bottom-0 left-0 right-0 p-4 pb-12 bg-app-bg border-t border-surface">
             <Button
               type="submit"
-              disabled={!isStepValid() || isSubmitting}
+              // disabled={isSubmitting}
+              // disabled={!isStepValid() || isSubmitting}
               className="w-full"
             >
               {isSubmitting

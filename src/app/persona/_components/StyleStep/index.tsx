@@ -13,7 +13,7 @@ const travelStyles = (travelStylesData as StyleData[]).map((item) => ({
   icon: (Icons as any)[item.icon] || Icons.Compass,
 }));
 
-// STEP THREE
-export default function StepThree() {
+// STYLE STEP
+export default function StyleStep() {
   return <SelectionStep fieldName="travelStyle" options={travelStyles} />;
 }

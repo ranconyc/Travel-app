@@ -11,6 +11,8 @@ import {
   completeProfile,
   deleteUserAccount,
   saveUserInterests,
+  updateUserProfilePersona,
+  updateVisitedCountries,
 } from "@/lib/db/user.repo";
 import { z } from "zod";
 
@@ -222,4 +224,100 @@ export async function generateBio(input: BioInput) {
       },
     ],
   };
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                TRAVEL DATA                                 */
+/* -------------------------------------------------------------------------- */
+
+const saveTravelSchema = z.object({
+  countries: z.array(z.string()).min(1, "Please select at least one country"),
+});
+
+export type SaveTravelFormValues = z.infer<typeof saveTravelSchema>;
+
+export type SaveTravelResult =
+  | { success: true; userId: string }
+  | {
+      success: false;
+      error: string;
+      fieldErrors?: Record<string, string>;
+    };
+
+export async function saveVisitedCountries(
+  rawValues: SaveTravelFormValues
+): Promise<SaveTravelResult> {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return { success: false, error: "UNAUTHENTICATED" };
+  }
+
+  const parsed = saveTravelSchema.safeParse(rawValues);
+
+  if (!parsed.success) {
+    const flat = parsed.error.flatten();
+    const fieldErrors: Record<string, string> = {};
+    for (const [name, messages] of Object.entries(flat.fieldErrors)) {
+      if (messages && messages[0]) {
+        fieldErrors[name] = messages[0];
+      }
+    }
+
+    return {
+      success: false,
+      error: "VALIDATION_ERROR",
+      fieldErrors,
+    };
+  }
+
+  try {
+    await updateVisitedCountries(session.user.id, parsed.data.countries);
+    return { success: true, userId: session.user.id };
+  } catch (error) {
+    console.error("saveVisitedCountries action error:", error);
+    return {
+      success: false,
+      error: "INTERNAL_SERVER_ERROR",
+    };
+  }
+}
+
+const savePersonaSchema = z.object({
+  areaPreferences: z.array(z.string()),
+  accommodationTypes: z.array(z.string()),
+  travelRhythm: z.string(),
+  travelStyle: z.string(),
+});
+
+export type SavePersonaFormValues = z.infer<typeof savePersonaSchema>;
+
+export async function saveTravelPersona(
+  rawValues: SavePersonaFormValues
+): Promise<SaveTravelResult> {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return { success: false, error: "UNAUTHENTICATED" };
+  }
+
+  const parsed = savePersonaSchema.safeParse(rawValues);
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: "VALIDATION_ERROR",
+    };
+  }
+
+  try {
+    await updateUserProfilePersona(session.user.id, parsed.data);
+    return { success: true, userId: session.user.id };
+  } catch (error) {
+    console.error("saveTravelPersona action error:", error);
+    return {
+      success: false,
+      error: "INTERNAL_SERVER_ERROR",
+    };
+  }
 }

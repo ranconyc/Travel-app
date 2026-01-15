@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
-import InterestsFormClient from "./InterestsFormClient";
+import PersonaFormClient from "./PersonaFormClient";
 import { redirect } from "next/navigation";
 import { User } from "@/domain/user/user.schema";
 
@@ -10,5 +10,5 @@ export default async function MultiStepFormPage() {
     redirect("/signin?callbackUrl=/interests");
   }
 
-  return <InterestsFormClient initialUser={user as unknown as User} />;
+  return <PersonaFormClient initialUser={user as unknown as User} />;
 }

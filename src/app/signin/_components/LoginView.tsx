@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, Input } from "@/app/mode/page";
+import Button from "@/app/component/common/Button";
+import { Input } from "@/app/mode/page";
 import { AuthHeader } from "./AuthHeader";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { SignInValues } from "../_types/form";
 
 interface LoginViewProps {
   onSwitch: () => void;
-  onBack: () => void;
   register: UseFormRegister<SignInValues>;
   errors: FieldErrors<SignInValues>;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
@@ -15,7 +15,6 @@ interface LoginViewProps {
 
 export const LoginView = ({
   onSwitch,
-  onBack,
   register,
   errors,
   onSubmit,
@@ -26,7 +25,6 @@ export const LoginView = ({
       <AuthHeader
         title="Welcome Back, Traveler"
         subtitle="Enter your details to pick up where you left off."
-        onBack={onBack}
       />
       <div className="flex flex-col gap-4">
         <Input

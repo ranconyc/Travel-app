@@ -60,17 +60,20 @@ export default function SignInFormClient() {
   };
 
   return (
-    <div className="bg-app-bg h-full w-full p-4 pt-16 flex flex-col items-center overflow-hidden text-app-text">
+    <div
+      className="bg-app-bg h-full w-full p-4 pt-16 flex flex-col items-center overflow-hidden text-app-text cursor-pointer"
+      onClick={() => setView("landing")}
+    >
       <h1 className="text-2xl font-bold">TravelMate</h1>
 
       {registered && (
-        <div className="mt-4 p-2 bg-brand/10 border border-brand/20 rounded text-brand text-xs text-center">
+        <div className="mt-4 p-2 bg-brand/10 border border-brand/20 rounded text-brand text-xs text-center z-20">
           Registration successful! Please sign in.
         </div>
       )}
 
       {error && (
-        <div className="mt-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs text-center">
+        <div className="mt-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs text-center z-20">
           {error}
         </div>
       )}
@@ -83,21 +86,20 @@ export default function SignInFormClient() {
         <div className="absolute w-1/4 h-1/4 bg-brand/6 border border-brand/70 rounded-full" />
       </div>
 
-      <div className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-[#080C14] rounded-2xl px-4 py-6 flex flex-col gap-8 z-10 shadow-xl">
+      <div
+        className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-[#080C14] rounded-2xl px-4 py-6 flex flex-col gap-8 z-10 shadow-xl cursor-default"
+        onClick={(e) => e.stopPropagation()}
+      >
         {view === "login" ? (
           <LoginView
             onSwitch={() => setView("signup")}
-            onBack={() => setView("landing")}
             register={register}
             errors={errors}
             onSubmit={handleSubmit(onSubmit)}
             loading={loading}
           />
         ) : view === "signup" ? (
-          <SignupView
-            onSwitch={() => setView("login")}
-            onBack={() => setView("landing")}
-          />
+          <SignupView onSwitch={() => setView("login")} />
         ) : (
           <LandingView onClick={() => setView("login")} />
         )}

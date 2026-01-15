@@ -92,13 +92,29 @@ export default async function Profile({ params }: { params: { id: string } }) {
             </h2>
           </div>
           <div>
-            <h1 className="text-lg font-bold">12</h1>
+            <h1 className="text-lg font-bold">
+              {profileUser.visitedCountries?.length || 0}
+            </h1>
             <h2 className="text-xs font-bold text-secondary uppercase">
               countries
             </h2>
           </div>
         </div>
-        <p className="text-xs">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-lg font-bold">Interests</h1>
+          <p className="text-xs text-secondary">
+            {profileUser.profile?.persona?.interests?.join(", ") ||
+              "None selected"}
+          </p>
+        </div>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-lg font-bold">Recent Travels</h1>
+          <p className="text-xs text-secondary">
+            {profileUser.visitedCountries?.join(", ") ||
+              "No countries recorded"}
+          </p>
+        </div>
+        <p className="text-xs mt-4">
           Member since {new Date(profileUser.createdAt).toLocaleDateString()}
         </p>
       </main>

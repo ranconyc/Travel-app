@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import interests from "@/data/interests.json";
 import { ChevronRight } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { InterestsFormValues } from "../../_types/form";
+import { PersonaFormValues } from "../../_types/form";
 import InterestsModal from "../InterestsModal";
 
 // CATEGORIES
@@ -49,12 +49,12 @@ export const CategoryRow = ({
   );
 };
 
-// Main StepOne Component
-export default function StepOne() {
+// Main InterestsStep Component
+export default function InterestsStep() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { watch, setValue } = useFormContext<InterestsFormValues>();
+  const { watch, setValue } = useFormContext<PersonaFormValues>();
   const selectedInterests = watch("interests");
 
   const handleOptionToggle = (option: string) => {

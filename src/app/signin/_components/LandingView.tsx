@@ -1,7 +1,7 @@
 import React from "react";
 import { AiFillFacebook, AiOutlineGoogle } from "react-icons/ai";
 import { signIn } from "next-auth/react";
-import { Button } from "@/app/mode/page";
+import Button from "@/app/component/common/Button";
 import { AuthHeader } from "./AuthHeader";
 
 export const LandingView = ({ onClick }: { onClick: () => void }) => {

@@ -218,6 +218,46 @@ export async function isUserExists(userId: string) {
   return !!user;
 }
 
+export async function updateUserProfilePersona(
+  userId: string,
+  newPersonaData: Record<string, any>
+): Promise<void> {
+  if (!userId) {
+    throw new Error("User ID missing");
+  }
+
+  try {
+    // 1. Fetch existing persona to merge
+    const userProfile = await prisma.userProfile.findUnique({
+      where: { userId },
+      select: { persona: true },
+    });
+
+    const existingPersona = (userProfile?.persona as Record<string, any>) || {};
+    const mergedPersona = { ...existingPersona, ...newPersonaData };
+
+    // 2. Update with merged data
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        profile: {
+          upsert: {
+            create: {
+              persona: mergedPersona,
+            },
+            update: {
+              persona: mergedPersona,
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("updateUserProfilePersona error:", error);
+    throw new Error("Failed to update user persona");
+  }
+}
+
 export async function saveUserInterests(
   userId: string,
   data: {
@@ -226,38 +266,7 @@ export async function saveUserInterests(
     travelStyle: string;
   }
 ): Promise<void> {
-  if (!userId) {
-    throw new Error("User ID missing");
-  }
-
-  try {
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        profile: {
-          upsert: {
-            create: {
-              persona: {
-                interests: data.interests,
-                dailyRhythm: data.dailyRhythm,
-                travelStyle: data.travelStyle,
-              },
-            },
-            update: {
-              persona: {
-                interests: data.interests,
-                dailyRhythm: data.dailyRhythm,
-                travelStyle: data.travelStyle,
-              },
-            },
-          },
-        },
-      },
-    });
-  } catch (error) {
-    console.error("saveUserInterests error:", error);
-    throw new Error("Failed to save user interests");
-  }
+  return updateUserProfilePersona(userId, data);
 }
 export async function deleteUserAccount(userId: string): Promise<void> {
   if (!userId) throw new Error("User ID missing");
@@ -285,6 +294,27 @@ export async function deleteUserAccount(userId: string): Promise<void> {
   } catch (error) {
     console.error("deleteUserAccount error:", error);
     throw new Error("Failed to delete user account");
+  }
+}
+
+export async function updateVisitedCountries(
+  userId: string,
+  countries: string[]
+): Promise<void> {
+  if (!userId) {
+    throw new Error("User ID missing");
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        visitedCountries: countries,
+      },
+    });
+  } catch (error) {
+    console.error("updateVisitedCountries error:", error);
+    throw new Error("Failed to update visited countries");
   }
 }
 

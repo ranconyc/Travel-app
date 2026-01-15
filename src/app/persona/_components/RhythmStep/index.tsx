@@ -13,7 +13,7 @@ const dailyRhythms = (dailyRhythmsData as RhythmData[]).map((item) => ({
   icon: (Icons as any)[item.icon] || Icons.Sun,
 }));
 
-// STEP TWO
-export default function StepTwo() {
+// RHYTHM STEP
+export default function RhythmStep() {
   return <SelectionStep fieldName="dailyRhythm" options={dailyRhythms} />;
 }

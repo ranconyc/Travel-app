@@ -10,16 +10,20 @@ type Visit = {
 };
 type Props = {
   trips: Visit[];
+  visitedCountriesCount?: number;
 };
 
-export const VisitedDestinationsSection = ({ trips }: Props) => {
+export const VisitedDestinationsSection = ({
+  trips,
+  visitedCountriesCount = 0,
+}: Props) => {
   return (
     <div className="flex gap-4">
       <Block className="w-fit">
         <Title>visited</Title>
         <h1 className="text-2xl">{8}</h1>
         <h2 className="uppercase text-xs font-bold">cities</h2>
-        <h1 className="text-2xl">{4}</h1>
+        <h1 className="text-2xl">{visitedCountriesCount}</h1>
         <h2 className="uppercase text-xs font-bold">countries</h2>
       </Block>
       <Block>

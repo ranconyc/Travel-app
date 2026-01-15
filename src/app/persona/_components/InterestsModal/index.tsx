@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, SelectionCard } from "@/app/mode/page";
+import { SelectionCard } from "@/app/mode/page";
+import Button from "@/app/component/common/Button";
 import { X } from "lucide-react";
 import interests from "@/data/interests.json";
 import { useEffect, useRef } from "react";

@@ -6,4 +6,4 @@ export const formSchema = z.object({
   travelStyle: z.string().min(1, "Please select a travel style"),
 });
 
-export type InterestsFormValues = z.infer<typeof formSchema>;
+export type PersonaFormValues = z.infer<typeof formSchema>;

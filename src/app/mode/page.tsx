@@ -3,32 +3,7 @@
 import { useState, useEffect } from "react";
 import { Sun, Moon, X } from "lucide-react";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  variant?: "primary" | "secondary";
-}
-
-export const Button = ({
-  children,
-  className,
-  variant = "primary",
-  ...props
-}: ButtonProps) => {
-  const base =
-    "px-4 h-11 rounded-md font-medium transition-all active:scale-95 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed";
-
-  const variants = {
-    primary: "bg-brand text-white hover:opacity-90 shadow-sm",
-    secondary: "bg-surface text-app-text hover:bg-brand/10",
-    outline: "border-2 border-brand text-brand hover:bg-brand/10",
-  };
-
-  return (
-    <button className={`${base} ${variants[variant]} ${className}`} {...props}>
-      {children}
-    </button>
-  );
-};
+import Button from "@/app/component/common/Button";
 
 const Buttons = () => {
   return (

@@ -148,7 +148,7 @@ export default function Home() {
       <main className="p-4 overflow-y-scroll h-[calc(100vh-10rem)]">
         <div className="flex flex-col gap-2">
           <Link
-            href="/interests?step=1"
+            href="/persona?step=1"
             className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
           >
             Select travel Interests
@@ -161,7 +161,14 @@ export default function Home() {
             Update travel history
           </Link>
 
-          {!user && (
+          {user ? (
+            <Link
+              href={`/auth/signout`}
+              className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
+            >
+              logout
+            </Link>
+          ) : (
             <Link
               href="/signin"
               className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
@@ -170,12 +177,12 @@ export default function Home() {
             </Link>
           )}
 
-          {user && (
+          {user?.role === "ADMIN" && (
             <Link
-              href={`/profile/${user.id}`}
+              href="/admin/dashboard"
               className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
             >
-              View Profile
+              Admin Dashboard
             </Link>
           )}
         </div>
