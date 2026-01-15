@@ -63,12 +63,11 @@ export default async function ChatPage({ params }: Props) {
     );
   }
 
-  const chatName = getChatDisplayName(chat, session.user.id);
-  const chatImage = getChatDisplayImage(chat, session.user.id);
-
   if (!chat) {
     return <div>Chat not found</div>;
   }
+  const chatName = getChatDisplayName(chat, session.user.id);
+  const chatImage = getChatDisplayImage(chat, session.user.id);
 
   return (
     <div className="flex flex-col h-screen">
