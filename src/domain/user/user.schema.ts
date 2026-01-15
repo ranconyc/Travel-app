@@ -61,6 +61,9 @@ export const userSchema = z.object({
   // ---- travel interests / persona ----
   interests: z.array(userInterestSchema).optional(),
   travelPersona: travelPersonaSchema.nullable().optional(),
+
+  // ---- media ----
+  images: z.array(z.any()).optional(),
 });
 
 export type User = z.infer<typeof userSchema>;

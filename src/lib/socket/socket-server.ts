@@ -124,8 +124,6 @@ export function initializeSocketServer(io: SocketIOServer) {
                   id: true,
                   name: true,
                   image: true,
-                  firstName: true,
-                  lastName: true,
                 },
               },
             },

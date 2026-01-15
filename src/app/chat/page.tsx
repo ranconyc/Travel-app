@@ -99,13 +99,20 @@ function FriendItem({
   friend: Awaited<ReturnType<typeof getUserFriends>>[number];
 }) {
   const displayName =
-    friend.firstName && friend.lastName
-      ? `${friend.firstName} ${friend.lastName}`
+    friend.profile?.firstName && friend.profile?.lastName
+      ? `${friend.profile.firstName} ${friend.profile.lastName}`
       : friend.name || "Unknown";
 
   return (
     <li className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors border-b border-gray-100">
-      <Avatar image={friend.image || undefined} size={48} />
+      <Avatar
+        image={
+          friend.images?.find((img) => img.isMain)?.url ||
+          friend.image ||
+          undefined
+        }
+        size={48}
+      />
       <div className="flex-1 min-w-0">
         <h3 className="font-semibold text-gray-900 truncate">{displayName}</h3>
       </div>

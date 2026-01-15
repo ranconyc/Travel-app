@@ -1,15 +1,19 @@
-import { User } from "@prisma/client";
+import { User, UserProfile, UserMedia } from "@prisma/client";
 
 export type ProfileUser = User & {
-  languages: string[];
-  homeBaseCity: {
-    id: string;
-    name: string;
-    country: {
-      id: string;
-      name: string;
-    } | null;
-  } | null;
+  profile:
+    | (UserProfile & {
+        homeBaseCity: {
+          id: string;
+          name: string;
+          country: {
+            id: string;
+            name: string;
+          } | null;
+        } | null;
+      })
+    | null;
+  images: UserMedia[];
   currentCity: {
     id: string;
     name: string;

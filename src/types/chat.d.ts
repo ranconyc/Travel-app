@@ -15,8 +15,11 @@ export type Message = {
     id: string;
     name: string | null;
     image: string | null;
-    firstName: string | null;
-    lastName: string | null;
+    profile?: {
+      firstName: string | null;
+      lastName: string | null;
+    } | null;
+    images?: Array<{ url: string; isMain: boolean }>;
   };
   readBy?: string[];
   tempId?: string; // For optimistic UI
@@ -34,8 +37,11 @@ export type ChatMember = {
     id: string;
     name: string | null;
     image: string | null;
-    firstName: string | null;
-    lastName: string | null;
+    profile?: {
+      firstName: string | null;
+      lastName: string | null;
+    } | null;
+    images?: Array<{ url: string; isMain: boolean }>;
   };
 };
 

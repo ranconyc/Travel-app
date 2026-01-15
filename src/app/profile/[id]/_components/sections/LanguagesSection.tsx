@@ -21,7 +21,8 @@ export const LanguagesSection = ({
   }
 
   const langs =
-    languages?.filter((lang) => user.languages?.includes(lang.code)) || [];
+    languages?.filter((lang) => user.profile?.languages?.includes(lang.code)) ||
+    [];
 
   return (
     <div className="grid grid-cols-2 gap-4">
@@ -39,7 +40,7 @@ export const LanguagesSection = ({
       </Block>
       <Block>
         <Title icon={<BriefcaseBusiness size={22} />}>Work</Title>
-        <p>{user.occupation || "no data"}</p>
+        <p>{user.profile?.occupation || "no data"}</p>
       </Block>
     </div>
   );

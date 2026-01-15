@@ -29,7 +29,12 @@ export default function MateCard({
   loggedUser: User;
   priority: boolean;
 }) {
-  const { id: userId, image, name, currentCity: location, birthday } = mate;
+  const { id: userId, image, name, currentCity: location } = mate;
+  const birthday = mate.birthday;
+  const mainImage = mate.images?.find((img) => img.isMain)?.url || image;
+  const loggedMainImage =
+    loggedUser?.images?.find((img) => img.isMain)?.url || loggedUser?.image;
+
   const isResident =
     !!mate.currentCityId &&
     !!mate.homeBaseCityId &&
@@ -41,7 +46,7 @@ export default function MateCard({
   return (
     <BaseCard
       linkHref={`/profile/${userId}`}
-      image={{ src: image ?? undefined, alt: name ?? undefined }}
+      image={{ src: mainImage ?? undefined, alt: name ?? undefined }}
       priority={priority}
     >
       <div className="h-full flex flex-col justify-between">
@@ -49,14 +54,7 @@ export default function MateCard({
           <h1 className="text-white">this is you</h1>
         ) : (
           <AvatarList
-            list={[
-              { id: userId, image: image, name: name },
-              {
-                id: loggedUser?.id,
-                image: loggedUser?.image,
-                name: loggedUser?.name,
-              },
-            ]}
+            list={[{ ...mate }, { ...loggedUser }]}
             matchPercentage={56}
             showMatch
           />
@@ -74,8 +72,10 @@ export default function MateCard({
             <ResidentOrVisitorBadge isResident={isResident} />
           </div>
           <h3 className="text-white font-bold leading-tight text-[clamp(18px,2.8vw,24px)] line-clamp-2 mt-2">
-            {mate.name}
-{birthday && `, ${getAge(birthday.toISOString())}`}
+            {mate.firstName
+              ? `${mate.firstName} ${mate.lastName || ""}`.trim()
+              : mate.name}
+            {birthday && `, ${getAge(birthday.toISOString())}`}
           </h3>
         </div>
       </div>

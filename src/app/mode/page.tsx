@@ -15,7 +15,7 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const base =
-    "px-4 py-4 rounded-lg font-medium transition-all active:scale-95 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed";
+    "px-4 h-11 rounded-md font-medium transition-all active:scale-95 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed";
 
   const variants = {
     primary: "bg-brand text-white hover:opacity-90 shadow-sm",
@@ -48,7 +48,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const Input = ({
+export const Input = ({
   label,
   error,
   inputId,
@@ -56,7 +56,7 @@ const Input = ({
   ...props
 }: InputProps) => {
   const base =
-    "bg-surface text-app-text px-4 py-2 rounded-lg font-medium transition-all active:scale-95 disabled:opacity-50 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed";
+    "bg-surface text-app-text px-4 h-11 rounded-md font-medium transition-all active:scale-95 disabled:opacity-50 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed transition-colors transition-300";
 
   return (
     <div className="flex flex-col gap-2">
@@ -65,7 +65,7 @@ const Input = ({
           {label}
         </label>
       )}
-      <input className={`${base} ${className}`} {...props} />
+      <input className={`${base} ${className}`} id={inputId} {...props} />
 
       {error && <span className="text-xs text-red-500 px-1">{error}</span>}
     </div>

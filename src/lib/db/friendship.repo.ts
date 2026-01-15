@@ -225,8 +225,18 @@ export async function getFriends(userId: string) {
       OR: [{ requesterId: userId }, { addresseeId: userId }],
     },
     include: {
-      requester: true,
-      addressee: true,
+      requester: {
+        include: {
+          profile: true,
+          images: { where: { isMain: true }, take: 1 },
+        },
+      },
+      addressee: {
+        include: {
+          profile: true,
+          images: { where: { isMain: true }, take: 1 },
+        },
+      },
     },
   });
 

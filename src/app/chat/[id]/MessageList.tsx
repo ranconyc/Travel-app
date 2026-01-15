@@ -61,8 +61,8 @@ export function MessageList({
         const isSent = message.senderId === currentUserId;
         const senderName =
           message.sender.name ||
-          `${message.sender.firstName || ""} ${
-            message.sender.lastName || ""
+          `${message.sender.profile?.firstName || ""} ${
+            message.sender.profile?.lastName || ""
           }`.trim() ||
           "Unknown";
 
@@ -73,7 +73,11 @@ export function MessageList({
           >
             {!isSent && (
               <Avatar
-                image={message.sender.image || undefined}
+                image={
+                  message.sender.images?.find((img) => img.isMain)?.url ||
+                  message.sender.image ||
+                  undefined
+                }
                 name={senderName}
                 size={32}
               />

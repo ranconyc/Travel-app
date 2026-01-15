@@ -35,7 +35,9 @@ export const HeaderSection = ({
 
       <div className="flex flex-col items-center gap-1 mb-6">
         <h1 className="text-3xl font-bold capitalize">
-          {profileUser.firstName + " " + profileUser.lastName}
+          {(profileUser.profile?.firstName || "") +
+            " " +
+            (profileUser.profile?.lastName || "")}
         </h1>
         <div className="flex items-center gap-2">
           <StatusIndector userId={profileUser.id} />
@@ -62,14 +64,20 @@ export const HeaderSection = ({
       )}
 
       <div className="rounded-xl overflow-hidden mt-4">
-        {profileUser.image && (
-          <Image
-            src={profileUser.image}
-            alt="user image"
-            width={500}
-            height={500}
-          />
-        )}
+        {(() => {
+          const mainImage =
+            profileUser.images?.find((img) => img.isMain)?.url ||
+            profileUser.image;
+          return mainImage ? (
+            <Image
+              src={mainImage}
+              alt="user image"
+              width={500}
+              height={500}
+              priority
+            />
+          ) : null;
+        })()}
       </div>
     </header>
   );

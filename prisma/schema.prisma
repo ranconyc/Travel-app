@@ -18,6 +18,7 @@ enum Role {
   ADMIN
 }
 
+
 /**
  * -------------------------- USER ---------------------------
  */
@@ -27,44 +28,32 @@ model User {
   email            String?        @unique
   role             Role           @default(USER)
   name             String?
-  firstName        String?
-  lastName         String?
-  homeBaseCityId   String?        @db.ObjectId
-  homeBaseCity     City?          @relation("HomeBase", fields: [homeBaseCityId], references: [id])
-  occupation       String?
-  birthday         DateTime?
-  description      String?
-  gender           Gender?
   emailVerified    DateTime?
   image            String?
-  imagePublicId    String?
   passwordHash     String?
   profileCompleted Boolean        @default(false)
 
-   /* ---- LANGUAGE ---- */
-  languages String[] @default([]) // ['en','es']
-
-   /* ---- AUTH ---- */
-  accounts         Account[]
-  sessions         Session[]
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  
   /** ---- DESTINATIONS ---- */
  
-  currentLocation  Json?
+  currentLocation  Json? // [lng, lat] important to store this way for geo queries
   currentCityId    String?        @db.ObjectId
   currentCity      City?          @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
-  /* ---- TRAVEL INTERESTS ---- */
-  interestsData     Json?  //{ "Shopping": ["id1", "id2"] }
- 
-  /* ---- TRAVEL PERSONA ---- */
-  dailyRhythm     String?  // "early_riser", "night_owl"
-  travelStyle     String?  // "relaxed", "adventurous"
-  /* ---- TRAVEL HISTORY ---- */
-  visitedCountries String[] @default([])
-  trips Trip[] @relation("UserTrips")
+  /* ---- AUTH ---- */
+  accounts         Account[]
+  sessions         Session[]
+
+  /* ---- PROFILE ---- */
+  profile          UserProfile?
+  images           UserMedia[]    @relation("UserGallery")
+  coverImage       UserMedia?     @relation("UserCoverImage", fields: [coverImageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  coverImageId     String?        @db.ObjectId
+
+  /* ---- TRAVELS ---- */
+  trips            Trip[]         @relation("UserTrips")
+  visitedCountries String[]       @default([])
+  
+  
   /* ---- FRIENDSHIP ---- */
 
   friendshipsRequested Friendship[] @relation("FriendshipsRequested")
@@ -73,6 +62,61 @@ model User {
   // --- CHAT FEATURE ADDITIONS ---
   chats            ChatMember[] // Links user to all their chats
   sentMessages     Message[]    @relation("SentMessages") // Messages sent by the user
+
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model UserMedia {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  user          User     @relation("UserGallery", fields: [userId], references: [id], onDelete: Cascade)
+
+  url           String
+  publicId      String   // Cloudinary/S3 ID
+  isMain        Boolean  @default(false)
+  type          String   // "avatar", "travel_photo", "cover"
+  
+  metadata      Json?    // { width, height, blurHash }
+
+  // Named relation for cover image backlink (optional but Prisma likes explicit relations)
+  userAsCover   User[]   @relation("UserCoverImage")
+
+  createdAt     DateTime @default(now())
+}
+
+/**
+ * -------------------------- USER PROFILE - Identity ---------------------------
+ */
+model UserProfile {
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String         @unique @db.ObjectId
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /* ---- INFO ---- */
+  firstName        String?
+  lastName         String?
+  occupation       String?
+  birthday         DateTime?
+  description      String?
+  gender           Gender?
+  
+  /* ---- LANGUAGE ---- */
+  languages        String[]       @default([]) // ['en','es']
+
+  /* ---- HOME BASE ---- */
+  homeBaseCityId   String?        @db.ObjectId
+  homeBaseCity     City?          @relation("HomeBase", fields: [homeBaseCityId], references: [id])
+
+  /* ---- TRAVEL PERSONA ---- */
+  persona          Json?          // { dailyRhythm, travelStyle, interest: { "Shopping": ["id1", "id2"] } }
+  
+  /* ---- SOCIALS ---- */
+  socials          Json?          // { instagram, etc }
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 }
 
 
@@ -212,7 +256,7 @@ model City {
 
   activities Activity[]
 
-  usersHomeBase     User[]             @relation("HomeBase")
+  usersHomeBase     UserProfile[]      @relation("HomeBase")
   usersCurrentCity  User[]             @relation("CurrentLocation")
   tripStops         TripStop[]
 
@@ -244,7 +288,7 @@ model Activity {
 
   // Location
   address      String?
-  coords       Json // GeoJSON { type: "Point", coordinates: [lng, lat] }
+  coords       Json // GeoJSON { type: "Point", coordinates: [lng, lat] } important to store this way for geo queries
   timeZone     String?
   neighborhood String?
 

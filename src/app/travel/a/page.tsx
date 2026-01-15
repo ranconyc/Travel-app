@@ -1,5 +1,5 @@
 "use client";
-import worldData from "../../data/world.json";
+import worldData from "../../../data/world.json";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
@@ -7,9 +7,9 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { SelectedItem, SelectionCard, Button } from "../mode/page";
-import { CategoryRow } from "../interests/_components/StepOne";
-import Modal from "./_components/Modal";
+import { SelectedItem, SelectionCard, Button } from "../../mode/page";
+import { CategoryRow } from "../../interests/_components/StepOne";
+import Modal from "../_components/Modal";
 
 // Form Schema
 const travelFormSchema = z.object({
@@ -42,7 +42,7 @@ const FormHeader = ({
   );
 };
 
-// Step 3: Country Selection with react-hook-form
+// Country Selection Component
 const CountrySelection = ({ countries }: { countries: string[] }) => {
   const { watch, setValue } = useFormContext<TravelFormValues>();
   const selectedCountries = watch("countries");
@@ -79,11 +79,10 @@ const CountrySelection = ({ countries }: { countries: string[] }) => {
 type WorldData = Record<string, Record<string, string[]>>;
 const world = worldData as WorldData;
 
-export default function Travel() {
+export default function TravelA() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedContinent, setSelectedContinent] = useState<string>("");
-  const [selectedSubContinent, setSelectedSubContinent] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getContinentSelectedCount = (continent: string) => {
@@ -92,25 +91,11 @@ export default function Travel() {
       .length;
   };
 
-  const getSubContinentSelectedCount = (
-    continent: string,
-    subContinent: string
-  ) => {
-    const subContinentCountries = world[continent][subContinent];
-    return selectedCountries.filter((c) => subContinentCountries.includes(c))
-      .length;
-  };
-
   const continents = Object.keys(world);
-  const subContinents = selectedContinent
-    ? Object.keys(world[selectedContinent])
+
+  const allCountriesInContinent = selectedContinent
+    ? Object.values(world[selectedContinent]).flat()
     : [];
-  const countries =
-    selectedContinent && selectedSubContinent
-      ? selectedSubContinent === `All countries in ${selectedContinent}`
-        ? Object.values(world[selectedContinent]).flat()
-        : world[selectedContinent][selectedSubContinent]
-      : [];
 
   const methods = useForm<TravelFormValues>({
     resolver: zodResolver(travelFormSchema),
@@ -129,7 +114,6 @@ export default function Travel() {
     try {
       console.log("Selected countries:", data.countries);
       // TODO: Call server action to save countries
-      // const result = await saveVisitedCountries(data);
       router.push("/profile");
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -139,15 +123,7 @@ export default function Travel() {
   };
 
   const handleBackWithReset = () => {
-    console.log("handleBackWithReset", selectedSubContinent, selectedContinent);
-    if (selectedSubContinent) {
-      setSelectedSubContinent("");
-      setSelectedContinent("");
-    } else if (selectedContinent) {
-      setSelectedContinent("");
-    } else {
-      router.back();
-    }
+    router.back();
   };
 
   const isStepValid = () => {
@@ -165,14 +141,10 @@ export default function Travel() {
         />
         <div className="mb-4 pt-20">
           <h1 className="text-xl font-bold mb-3">
-            {selectedContinent
-              ? "What SubContinents did you travel to?"
-              : "What Continents did you travel to?"}
+            What Continents did you travel to?
           </h1>
           <p className="mb-8 font-medium text-secondary">
-            {selectedContinent
-              ? "Select one SubContinent to continue"
-              : "Select one Continent to continue"}
+            Select one Continent to continue
           </p>
           {selectedCountriesCount > 0 && (
             <p className="text-sm text-muted">
@@ -181,6 +153,7 @@ export default function Travel() {
             </p>
           )}
         </div>
+
         {/* Show selected countries */}
         {selectedCountries.length > 0 && (
           <div className="mb-8">
@@ -195,65 +168,37 @@ export default function Travel() {
                       "countries",
                       selectedCountries.filter((c) => c !== country)
                     );
-                    setSelectedSubContinent("");
                   }}
                 />
               ))}
             </ul>
           </div>
         )}
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-2 h-fit">
-            {selectedContinent && (
-              <>
-                <CategoryRow
-                  key="all-countries"
-                  title={`All countries in ${selectedContinent}`}
-                  selectedCount={getContinentSelectedCount(selectedContinent)}
-                  onClick={() => {
-                    setSelectedSubContinent(
-                      `All countries in ${selectedContinent}`
-                    );
-                    setIsModalOpen(true);
-                  }}
-                />
-                {subContinents.map((subContinent: string) => (
-                  <CategoryRow
-                    key={subContinent}
-                    title={subContinent}
-                    selectedCount={getSubContinentSelectedCount(
-                      selectedContinent,
-                      subContinent
-                    )}
-                    onClick={() => {
-                      setSelectedSubContinent(subContinent);
-                      setIsModalOpen(true);
-                    }}
-                  />
-                ))}
-              </>
-            )}
-            {!selectedContinent &&
-              continents.map((continent: string) => (
-                <CategoryRow
-                  key={continent}
-                  title={continent}
-                  selectedCount={getContinentSelectedCount(continent)}
-                  onClick={() => {
-                    setSelectedContinent(continent);
-                  }}
-                />
-              ))}
+            {continents.map((continent: string) => (
+              <CategoryRow
+                key={continent}
+                title={continent}
+                selectedCount={getContinentSelectedCount(continent)}
+                onClick={() => {
+                  setSelectedContinent(continent);
+                  setIsModalOpen(true);
+                }}
+              />
+            ))}
+
             {isModalOpen && (
               <Modal onClose={() => setIsModalOpen(false)}>
                 <h1 id="modal-title" className="text-xl font-bold mb-2">
-                  {selectedSubContinent}
+                  {selectedContinent}
                 </h1>
                 <p className="mb-4 text-sm font-bold text-secondary">
                   Select all the countries you have traveled to
                 </p>
                 <div className="grid gap-2 h-fit max-h-[350px] overflow-y-auto">
-                  <CountrySelection countries={countries} />
+                  <CountrySelection countries={allCountriesInContinent} />
                 </div>
                 <div className="mt-6">
                   <Button
@@ -272,9 +217,7 @@ export default function Travel() {
               disabled={!isStepValid() || isSubmitting}
               className="w-full"
             >
-              {isSubmitting
-                ? "Saving..."
-                : `Submit (${selectedCountriesCount})`}
+              {isSubmitting ? "Saving..." : `Submit`}
             </Button>
           </div>
         </form>
@@ -282,7 +225,3 @@ export default function Travel() {
     </FormProvider>
   );
 }
-
-//  {continents.map((continent) => (
-//           <li key={continent}>{continent}</li>
-//         ))}

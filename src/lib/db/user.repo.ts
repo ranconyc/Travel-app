@@ -7,45 +7,20 @@ export async function getUserById(id: string) {
   try {
     return await prisma.user.findUnique({
       where: { id },
-      select: {
-        currentLocation: true,
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        firstName: true,
-        lastName: true,
-        image: true,
-        birthday: true,
-        gender: true,
-        occupation: true,
-        description: true,
-        homeBaseCityId: true,
-        profileCompleted: true,
-        languages: true,
-        homeBaseCity: {
-          select: {
-            id: true,
-            name: true,
-            country: {
-              select: {
-                id: true,
-                name: true,
+      include: {
+        profile: {
+          include: {
+            homeBaseCity: {
+              include: {
+                country: true,
               },
             },
           },
         },
-        currentCityId: true,
+        images: true,
         currentCity: {
-          select: {
-            id: true,
-            name: true,
-            country: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
+          include: {
+            country: true,
           },
         },
         trips: {
@@ -55,8 +30,6 @@ export async function getUserById(id: string) {
             id: true,
           },
         },
-        createdAt: true,
-        updatedAt: true,
       },
     });
   } catch (error) {
@@ -81,25 +54,44 @@ export async function completeProfile(
       ? null
       : (data.gender as "MALE" | "FEMALE" | "NON_BINARY");
 
-  const imageValue =
-    data.image === "" || data.image === null ? undefined : data.image;
-
   try {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        firstName: data.firstName,
-        lastName: data.lastName || null,
-        birthday: birthdayDate,
-        gender: genderEnum,
-        occupation: data.occupation || null,
-        description: undefined, // leave untouched
-        image: imageValue,
-        // TODO: homeBaseCityId + languages update if needed
-        homeBaseCityId: data.homeBaseCityId,
-        languages: data.languages,
+        profileCompleted: true,
+        name: `${data.firstName} ${data.lastName}`.trim(),
+        profile: {
+          upsert: {
+            create: {
+              firstName: data.firstName,
+              lastName: data.lastName || null,
+              birthday: birthdayDate,
+              gender: genderEnum,
+              occupation: data.occupation || null,
+              homeBaseCityId: data.homeBaseCityId,
+              languages: data.languages,
+            },
+            update: {
+              firstName: data.firstName,
+              lastName: data.lastName || null,
+              birthday: birthdayDate,
+              gender: genderEnum,
+              occupation: data.occupation || null,
+              homeBaseCityId: data.homeBaseCityId,
+              languages: data.languages,
+            },
+          },
+        },
       },
     });
+
+    // Legacy image update if present in form but not yet moved to UserMedia domain
+    if (data.image) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { image: data.image },
+      });
+    }
   } catch (error) {
     console.error("completeProfile error:", error);
     throw new Error("Failed to update profile");
@@ -108,54 +100,28 @@ export async function completeProfile(
 
 export async function getAllUsers() {
   try {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        name: true,
-        email: true,
-        image: true,
-        birthday: true,
-        gender: true,
-        occupation: true,
-        description: true,
-        languages: true,
-        homeBaseCityId: true,
-        homeBaseCity: {
-          select: {
-            id: true,
-            name: true,
-            country: {
-              select: {
-                id: true,
-                name: true,
+    return await prisma.user.findMany({
+      include: {
+        profile: {
+          include: {
+            homeBaseCity: {
+              include: {
+                country: true,
               },
             },
           },
         },
-        currentCityId: true,
+        images: true,
         currentCity: {
-          select: {
-            id: true,
-            name: true,
-            country: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
+          include: {
+            country: true,
           },
         },
-        createdAt: true,
-        updatedAt: true,
       },
       orderBy: {
         createdAt: "desc",
       },
     });
-
-    return users;
   } catch (error) {
     console.error("getAllUsers error:", error);
     throw new Error("Unable to fetch users at this time");
@@ -177,9 +143,7 @@ export async function getNearbyUsers(
       return [];
     }
 
-    // Protect MongoDB: earth radius ≈ 6371km → absolute max ~20k
     if (km > 20000) {
-      console.warn(`km value too large (${km}), clamping to 20000`);
       km = 20000;
     }
 
@@ -196,34 +160,38 @@ export async function getNearbyUsers(
             maxDistance: meters,
           },
         },
-        // ... other stages ...
+        {
+          $lookup: {
+            from: "UserProfile",
+            localField: "_id",
+            foreignField: "userId",
+            as: "profile",
+          },
+        },
+        { $unwind: { path: "$profile", preserveNullAndEmptyArrays: true } },
       ],
     });
 
     return (res as unknown as any[]).map((row) => ({
       id: row._id?.$oid ?? row._id ?? null,
-      firstName: row.firstName ?? null,
-      lastName: row.lastName ?? null,
+      firstName: row.profile?.firstName ?? row.firstName ?? null,
+      lastName: row.profile?.lastName ?? row.lastName ?? null,
       name: row.name ?? null,
       email: row.email ?? null,
       image: row.image ?? null,
-      birthday: row.birthday ? new Date(row.birthday) : null,
-      gender: row.gender ?? null,
-      occupation: row.occupation ?? null,
-      description: row.description ?? null,
-      languages: row.languages ?? [],
-      homeBaseCityId: row.homeBaseCityId?.$oid ?? row.homeBaseCityId ?? null,
+      birthday: row.profile?.birthday ? new Date(row.profile.birthday) : null,
+      gender: row.profile?.gender ?? null,
+      occupation: row.profile?.occupation ?? null,
+      description: row.profile?.description ?? null,
+      languages: row.profile?.languages ?? [],
+      homeBaseCityId:
+        row.profile?.homeBaseCityId?.$oid ??
+        row.profile?.homeBaseCityId ??
+        null,
       distanceKm: row.dist_m ? row.dist_m / 1000 : null,
     }));
   } catch (error: any) {
-    console.error("getNearbyUsers error:", {
-      message: error?.message,
-      stack: error?.stack,
-      coords,
-      km,
-      limit,
-    });
-
+    console.error("getNearbyUsers error:", error);
     return [];
   }
 }
@@ -249,9 +217,24 @@ export async function saveUserInterests(
     await prisma.user.update({
       where: { id: userId },
       data: {
-        interestsData: data.interests,
-        dailyRhythm: data.dailyRhythm,
-        travelStyle: data.travelStyle,
+        profile: {
+          upsert: {
+            create: {
+              persona: {
+                interests: data.interests,
+                dailyRhythm: data.dailyRhythm,
+                travelStyle: data.travelStyle,
+              },
+            },
+            update: {
+              persona: {
+                interests: data.interests,
+                dailyRhythm: data.dailyRhythm,
+                travelStyle: data.travelStyle,
+              },
+            },
+          },
+        },
       },
     });
   } catch (error) {

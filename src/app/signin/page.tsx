@@ -3,49 +3,67 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { AiFillGoogleSquare, AiFillFacebook } from "react-icons/ai";
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 import {
-  FiMail,
-  FiLock,
-  FiAlertCircle,
-  FiCheckCircle,
-  FiEye,
-  FiEyeOff,
-} from "react-icons/fi";
-import Link from "next/link";
+  AiFillFacebook,
+  AiOutlineGoogle,
+  AiOutlineArrowLeft,
+} from "react-icons/ai";
+import { Button, Input } from "../mode/page"; // Ensure Input uses React.forwardRef
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+// 1. Define a Validation Schema
+const signInSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type SignInValues = z.infer<typeof signInSchema>;
 
 export default function SignInPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const registered = searchParams.get("registered");
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [isEmailLogin, setIsEmailLogin] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // 2. Setup Hook Form correctly
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<SignInValues>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data: SignInValues) => {
     setError(null);
     setLoading(true);
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
     try {
       const res = await signIn("credentials", {
-        email,
-        password,
+        email: data.email,
+        password: data.password,
         redirect: false,
       });
 
       if (res?.error) {
+        console.log("res", res);
         setError("Invalid email or password");
       } else {
         router.push("/");
         router.refresh();
       }
-    } catch {
+    } catch (err) {
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -53,125 +71,101 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f7f2] flex flex-col items-center justify-center p-6">
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-50 rounded-full blur-3xl opacity-60" />
-      <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-50 rounded-full blur-3xl opacity-60" />
+    <div className="bg-app-bg h-full w-full p-4 pt-16 flex flex-col items-center overflow-hidden text-app-text">
+      <h1 className="text-2xl font-bold">TravelMate</h1>
 
-      <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
-        <h1 className="text-[2.5rem] leading-tight font-bold text-gray-900 mb-2 font-sora text-center tracking-tight">
-          Welcome Back
-        </h1>
-        <p className="text-gray-500 mb-10 text-center font-medium">
-          Sign in to continue your journey
-        </p>
-
-        {registered && (
-          <div className="w-full mb-6 bg-emerald-50 border border-emerald-100 p-4 rounded-2xl flex items-center gap-3 text-emerald-600 animate-in fade-in slide-in-from-top-2">
-            <FiCheckCircle className="text-xl flex-shrink-0" />
-            <p className="text-sm font-semibold">
-              Account created! Please sign in.
-            </p>
-          </div>
-        )}
-
-        {error && (
-          <div className="w-full mb-6 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-600 animate-in fade-in slide-in-from-top-2">
-            <FiAlertCircle className="text-xl flex-shrink-0" />
-            <p className="text-sm font-semibold">{error}</p>
-          </div>
-        )}
-
-        <div className="w-full space-y-4 mb-8">
-          <button
-            onClick={() => signIn("google", { callbackUrl: "/" })}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 py-3.5 rounded-2xl font-semibold text-gray-700 hover:bg-gray-50 transition-all duration-200 active:scale-[0.98] shadow-sm"
-          >
-            <AiFillGoogleSquare className="text-2xl text-[#DB4437]" />
-            <span>Continue with Google</span>
-          </button>
-
-          <button
-            onClick={() => signIn("facebook", { callbackUrl: "/" })}
-            className="w-full flex items-center justify-center gap-3 bg-[#1877F2] py-3.5 rounded-2xl font-semibold text-white hover:bg-[#166fe5] transition-all duration-200 active:scale-[0.98] shadow-md shadow-[#1877f2]/20"
-          >
-            <AiFillFacebook className="text-2xl" />
-            <span>Continue with Facebook</span>
-          </button>
+      {registered && (
+        <div className="mt-4 p-2 bg-brand/10 border border-brand/20 rounded text-brand text-xs text-center">
+          Registration successful! Please sign in.
         </div>
+      )}
 
-        <div className="w-full flex items-center gap-4 mb-8">
-          <div className="flex-1 h-[1px] bg-gray-200" />
-          <span className="text-gray-400 text-sm font-semibold uppercase tracking-widest">
-            or
-          </span>
-          <div className="flex-1 h-[1px] bg-gray-200" />
+      {error && (
+        <div className="mt-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs text-center">
+          {error}
         </div>
+      )}
 
-        <form className="w-full space-y-5" onSubmit={handleSubmit}>
-          <div className="relative">
-            <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              required
-              className="w-full bg-[#f9fafb] border border-gray-100 px-12 py-4 rounded-2xl focus:bg-white focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500 transition-all outline-none text-gray-800 font-medium placeholder:text-gray-400"
-            />
-          </div>
-
-          <div className="relative">
-            <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              required
-              className="w-full bg-[#f9fafb] border border-gray-100 px-12 py-4 rounded-2xl focus:bg-white focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500 transition-all outline-none text-gray-800 font-medium placeholder:text-gray-400"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition p-1"
-            >
-              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-            </button>
-          </div>
-
-          <div className="flex justify-end pt-1">
-            <button
-              type="button"
-              className="text-cyan-600 text-sm font-semibold hover:text-cyan-700 transition"
-            >
-              Forgot Password?
-            </button>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-cyan-700 hover:bg-cyan-800 text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-cyan-900/10 transition-all duration-300 active:scale-[0.99] mt-4 flex items-center justify-center gap-2"
-          >
-            {loading ? (
-              <>
-                <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Signing In...</span>
-              </>
-            ) : (
-              "Sign In"
-            )}
-          </button>
-        </form>
-
-        <p className="mt-10 text-gray-500 font-medium text-center">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-cyan-600 font-bold hover:underline transition"
-          >
-            Create Account
-          </Link>
-        </p>
+      {/* Decorative Circles */}
+      <div className="relative flex items-center justify-center w-110 h-110 opacity-50">
+        <div className="absolute w-full h-full bg-brand/10 border border-brand/20 rounded-full" />
+        <div className="absolute w-3/4 h-3/4 bg-brand/8 border border-brand/20 rounded-full" />
       </div>
+
+      <div className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-[#080C14] rounded-2xl p-6 flex flex-col gap-8 z-10 shadow-xl">
+        <header>
+          <h1 className="text-2xl font-bold">Start Your Journey</h1>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Connect with fellow travelers to explore together.
+          </p>
+        </header>
+
+        {/* 3. Use handleSubmit */}
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          {isEmailLogin ? (
+            <div className="flex flex-col gap-4">
+              {/* 4. Use register instead of manual onChange */}
+              <Input
+                label="Email"
+                type="email"
+                {...register("email")}
+                error={errors.email?.message} // Pass error to your component
+              />
+              <Input
+                label="Password"
+                type="password"
+                {...register("password")}
+                error={errors.password?.message}
+              />
+
+              <div className="flex flex-col gap-2 mt-2">
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Signing In..." : "Login"}
+                </Button>
+
+                <p>
+                  <>create an account</>
+                </p>
+
+                {/* <button
+                  type="button"
+                  onClick={() => setIsEmailLogin(false)}
+                  className="text-xs flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors py-2"
+                >
+                  <AiOutlineArrowLeft /> Back to options
+                </button> */}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <Button type="button" onClick={() => setIsEmailLogin(true)}>
+                Login with email
+              </Button>
+
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="flex-1 flex justify-center items-center"
+                  onClick={() => signIn("google", { callbackUrl: "/" })}
+                >
+                  <AiOutlineGoogle size={20} />
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => signIn("facebook", { callbackUrl: "/" })}
+                  variant="secondary"
+                  className="flex-1 flex justify-center items-center"
+                >
+                  <AiFillFacebook size={20} />
+                </Button>
+              </div>
+            </div>
+          )}
+        </form>
+      </div>
+
+      <DevTool control={control} />
     </div>
   );
 }

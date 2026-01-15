@@ -93,28 +93,46 @@ export async function getTravelPartnersAction() {
         requester: {
           select: {
             id: true,
-            firstName: true,
-            lastName: true,
+            name: true,
             image: true,
-            homeBaseCity: {
+            profile: {
               select: {
-                name: true,
-                country: { select: { name: true } },
+                firstName: true,
+                lastName: true,
+                homeBaseCity: {
+                  select: {
+                    name: true,
+                    country: { select: { name: true } },
+                  },
+                },
               },
+            },
+            images: {
+              where: { isMain: true },
+              take: 1,
             },
           },
         },
         addressee: {
           select: {
             id: true,
-            firstName: true,
-            lastName: true,
+            name: true,
             image: true,
-            homeBaseCity: {
+            profile: {
               select: {
-                name: true,
-                country: { select: { name: true } },
+                firstName: true,
+                lastName: true,
+                homeBaseCity: {
+                  select: {
+                    name: true,
+                    country: { select: { name: true } },
+                  },
+                },
               },
+            },
+            images: {
+              where: { isMain: true },
+              take: 1,
             },
           },
         },
@@ -124,13 +142,15 @@ export async function getTravelPartnersAction() {
     return friendships.map((f) => {
       const isRequester = f.requesterId === userId;
       const friend = isRequester ? f.addressee : f.requester;
+      const mainImage =
+        friend.images?.find((img) => img.isMain)?.url || friend.image;
 
       return {
         id: friend.id,
-        firstName: friend.firstName,
-        lastName: friend.lastName,
-        profilePicture: friend.image,
-        homeBaseCity: friend.homeBaseCity,
+        firstName: friend.profile?.firstName || "",
+        lastName: friend.profile?.lastName || "",
+        profilePicture: mainImage,
+        homeBaseCity: friend.profile?.homeBaseCity,
       };
     });
   } catch (error) {

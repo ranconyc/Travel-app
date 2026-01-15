@@ -76,7 +76,7 @@ function RequestSection({
         <SimilaritiesSection />;
         <div>
           <p className="mb-4">
-            {profileUser.firstName} wants to become a friend with you
+            {profileUser.profile?.firstName} wants to become a friend with you
           </p>
 
           <div className="flex gap-4 mb-6">
@@ -104,7 +104,7 @@ function RequestSection({
         </p>
         {
           <Button className="w-full" variant="teal" onClick={handleConnect}>
-            Connect with {profileUser?.firstName}
+            Connect with {profileUser.profile?.firstName}
           </Button>
         }
       </>
@@ -165,7 +165,7 @@ export const MatchSection = ({
     <div className="bg-gray-900 text-white p-4 rounded-xl">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-bold mb-1 w-[40%]">
-          You and {profileUser.firstName} both have...
+          You and {profileUser.profile?.firstName} both have...
         </h2>
         {/* Match Badge */}
         <AvatarList

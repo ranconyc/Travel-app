@@ -37,11 +37,14 @@ function AvatarMatchBadge({ percentage = 56 }: { percentage?: number }) {
 // Define a simpler interface for the avatar list item
 // We don't need the full User object (which requires createdAt, etc.)
 interface AvatarUser {
-  id?: string; // made optional to match usage key={user.id ?? index}
+  id?: string;
   image?: string | null;
   name?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
+  profile?: {
+    firstName?: string | null;
+    lastName?: string | null;
+  } | null;
+  images?: Array<{ url: string; isMain: boolean }>;
 }
 
 type AvatarListProps = {
@@ -82,15 +85,19 @@ export function AvatarList({
           // Determine the display name: prefer 'name', then 'firstName lastName', then fallback
           const displayName =
             user.name ||
-            (user.firstName && user.lastName
-              ? `${user.firstName} ${user.lastName}`
-              : user.firstName || "User");
+            (user.profile?.firstName && user.profile?.lastName
+              ? `${user.profile.firstName} ${user.profile.lastName}`
+              : user.profile?.firstName || user.name || "User");
 
           return (
             <Avatar
               key={user.id ?? index}
               size={size}
-              image={user.image || undefined}
+              image={
+                user.images?.find((img) => img.isMain)?.url ||
+                user.image ||
+                undefined
+              }
               name={displayName}
               style={{
                 marginLeft: index === 0 ? 0 : size * -0.45, // overlap only here

@@ -13,8 +13,10 @@ export function getChatDisplayName(
       user: {
         id: string;
         name: string | null;
-        firstName: string | null;
-        lastName: string | null;
+        profile?: {
+          firstName: string | null;
+          lastName: string | null;
+        } | null;
       };
     }>;
   },
@@ -32,8 +34,8 @@ export function getChatDisplayName(
 
   return (
     otherMember.user.name ||
-    `${otherMember.user.firstName || ""} ${
-      otherMember.user.lastName || ""
+    `${otherMember.user.profile?.firstName || ""} ${
+      otherMember.user.profile?.lastName || ""
     }`.trim() ||
     "Unknown User"
   );
@@ -52,6 +54,7 @@ export function getChatDisplayImage(
       user: {
         id: string;
         image: string | null;
+        images?: Array<{ url: string; isMain: boolean }>;
       };
     }>;
   },
@@ -63,7 +66,8 @@ export function getChatDisplayImage(
 
   // For 1-on-1, get the other participant's image
   const otherMember = chat.members.find((m) => m.user.id !== currentUserId);
-  return otherMember?.user.image || null;
+  const mainImage = otherMember?.user.images?.find((img) => img.isMain);
+  return mainImage?.url || otherMember?.user.image || null;
 }
 
 /**

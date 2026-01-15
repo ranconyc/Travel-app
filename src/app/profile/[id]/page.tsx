@@ -47,6 +47,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
           <div className="w-32 h-32 relative">
             <Image
               src={
+                profileUser.images?.find((img) => img.isMain)?.url ||
                 profileUser.image ||
                 "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
               }
@@ -60,7 +61,13 @@ export default async function Profile({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="text-center">
-            <h1 className="text-2xl font-bold">{profileUser.name}</h1>
+            <h1 className="text-2xl font-bold">
+              {profileUser.profile?.firstName
+                ? `${profileUser.profile.firstName} ${
+                    profileUser.profile.lastName || ""
+                  }`.trim()
+                : profileUser.name}
+            </h1>
             <p className="text-xs">
               {profileUser.currentCity?.name},
               {profileUser.currentCity?.country?.name ===

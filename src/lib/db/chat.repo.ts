@@ -15,8 +15,16 @@ export async function findUserChats(userId: string) {
               id: true,
               name: true,
               image: true,
-              firstName: true,
-              lastName: true,
+              profile: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+              images: {
+                where: { isMain: true },
+                take: 1,
+              },
             },
           },
         },
@@ -61,8 +69,16 @@ export async function findChatById(chatId: string) {
               id: true,
               name: true,
               image: true,
-              firstName: true,
-              lastName: true,
+              profile: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+              images: {
+                where: { isMain: true },
+                take: 1,
+              },
             },
           },
         },
@@ -74,8 +90,16 @@ export async function findChatById(chatId: string) {
               id: true,
               name: true,
               image: true,
-              firstName: true,
-              lastName: true,
+              profile: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+              images: {
+                where: { isMain: true },
+                take: 1,
+              },
             },
           },
         },
@@ -115,8 +139,16 @@ export async function createMessage(
           id: true,
           name: true,
           image: true,
-          firstName: true,
-          lastName: true,
+          profile: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+          images: {
+            where: { isMain: true },
+            take: 1,
+          },
         },
       },
     },

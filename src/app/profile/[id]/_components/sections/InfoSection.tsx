@@ -5,7 +5,7 @@ import { getAge } from "@/app/_utils/age";
 import { ProfileUser } from "../../types";
 
 function formatHomeBase(user: ProfileUser) {
-  const city = user.homeBaseCity;
+  const city = user.profile?.homeBaseCity;
   const country = city?.country;
 
   if (!city) return "No location set";
@@ -22,7 +22,10 @@ export const InfoSection = ({ user }: { user: ProfileUser }) => {
       <div className="flex items-start justify-between">
         <div>
           <Title>
-            {user.firstName + " " + user.lastName},{getAge(user.birthday) || ""}
+            {(user.profile?.firstName || "") +
+              " " +
+              (user.profile?.lastName || "")}
+            ,{getAge(user.profile?.birthday) || ""}
           </Title>
           <div className="flex items-center gap-2 w-fit mb-2">
             <MapPinHouse size={22} />
@@ -30,9 +33,9 @@ export const InfoSection = ({ user }: { user: ProfileUser }) => {
           </div>
         </div>
         {/* gender */}
-        {user.gender === "MALE" ? (
+        {user.profile?.gender === "MALE" ? (
           <Mars size={22} />
-        ) : user.gender === "FEMALE" ? (
+        ) : user.profile?.gender === "FEMALE" ? (
           <Venus size={22} />
         ) : (
           <VenusAndMars size={22} />
@@ -40,7 +43,7 @@ export const InfoSection = ({ user }: { user: ProfileUser }) => {
       </div>
 
       <p className="max-w-[50ch]">
-        {user.description ||
+        {user.profile?.description ||
           "Market hopper, temple lover, island-weekend enthusiast."}
       </p>
     </Block>
