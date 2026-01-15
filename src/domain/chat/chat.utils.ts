@@ -5,6 +5,7 @@ import { formatDistanceToNow, format, isToday, isYesterday } from "date-fns";
  * For 1-on-1 chats: other participant's name
  * For group chats: group name
  */
+
 export function getChatDisplayName(
   chat: {
     isGroup: boolean;

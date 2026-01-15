@@ -5,8 +5,8 @@ export const UserLink = ({ user }: { user: ProfileUser }) => {
   const fullName =
     (user.profile?.firstName || "") + " " + (user.profile?.lastName || "");
   const avatarImage =
-    user.media?.find((img: any) => img.category === "AVATAR")?.url ||
-    user.avatarUrl;
+    user.media?.find((img: { category: string }) => img.category === "AVATAR")
+      ?.url || user.avatarUrl;
 
   return (
     <a
