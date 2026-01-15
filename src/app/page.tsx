@@ -140,6 +140,13 @@ export default function Home() {
           >
             Update travel history
           </Link>
+
+          <Link
+            href="/signin"
+            className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
+          >
+            signin
+          </Link>
         </div>
         <ListOne />
         <ListTwo />
