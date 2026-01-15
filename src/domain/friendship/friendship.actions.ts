@@ -8,6 +8,7 @@ import {
   denyFriendRequest,
   findFriendshipBetween,
   getFriends,
+  getIncomingFriendRequests,
   removeFriend,
   sendFriendRequest,
 } from "@/lib/db/friendship.repo";
@@ -59,6 +60,11 @@ export async function removeFriendAction(
   currentUserId: string
 ) {
   const res = await removeFriend(currentUserId, targetUserId);
+  return res;
+}
+
+export async function getFriendRequestsAction(userId: string) {
+  const res = await getIncomingFriendRequests(userId);
   return res;
 }
 

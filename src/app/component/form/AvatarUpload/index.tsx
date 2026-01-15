@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { MdEdit } from "react-icons/md";
+import { CameraIcon } from "lucide-react";
 
 type Props = {
   src: string | null; // allow null to avoid crashes if empty
@@ -74,11 +75,14 @@ export default function AvatarUpload({
         {!disabled && (
           <label
             htmlFor={inputId}
-            className="absolute -bottom-1 -right-1 z-10 grid place-items-center
-                     rounded-full bg-amber-300 p-2 shadow-lg hover:bg-amber-400 cursor-pointer"
+            className="absolute -bottom-4 left-0 right-0 z-10 grid place-items-center
+                      hover:bg-amber-400 cursor-pointer"
             aria-label="Change profile picture"
           >
-            <MdEdit size={18} />
+            <div className="flex items-center gap-2 px-3 py-2 max-w-[100px] bg-amber-300 rounded-full">
+              <CameraIcon size={18} />
+              Edit
+            </div>
           </label>
         )}
 

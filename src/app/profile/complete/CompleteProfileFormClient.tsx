@@ -22,6 +22,7 @@ import AvatarSectionShell from "./sections/AvatarSection/AvatarSectionShell";
 import { useProfileDraft } from "@/app/_hooks/useProfileDraft";
 import type { User as DomainUser } from "@/domain/user/user.schema";
 import type { Gender } from "@/domain/user/user.schema";
+import Button from "@/app/component/common/Button";
 
 type PrismaUser = DomainUser & {
   homeBaseCity?: {
@@ -125,11 +126,7 @@ export default function CompleteProfileFormClient({ user }: Props) {
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={handleFormSubmit}
-        className=" border border-red-500 px-2 py-4 md:px-6 md:max-w-1/3 lg:max-w-1/2 md:mx-auto space-y-4 pb-10 "
-        noValidate
-      >
+      <form onSubmit={handleFormSubmit} className="p-4" noValidate>
         <div className="w-full">
           <AvatarSectionShell />
           <div>
@@ -142,13 +139,9 @@ export default function CompleteProfileFormClient({ user }: Props) {
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="mt-4 w-full rounded-xl bg-cyan-700 py-3 text-sm font-semibold text-white hover:bg-cyan-800 disabled:opacity-60"
-        >
-          {isSubmitting ? "Saving..." : "Complete Profile"}
-        </button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Saving..." : "Update Profile"}
+        </Button>
       </form>
     </FormProvider>
   );

@@ -9,7 +9,6 @@ const iconsSize = 24;
 
 export default function Navbar() {
   const unreadCount = useUnreadCount();
-  console.log("unread Count", unreadCount);
 
   return (
     <nav className="fixed bottom-4 left-20 right-20">

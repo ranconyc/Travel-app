@@ -10,6 +10,7 @@ import {
 import {
   completeProfile,
   deleteUserAccount,
+  getAllUsers,
   saveUserInterests,
   updateUserProfilePersona,
   updateVisitedCountries,
@@ -319,5 +320,15 @@ export async function saveTravelPersona(
       success: false,
       error: "INTERNAL_SERVER_ERROR",
     };
+  }
+}
+
+export async function getAllUsersAction() {
+  try {
+    const users = await getAllUsers();
+    return { success: true, data: users };
+  } catch (error) {
+    console.error("getAllUsersAction error:", error);
+    return { success: false, error: "Failed to fetch users" };
   }
 }

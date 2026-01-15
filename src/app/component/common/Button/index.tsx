@@ -47,7 +47,7 @@ export default function Button({
         onClick={() => router.back()}
         disabled={props.disabled}
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={30} />
       </button>
     );
   }

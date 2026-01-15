@@ -53,14 +53,14 @@ export default async function RootLayout({
         className={`${sora.variable} ${inter.variable} antialiased`}
         suppressHydrationWarning
       >
-        <UserProvider user={user}>
-          <SessionProviderWrapper>
-            <SocketProvider>
-              <ReactQueryProvider>{children}</ReactQueryProvider>
-            </SocketProvider>
-          </SessionProviderWrapper>
-          <ConditionalNavbar />
-        </UserProvider>
+        <ReactQueryProvider>
+          <UserProvider user={user}>
+            <SessionProviderWrapper>
+              <SocketProvider>{children}</SocketProvider>
+            </SessionProviderWrapper>
+            <ConditionalNavbar />
+          </UserProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

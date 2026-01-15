@@ -60,24 +60,6 @@ const AttractionCard = () => {
   );
 };
 
-const ListOne = () => {
-  return (
-    <div>
-      <div className="my-2 flex items-center justify-between">
-        <h1>Nearby countries</h1>
-        <Link href="/countries" className="text-xs text-secondary">
-          see all
-        </Link>
-      </div>
-      <div className="flex gap-4 overflow-x-scroll">
-        <AttractionCard />
-        <AttractionCard />
-        <AttractionCard />
-      </div>
-    </div>
-  );
-};
-
 const ListTwo = () => {
   return (
     <div>
@@ -115,6 +97,40 @@ const ListThree = () => {
 };
 import { useUser } from "./providers/UserProvider";
 import { Avatar } from "./component/common/Avatar";
+import { useUsers } from "./_hooks/useUsers";
+
+const UserList = () => {
+  const { data: users, isLoading } = useUsers();
+
+  if (isLoading) return <div>Loading users...</div>;
+
+  return (
+    <div>
+      <div className="my-2 flex items-center justify-between">
+        <h1>Travelers</h1>
+        <Link href="/mates" className="text-xs text-secondary">
+          see all
+        </Link>
+      </div>
+      <div className="flex gap-4 overflow-x-scroll pb-2">
+        {users?.map((user: any) => (
+          <Link
+            key={user.id}
+            href={`/profile/${user.id}`}
+            className="min-w-[80px]"
+          >
+            <div className="flex flex-col items-center gap-2">
+              <Avatar image={user.avatarUrl} name={user.name || ""} size={60} />
+              <p className="text-xs text-center truncate w-full">
+                {user.name?.split(" ")[0]}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
   const user = useUser();
@@ -186,7 +202,7 @@ export default function Home() {
             </Link>
           )}
         </div>
-        <ListOne />
+        <UserList />
         <ListTwo />
         <ListThree />
       </main>

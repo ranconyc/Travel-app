@@ -2,9 +2,11 @@ import { memo } from "react";
 
 function FormHeader() {
   return (
-    <header className="bg-cyan-900 text-white font-bold text-2xl capitalize  p-4  pt-6 pb-16 md:px-6 lg:w-full md:mx-auto">
-      <div className="text-base">complete your</div>
-      <div className="text-5xl">profile</div>
+    <header className="p-4">
+      <div>
+        <p className="text-lg text-secondary">complete your</p>
+        <h1 className="text-3xl font-bold">profile</h1>
+      </div>
     </header>
   );
 }

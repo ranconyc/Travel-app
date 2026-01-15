@@ -28,6 +28,11 @@ export async function getUserById(
   id: string
 ): Promise<UserWithRelations | null> {
   if (!id) return null;
+  // Validate MongoDB ObjectId format (24 hex characters)
+  if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+    console.warn(`getUserById: Invalid ObjectId format: "${id}"`);
+    return null;
+  }
   try {
     return await prisma.user.findUnique({
       where: { id },
