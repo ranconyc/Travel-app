@@ -94,7 +94,7 @@ export async function getTravelPartnersAction() {
           select: {
             id: true,
             name: true,
-            image: true,
+            avatarUrl: true,
             profile: {
               select: {
                 firstName: true,
@@ -107,8 +107,8 @@ export async function getTravelPartnersAction() {
                 },
               },
             },
-            images: {
-              where: { isMain: true },
+            media: {
+              where: { category: "AVATAR" },
               take: 1,
             },
           },
@@ -117,7 +117,7 @@ export async function getTravelPartnersAction() {
           select: {
             id: true,
             name: true,
-            image: true,
+            avatarUrl: true,
             profile: {
               select: {
                 firstName: true,
@@ -130,8 +130,8 @@ export async function getTravelPartnersAction() {
                 },
               },
             },
-            images: {
-              where: { isMain: true },
+            media: {
+              where: { category: "AVATAR" },
               take: 1,
             },
           },
@@ -143,7 +143,8 @@ export async function getTravelPartnersAction() {
       const isRequester = f.requesterId === userId;
       const friend = isRequester ? f.addressee : f.requester;
       const mainImage =
-        friend.images?.find((img) => img.isMain)?.url || friend.image;
+        friend.media?.find((img) => img.category === "AVATAR")?.url ||
+        friend.avatarUrl;
 
       return {
         id: friend.id,

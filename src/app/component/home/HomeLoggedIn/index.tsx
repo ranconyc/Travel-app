@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity } from "@/domain/activity/activity.schema";
+import { Place } from "@/domain/place/place.schema";
 import { useGeo } from "@/app/hooks/useGeo";
 import { useMemo, useState } from "react";
 
@@ -77,7 +77,7 @@ function CountriesList({
 type HomeLoggedInProps = {
   countries: Country[];
   cities: City[];
-  activities: Activity[];
+  places: Place[];
   users: User[];
   loggedUser: User;
   trips: Trip[];
@@ -87,7 +87,7 @@ export default function HomeLoggedIn({
   trips,
   cities,
   countries,
-  activities,
+  places,
   loggedUser,
   users,
 }: HomeLoggedInProps) {

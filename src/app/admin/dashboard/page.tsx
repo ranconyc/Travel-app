@@ -112,7 +112,7 @@ export default async function AdminDashboardPage({
 
             <ReviewItemsList
               title="Activities Needing Review"
-              items={reviewItems.activities.map((a: any) => ({
+              items={reviewItems.places.map((a: any) => ({
                 id: a.id,
                 name: a.name,
                 type: "activity",

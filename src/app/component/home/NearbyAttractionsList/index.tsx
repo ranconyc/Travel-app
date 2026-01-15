@@ -1,9 +1,9 @@
-import { Activity } from "@/domain/activity/activity.schema";
+import { Place } from "@/domain/place/place.schema";
 import ActivityCard from "../../common/cards/ActivityCard";
 import { sectionTitle } from "../HomeLoggedIn";
 
 type Props = {
-  activities?: Activity[];
+  places?: Place[];
 };
 
 const bangkokActivities = [
@@ -77,7 +77,7 @@ export const FakeMates = [
   },
 ];
 
-export default function NearbyAttractionsList({ activities }: Props) {
+export default function NearbyAttractionsList({ places }: Props) {
   return (
     <>
       <h1 className={sectionTitle}>Nearby Attractions</h1>

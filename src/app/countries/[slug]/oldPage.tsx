@@ -86,18 +86,21 @@ export default async function CountryPage({
       <main className="bg-gray-100 dark:bg-gray-400 p-4 flex gap-4 flex-wrap items-stretch">
         <Block>
           <Title>images</Title>
-          <div className="flex items-center gap-2">
-            {country?.images.length > 0 &&
-              country?.images.map((image, index) => (
-                <div key={image}>
-                  <Image
-                    src={image}
-                    alt={`${country?.name}-image-${index + 1}`}
-                    width={150}
-                    height={300}
-                  />
-                </div>
-              ))}
+          <div className="flex items-center gap-2 overflow-x-auto">
+            {country?.media &&
+              country.media
+                .filter((m: any) => m.category === "GALLERY")
+                .map((image: any, index: number) => (
+                  <div key={image.id || index} className="flex-shrink-0">
+                    <Image
+                      src={image.url}
+                      alt={`${country?.name}-image-${index + 1}`}
+                      width={150}
+                      height={300}
+                      className="rounded-lg object-cover h-40 w-auto"
+                    />
+                  </div>
+                ))}
           </div>
         </Block>
 

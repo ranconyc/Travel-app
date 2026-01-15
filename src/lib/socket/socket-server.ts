@@ -123,7 +123,11 @@ export function initializeSocketServer(io: SocketIOServer) {
                 select: {
                   id: true,
                   name: true,
-                  image: true,
+                  avatarUrl: true,
+                  media: {
+                    where: { category: "AVATAR" },
+                    take: 1,
+                  },
                 },
               },
             },

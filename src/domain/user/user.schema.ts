@@ -33,18 +33,6 @@ export const cityLiteSchema = z.object({
     .nullable(),
 });
 
-/** UserMedia schema (Gallery & Profile Images) */
-export const userMediaSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  url: z.string().url(),
-  publicId: z.string(),
-  isMain: z.boolean(),
-  type: z.string(), // "avatar", "travel_photo", etc.
-  metadata: z.any().nullable(),
-  createdAt: z.date(),
-});
-
 /** UserProfile schema (Identity & Bio) */
 export const userProfileSchema = z.object({
   id: z.string(),
@@ -58,8 +46,8 @@ export const userProfileSchema = z.object({
   languages: z.array(z.string()).default([]),
   homeBaseCityId: z.string().nullable(),
   homeBaseCity: cityLiteSchema.optional().nullable(),
-  persona: z.any().nullable(), // Json field
-  socials: z.any().nullable(), // Json field
+  persona: z.any().nullable(), // { dailyRhythm, travelStyle, interests }
+  socials: z.any().nullable(), // { instagram, tiktok }
   updatedAt: z.date(),
 });
 
@@ -94,7 +82,7 @@ export const userSchema = z.object({
   role: RoleEnum.default("USER"),
   name: z.string().nullable(),
   emailVerified: z.date().nullable(),
-  image: z.string().url().nullable(),
+  avatarUrl: z.string().url().nullable().optional(),
   passwordHash: z.string().nullable().optional(), // Optional as it's sensitive
   profileCompleted: z.boolean().default(false),
 
@@ -105,9 +93,7 @@ export const userSchema = z.object({
 
   // Relations
   profile: userProfileSchema.optional().nullable(),
-  images: z.array(userMediaSchema).optional(),
-  coverImageId: z.string().nullable(),
-  coverImage: userMediaSchema.optional().nullable(),
+  media: z.array(z.any()).optional(), // Will be Media type from external schema
 
   // Travels
   trips: z.array(z.union([tripSchema, partialTripSchema])).optional(),
@@ -121,5 +107,5 @@ export const userSchema = z.object({
 // --- Types ---
 export type User = z.infer<typeof userSchema>;
 export type UserProfile = z.infer<typeof userProfileSchema>;
-export type UserMedia = z.infer<typeof userMediaSchema>;
+export type UserMedia = any;
 export type Trip = z.infer<typeof tripSchema>;

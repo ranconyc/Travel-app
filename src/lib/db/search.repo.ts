@@ -74,11 +74,11 @@ export async function searchActivities(query: string): Promise<SearchResult[]> {
   const trimmed = query.trim();
   if (!trimmed || trimmed.length < 2) return [];
 
-  const activities = await prisma.activity.findMany({
+  const places = await prisma.place.findMany({
     where: {
       OR: [
         { name: { contains: trimmed, mode: "insensitive" } },
-        { shortName: { contains: trimmed, mode: "insensitive" } },
+        { slug: { contains: trimmed, mode: "insensitive" } },
       ],
     },
     include: {
@@ -88,18 +88,16 @@ export async function searchActivities(query: string): Promise<SearchResult[]> {
     take: MAX_RESULTS_PER_TYPE,
   });
 
-  return activities.map((activity) => ({
-    id: `activity-${activity.id}`,
-    label: activity.name,
-    subtitle: activity.city
-      ? `in ${activity.city.name}`
-      : activity.country?.name,
+  return places.map((place) => ({
+    id: `activity-${place.id}`,
+    label: place.name,
+    subtitle: place.city ? `in ${place.city.name}` : place.country?.name,
     type: "activity" as const,
-    entityId: activity.slug, // Use slug for routing
+    entityId: place.slug, // Use slug for routing
     meta: {
-      activityType: activity.type,
-      cityName: activity.city?.name,
-      countryName: activity.country?.name,
+      activityType: place.type,
+      cityName: place.city?.name,
+      countryName: place.country?.name,
     },
   }));
 }

@@ -106,7 +106,7 @@ export async function getLatestUsers() {
       name: true,
       email: true,
       createdAt: true,
-      image: true,
+      avatarUrl: true,
     },
   });
 

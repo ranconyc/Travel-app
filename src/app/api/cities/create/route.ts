@@ -1,4 +1,3 @@
-import { getActivityById } from "@/lib/db/activity.repo";
 import { getCityById } from "@/lib/db/cityLocation.repo";
 import { createCountryFromName } from "@/lib/db/country.repo";
 import { NextRequest, NextResponse } from "next/server";

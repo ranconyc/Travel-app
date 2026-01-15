@@ -1,11 +1,11 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import HomeLoggedIn from "./component/home/HomeLoggedIn";
 import { getAllCities } from "@/lib/db/cityLocation.repo";
-import { getAllActivities } from "@/lib/db/activity.repo";
+import { getAllPlaces } from "@/lib/db/place.repo";
 import { getAllUsers } from "@/lib/db/user.repo";
 
 import { City } from "@/domain/city/city.schema";
-import { Activity } from "@/domain/activity/activity.schema";
+import { Place } from "@/domain/place/place.schema";
 
 import { User } from "@/domain/user/user.schema";
 import { getAllCountries } from "@/lib/db/country.repo";
@@ -20,7 +20,7 @@ export default async function Home() {
     redirect("/signin");
   }
   const cities = (await getAllCities()) as City[];
-  const activities = (await getAllActivities()) as Activity[];
+  const places = (await getAllPlaces()) as Place[];
   const users = (await getAllUsers()) as User[];
   const countries = (await getAllCountries()) as Country[];
   const trips = (await getAllTrips()) as Trip[];
@@ -31,7 +31,7 @@ export default async function Home() {
     <HomeLoggedIn
       countries={countries}
       cities={cities}
-      activities={activities}
+      places={places}
       users={users}
       loggedUser={loggedUser}
       trips={trips}

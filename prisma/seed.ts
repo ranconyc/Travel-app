@@ -9,39 +9,21 @@ async function main() {
   let citiesCount = 0;
 
   for (const city of cities) {
+    const { activities, images, ...cityData } = city as any;
+
     await prisma.city.upsert({
-      where: { cityId: city.cityId }, // ✅ fixed (was city.id)
+      where: { cityId: city.cityId },
       update: {
-        cityId: city.cityId,
-        name: city.name,
-        countryRefId: city.countryRefId,
-        coords: city.coords,
-        radiusKm: city.radiusKm,
-        imageHeroUrl: city.imageHeroUrl,
-        images: city.images,
-        bestSeason: city.bestSeason,
-        idealDuration: city.idealDuration,
-        safety: city.safety,
-        neighborhoods: city.neighborhoods,
-        budget: city.budget,
-        gettingAround: city.gettingAround,
-        activities: { create: city.activities },
+        ...cityData,
+        places: {
+          create: activities || [],
+        },
       },
       create: {
-        cityId: city.cityId,
-        name: city.name,
-        countryRefId: city.countryRefId,
-        coords: city.coords,
-        radiusKm: city.radiusKm,
-        imageHeroUrl: city.imageHeroUrl,
-        images: city.images,
-        bestSeason: city.bestSeason,
-        idealDuration: city.idealDuration,
-        safety: city.safety,
-        neighborhoods: city.neighborhoods,
-        budget: city.budget,
-        gettingAround: city.gettingAround,
-        activities: { create: city.activities },
+        ...cityData,
+        places: {
+          create: activities || [],
+        },
       },
     });
     citiesCount++;
@@ -53,7 +35,7 @@ async function main() {
 
 main()
   .then(() => {
-    console.log("✅ Seed complete: Thailand + Bangkok");
+    console.log("✅ Seed complete");
   })
   .catch((e) => {
     console.error("❌ Seed failed:", e);

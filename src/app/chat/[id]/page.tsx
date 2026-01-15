@@ -47,7 +47,7 @@ export default async function ChatPage({ params }: Props) {
 
   let chat;
   try {
-    // chat = await getChatById(id);
+    chat = await getChatById(id);
   } catch (error) {
     return (
       <div>
@@ -63,18 +63,18 @@ export default async function ChatPage({ params }: Props) {
     );
   }
 
-  // const chatName = getChatDisplayName(chat, session.user.id);
-  // const chatImage = getChatDisplayImage(chat, session.user.id);
+  const chatName = getChatDisplayName(chat, session.user.id);
+  const chatImage = getChatDisplayImage(chat, session.user.id);
 
   return (
     <div className="flex flex-col h-screen">
-      {/* <ChatHeader chatName={chatName} chatImage={chatImage} /> */}
-      {/* <MessageList
+      <ChatHeader chatName={chatName} chatImage={chatImage} />
+      <MessageList
         messages={chat.messages}
         currentUserId={session.user.id}
         chatId={id}
       />
-      <MessageInput chatId={id} /> */}
+      <MessageInput chatId={id} />
     </div>
   );
 }

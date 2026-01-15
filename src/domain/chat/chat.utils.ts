@@ -53,8 +53,8 @@ export function getChatDisplayImage(
     members: Array<{
       user: {
         id: string;
-        image: string | null;
-        images?: Array<{ url: string; isMain: boolean }>;
+        avatarUrl: string | null;
+        media?: Array<{ url: string; category: string }>;
       };
     }>;
   },
@@ -66,8 +66,10 @@ export function getChatDisplayImage(
 
   // For 1-on-1, get the other participant's image
   const otherMember = chat.members.find((m) => m.user.id !== currentUserId);
-  const mainImage = otherMember?.user.images?.find((img) => img.isMain);
-  return mainImage?.url || otherMember?.user.image || null;
+  const avatarMedia = otherMember?.user.media?.find(
+    (m) => m.category === "AVATAR"
+  );
+  return avatarMedia?.url || otherMember?.user.avatarUrl || null;
 }
 
 /**

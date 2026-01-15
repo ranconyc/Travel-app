@@ -1,27 +1,20 @@
 import Image from "next/image";
 
 import Button from "@/app/component/common/Button";
-import { Activity } from "@/domain/activity/activity.schema";
+import { Place } from "@/domain/place/place.schema";
 
-// Extend Activity type to include cityName
-
-interface ExtendedActivity extends Activity {
-  cityName: string;
-  countryName: string;
+interface ExtendedPlace extends Place {
+  city: { name: string; country: { name: string } };
 }
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getActivityById } from "@/lib/db/activity.repo";
+import { getPlaceBySlug } from "@/lib/db/place.repo";
 import Link from "next/link";
 import HeaderWrapper from "@/app/component/common/Header";
 import { CalendarPlus, Users } from "lucide-react";
 import Title from "@/app/component/Title";
 
-const Header = ({
-  activity,
-}: {
-  activity: Activity & { city: { name: string; country: { name: string } } };
-}) => {
+const Header = ({ activity }: { activity: ExtendedPlace }) => {
   return (
     <HeaderWrapper backButton rightComponent={<CalendarPlus size={22} />}>
       <div className="flex flex-col items-center gap-1">
@@ -38,9 +31,9 @@ const Header = ({
       </div>
 
       <div className="overflow-hidden rounded-xl my-4">
-        {activity?.images?.heroUrl ? (
+        {activity?.imageHeroUrl ? (
           <Image
-            src={activity.images.heroUrl}
+            src={activity.imageHeroUrl}
             alt="activity image"
             width={500}
             height={500}
@@ -85,7 +78,12 @@ const TravelerCard = ({ session }: { session: any }) => {
   return (
     <Link href={`/profile/690bb3c6686edc10b979584f`}>
       <div className="rounded-2xl overflow-hidden w-fit">
-        <Image src={session?.user?.image} alt="avatar" width={80} height={80} />
+        <Image
+          src={session?.user?.avatarUrl || session?.user?.image}
+          alt="avatar"
+          width={80}
+          height={80}
+        />
       </div>
       {/* <h1>{session?.user?.name}</h1> */}
     </Link>
@@ -98,14 +96,14 @@ export default async function ActivityPage({ params }: any) {
   const { slug } = await params;
   console.log("slug", slug);
 
-  const activity = (await getActivityById(slug)) as unknown as ExtendedActivity;
-  if (!activity) return <div>Activity not found</div>;
+  const activity = (await getPlaceBySlug(slug)) as unknown as ExtendedPlace;
+  if (!activity) return <div>Place not found</div>;
 
   console.log("activity", activity);
 
   return (
     <div>
-      <Header activity={{ ...activity, city: { name: activity.cityName, country: { name: activity.countryName } } }} />
+      <Header activity={activity} />
       <main className="p-4 bg-gray-100">
         <div className="bg-white p-4 grid gap-4 rounded-xl mb-4">
           <div className="flex items-start justify-between">

@@ -10,7 +10,7 @@ export async function addActivityToTripAction(
     date: Date;
     startTime?: string;
     notes?: string;
-    activityId?: string; // If selecting from catalog
+    placeId?: string; // If selecting from catalog
   }
 ) {
   if (!tripStopId) throw new Error("Trip Stop ID required");
@@ -24,7 +24,7 @@ export async function addActivityToTripAction(
       date: data.date,
       startTime: data.startTime,
       notes: data.notes,
-      activityId: data.activityId,
+      placeId: data.placeId,
     },
     include: {
       tripStop: true,

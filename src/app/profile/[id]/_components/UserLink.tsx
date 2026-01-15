@@ -4,7 +4,9 @@ import { ProfileUser } from "@/types/user";
 export const UserLink = ({ user }: { user: ProfileUser }) => {
   const fullName =
     (user.profile?.firstName || "") + " " + (user.profile?.lastName || "");
-  const avatarImage = user.images?.find((img) => img.isMain)?.url || user.image;
+  const avatarImage =
+    user.media?.find((img: any) => img.category === "AVATAR")?.url ||
+    user.avatarUrl;
 
   return (
     <a

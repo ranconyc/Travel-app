@@ -23,50 +23,40 @@ export const CitySchema = z.object({
   name: z.string().min(1),
 
   // Country relation
-  countryRefId: z.string().min(1),
-  country: CountrySchema.optional(),
+  countryRefId: z.string().nullable().optional(),
+  country: CountrySchema.optional().nullable(),
 
-  // Capital meta
   isCapital: z.boolean().default(false),
-  countryAsCapital: z.unknown().optional(),
 
   // Geo
   coords: GeoPointSchema,
   radiusKm: z.number().default(30),
-  timeZone: z.string().optional(),
-  boundingBox: z.unknown().optional(),
+  timeZone: z.string().optional().nullable(),
+  boundingBox: z.any().optional().nullable(),
 
-  // Climate & safety JSON blobs (can be refined later)
-  climate: z.unknown().optional(),
-  emergency: z.unknown().optional(),
-  internet: z.unknown().optional(),
-
-  // UX – images
-  imageHeroUrl: z.string().url().optional(),
-  images: z.array(z.string().url()).default([]),
+  // Media
+  imageHeroUrl: z.string().url().optional().nullable(),
+  media: z.array(z.any()).optional(),
 
   // Meta
-  state: z.string().optional(),
-  district: z.string().optional(),
-  population: z.number().int().optional(),
-
-  bestSeason: z.string().optional(),
-  idealDuration: z.string().optional(),
-  safety: z.string().optional(),
-
+  state: z.string().optional().nullable(),
+  district: z.string().optional().nullable(),
+  population: z.number().int().optional().nullable(),
+  bestSeason: z.string().optional().nullable(),
+  idealDuration: z.string().optional().nullable(),
+  safety: z.string().optional().nullable(),
   neighborhoods: z.array(z.string()).default([]),
 
   // Money & moving around
-  budget: BudgetSchema.optional(), // Prisma: Json
-  gettingAround: z.record(z.string(), z.any()).default({}), // Prisma: Json
+  budget: BudgetSchema.optional().nullable(),
+  gettingAround: z.any().optional().nullable(),
 
   // Relations
-  activities: z.array(z.unknown()).default([]),
+  places: z.array(z.any()).default([]),
 
-  usersHomeBase: z.array(z.unknown()).default([]),
-  usersCurrentCity: z.array(z.unknown()).default([]),
-  visitedByUsers: z.array(z.unknown()).default([]),
-  wishListedByUsers: z.array(z.unknown()).default([]),
+  usersHomeBase: z.array(z.any()).default([]),
+  usersCurrentCity: z.array(z.any()).default([]),
+  tripStops: z.array(z.any()).default([]),
 
   // CMS flags
   autoCreated: z.boolean().default(false),

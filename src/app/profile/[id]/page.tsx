@@ -47,8 +47,9 @@ export default async function Profile({ params }: { params: { id: string } }) {
           <div className="w-32 h-32 relative">
             <Image
               src={
-                profileUser.images?.find((img) => img.isMain)?.url ||
-                profileUser.image ||
+                profileUser.media?.find((img: any) => img.category === "AVATAR")
+                  ?.url ||
+                profileUser.avatarUrl ||
                 "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
               }
               alt={profileUser.name || "User"}

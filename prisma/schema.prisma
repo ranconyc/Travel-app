@@ -18,123 +18,150 @@ enum Role {
   ADMIN
 }
 
+enum MediaType {
+  IMAGE
+  VIDEO
+  VR_360
+}
+
+enum MediaCategory {
+  AVATAR
+  COVER
+  GALLERY
+  REVIEW_PHOTO
+  OFFICIAL // For manually curated content
+}
 
 /**
  * -------------------------- USER ---------------------------
  */
 model User {
-  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
   /* ---- INFO ---- */
-  email            String?        @unique
-  role             Role           @default(USER)
+  email            String?   @unique
+  role             Role      @default(USER)
   name             String?
   emailVerified    DateTime?
-  image            String?
   passwordHash     String?
-  profileCompleted Boolean        @default(false)
+  profileCompleted Boolean   @default(false)
 
-  /** ---- DESTINATIONS ---- */
- 
-  currentLocation  Json? // [lng, lat] important to store this way for geo queries
-  currentCityId    String?        @db.ObjectId
-  currentCity      City?          @relation("CurrentLocation", fields: [currentCityId], references: [id])
+  /* ---- LOCATION ---- */
+  currentLocation Json? // [lng, lat]
+  currentCityId   String? @db.ObjectId
+  currentCity     City?   @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
   /* ---- AUTH ---- */
-  accounts         Account[]
-  sessions         Session[]
+  accounts Account[]
+  sessions Session[]
 
   /* ---- PROFILE ---- */
-  profile          UserProfile?
-  images           UserMedia[]    @relation("UserGallery")
-  coverImage       UserMedia?     @relation("UserCoverImage", fields: [coverImageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  coverImageId     String?        @db.ObjectId
-
+  profile      UserProfile?
+  
+  // Refactored Media Relations
+  media        Media[] // Media uploaded by this user
+  
+  // Helper for quick avatar access (optional, can also query Media model directly)
+  avatarUrl    String? 
+  
   /* ---- TRAVELS ---- */
-  trips            Trip[]         @relation("UserTrips")
-  visitedCountries String[]       @default([])
-  
-  
+  trips            Trip[]   @relation("UserTrips")
+  visitedCountries String[] @default([])
+
   /* ---- FRIENDSHIP ---- */
-
   friendshipsRequested Friendship[] @relation("FriendshipsRequested")
-  friendshipsReceived Friendship[] @relation("FriendshipsReceived")
+  friendshipsReceived  Friendship[] @relation("FriendshipsReceived")
 
-  // --- CHAT FEATURE ADDITIONS ---
-  chats            ChatMember[] // Links user to all their chats
-  sentMessages     Message[]    @relation("SentMessages") // Messages sent by the user
+  /* ---- CHAT ---- */
+  chats        ChatMember[]
+  sentMessages Message[]    @relation("SentMessages")
 
-
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-}
-
-model UserMedia {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String   @db.ObjectId
-  user          User     @relation("UserGallery", fields: [userId], references: [id], onDelete: Cascade)
-
-  url           String
-  publicId      String   // Cloudinary/S3 ID
-  isMain        Boolean  @default(false)
-  type          String   // "avatar", "travel_photo", "cover"
-  
-  metadata      Json?    // { width, height, blurHash }
-
-  // Named relation for cover image backlink (optional but Prisma likes explicit relations)
-  userAsCover   User[]   @relation("UserCoverImage")
-
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 /**
- * -------------------------- USER PROFILE - Identity ---------------------------
+ * -------------------------- UNIFIED MEDIA ---------------------------
+ * Replaces UserMedia. Handles all images/videos for Users, Places, Cities, etc.
  */
-model UserProfile {
-  id               String         @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String         @unique @db.ObjectId
-  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  /* ---- INFO ---- */
-  firstName        String?
-  lastName         String?
-  occupation       String?
-  birthday         DateTime?
-  description      String?
-  gender           Gender?
+model Media {
+  id       String        @id @default(auto()) @map("_id") @db.ObjectId
+  url      String
+  publicId String // Cloudinary/S3 ID
   
-  /* ---- LANGUAGE ---- */
-  languages        String[]       @default([]) // ['en','es']
+  type     MediaType     @default(IMAGE)
+  category MediaCategory @default(GALLERY)
 
-  /* ---- HOME BASE ---- */
-  homeBaseCityId   String?        @db.ObjectId
-  homeBaseCity     City?          @relation("HomeBase", fields: [homeBaseCityId], references: [id])
+  metadata Json? // { width, height, blurHash, altText }
 
-  /* ---- TRAVEL PERSONA ---- */
-  persona          Json?          // { dailyRhythm, travelStyle, interest: { "Shopping": ["id1", "id2"] } }
+  // --- OWNERSHIP ---
+  userId String? @db.ObjectId
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // --- ASSOCIATIONS (Where does this image appear?) ---
+  // A media item usually belongs to one entity, but could technically belong to multiple if shared
+  placeId String? @db.ObjectId
+  place   Place?  @relation(fields: [placeId], references: [id])
+
+  cityId String? @db.ObjectId
+  city   City?   @relation(fields: [cityId], references: [id])
   
-  /* ---- SOCIALS ---- */
-  socials          Json?          // { instagram, etc }
+  countryId String? @db.ObjectId
+  country   Country? @relation(fields: [countryId], references: [id])
 
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  reviewId String? @db.ObjectId
+  // review Review? @relation(...) // If you add reviews later
+
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([placeId])
+  @@index([cityId])
 }
 
+/**
+ * -------------------------- USER PROFILE ---------------------------
+ */
+model UserProfile {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /* ---- INFO ---- */
+  firstName   String?
+  lastName    String?
+  occupation  String?
+  birthday    DateTime?
+  description String?
+  gender      Gender?
+
+  /* ---- LANGUAGE ---- */
+  languages String[] @default([])
+
+  /* ---- HOME BASE ---- */
+  homeBaseCityId String? @db.ObjectId
+  homeBaseCity   City?   @relation("HomeBase", fields: [homeBaseCityId], references: [id])
+
+  /* ---- TRAVEL PERSONA ---- */
+  persona Json? // { dailyRhythm, travelStyle, interests }
+  socials Json? // { instagram, tiktok }
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String  @db.ObjectId
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?        @map("refresh_token")
-  access_token       String?        @map("access_token")
-  expires_at         Int?           @map("expires_at")
-  token_type         String?
-  scope              String?
-  id_token           String?        @map("id_token")
-  session_state      String?        @map("session_state")
-  oauth_token_secret String?
-  oauth_token        String?
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @map("refresh_token")
+  access_token      String? @map("access_token")
+  expires_at        Int?    @map("expires_at")
+  token_type        String?
+  scope             String?
+  id_token          String? @map("id_token")
+  session_state     String? @map("session_state")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -163,20 +190,16 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
-
-
 /**
  * ------------------------- COUNTRY -------------------------
  */
-
 model Country {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  countryId String @unique
-  code      String
+  countryId String @unique // e.g. "th" or "thailand"
+  code      String // ISO code "TH"
   name      String
 
-  coords    Json?
+  coords Json? // GeoJSON point for map centering
 
   continent     String?
   subRegion     String?
@@ -186,6 +209,8 @@ model Country {
   subRegionCode String?
   population    Int?
   areaKm2       Float?
+  
+  // Practical Info
   currency      Json?
   emergency     Json?
   visaEntry     Json?
@@ -193,24 +218,21 @@ model Country {
   utilities     Json?
   internet      Json?
   gettingAround Json?
-  imageHeroUrl  String?
-  images        String[] @default([])
+  
+  // Media (Now using relation + simple hero string for speed)
+  imageHeroUrl String?
+  media        Media[] // All images associated with this country
 
   bestSeason    String?
   idealDuration String?
   safety        String?
 
-  meta Json?
+  meta    Json?
   regions String[] @default([])
 
-   // Capital relation (one-to-one)
-  capitalCityRefId String?        @db.ObjectId
-  // capitalCity      City?          @relation("CountryCapital", fields: [capitalCityRefId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-
   // Relations
-  cities     City[]
-  activities Activity[]
+  cities City[]
+  places Place[]
 
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
@@ -219,34 +241,32 @@ model Country {
   updatedAt DateTime @updatedAt
 }
 
-
- /* ------------------------- CITY ------------------------- */
-
+/**
+ * ------------------------- CITY -------------------------
+ */
 model City {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  cityId       String  @unique
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  cityId       String   @unique // "bangkok"
   name         String
   countryRefId String?  @db.ObjectId
   country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
-  // Capital inverse relation (optional but nice)
-  isCapital        Boolean  @default(false)
-  // countryAsCapital Country?        @relation("CountryCapital")
+  isCapital Boolean @default(false)
 
   // Geo
-  coords      Json
+  coords      Json // GeoJSON Point
   radiusKm    Int     @default(30)
   timeZone    String?
-  boundingBox Json?
+  boundingBox Json? // { sw: [lng, lat], ne: [lng, lat] } - Crucial for map zoom
 
   // Media
   imageHeroUrl String?
-  images       String[] @default([])
+  media        Media[]
 
   // Meta
-  state       String?
-  district    String?
-  population  Int?
+  state         String?
+  district      String?
+  population    Int?
   bestSeason    String?
   idealDuration String?
   safety        String?
@@ -254,11 +274,12 @@ model City {
   budget        Json?
   gettingAround Json?
 
-  activities Activity[]
+  places Place[]
 
-  usersHomeBase     UserProfile[]      @relation("HomeBase")
-  usersCurrentCity  User[]             @relation("CurrentLocation")
-  tripStops         TripStop[]
+  // User Relations
+  usersHomeBase    UserProfile[] @relation("HomeBase")
+  usersCurrentCity User[]        @relation("CurrentLocation")
+  tripStops        TripStop[]
 
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
@@ -266,78 +287,89 @@ model City {
   @@index([countryRefId])
 }
 
- /* ------------------------- ACTIVITY -------------------------*/
-
-model Activity {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  activityId String  @unique // "chatuchak-weekend-market"
-  name       String
-  shortName  String?
-  slug       String  @unique
+/**
+ * ------------------------- PLACE (Formerly Activity) -------------------------
+ */
+model Place {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  slug    String @unique // "chatuchak-weekend-market"
+  name    String
+  altName String?
 
   // Relations
   cityRefId String @db.ObjectId
   city      City   @relation(fields: [cityRefId], references: [id], onDelete: Cascade)
 
-  // Optional denorm for filtering/joins
-  countryRefId String?        @db.ObjectId
-  country      Country?        @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+  countryRefId String?  @db.ObjectId
+  country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
-  type       String // enum-like in app code
-  categories String[] // ["shopping","street-food"]
+  // Classification
+  type       String // "RESTAURANT", "LANDMARK", "MUSEUM"
+  categories String[] // ["street-food", "history"]
+  mapIcon    String?  // "cutlery", "camera", "bed" - For map rendering
 
   // Location
   address      String?
-  coords       Json // GeoJSON { type: "Point", coordinates: [lng, lat] } important to store this way for geo queries
+  coords       Json // GeoJSON { type: "Point", coordinates: [lng, lat] }
   timeZone     String?
   neighborhood String?
 
+  // Contact / Info (New Traveler Fields)
+  websiteUrl    String?
+  phoneNumber   String?
+  googlePlaceId String? @unique
+  
   // Ops
-  openingHours         Json? // WeeklyHours (see TS)
+  openingHours         Json? // Structured weekly hours
+  isPermanentlyClosed  Boolean @default(false)
+  
   bestTimeToVisit      String?
   typicalVisitDuration String?
 
-  // Price
-  entryPrice Json? // { currencyCode, range, note, badges }
+  // Social Proof (Aggregated)
+  rating      Float? @default(0.0)
+  reviewCount Int    @default(0)
 
-  // UX
-  amenities     String[]
+  // Price
+  entryPrice Json? // { currencyCode, range: "$-$$$$", exact: 100 }
+
+  // UX & Vibe
+  amenities     String[] // "wifi", "ac", "parking"
+  vibe          String[] // "quiet", "crowded", "touristy"
   accessibility String?
   safetyNotes   String?
-  crowdLevel    String? // "low"|"moderate"|"busy"|"very-busy"
-  haggling      String? // "expected" etc.
-  photoTips     String[]
-
+  
   // Media
-  images Json? // { heroUrl, thumbUrl, gallery }
+  imageHeroUrl String? // Quick access cover
+  media        Media[] // Full gallery
 
-  // CMS
+  // CMS Content
   summary    String?
   highlights String[]
   tags       String[]
 
-  // data for auto-created activity
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
+  // Trip Relations
   tripActivities TripActivity[]
 
   @@index([cityRefId])
   @@index([countryRefId])
   @@index([type])
+  @@index([coords]) // Geo index for "places near me"
 }
 
-
-
- /* ------------------------- Trip -------------------------*/
+/**
+ * ------------------------- TRIP -------------------------
+ */
 enum TripType {
-  VISITED   // Historical travel (replaces UserVisitedCity)
-  WISHLIST  // Future aspiration (replaces UserWishlistCity)
-  PLANNED   // Detailed future itinerary
+  VISITED
+  WISHLIST
+  PLANNED
 }
 
 enum TripStatus {
@@ -348,95 +380,91 @@ enum TripStatus {
 }
 
 model Trip {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String      @db.ObjectId
-  type        TripType
-  status      TripStatus  @default(DRAFT)
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String     @db.ObjectId
+  type     TripType
+  status   TripStatus @default(DRAFT)
 
-  name        String?
-  imageUrl    String?
+  name     String?
+  imageUrl String?
 
-  startDate   DateTime?
-  endDate     DateTime?
+  startDate DateTime?
+  endDate   DateTime?
 
-  user        User        @relation("UserTrips", fields: [userId], references: [id], onDelete: Cascade)
-  stops       TripStop[]
+  user  User       @relation("UserTrips", fields: [userId], references: [id], onDelete: Cascade)
+  stops TripStop[]
 
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId, type])
 }
 
-
 model TripStop {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  tripId          String   @db.ObjectId
-  cityId          String   @db.ObjectId
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  tripId String @db.ObjectId
+  cityId String @db.ObjectId
 
-  arrivalDate     DateTime?
-  departureDate   DateTime?
-  title           String?
-  notes           String?
+  arrivalDate   DateTime?
+  departureDate DateTime?
+  title         String?
+  notes         String?
 
-  trip            Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  city            City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
-
-  activities      TripActivity[]
+  trip     Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  city     City            @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  
+  activities TripActivity[] // Could rename to "places" in relation, but model name is historical
 
   @@index([tripId])
   @@index([cityId])
 }
 
-
 model TripActivity {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   tripStopId String   @db.ObjectId
   tripStop   TripStop @relation(fields: [tripStopId], references: [id], onDelete: Cascade)
 
-  // Optional catalog link
-  activityId String?    @db.ObjectId
-  activity   Activity?  @relation(fields: [activityId], references: [id])
+  // Link to the Place model
+  placeId    String? @db.ObjectId
+  place      Place?  @relation(fields: [placeId], references: [id])
 
-  name        String
-  date        DateTime
-  startTime   String?
-  notes       String?
-  duration    String?
+  name      String
+  date      DateTime
+  startTime String?
+  notes     String?
+  duration  String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([tripStopId])
 }
 
-
-
-
-/* ------------------------- FRIENDSHIP -------------------------*/
+/**
+ * ------------------------- FRIENDSHIP -------------------------
+ */
 enum FriendStatus {
-  PENDING   // request sent, waiting for response
-  ACCEPTED  // you are friends
-  DENIED    // request was rejected
-  BLOCKED   // one side blocked the other
+  PENDING
+  ACCEPTED
+  DENIED
+  BLOCKED
 }
 
 model Friendship {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  requesterId String       @db.ObjectId   // user who sent the request
-  addresseeId String       @db.ObjectId   // user who receives the request
+  requesterId String       @db.ObjectId
+  addresseeId String       @db.ObjectId
   status      FriendStatus @default(PENDING)
 
-  // who blocked whom (only used when status = BLOCKED)
-  blockedById String?      @db.ObjectId
+  blockedById String? @db.ObjectId
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  requester   User @relation("FriendshipsRequested", fields: [requesterId], references: [id], onDelete: Cascade)
-  addressee   User @relation("FriendshipsReceived", fields: [addresseeId], references: [id], onDelete: Cascade)
+  requester User @relation("FriendshipsRequested", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("FriendshipsReceived", fields: [addresseeId], references: [id], onDelete: Cascade)
 
   @@unique([requesterId, addresseeId])
   @@index([requesterId])
@@ -444,75 +472,69 @@ model Friendship {
   @@index([status])
 }
 
-/* ---------------------------- CHAT ----------------------------- */
+/**
+ * ---------------------------- CHAT -----------------------------
+ */
 
 model Chat {
-  id              String         @id @default(auto()) @map("_id") @db.ObjectId
-  isGroup         Boolean        @default(false)
-  groupName       String?        // Name for group chats
-  groupImage      String?        // Optional image URL for group chats
-  
-  // Relations
-  members         ChatMember[]   // Links to users in this chat
-  messages        Message[]      @relation("ChatMessages") // All messages in this chat
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  isGroup    Boolean @default(false)
+  groupName  String?
+  groupImage String?
 
-  // Last message for quick list display
-  lastMessageId   String?        @db.ObjectId
-  lastMessage     Message?       @relation("ChatLastMessage", fields: [lastMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  members  ChatMember[]
+  messages Message[]    @relation("ChatMessages")
+
+  lastMessageId String?  @db.ObjectId
+  lastMessage   Message? @relation("ChatLastMessage", fields: [lastMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ChatMember {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  chatId          String    @db.ObjectId
-  userId          String    @db.ObjectId
-  
-  // To track where a user last left off (useful for unread counts)
-  lastReadAt      DateTime? 
-  
-  // Relations
-  chat            Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  chatId String @db.ObjectId
+  userId String @db.ObjectId
+
+  lastReadAt DateTime?
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([chatId, userId])
   @@index([userId])
 }
 
 model Message {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  chatId          String    @db.ObjectId
-  senderId        String    @db.ObjectId
-  content         String    // The message text
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  chatId   String   @db.ObjectId
+  senderId String   @db.ObjectId
+  content  String
   
-  // Array of user IDs who have read the message
-  readBy          String[]  @db.ObjectId 
-  
-  // Relations
-  chat            Chat      @relation("ChatMessages", fields: [chatId], references: [id], onDelete: Cascade)
-  sender          User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime  @default(now())
+  readBy   String[] @db.ObjectId
 
-  // For the `lastMessage` relationship on the Chat model
-  chatLastMessage Chat[]    @relation("ChatLastMessage")
-  
+  chat   Chat @relation("ChatMessages", fields: [chatId], references: [id], onDelete: Cascade)
+  sender User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  chatLastMessage Chat[] @relation("ChatLastMessage")
+
   @@index([chatId])
   @@index([senderId])
 }
 
-
-
-
-/* ---------------------------- SEARCH ----------------------------- */
+/**
+ * ---------------------------- SEARCH -----------------------------
+ */
 model SearchEvent {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String?   // User's ID if logged in (optional)
-  sessionId         String    // Session identifier
-  searchQuery       String
-  timestamp         DateTime  @default(now())
-  resultCount       Int
-  clickedResultIndex Int?     // Null if no result was clicked
-  pagePath          String?
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String?
+  sessionId          String
+  searchQuery        String
+  timestamp          DateTime @default(now())
+  resultCount        Int
+  clickedResultIndex Int?
+  pagePath           String?
 }

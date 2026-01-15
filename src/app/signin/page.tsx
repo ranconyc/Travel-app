@@ -13,6 +13,7 @@ import {
 import { Button, Input } from "../mode/page"; // Ensure Input uses React.forwardRef
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import Link from "next/link";
 
 // 1. Define a Validation Schema
 const signInSchema = z.object({
@@ -21,6 +22,111 @@ const signInSchema = z.object({
 });
 
 type SignInValues = z.infer<typeof signInSchema>;
+const Header = ({ title, subtitle }: { title: string; subtitle: string }) => (
+  <header className="">
+    <h1 className="text-2xl font-bold mb-1">{title}</h1>
+    <p className="text-secondary text-sm leading-relaxed max-w-65">
+      {subtitle}
+    </p>
+  </header>
+);
+
+const LandingView = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <div className="flex flex-col gap-10">
+      <Header
+        title="Unlock Your World"
+        subtitle="Connect with travelers, plan trips, and explore hidden gems nearby."
+      />
+
+      <div className="flex flex-col gap-3">
+        <Button type="button" onClick={onClick}>
+          Login with email
+        </Button>
+
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="secondary"
+            className="flex-1 flex justify-center items-center"
+            onClick={() => signIn("google", { callbackUrl: "/" })}
+          >
+            <AiOutlineGoogle size={20} />
+          </Button>
+          <Button
+            type="button"
+            onClick={() => signIn("facebook", { callbackUrl: "/" })}
+            variant="secondary"
+            className="flex-1 flex justify-center items-center"
+          >
+            <AiFillFacebook size={20} />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LoginView = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-10">
+      <Header
+        title="Welcome Back, Traveler"
+        subtitle="Enter your details to pick up where you left off."
+      />
+      <div className="flex flex-col gap-4">
+        {/* 4. Use register instead of manual onChange */}
+        <Input label="Email" type="email" />
+        <Input label="Password" type="password" />
+
+        <div className="flex flex-col gap-2 mt-2">
+          <Button type="submit">Log In</Button>
+        </div>
+
+        <p className="flex items-center justify-center gap-2 text-xs">
+          New here?
+          <button
+            onClick={onClick}
+            type="button"
+            className="p-0 bg-transparent text-brand font-bold "
+          >
+            Create an account
+          </button>
+        </p>
+      </div>
+    </form>
+  );
+};
+
+const SignupView = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-10">
+      <Header
+        title="Join the Community"
+        subtitle="Create your free account to start planning your next journey."
+      />
+      <div className="flex flex-col gap-4">
+        {/* 4. Use register instead of manual onChange */}
+        <Input label="Email" type="email" />
+        <Input label="Password" type="password" />
+
+        <div className="flex flex-col gap-2 mt-2">
+          <Button type="submit">Create Account</Button>
+        </div>
+        <p className="flex items-center justify-center gap-2 text-xs">
+          Already a member?
+          <button
+            onClick={onClick}
+            type="button"
+            className="p-0 bg-transparent text-brand font-bold "
+          >
+            Log In
+          </button>
+        </p>
+      </div>
+    </form>
+  );
+};
 
 export default function SignInPage() {
   const router = useRouter();
@@ -29,7 +135,7 @@ export default function SignInPage() {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isEmailLogin, setIsEmailLogin] = useState(false);
+  const [view, setView] = useState("landing"); // "landing", "login", "signup"
 
   // 2. Setup Hook Form correctly
   const {
@@ -87,85 +193,24 @@ export default function SignInPage() {
       )}
 
       {/* Decorative Circles */}
-      <div className="relative flex items-center justify-center w-110 h-110 opacity-50">
-        <div className="absolute w-full h-full bg-brand/10 border border-brand/20 rounded-full" />
-        <div className="absolute w-3/4 h-3/4 bg-brand/8 border border-brand/20 rounded-full" />
+      <div className="relative flex items-center justify-center w-110 h-110">
+        <div className="absolute w-full h-full bg-brand/12  border border-brand/40 rounded-full" />
+        <div className="absolute w-3/4 h-3/4 bg-brand/10 border border-brand/50 rounded-full" />
+        <div className="absolute w-1/2 h-1/2 bg-brand/8 border border-brand/60 rounded-full" />
+        <div className="absolute w-1/4 h-1/4 bg-brand/6 border border-brand/70 rounded-full" />
       </div>
 
-      <div className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-[#080C14] rounded-2xl p-6 flex flex-col gap-8 z-10 shadow-xl">
-        <header>
-          <h1 className="text-2xl font-bold">Start Your Journey</h1>
-          <p className="text-xs text-gray-500 leading-relaxed">
-            Connect with fellow travelers to explore together.
-          </p>
-        </header>
+      <div className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-[#080C14] rounded-2xl px-4 py-6 flex flex-col gap-8 z-10 shadow-xl">
+        {view === "login" ? (
+          <LoginView onClick={() => setView("signup")} />
+        ) : view === "signup" ? (
+          <SignupView onClick={() => setView("login")} />
+        ) : (
+          <LandingView onClick={() => setView("login")} />
+        )}
 
-        {/* 3. Use handleSubmit */}
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-          {isEmailLogin ? (
-            <div className="flex flex-col gap-4">
-              {/* 4. Use register instead of manual onChange */}
-              <Input
-                label="Email"
-                type="email"
-                {...register("email")}
-                error={errors.email?.message} // Pass error to your component
-              />
-              <Input
-                label="Password"
-                type="password"
-                {...register("password")}
-                error={errors.password?.message}
-              />
-
-              <div className="flex flex-col gap-2 mt-2">
-                <Button type="submit" disabled={loading}>
-                  {loading ? "Signing In..." : "Login"}
-                </Button>
-
-                {/* <p>
-                  <>create an account</>
-                </p> */}
-
-                {/* <button
-                  type="button"
-                  onClick={() => setIsEmailLogin(false)}
-                  className="text-xs flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors py-2"
-                >
-                  <AiOutlineArrowLeft /> Back to options
-                </button> */}
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <Button type="button" onClick={() => setIsEmailLogin(true)}>
-                Login with email
-              </Button>
-
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="flex-1 flex justify-center items-center"
-                  onClick={() => signIn("google", { callbackUrl: "/" })}
-                >
-                  <AiOutlineGoogle size={20} />
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => signIn("facebook", { callbackUrl: "/" })}
-                  variant="secondary"
-                  className="flex-1 flex justify-center items-center"
-                >
-                  <AiFillFacebook size={20} />
-                </Button>
-              </div>
-            </div>
-          )}
-        </form>
+        <DevTool control={control} />
       </div>
-
-      <DevTool control={control} />
     </div>
   );
 }

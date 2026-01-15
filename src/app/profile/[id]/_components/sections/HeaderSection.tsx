@@ -66,8 +66,8 @@ export const HeaderSection = ({
       <div className="rounded-xl overflow-hidden mt-4">
         {(() => {
           const mainImage =
-            profileUser.images?.find((img: any) => img.isMain)?.url ||
-            profileUser.image;
+            profileUser.media?.find((img: any) => img.category === "AVATAR")
+              ?.url || profileUser.avatarUrl;
           return mainImage ? (
             <Image
               src={mainImage}

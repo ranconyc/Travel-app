@@ -51,7 +51,7 @@ export type NearbyUserResult = {
   lastName: string | null;
   name: string | null;
   email: string | null;
-  image: string | null;
+  avatarUrl: string | null;
   birthday: Date | null;
   gender: string | null;
   occupation: string | null;

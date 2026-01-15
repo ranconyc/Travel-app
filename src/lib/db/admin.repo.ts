@@ -26,7 +26,7 @@ export async function getAdminStats() {
  * Get items that need review
  */
 export async function getItemsNeedingReview() {
-  const [countries, cities, activities] = await Promise.all([
+  const [countries, cities, places] = await Promise.all([
     prisma.country.findMany({
       where: { needsReview: true },
       select: {
@@ -55,11 +55,10 @@ export async function getItemsNeedingReview() {
       },
       orderBy: { name: "asc" },
     }),
-    prisma.activity.findMany({
+    prisma.place.findMany({
       where: { needsReview: true },
       select: {
         id: true,
-        activityId: true,
         slug: true,
         name: true,
         autoCreated: true,
@@ -77,7 +76,7 @@ export async function getItemsNeedingReview() {
   return {
     countries,
     cities,
-    activities,
+    places,
   };
 }
 

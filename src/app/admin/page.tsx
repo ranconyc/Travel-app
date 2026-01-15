@@ -93,7 +93,7 @@ export default async function AdminDashboardPage() {
           <div className="divide-y divide-gray-100">
             {latestUsers.map((user) => (
               <div key={user.id} className="p-4 flex items-center gap-3">
-                <Avatar image={user.image || undefined} size={40} />
+                <Avatar image={user.avatarUrl || undefined} size={40} />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-gray-900 truncate">
                     {user.name}

@@ -14,15 +14,15 @@ export async function findUserChats(userId: string) {
             select: {
               id: true,
               name: true,
-              image: true,
+              avatarUrl: true,
               profile: {
                 select: {
                   firstName: true,
                   lastName: true,
                 },
               },
-              images: {
-                where: { isMain: true },
+              media: {
+                where: { category: "AVATAR" },
                 take: 1,
               },
             },
@@ -68,15 +68,15 @@ export async function findChatById(chatId: string) {
             select: {
               id: true,
               name: true,
-              image: true,
+              avatarUrl: true,
               profile: {
                 select: {
                   firstName: true,
                   lastName: true,
                 },
               },
-              images: {
-                where: { isMain: true },
+              media: {
+                where: { category: "AVATAR" },
                 take: 1,
               },
             },
@@ -89,15 +89,15 @@ export async function findChatById(chatId: string) {
             select: {
               id: true,
               name: true,
-              image: true,
+              avatarUrl: true,
               profile: {
                 select: {
                   firstName: true,
                   lastName: true,
                 },
               },
-              images: {
-                where: { isMain: true },
+              media: {
+                where: { category: "AVATAR" },
                 take: 1,
               },
             },
@@ -138,15 +138,15 @@ export async function createMessage(
         select: {
           id: true,
           name: true,
-          image: true,
+          avatarUrl: true,
           profile: {
             select: {
               firstName: true,
               lastName: true,
             },
           },
-          images: {
-            where: { isMain: true },
+          media: {
+            where: { category: "AVATAR" },
             take: 1,
           },
         },

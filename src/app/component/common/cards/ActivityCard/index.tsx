@@ -1,11 +1,13 @@
 import BaseCard from "../BaseCard";
 import { AvatarList } from "../../AvatarList";
-import { Activity } from "@/domain/activity/activity.schema";
-
-
 type ActivityCardProps = {
-  activity: { id: string | number; name: string; image: string; mates: any[]; }
-  // activity: Pick<Activity, "id" | "name" | "images"| 'mates' >;
+  activity: {
+    id: string;
+    name: string;
+    image: string;
+    mates: any[];
+    slug?: string;
+  };
   index: number;
 };
 
@@ -14,12 +16,12 @@ export default function ActivityCard({
 
   index,
 }: ActivityCardProps) {
-  const { id, name, image, mates  } = activity;
+  const { id, name, image, mates, slug } = activity;
 
   return (
     <BaseCard
       image={{ src: image, alt: name || "Activity image" }}
-      linkHref={`/activity/${id}`}
+      linkHref={`/place/${slug || id}`}
       priority={index < 3}
     >
       <div className="h-full flex items-end">

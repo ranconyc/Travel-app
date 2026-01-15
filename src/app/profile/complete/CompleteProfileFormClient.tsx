@@ -36,7 +36,7 @@ type PrismaUser = DomainUser & {
 
 function mapUserToDefaults(user: PrismaUser | null): CompleteProfileFormValues {
   return {
-    image: user?.image ?? null,
+    image: user?.avatarUrl ?? null,
     firstName: user?.profile?.firstName ?? "",
     lastName: user?.profile?.lastName ?? "",
     birthday: user?.profile?.birthday

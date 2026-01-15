@@ -74,8 +74,9 @@ export function MessageList({
             {!isSent && (
               <Avatar
                 image={
-                  message.sender.images?.find((img) => img.isMain)?.url ||
-                  message.sender.image ||
+                  message.sender.media?.find((img) => img.category === "AVATAR")
+                    ?.url ||
+                  message.sender.avatarUrl ||
                   undefined
                 }
                 name={senderName}

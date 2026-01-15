@@ -17,7 +17,7 @@ export async function getUserById(id: string) {
             },
           },
         },
-        images: true,
+        media: true,
         currentCity: {
           include: {
             country: true,
@@ -85,11 +85,11 @@ export async function completeProfile(
       },
     });
 
-    // Legacy image update if present in form but not yet moved to UserMedia domain
+    // Unified avatar update
     if (data.image) {
       await prisma.user.update({
         where: { id: userId },
-        data: { image: data.image },
+        data: { avatarUrl: data.image },
       });
     }
   } catch (error) {
@@ -111,7 +111,7 @@ export async function getAllUsers() {
             },
           },
         },
-        images: true,
+        media: true,
         currentCity: {
           include: {
             country: true,
@@ -178,7 +178,7 @@ export async function getNearbyUsers(
       lastName: row.profile?.lastName ?? row.lastName ?? null,
       name: row.name ?? null,
       email: row.email ?? null,
-      image: row.image ?? null,
+      avatarUrl: row.avatarUrl ?? null,
       birthday: row.profile?.birthday ? new Date(row.profile.birthday) : null,
       gender: row.profile?.gender ?? null,
       occupation: row.profile?.occupation ?? null,

@@ -47,9 +47,9 @@ export const CountrySchema = z.object({
   // Transport UX
   gettingAround: z.any().optional().nullable(),
 
-  // Media
+  // Media (Now using relation + simple hero string for speed)
   imageHeroUrl: z.string().url().optional().nullable(),
-  images: z.array(z.string().url()).default([]),
+  media: z.array(z.any()).optional(),
 
   // Trip meta
   bestSeason: z.string().optional().nullable(),
@@ -60,13 +60,9 @@ export const CountrySchema = z.object({
   meta: CountryMetaSchema.optional().nullable(),
   regions: z.array(z.string()).default([]),
 
-  // Capital relation
-  capitalCityRefId: z.string().optional().nullable(),
-  capitalCity: z.any().optional().nullable(),
-
-  // Relations (Prisma relations are usually optional in the result if not included)
+  // Relations
   cities: z.array(z.any()).optional(),
-  activities: z.array(z.any()).optional(),
+  places: z.array(z.any()).optional(),
 
   // CMS flags
   autoCreated: z.boolean().default(false),

@@ -156,8 +156,8 @@ export async function getCountryWithCities(slug: string) {
         cities: {
           orderBy: { name: "asc" },
         },
-        // include activities for this country
-        activities: true,
+        // include places for this country
+        places: true,
         // include capital city relation if set
       },
     });
@@ -401,7 +401,6 @@ export async function createCountryFromName(countryName: string) {
     visaEntry: visaEntryJson,
 
     imageHeroUrl,
-    images,
 
     bestSeason: null,
     idealDuration: null,

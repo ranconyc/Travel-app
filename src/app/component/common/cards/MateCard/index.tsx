@@ -29,11 +29,13 @@ export default function MateCard({
   loggedUser: User;
   priority: boolean;
 }) {
-  const { id: userId, image, name, currentCity: location } = mate;
+  const { id: userId, avatarUrl, name, currentCity: location } = mate;
   const birthday = mate.profile?.birthday;
-  const mainImage = mate.images?.find((img) => img.isMain)?.url || image;
+  const mainImage =
+    mate.media?.find((img: any) => img.category === "AVATAR")?.url || avatarUrl;
   const loggedMainImage =
-    loggedUser?.images?.find((img) => img.isMain)?.url || loggedUser?.image;
+    loggedUser?.media?.find((img: any) => img.category === "AVATAR")?.url ||
+    loggedUser?.avatarUrl;
 
   const isResident =
     !!mate.currentCityId &&

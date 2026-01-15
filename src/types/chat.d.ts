@@ -14,12 +14,12 @@ export type Message = {
   sender: {
     id: string;
     name: string | null;
-    image: string | null;
+    avatarUrl: string | null;
     profile?: {
       firstName: string | null;
       lastName: string | null;
     } | null;
-    images?: Array<{ url: string; isMain: boolean }>;
+    media?: Array<{ url: string; category: string }>;
   };
   readBy?: string[];
   tempId?: string; // For optimistic UI
@@ -36,12 +36,12 @@ export type ChatMember = {
   user?: {
     id: string;
     name: string | null;
-    image: string | null;
+    avatarUrl: string | null;
     profile?: {
       firstName: string | null;
       lastName: string | null;
     } | null;
-    images?: Array<{ url: string; isMain: boolean }>;
+    media?: Array<{ url: string; category: string }>;
   };
 };
 

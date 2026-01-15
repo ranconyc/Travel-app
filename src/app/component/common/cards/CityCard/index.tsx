@@ -118,7 +118,10 @@ export default function CityCard({ city, userLocation, index }: CityCardProps) {
   return (
     <BaseCard
       linkHref={`/city/${city.cityId}`}
-      image={{ src: city?.imageHeroUrl, alt: city?.name }}
+      image={{
+        src: city?.imageHeroUrl ?? undefined,
+        alt: city?.name ?? undefined,
+      }}
       priority={index < 3}
     >
       <div className="h-full flex items-end">

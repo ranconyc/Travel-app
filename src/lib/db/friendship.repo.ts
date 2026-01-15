@@ -228,13 +228,13 @@ export async function getFriends(userId: string) {
       requester: {
         include: {
           profile: true,
-          images: { where: { isMain: true }, take: 1 },
+          media: { where: { category: "AVATAR" }, take: 1 },
         },
       },
       addressee: {
         include: {
           profile: true,
-          images: { where: { isMain: true }, take: 1 },
+          media: { where: { category: "AVATAR" }, take: 1 },
         },
       },
     },
