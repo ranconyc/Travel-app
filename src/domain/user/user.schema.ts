@@ -24,6 +24,13 @@ export const cityLiteSchema = z.object({
   name: z.string(),
   countryRefId: z.string().nullable(),
   imageHeroUrl: z.string().url().nullable(),
+  country: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .optional()
+    .nullable(),
 });
 
 /** UserMedia schema (Gallery & Profile Images) */
@@ -34,7 +41,7 @@ export const userMediaSchema = z.object({
   publicId: z.string(),
   isMain: z.boolean(),
   type: z.string(), // "avatar", "travel_photo", etc.
-  metadata: z.record(z.any()).nullable(),
+  metadata: z.any().nullable(),
   createdAt: z.date(),
 });
 
@@ -51,8 +58,8 @@ export const userProfileSchema = z.object({
   languages: z.array(z.string()).default([]),
   homeBaseCityId: z.string().nullable(),
   homeBaseCity: cityLiteSchema.optional().nullable(),
-  persona: z.record(z.any()).nullable(), // Json field
-  socials: z.record(z.any()).nullable(), // Json field
+  persona: z.any().nullable(), // Json field
+  socials: z.any().nullable(), // Json field
   updatedAt: z.date(),
 });
 
@@ -70,6 +77,13 @@ export const tripSchema = z.object({
 });
 
 // --- Main User Schema ---
+
+/** Partial Trip schema for shallow relations */
+export const partialTripSchema = z.object({
+  id: z.string(),
+  startDate: z.date().nullable(),
+  endDate: z.date().nullable(),
+});
 
 export const userSchema = z.object({
   // Identifiers
@@ -96,7 +110,7 @@ export const userSchema = z.object({
   coverImage: userMediaSchema.optional().nullable(),
 
   // Travels
-  trips: z.array(tripSchema).optional(),
+  trips: z.array(z.union([tripSchema, partialTripSchema])).optional(),
   visitedCountries: z.array(z.string()).default([]),
 
   // Timestamps

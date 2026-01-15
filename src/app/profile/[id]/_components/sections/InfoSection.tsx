@@ -2,7 +2,7 @@ import Block from "@/app/component/common/Block";
 import Title from "@/app/component/Title";
 import { MapPinHouse, VenusAndMars, Venus, Mars } from "lucide-react";
 import { getAge } from "@/app/_utils/age";
-import { ProfileUser } from "../../types";
+import { ProfileUser } from "@/types/user";
 
 function formatHomeBase(user: ProfileUser) {
   const city = user.profile?.homeBaseCity;

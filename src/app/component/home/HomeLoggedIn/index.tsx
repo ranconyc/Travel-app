@@ -15,7 +15,7 @@ import NearbyMateList from "../NearbyMateList";
 import { Country } from "@/domain/country/country.schema";
 import CityCard from "../../common/cards/CityCard";
 import { useSocket } from "@/lib/socket/socket-context";
-import { Trip } from "@prisma/client";
+import { Trip } from "@/domain/user/user.schema";
 import TripCard from "@/app/(home)/_components/TripCard";
 
 export const sectionTitle = "font-bold text-xl my-4";
@@ -101,7 +101,8 @@ export default function HomeLoggedIn({
     initialUser: loggedUser,
   });
   const { isUserOnline } = useSocket();
-  const isResident = loggedUser.currentCityId === loggedUser.homeBaseCityId;
+  const isResident =
+    loggedUser.currentCityId === loggedUser.profile?.homeBaseCityId;
 
   // const sortedCities = useMemo(() => {
   //   if (!loggedUser.currentLocation) return cities;

@@ -37,22 +37,22 @@ type PrismaUser = DomainUser & {
 function mapUserToDefaults(user: PrismaUser | null): CompleteProfileFormValues {
   return {
     image: user?.image ?? null,
-    firstName: user?.firstName ?? "",
-    lastName: user?.lastName ?? "",
-    birthday: user?.birthday
-      ? new Date(user.birthday).toISOString().slice(0, 10)
+    firstName: user?.profile?.firstName ?? "",
+    lastName: user?.profile?.lastName ?? "",
+    birthday: user?.profile?.birthday
+      ? new Date(user.profile.birthday).toISOString().slice(0, 10)
       : "",
-    gender: (user?.gender as Gender | "") ?? "",
-    homeBase: user?.homeBaseCity?.name
-      ? `${user.homeBaseCity.name}${
-          user.homeBaseCity.country?.name
-            ? `, ${user.homeBaseCity.country.name}`
+    gender: (user?.profile?.gender as Gender | "") ?? "",
+    homeBase: user?.profile?.homeBaseCity?.name
+      ? `${user.profile.homeBaseCity.name}${
+          user.profile.homeBaseCity.country?.name
+            ? `, ${user.profile.homeBaseCity.country.name}`
             : ""
         }`
       : "",
-    homeBaseCityId: user?.homeBaseCityId ?? null,
-    occupation: user?.occupation ?? "",
-    languages: user?.languages ?? [],
+    homeBaseCityId: user?.profile?.homeBaseCityId ?? null,
+    occupation: user?.profile?.occupation ?? "",
+    languages: user?.profile?.languages ?? [],
   };
 }
 

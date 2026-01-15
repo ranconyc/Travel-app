@@ -2,7 +2,7 @@
 
 import Button from "@/app/component/common/Button";
 import { User } from "@/domain/user/user.schema";
-import { Trip } from "@prisma/client";
+import { Trip } from "@/domain/user/user.schema";
 import { Plus } from "lucide-react";
 
 type Props = { loggedUser: User; trip: Trip };

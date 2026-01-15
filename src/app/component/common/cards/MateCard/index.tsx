@@ -30,15 +30,15 @@ export default function MateCard({
   priority: boolean;
 }) {
   const { id: userId, image, name, currentCity: location } = mate;
-  const birthday = mate.birthday;
+  const birthday = mate.profile?.birthday;
   const mainImage = mate.images?.find((img) => img.isMain)?.url || image;
   const loggedMainImage =
     loggedUser?.images?.find((img) => img.isMain)?.url || loggedUser?.image;
 
   const isResident =
     !!mate.currentCityId &&
-    !!mate.homeBaseCityId &&
-    mate.currentCityId === mate.homeBaseCityId;
+    !!mate.profile?.homeBaseCityId &&
+    mate.currentCityId === mate.profile.homeBaseCityId;
 
   const { isUserOnline } = useSocket();
   const isOnline = isUserOnline(userId);
@@ -72,8 +72,10 @@ export default function MateCard({
             <ResidentOrVisitorBadge isResident={isResident} />
           </div>
           <h3 className="text-white font-bold leading-tight text-[clamp(18px,2.8vw,24px)] line-clamp-2 mt-2">
-            {mate.firstName
-              ? `${mate.firstName} ${mate.lastName || ""}`.trim()
+            {mate.profile?.firstName
+              ? `${mate.profile.firstName} ${
+                  mate.profile.lastName || ""
+                }`.trim()
               : mate.name}
             {birthday && `, ${getAge(birthday.toISOString())}`}
           </h3>

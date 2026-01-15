@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Button from "@/app/component/common/Button";
 import { MatchSection } from "../MatchSection";
-import { User } from "@prisma/client";
-import { ProfileUser } from "../../types";
+import { User } from "@/domain/user/user.schema";
+import { ProfileUser } from "@/types/user";
 import { MessageCircle } from "lucide-react";
 import { UserRoundPen } from "lucide-react";
 
@@ -66,7 +66,7 @@ export const HeaderSection = ({
       <div className="rounded-xl overflow-hidden mt-4">
         {(() => {
           const mainImage =
-            profileUser.images?.find((img) => img.isMain)?.url ||
+            profileUser.images?.find((img: any) => img.isMain)?.url ||
             profileUser.image;
           return mainImage ? (
             <Image

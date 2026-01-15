@@ -1,7 +1,7 @@
 "use client";
 
-import { User } from "@prisma/client";
-import { ProfileUser } from "../types";
+import { User } from "@/domain/user/user.schema";
+import { ProfileUser } from "@/types/user";
 import Button from "@/app/component/common/Button";
 import { useFriendshipStatus } from "@/app/hooks/useFriendship";
 import { useQueryClient } from "@tanstack/react-query";

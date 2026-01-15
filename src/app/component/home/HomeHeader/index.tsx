@@ -21,7 +21,7 @@ export default function HomeHeader({ user }: Props) {
       </div>
       <div className="mt-8">
         {/* check if user is at home */}
-        {user.currentCityId === user.homeBaseCityId ? (
+        {user.currentCityId === user.profile?.homeBaseCityId ? (
           <>
             <h1 className="text-xl mb-2">There is no place like</h1>
             <h2 className="text-4xl font-bold">Home</h2>
@@ -30,8 +30,8 @@ export default function HomeHeader({ user }: Props) {
           <>
             <h1 className="text-xl mb-2">
               Hello{" "}
-              {user.firstName
-                ? user.firstName
+              {user.profile?.firstName
+                ? user.profile.firstName
                 : user?.name?.split(" ")[0] ?? "Traveler"}
               , Welcome to
             </h1>

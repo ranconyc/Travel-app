@@ -1,7 +1,7 @@
 import React from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { User } from "@prisma/client";
+import { User } from "@/domain/user/user.schema";
 import {
   MapPinHouse,
   Languages,
