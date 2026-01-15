@@ -172,11 +172,11 @@ export default async function ChatsPage() {
 
   return (
     <React.Fragment>
-      <Header />
+      {/* <Header />
       <main className="h-full border border-green-500">
         <ChatsList chats={chats} currentUserId={session.user.id} />
         <FriendsList friends={friends} />
-      </main>
+      </main> */}
     </React.Fragment>
   );
 }
