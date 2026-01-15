@@ -34,8 +34,8 @@ async function main() {
   // City
   await createIndex("City", "city_coords_2dsphere", "coords");
 
-  // Activity
-  await createIndex("Activity", "activity_coords_2dsphere", "coords");
+  // Place
+  await createIndex("Place", "place_coords_2dsphere", "coords");
 
   // Country
   await createIndex("Country", "country_coords_2dsphere", "coords");

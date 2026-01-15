@@ -98,6 +98,7 @@ const ListThree = () => {
 import { useUser } from "./providers/UserProvider";
 import { Avatar } from "./component/common/Avatar";
 import { useUsers } from "./_hooks/useUsers";
+import { signOut } from "next-auth/react";
 
 const UserList = () => {
   const { data: users, isLoading } = useUsers();
@@ -178,12 +179,12 @@ export default function Home() {
           </Link>
 
           {user ? (
-            <Link
-              href={`/auth/signout`}
+            <div
+              onClick={() => signOut({ callbackUrl: "/login" })}
               className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
             >
               logout
-            </Link>
+            </div>
           ) : (
             <Link
               href="/signin"
