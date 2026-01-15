@@ -113,16 +113,36 @@ const ListThree = () => {
     </div>
   );
 };
+import { useUser } from "./providers/UserProvider";
+import { Avatar } from "./component/common/Avatar";
 
 export default function Home() {
+  const user = useUser();
+
   return (
     <div>
       <HeaderWrapper
-        rightComponent={<WeatherWidget />}
+        rightComponent={
+          user ? (
+            <Link href={`/profile/${user.id}`}>
+              <Avatar
+                image={user.avatarUrl ?? undefined}
+                name={user.name ?? ""}
+                size={40}
+              />
+            </Link>
+          ) : (
+            <WeatherWidget />
+          )
+        }
         className="sticky top-0 left-0 right-0 z-50"
       >
-        <p className="text-md text-secondary capitalize">Explore</p>
-        <h1 className="text-4xl font-bold capitalize mb-6">Bangkok</h1>
+        <p className="text-md text-secondary capitalize">
+          {user ? `Hello, ${user.name?.split(" ")[0]}` : "Explore"}
+        </p>
+        <h1 className="text-4xl font-bold capitalize mb-6">
+          {user?.currentCity?.name ?? "Bangkok"}
+        </h1>
         <Input placeholder="Search destination" type="text" />
       </HeaderWrapper>
       <main className="p-4 overflow-y-scroll h-[calc(100vh-10rem)]">
@@ -141,12 +161,23 @@ export default function Home() {
             Update travel history
           </Link>
 
-          <Link
-            href="/signin"
-            className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
-          >
-            signin
-          </Link>
+          {!user && (
+            <Link
+              href="/signin"
+              className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
+            >
+              signin
+            </Link>
+          )}
+
+          {user && (
+            <Link
+              href={`/profile/${user.id}`}
+              className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
+            >
+              View Profile
+            </Link>
+          )}
         </div>
         <ListOne />
         <ListTwo />
