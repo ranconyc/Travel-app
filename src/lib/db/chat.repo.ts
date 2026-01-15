@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function findUserChats(userId: string) {
   return prisma.chat.findMany({
@@ -58,7 +59,51 @@ export async function findUserChats(userId: string) {
   });
 }
 
-export async function findChatById(chatId: string) {
+// Type for chat with all related data
+export type ChatWithMembers = Prisma.ChatGetPayload<{
+  include: {
+    members: {
+      include: {
+        user: {
+          select: {
+            id: true;
+            name: true;
+            avatarUrl: true;
+            profile: {
+              select: {
+                firstName: true;
+                lastName: true;
+              };
+            };
+            media: true;
+          };
+        };
+      };
+    };
+    messages: {
+      include: {
+        sender: {
+          select: {
+            id: true;
+            name: true;
+            avatarUrl: true;
+            profile: {
+              select: {
+                firstName: true;
+                lastName: true;
+              };
+            };
+            media: true;
+          };
+        };
+      };
+    };
+  };
+}>;
+
+export async function findChatById(
+  chatId: string
+): Promise<ChatWithMembers | null> {
   return prisma.chat.findUnique({
     where: { id: chatId },
     include: {

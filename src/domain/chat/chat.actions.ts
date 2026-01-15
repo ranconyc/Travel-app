@@ -9,6 +9,7 @@ import {
   findOrCreatePrivateChat,
   findUserChats,
   markMessagesAsRead as markReadRepo,
+  type ChatWithMembers,
 } from "@/lib/db/chat.repo";
 import { getFriends } from "@/lib/db/friendship.repo";
 
@@ -40,7 +41,7 @@ export async function getUserChats() {
 /**
  * Get a specific chat by ID with all messages
  */
-export async function getChatById(chatId: string) {
+export async function getChatById(chatId: string): Promise<ChatWithMembers> {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     throw new Error("Unauthorized");
