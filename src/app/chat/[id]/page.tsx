@@ -69,12 +69,12 @@ export default async function ChatPage({ params }: Props) {
   return (
     <div className="flex flex-col h-screen">
       {/* <ChatHeader chatName={chatName} chatImage={chatImage} /> */}
-      <MessageList
+      {/* <MessageList
         messages={chat.messages}
         currentUserId={session.user.id}
         chatId={id}
       />
-      <MessageInput chatId={id} />
+      <MessageInput chatId={id} /> */}
     </div>
   );
 }
