@@ -97,7 +97,7 @@ const saveInterestsSchema = z.object({
 export type SaveInterestsFormValues = z.infer<typeof saveInterestsSchema>;
 
 export type SaveInterestsResult =
-  | { success: true }
+  | { success: true; userId: string }
   | {
       success: false;
       error: string;
@@ -133,7 +133,7 @@ export async function saveInterests(
 
   try {
     await saveUserInterests(session.user.id, parsed.data);
-    return { success: true };
+    return { success: true, userId: session.user.id };
   } catch (error) {
     console.error("saveInterests action error:", error);
     return {

@@ -19,7 +19,7 @@ import LanguagesSectionShell from "./sections/LanguagesSection/LanguagesSectionS
 import BirthdaySectionShell from "./sections/BirthdaySection/BirthdaySectionShell";
 import AvatarSectionShell from "./sections/AvatarSection/AvatarSectionShell";
 
-import { useProfileDraft } from "@/app/hooks/useProfileDraft";
+import { useProfileDraft } from "@/app/_hooks/useProfileDraft";
 import type { User as DomainUser } from "@/domain/user/user.schema";
 import type { Gender } from "@/domain/user/user.schema";
 

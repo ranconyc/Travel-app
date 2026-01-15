@@ -16,7 +16,7 @@ export async function signupAction(values: SignupValues) {
     };
   }
 
-  const { email, password } = validatedFields.data;
+  const { email, password, name } = validatedFields.data;
 
   try {
     // 2. Check if user already exists
@@ -35,6 +35,7 @@ export async function signupAction(values: SignupValues) {
     // 4. Create the user
     await createUser({
       email,
+      name,
       passwordHash: hashedPassword,
       role: "USER",
     });

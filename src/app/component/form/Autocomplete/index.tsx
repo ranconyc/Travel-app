@@ -3,11 +3,11 @@
 import React, { useEffect, useRef, useState, forwardRef } from "react";
 import ErrorMessage from "../ErrorMessage";
 import { highlightMatch } from "./highlightMatch";
-import { useAutocompleteValue } from "@/app/hooks/autocomplete/useAutocompleteValue";
-import { useAutocompleteKeyboardNavigation } from "@/app/hooks/autocomplete/useAutocompleteKeyboard";
-import { useClickOutside } from "@/app/hooks/useClickOutside";
-import { useAutocompleteRemote } from "@/app/hooks/autocomplete/useAutocompleteRemote";
-import { useAutocompleteOptions } from "@/app/hooks/autocomplete/useAutocompleteOptions";
+import { useAutocompleteValue } from "@/app/_hooks/autocomplete/useAutocompleteValue";
+import { useAutocompleteKeyboardNavigation } from "@/app/_hooks/autocomplete/useAutocompleteKeyboard";
+import { useClickOutside } from "@/app/_hooks/useClickOutside";
+import { useAutocompleteRemote } from "@/app/_hooks/autocomplete/useAutocompleteRemote";
+import { useAutocompleteOptions } from "@/app/_hooks/autocomplete/useAutocompleteOptions";
 import Button from "../../common/Button";
 import { X } from "lucide-react";
 
@@ -98,15 +98,13 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     const [open, setOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
 
-   
     // 3) remote options via hook
     const [hasTyped, setHasTyped] = useState(false);
-    const effectiveLoadOptions =
-  enableRemoteOnType
-    ? hasTyped
-      ? loadOptions
-      : undefined   // block remote until user types
-    : loadOptions;  // old behavior when the prop is false
+    const effectiveLoadOptions = enableRemoteOnType
+      ? hasTyped
+        ? loadOptions
+        : undefined // block remote until user types
+      : loadOptions; // old behavior when the prop is false
 
     const { remote, loading, err, skipNextFetch, resetRemote } =
       useAutocompleteRemote<AutoOption>({
@@ -149,7 +147,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
 
     // 7) query setter used by typing
     const setQ = (val: string) => {
-       if (!hasTyped) setHasTyped(true);
+      if (!hasTyped) setHasTyped(true);
       setInnerValue(val);
       onQueryChange?.(val);
     };

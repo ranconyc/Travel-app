@@ -1,47 +1,17 @@
-import {
-  TreePalm,
-  Compass,
-  Activity,
-  Binoculars,
-  CableCar,
-} from "lucide-react";
+import * as Icons from "lucide-react";
 import SelectionStep from "../SelectionStep";
+import travelStylesData from "@/data/travelStyles.json";
 
-const travelStyles: {
-  icon: React.ComponentType<{ size: number }>;
+interface StyleData {
+  icon: string;
   label: string;
   description: string;
-}[] = [
-  {
-    icon: TreePalm,
-    label: "Relaxed",
-    description: "You're all about calm vibes no rush",
-  },
-  {
-    icon: Compass,
-    label: "Easygoing",
-    description:
-      "You prefer slow days, wandering around, and enjoying things as they come",
-  },
-  {
-    icon: Activity,
-    label: "Balanced Traveler",
-    description:
-      "A bit of both adventure with time to relax and enjoy the moment.",
-  },
-  {
-    icon: Binoculars,
-    label: "Active Explorer",
-    description:
-      "Always on the move sightseeing, discovering hidden gems, making every day count.",
-  },
-  {
-    icon: CableCar,
-    label: "Adventurous",
-    description:
-      "You love pushing limits hiking, exploring, saying yes to everything.",
-  },
-];
+}
+
+const travelStyles = (travelStylesData as StyleData[]).map((item) => ({
+  ...item,
+  icon: (Icons as any)[item.icon] || Icons.Compass,
+}));
 
 // STEP THREE
 export default function StepThree() {

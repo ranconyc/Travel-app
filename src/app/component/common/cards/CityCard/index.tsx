@@ -9,7 +9,7 @@ import {
 } from "@/app/_utils/geo";
 import BaseCard from "../BaseCard";
 import DistanceBadge from "../../DistanceBadge";
-import useStorageState from "@/app/hooks/useStorageState";
+import useStorageState from "@/app/_hooks/useStorageState";
 import { useLocationStore } from "@/store/locationStore";
 
 // Cache entry type

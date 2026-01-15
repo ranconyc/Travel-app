@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 import { useFormContext, useController } from "react-hook-form";
 import occupationsData from "@/data/occupations.json";
 import { Autocomplete } from "@/app/component/form/Autocomplete";
-import { useLazyLoad } from "@/app/hooks/useLazyLoad";
+import { useLazyLoad } from "@/app/_hooks/useLazyLoad";
 
 type FormValues = {
   occupation: string;
@@ -19,10 +19,12 @@ function OccupationSectionClient() {
   });
 
   // Use lazy loading hook for occupations data
-  const { sectionRef, data: occupationsData } = useLazyLoad<string[]>(() => 
-    import('@/data/occupations.json').then(module => module.default.filter(Boolean))
+  const { sectionRef, data: occupationsData } = useLazyLoad<string[]>(() =>
+    import("@/data/occupations.json").then((module) =>
+      module.default.filter(Boolean)
+    )
   );
-  
+
   // Options are the filtered occupations
   const options = occupationsData || [];
 

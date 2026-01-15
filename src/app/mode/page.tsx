@@ -48,29 +48,34 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-export const Input = ({
-  label,
-  error,
-  inputId,
-  className = "",
-  ...props
-}: InputProps) => {
-  const base =
-    "bg-surface text-app-text px-4 h-11 rounded-md font-medium transition-all active:scale-95 disabled:opacity-50 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed transition-colors transition-300";
+import React, { forwardRef } from "react";
 
-  return (
-    <div className="flex flex-col gap-2">
-      {label && (
-        <label htmlFor={inputId} className="text-sm capitalize">
-          {label}
-        </label>
-      )}
-      <input className={`${base} ${className}`} id={inputId} {...props} />
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, inputId, className = "", ...props }, ref) => {
+    const base =
+      "bg-surface text-app-text px-4 h-11 rounded-md font-medium transition-all active:scale-95 disabled:opacity-50 cursor-pointer hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-brand/50 active:scale-95 disabled:bg-surface  disabled:cursor-not-allowed transition-colors transition-300";
 
-      {error && <span className="text-xs text-red-500 px-1">{error}</span>}
-    </div>
-  );
-};
+    return (
+      <div className="flex flex-col gap-2 w-full">
+        {label && (
+          <label htmlFor={inputId} className="text-sm capitalize">
+            {label}
+          </label>
+        )}
+        <input
+          className={`${base} ${className}`}
+          id={inputId}
+          ref={ref}
+          {...props}
+        />
+
+        {error && <span className="text-xs text-red-500 px-1">{error}</span>}
+      </div>
+    );
+  }
+);
+
+Input.displayName = "Input";
 
 //change name to SelectionCard
 export const SelectionCard = ({

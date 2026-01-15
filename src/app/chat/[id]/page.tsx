@@ -8,8 +8,8 @@ import {
 } from "@/domain/chat/chat.utils";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { MessageList } from "./MessageList";
-import { MessageInput } from "./MessageInput";
+import { MessageList } from "../_components/MessageList";
+import { MessageInput } from "../_components/MessageInput";
 import { redirect } from "next/navigation";
 
 type Props = {

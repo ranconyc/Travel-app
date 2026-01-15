@@ -294,12 +294,14 @@ export async function findUserByEmail(email: string) {
 
 export async function createUser(data: {
   email: string;
+  name: string;
   passwordHash: string;
   role?: "USER" | "ADMIN";
 }) {
   return prisma.user.create({
     data: {
       email: data.email,
+      name: data.name,
       passwordHash: data.passwordHash,
       role: data.role || "USER",
     },

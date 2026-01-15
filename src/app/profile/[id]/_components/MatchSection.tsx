@@ -3,7 +3,7 @@
 import { User } from "@/domain/user/user.schema";
 import { ProfileUser } from "@/types/user";
 import Button from "@/app/component/common/Button";
-import { useFriendshipStatus } from "@/app/hooks/useFriendship";
+import { useFriendshipStatus } from "@/app/_hooks/useFriendship";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   acceptFriendRequestAction,

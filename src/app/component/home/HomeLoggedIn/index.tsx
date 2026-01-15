@@ -1,7 +1,7 @@
 "use client";
 
 import { Place } from "@/domain/place/place.schema";
-import { useGeo } from "@/app/hooks/useGeo";
+import { useGeo } from "@/app/_hooks/useGeo";
 
 import { City } from "@/domain/city/city.schema";
 import { User } from "@/domain/user/user.schema";

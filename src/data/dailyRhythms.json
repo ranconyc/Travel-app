@@ -1,0 +1,27 @@
+[
+  {
+    "icon": "Sunrise",
+    "label": "Early Riser",
+    "description": "Up with the sun"
+  },
+  {
+    "icon": "Sun",
+    "label": "Morning Person",
+    "description": "Gets going early"
+  },
+  {
+    "icon": "SunMoon",
+    "label": "Flexible",
+    "description": "Goes with the flow"
+  },
+  {
+    "icon": "Sunset",
+    "label": "Evening Person",
+    "description": "Energized after dark"
+  },
+  {
+    "icon": "Moon",
+    "label": "Night Owl",
+    "description": "Thrives at night"
+  }
+]
