@@ -56,7 +56,6 @@ export const CitySchema = z.object({
 
   usersHomeBase: z.array(z.any()).default([]),
   usersCurrentCity: z.array(z.any()).default([]),
-  tripStops: z.array(z.any()).default([]),
 
   // CMS flags
   autoCreated: z.boolean().default(false),

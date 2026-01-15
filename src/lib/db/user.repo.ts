@@ -21,13 +21,6 @@ export type UserWithRelations = Prisma.UserGetPayload<{
         country: true;
       };
     };
-    trips: {
-      select: {
-        startDate: true;
-        endDate: true;
-        id: true;
-      };
-    };
   };
 }>;
 
@@ -52,13 +45,6 @@ export async function getUserById(
         currentCity: {
           include: {
             country: true,
-          },
-        },
-        trips: {
-          select: {
-            startDate: true,
-            endDate: true,
-            id: true,
           },
         },
       },

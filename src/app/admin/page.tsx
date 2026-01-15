@@ -84,7 +84,6 @@ export default async function AdminDashboardPage() {
             )}
           </div>
         </div>
-
         {/* Latest Users */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100">

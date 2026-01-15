@@ -8,7 +8,6 @@ import {
   searchCities,
   searchCountries,
   searchActivities,
-  searchTrips,
 } from "@/lib/db/search.repo";
 import { SearchResponse, SearchResult } from "@/types/search";
 
@@ -16,7 +15,6 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("q")?.trim() || "";
-    const userId = searchParams.get("userId") || undefined;
 
     // Return empty results for queries that are too short
     if (!query || query.length < 2) {
@@ -27,20 +25,14 @@ export async function GET(req: NextRequest) {
     }
 
     // Search across all entity types in parallel
-    const [cities, countries, activities, trips] = await Promise.all([
+    const [cities, countries, activities] = await Promise.all([
       searchCities(query),
       searchCountries(query),
       searchActivities(query),
-      searchTrips(query, userId),
     ]);
 
-    // Combine results with cities first, then countries, activities, and trips
-    const allResults: SearchResult[] = [
-      ...cities,
-      ...countries,
-      ...activities,
-      ...trips,
-    ];
+    // Combine results with cities first, then countries, and activities
+    const allResults: SearchResult[] = [...cities, ...countries, ...activities];
 
     // Limit total results to prevent overwhelming the UI
     const MAX_TOTAL_RESULTS = 15;

@@ -2,7 +2,7 @@
  * Search feature type definitions
  */
 
-export type SearchResultType = "city" | "country" | "activity" | "trip";
+export type SearchResultType = "city" | "country" | "activity";
 
 export interface SearchResult {
   id: string; // Unique identifier for the autocomplete
@@ -13,7 +13,7 @@ export interface SearchResult {
   meta?: {
     countryName?: string;
     cityName?: string;
-    tripType?: string;
+
     activityType?: string;
   } & Record<string, unknown>;
 }

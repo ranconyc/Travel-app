@@ -64,7 +64,6 @@ model User {
   avatarUrl    String? 
   
   /* ---- TRAVELS ---- */
-  trips            Trip[]   @relation("UserTrips")
   visitedCountries String[] @default([])
 
   /* ---- FRIENDSHIP ---- */
@@ -279,7 +278,6 @@ model City {
   // User Relations
   usersHomeBase    UserProfile[] @relation("HomeBase")
   usersCurrentCity User[]        @relation("CurrentLocation")
-  tripStops        TripStop[]
 
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
@@ -354,92 +352,13 @@ model Place {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Trip Relations
-  tripActivities TripActivity[]
-
   @@index([cityRefId])
   @@index([countryRefId])
   @@index([type])
   @@index([coords]) // Geo index for "places near me"
 }
 
-/**
- * ------------------------- TRIP -------------------------
- */
-enum TripType {
-  VISITED
-  WISHLIST
-  PLANNED
-}
 
-enum TripStatus {
-  DRAFT
-  ACTIVE
-  COMPLETED
-  PUBLISHED
-}
-
-model Trip {
-  id       String     @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String     @db.ObjectId
-  type     TripType
-  status   TripStatus @default(DRAFT)
-
-  name     String?
-  imageUrl String?
-
-  startDate DateTime?
-  endDate   DateTime?
-
-  user  User       @relation("UserTrips", fields: [userId], references: [id], onDelete: Cascade)
-  stops TripStop[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId, type])
-}
-
-model TripStop {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  tripId String @db.ObjectId
-  cityId String @db.ObjectId
-
-  arrivalDate   DateTime?
-  departureDate DateTime?
-  title         String?
-  notes         String?
-
-  trip     Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  city     City            @relation(fields: [cityId], references: [id], onDelete: Cascade)
-  
-  activities TripActivity[] // Could rename to "places" in relation, but model name is historical
-
-  @@index([tripId])
-  @@index([cityId])
-}
-
-model TripActivity {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  tripStopId String   @db.ObjectId
-  tripStop   TripStop @relation(fields: [tripStopId], references: [id], onDelete: Cascade)
-
-  // Link to the Place model
-  placeId    String? @db.ObjectId
-  place      Place?  @relation(fields: [placeId], references: [id])
-
-  name      String
-  date      DateTime
-  startTime String?
-  notes     String?
-  duration  String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([tripStopId])
-}
 
 /**
  * ------------------------- FRIENDSHIP -------------------------

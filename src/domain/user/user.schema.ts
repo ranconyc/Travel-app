@@ -7,14 +7,6 @@ export type Gender = z.infer<typeof GenderEnum>;
 export const RoleEnum = z.enum(["USER", "ADMIN"]);
 export type Role = z.infer<typeof RoleEnum>;
 
-export const TripTypeEnum = z.enum(["VISITED", "WISHLIST", "PLANNED"]);
-export const TripStatusEnum = z.enum([
-  "DRAFT",
-  "ACTIVE",
-  "COMPLETED",
-  "PUBLISHED",
-]);
-
 // --- Helper / Nested Schemas ---
 
 /** Simplified City schema for relations */
@@ -51,27 +43,7 @@ export const userProfileSchema = z.object({
   updatedAt: z.date(),
 });
 
-/** Trip schema */
-export const tripSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  type: TripTypeEnum,
-  status: TripStatusEnum,
-  name: z.string().nullable(),
-  imageUrl: z.string().url().nullable(),
-  startDate: z.date().nullable(),
-  endDate: z.date().nullable(),
-  createdAt: z.date(),
-});
-
 // --- Main User Schema ---
-
-/** Partial Trip schema for shallow relations */
-export const partialTripSchema = z.object({
-  id: z.string(),
-  startDate: z.date().nullable(),
-  endDate: z.date().nullable(),
-});
 
 export const userSchema = z.object({
   // Identifiers
@@ -96,7 +68,6 @@ export const userSchema = z.object({
   media: z.array(z.any()).optional(), // Will be Media type from external schema
 
   // Travels
-  trips: z.array(z.union([tripSchema, partialTripSchema])).optional(),
   visitedCountries: z.array(z.string()).default([]),
 
   // Timestamps
@@ -108,4 +79,3 @@ export const userSchema = z.object({
 export type User = z.infer<typeof userSchema>;
 export type UserProfile = z.infer<typeof userProfileSchema>;
 export type UserMedia = any;
-export type Trip = z.infer<typeof tripSchema>;

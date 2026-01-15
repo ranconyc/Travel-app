@@ -103,48 +103,6 @@ export async function searchActivities(query: string): Promise<SearchResult[]> {
 }
 
 /**
- * Search trips by name (user-specific)
- */
-export async function searchTrips(
-  query: string,
-  userId?: string
-): Promise<SearchResult[]> {
-  const trimmed = query.trim();
-  if (!trimmed || trimmed.length < 2) return [];
-  if (!userId) return []; // Only search user's own trips
-
-  const trips = await prisma.trip.findMany({
-    where: {
-      userId,
-      name: { contains: trimmed, mode: "insensitive" },
-    },
-    include: {
-      stops: {
-        include: {
-          city: { select: { name: true } },
-        },
-        take: 1, // Just get first stop for display
-      },
-    },
-    take: MAX_RESULTS_PER_TYPE,
-  });
-
-  return trips.map((trip) => ({
-    id: `trip-${trip.id}`,
-    label: trip.name || "Unnamed Trip",
-    subtitle: trip.stops[0]?.city?.name
-      ? `Starts in ${trip.stops[0].city.name}`
-      : trip.type,
-    type: "trip" as const,
-    entityId: trip.id,
-    meta: {
-      tripType: trip.type,
-      status: trip.status,
-    },
-  }));
-}
-
-/**
  * Save a search event for analytics
  */
 export async function saveSearchEvent(

@@ -56,43 +56,44 @@ export async function getDashboardStats() {
 export async function getTopCities() {
   await checkAdminAuth();
 
-  // Aggregate user visits by city via TripStops belonging to VISITED trips
-  const topCities = await prisma.tripStop.groupBy({
-    by: ["cityId"],
+  // Aggregate user current locations by city
+  const topCities = await prisma.user.groupBy({
+    by: ["currentCityId"],
     where: {
-      trip: {
-        type: "VISITED",
-      },
+      currentCityId: { not: null },
     },
     _count: {
-      tripId: true,
+      id: true,
     },
     orderBy: {
       _count: {
-        tripId: "desc",
+        id: "desc",
       },
     },
     take: 5,
   });
 
-  // Fetch city names
+  // Fetch city details
   const citiesWithDetails = await Promise.all(
     topCities.map(async (item) => {
+      if (!item.currentCityId) return null;
       const city = await prisma.city.findUnique({
-        where: { id: item.cityId },
+        where: { id: item.currentCityId },
         select: { name: true, country: { select: { name: true, code: true } } },
       });
       return {
-        ...item,
+        cityId: item.currentCityId,
         name: city?.name || "Unknown",
         country: city?.country?.name || "",
         countryCode: city?.country?.code || "",
-        visitors: item._count.tripId,
+        visitors: item._count.id,
       };
     })
   );
 
-  return citiesWithDetails;
+  return citiesWithDetails.filter(
+    (c): c is NonNullable<typeof c> => c !== null
+  );
 }
 
 type LatestUser = {

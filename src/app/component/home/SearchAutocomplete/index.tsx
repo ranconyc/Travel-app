@@ -101,7 +101,6 @@ export default function SearchAutocomplete({
         city: `/city/${option.entityId}`,
         country: `/country/${option.entityId}`,
         activity: `/activity/${option.entityId}`,
-        trip: `/trip/${option.entityId}`,
       };
 
       const route = routes[option.type];
