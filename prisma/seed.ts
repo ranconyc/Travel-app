@@ -1,4 +1,4 @@
-import { prisma } from "../src/lib/db/prisma";
+import { prisma } from "@/lib/db/prisma";
 import cities from "../src/data/cities.json" assert { type: "json" };
 
 async function main() {

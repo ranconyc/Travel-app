@@ -5,21 +5,117 @@
 
 import { prisma } from "@/lib/db/prisma";
 
+export type AdminDashboardStats = {
+  totalUsers: number;
+  activeUsers: number;
+  totalCities: number;
+  totalCountries: number;
+};
+
+export type TopCity = {
+  cityId: string;
+  name: string;
+  country: string;
+  countryCode: string;
+  visitors: number;
+};
+
+export type LatestUser = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  avatarUrl: string | null;
+  createdAt: Date;
+};
+
 /**
  * Get admin dashboard statistics
  */
-export async function getAdminStats() {
-  const [totalUsers, totalCountries, totalCities] = await Promise.all([
-    prisma.user.count(),
-    prisma.country.count(),
-    prisma.city.count(),
-  ]);
+export async function getAdminStats(): Promise<AdminDashboardStats> {
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const [totalUsers, totalCountries, totalCities, activeUsers] =
+    await Promise.all([
+      prisma.user.count(),
+      prisma.country.count(),
+      prisma.city.count(),
+      prisma.user.count({
+        where: {
+          updatedAt: {
+            gte: sevenDaysAgo,
+          },
+        },
+      }),
+    ]);
 
   return {
     totalUsers,
     totalCountries,
     totalCities,
+    activeUsers,
   };
+}
+
+/**
+ * Get top trending cities based on user current locations
+ */
+export async function getTopTrendingCities(limit = 5): Promise<TopCity[]> {
+  // Aggregate user current locations by city
+  const topCities = await prisma.user.groupBy({
+    by: ["currentCityId"],
+    where: {
+      currentCityId: { not: null },
+    },
+    _count: {
+      id: true,
+    },
+    orderBy: {
+      _count: {
+        id: "desc",
+      },
+    },
+    take: limit,
+  });
+
+  // Fetch city details
+  const citiesWithDetails = await Promise.all(
+    topCities.map(async (item) => {
+      if (!item.currentCityId) return null;
+      const city = await prisma.city.findUnique({
+        where: { id: item.currentCityId },
+        select: { name: true, country: { select: { name: true, code: true } } },
+      });
+      return {
+        cityId: item.currentCityId,
+        name: city?.name || "Unknown",
+        country: city?.country?.name || "",
+        countryCode: city?.country?.code || "",
+        visitors: item._count.id,
+      };
+    })
+  );
+
+  return citiesWithDetails.filter(
+    (c): c is NonNullable<typeof c> => c !== null
+  );
+}
+
+/**
+ * Get latest registered users
+ */
+export async function findLatestUsers(limit = 5): Promise<LatestUser[]> {
+  return prisma.user.findMany({
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      avatarUrl: true,
+    },
+  });
 }
 
 /**

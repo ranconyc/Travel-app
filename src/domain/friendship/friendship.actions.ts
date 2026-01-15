@@ -1,6 +1,5 @@
 "use server";
 
-import { prisma } from "@/lib/db/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
@@ -8,6 +7,7 @@ import {
   cancelFriendRequest,
   denyFriendRequest,
   findFriendshipBetween,
+  getFriends,
   removeFriend,
   sendFriendRequest,
 } from "@/lib/db/friendship.repo";
@@ -81,79 +81,8 @@ export async function getTravelPartnersAction() {
     return [];
   }
 
-  const userId = session.user.id;
-
   try {
-    const friendships = await prisma.friendship.findMany({
-      where: {
-        OR: [{ requesterId: userId }, { addresseeId: userId }],
-        status: "ACCEPTED",
-      },
-      include: {
-        requester: {
-          select: {
-            id: true,
-            name: true,
-            avatarUrl: true,
-            profile: {
-              select: {
-                firstName: true,
-                lastName: true,
-                homeBaseCity: {
-                  select: {
-                    name: true,
-                    country: { select: { name: true } },
-                  },
-                },
-              },
-            },
-            media: {
-              where: { category: "AVATAR" },
-              take: 1,
-            },
-          },
-        },
-        addressee: {
-          select: {
-            id: true,
-            name: true,
-            avatarUrl: true,
-            profile: {
-              select: {
-                firstName: true,
-                lastName: true,
-                homeBaseCity: {
-                  select: {
-                    name: true,
-                    country: { select: { name: true } },
-                  },
-                },
-              },
-            },
-            media: {
-              where: { category: "AVATAR" },
-              take: 1,
-            },
-          },
-        },
-      },
-    });
-
-    return friendships.map((f) => {
-      const isRequester = f.requesterId === userId;
-      const friend = isRequester ? f.addressee : f.requester;
-      const mainImage =
-        friend.media?.find((img) => img.category === "AVATAR")?.url ||
-        friend.avatarUrl;
-
-      return {
-        id: friend.id,
-        firstName: friend.profile?.firstName || "",
-        lastName: friend.profile?.lastName || "",
-        profilePicture: mainImage,
-        homeBaseCity: friend.profile?.homeBaseCity,
-      };
-    });
+    return await getFriends(session.user.id);
   } catch (error) {
     console.error("getTravelPartnersAction error:", error);
     return [];

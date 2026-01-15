@@ -2,13 +2,16 @@
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 import {
   completeProfileSchema,
   type CompleteProfileFormValues,
 } from "@/domain/user/completeProfile.schema";
-import { completeProfile } from "@/lib/db/user.repo";
+import {
+  completeProfile,
+  deleteUserAccount,
+  saveUserInterests,
+} from "@/lib/db/user.repo";
 import { z } from "zod";
 
 /* -------------------------------------------------------------------------- */
@@ -72,22 +75,7 @@ export async function deleteAccount() {
   const userId = session.user.id;
 
   try {
-    await prisma.chat.updateMany({
-      where: {
-        lastMessage: {
-          senderId: userId,
-        },
-      },
-      data: {
-        lastMessageId: null,
-      },
-    });
-
-    await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    });
+    await deleteUserAccount(userId);
   } catch (error) {
     console.error("Failed to delete user account:", error);
     throw new Error("Failed to delete account");
@@ -99,8 +87,6 @@ export async function deleteAccount() {
 /* -------------------------------------------------------------------------- */
 /*                            TRAVEL PREFERENCES                              */
 /* -------------------------------------------------------------------------- */
-
-import { saveUserInterests } from "@/lib/db/user.repo";
 
 const saveInterestsSchema = z.object({
   interests: z.array(z.string()).min(1, "Please select at least one interest"),

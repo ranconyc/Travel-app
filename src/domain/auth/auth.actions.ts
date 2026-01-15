@@ -1,8 +1,8 @@
 "use server";
 
-import { prisma } from "@/lib/db/prisma";
 import bcrypt from "bcrypt";
 import { signupSchema, SignupValues } from "./signup.schema";
+import { createUser, findUserByEmail } from "@/lib/db/user.repo";
 
 export async function signupAction(values: SignupValues) {
   // 1. Validate the input
@@ -20,9 +20,7 @@ export async function signupAction(values: SignupValues) {
 
   try {
     // 2. Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await findUserByEmail(email);
 
     if (existingUser) {
       return {
@@ -35,13 +33,10 @@ export async function signupAction(values: SignupValues) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // 4. Create the user
-    await prisma.user.create({
-      data: {
-        email,
-        passwordHash: hashedPassword,
-        role: "USER",
-        // Initialize other fields with defaults if necessary
-      },
+    await createUser({
+      email,
+      passwordHash: hashedPassword,
+      role: "USER",
     });
 
     return {

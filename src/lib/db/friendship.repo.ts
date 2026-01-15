@@ -226,23 +226,68 @@ export async function getFriends(userId: string) {
     },
     include: {
       requester: {
-        include: {
-          profile: true,
-          media: { where: { category: "AVATAR" }, take: 1 },
+        select: {
+          id: true,
+          name: true,
+          avatarUrl: true,
+          profile: {
+            select: {
+              firstName: true,
+              lastName: true,
+              homeBaseCity: {
+                select: {
+                  name: true,
+                  country: { select: { name: true } },
+                },
+              },
+            },
+          },
+          media: {
+            where: { category: "AVATAR" },
+            take: 1,
+          },
         },
       },
       addressee: {
-        include: {
-          profile: true,
-          media: { where: { category: "AVATAR" }, take: 1 },
+        select: {
+          id: true,
+          name: true,
+          avatarUrl: true,
+          profile: {
+            select: {
+              firstName: true,
+              lastName: true,
+              homeBaseCity: {
+                select: {
+                  name: true,
+                  country: { select: { name: true } },
+                },
+              },
+            },
+          },
+          media: {
+            where: { category: "AVATAR" },
+            take: 1,
+          },
         },
       },
     },
   });
 
-  return rows.map((row) =>
-    row.requesterId === userId ? row.addressee : row.requester
-  );
+  return rows.map((row) => {
+    const friend = row.requesterId === userId ? row.addressee : row.requester;
+    const mainImage =
+      friend.media?.find((img) => img.category === "AVATAR")?.url ||
+      friend.avatarUrl;
+
+    return {
+      id: friend.id,
+      firstName: friend.profile?.firstName || "",
+      lastName: friend.profile?.lastName || "",
+      profilePicture: mainImage,
+      homeBaseCity: friend.profile?.homeBaseCity,
+    };
+  });
 }
 
 /**

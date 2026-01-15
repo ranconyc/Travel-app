@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+import { prisma } from "@/lib/db/prisma";
 import type { Prisma } from "@prisma/client";
 import type { Coordinates, NearbyUserResult } from "@/types/user";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
@@ -258,4 +258,58 @@ export async function saveUserInterests(
     console.error("saveUserInterests error:", error);
     throw new Error("Failed to save user interests");
   }
+}
+export async function deleteUserAccount(userId: string): Promise<void> {
+  if (!userId) throw new Error("User ID missing");
+
+  try {
+    // 1. Clear lastMessageId in chats where this user sent the last message
+    // (To prevent circular reference errors or FK issues depending on DB setup)
+    await prisma.chat.updateMany({
+      where: {
+        lastMessage: {
+          senderId: userId,
+        },
+      },
+      data: {
+        lastMessageId: null,
+      },
+    });
+
+    // 2. Delete the user (Cascade should handle profile, media, etc. if configured)
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+  } catch (error) {
+    console.error("deleteUserAccount error:", error);
+    throw new Error("Failed to delete user account");
+  }
+}
+
+export async function findUserByEmail(email: string) {
+  return prisma.user.findUnique({ where: { email } });
+}
+
+export async function createUser(data: {
+  email: string;
+  passwordHash: string;
+  role?: "USER" | "ADMIN";
+}) {
+  return prisma.user.create({
+    data: {
+      email: data.email,
+      passwordHash: data.passwordHash,
+      role: data.role || "USER",
+    },
+  });
+}
+
+export async function getUserRole(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+  return user?.role || null;
 }
