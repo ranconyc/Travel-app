@@ -1,8 +1,39 @@
 import { prisma } from "./prisma";
+import { Prisma } from "@prisma/client";
 import type { Coordinates, NearbyUserResult } from "@/types/user";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
-export async function getUserById(id: string) {
+// Type for user with all related data
+export type UserWithRelations = Prisma.UserGetPayload<{
+  include: {
+    profile: {
+      include: {
+        homeBaseCity: {
+          include: {
+            country: true;
+          };
+        };
+      };
+    };
+    media: true;
+    currentCity: {
+      include: {
+        country: true;
+      };
+    };
+    trips: {
+      select: {
+        startDate: true;
+        endDate: true;
+        id: true;
+      };
+    };
+  };
+}>;
+
+export async function getUserById(
+  id: string
+): Promise<UserWithRelations | null> {
   if (!id) return null;
   try {
     return await prisma.user.findUnique({
