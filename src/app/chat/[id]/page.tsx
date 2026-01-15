@@ -66,6 +66,10 @@ export default async function ChatPage({ params }: Props) {
   const chatName = getChatDisplayName(chat, session.user.id);
   const chatImage = getChatDisplayImage(chat, session.user.id);
 
+  if (!chat) {
+    return <div>Chat not found</div>;
+  }
+
   return (
     <div className="flex flex-col h-screen">
       <ChatHeader chatName={chatName} chatImage={chatImage} />
