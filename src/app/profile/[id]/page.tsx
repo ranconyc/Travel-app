@@ -1,12 +1,12 @@
 import { getUserById } from "@/lib/db/user.repo";
-import { User } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { ProfileUser } from "./types";
+
 import { authOptions } from "@/lib/auth";
 import Button from "../../component/common/Button";
 import { Linkedin, ShieldUser, UserRoundPlus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { User } from "../../../domain/user/user.schema";
 
 export default async function Profile({ params }: { params: { id: string } }) {
   const { id } = await params;
@@ -14,7 +14,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
   const loggedUser = (await getUserById(
     session?.user?.id as string
   )) as unknown as User;
-  const profileUser = (await getUserById(id)) as unknown as ProfileUser;
+  const profileUser = (await getUserById(id)) as unknown as User;
 
   if (!profileUser) {
     // you might want a proper 404 here
