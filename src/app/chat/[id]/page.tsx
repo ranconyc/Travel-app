@@ -63,12 +63,12 @@ export default async function ChatPage({ params }: Props) {
     );
   }
 
-  const chatName = getChatDisplayName(chat, session.user.id);
-  const chatImage = getChatDisplayImage(chat, session.user.id);
+  // const chatName = getChatDisplayName(chat, session.user.id);
+  // const chatImage = getChatDisplayImage(chat, session.user.id);
 
   return (
     <div className="flex flex-col h-screen">
-      <ChatHeader chatName={chatName} chatImage={chatImage} />
+      {/* <ChatHeader chatName={chatName} chatImage={chatImage} /> */}
       <MessageList
         messages={chat.messages}
         currentUserId={session.user.id}
