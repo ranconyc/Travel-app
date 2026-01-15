@@ -123,9 +123,9 @@ export default function SignInPage() {
                   {loading ? "Signing In..." : "Login"}
                 </Button>
 
-                <p>
+                {/* <p>
                   <>create an account</>
-                </p>
+                </p> */}
 
                 {/* <button
                   type="button"
