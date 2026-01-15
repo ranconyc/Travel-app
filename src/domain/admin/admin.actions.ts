@@ -95,7 +95,7 @@ export async function getTopCities() {
   return citiesWithDetails;
 }
 
-export async function getLatestUsers() {
+export async function getLatestUsers(): Promise<any[]> {
   await checkAdminAuth();
 
   const users = await prisma.user.findMany({
