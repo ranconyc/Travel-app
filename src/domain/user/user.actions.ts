@@ -8,6 +8,16 @@ import {
   type CompleteProfileFormValues,
 } from "@/domain/user/completeProfile.schema";
 import {
+  saveInterestsSchema,
+  saveTravelSchema,
+  savePersonaSchema,
+  BioInputSchema,
+  type SaveInterestsFormValues,
+  type SaveTravelFormValues,
+  type SavePersonaFormValues,
+  type BioInput,
+} from "@/domain/user/user.schema";
+import {
   completeProfile,
   deleteUserAccount,
   getAllUsers,
@@ -15,7 +25,6 @@ import {
   updateUserProfilePersona,
   updateVisitedCountries,
 } from "@/lib/db/user.repo";
-import { z } from "zod";
 
 /* -------------------------------------------------------------------------- */
 /*                                USER ACTIONS                                */
@@ -91,14 +100,6 @@ export async function deleteAccount() {
 /*                            TRAVEL PREFERENCES                              */
 /* -------------------------------------------------------------------------- */
 
-const saveInterestsSchema = z.object({
-  interests: z.array(z.string()).min(1, "Please select at least one interest"),
-  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
-  travelStyle: z.string().min(1, "Please select a travel style"),
-});
-
-export type SaveInterestsFormValues = z.infer<typeof saveInterestsSchema>;
-
 export type SaveInterestsResult =
   | { success: true; userId: string }
   | {
@@ -149,24 +150,6 @@ export async function saveInterests(
 /* -------------------------------------------------------------------------- */
 /*                               BIO GENERATION                               */
 /* -------------------------------------------------------------------------- */
-
-const BioInputSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  occupation: z.string().min(1, "Occupation is required"),
-  hometown: z.string().min(1, "Hometown is required"),
-  birthday: z.string().min(1, "Birthday is required"),
-  languages: z
-    .array(
-      z.object({
-        code: z.string(),
-        name: z.string(),
-      })
-    )
-    .optional(),
-  gender: z.enum(["male", "female"]).optional(),
-});
-
-type BioInput = z.infer<typeof BioInputSchema>;
 
 function safeAge(birthday: string): number | null {
   const d = new Date(birthday);
@@ -231,12 +214,6 @@ export async function generateBio(input: BioInput) {
 /*                                TRAVEL DATA                                 */
 /* -------------------------------------------------------------------------- */
 
-const saveTravelSchema = z.object({
-  countries: z.array(z.string()).min(1, "Please select at least one country"),
-});
-
-export type SaveTravelFormValues = z.infer<typeof saveTravelSchema>;
-
 export type SaveTravelResult =
   | { success: true; userId: string }
   | {
@@ -284,15 +261,6 @@ export async function saveVisitedCountries(
   }
 }
 
-const savePersonaSchema = z.object({
-  areaPreferences: z.array(z.string()),
-  accommodationTypes: z.array(z.string()),
-  travelRhythm: z.string(),
-  travelStyle: z.string(),
-});
-
-export type SavePersonaFormValues = z.infer<typeof savePersonaSchema>;
-
 export async function saveTravelPersona(
   rawValues: SavePersonaFormValues
 ): Promise<SaveTravelResult> {
@@ -330,5 +298,25 @@ export async function getAllUsersAction() {
   } catch (error) {
     console.error("getAllUsersAction error:", error);
     return { success: false, error: "Failed to fetch users" };
+  }
+}
+
+export async function updateUserRoleAction(
+  userId: string,
+  role: "USER" | "ADMIN"
+) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || (session.user as any).role !== "ADMIN") {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const { updateUserRole } = await import("@/lib/db/user.repo");
+    await updateUserRole(userId, role);
+    return { success: true };
+  } catch (error) {
+    console.error("updateUserRoleAction error:", error);
+    return { success: false, error: "Failed to update role" };
   }
 }

@@ -6,7 +6,13 @@ const languageSchema = z.string().min(2);
  * Gender enum used in the profile.
  * Adjust values if your Prisma enum uses different casing.
  */
-export const GenderEnum = z.enum(["MALE", "FEMALE", "NON_BINARY"]);
+import { GenderEnum } from "./user.schema";
+
+/**
+ * Gender enum used in the profile.
+ * Adjust values if your Prisma enum uses different casing.
+ */
+// export const GenderEnum = z.enum(["MALE", "FEMALE", "NON_BINARY"]); // Use imported
 
 /**
  * Form version allows also "" (no selection yet).

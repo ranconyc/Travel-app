@@ -350,3 +350,11 @@ export async function getUserRole(userId: string) {
   });
   return user?.role || null;
 }
+
+export async function updateUserRole(userId: string, role: "USER" | "ADMIN") {
+  if (!userId) throw new Error("User ID missing");
+  return prisma.user.update({
+    where: { id: userId },
+    data: { role },
+  });
+}

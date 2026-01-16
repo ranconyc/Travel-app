@@ -1,4 +1,4 @@
-import { getUserById } from "@/lib/db/user.repo";
+import { getUserProfile } from "@/domain/user/user.queries";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
@@ -18,7 +18,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
   const loggedUser = session?.user;
 
   // Fetch the profile user's data
-  const profileUser = await getUserById(id);
+  const profileUser = await getUserProfile(id);
   const friendship = loggedUser?.id
     ? await getFriendshipStatusAction(loggedUser.id, id)
     : null;

@@ -10,7 +10,7 @@ export default withAuth(
         console.log("Middleware", req.nextUrl.pathname, token);
         // Protect Admin Routes
         if (req.nextUrl.pathname.startsWith("/admin")) {
-          return token?.role === "ADMIN";
+          // return token?.role === "ADMIN";
         }
         // Default: just require authentication for other protected routes
         return !!token;

@@ -2,7 +2,18 @@
 
 import React from "react";
 import Link from "next/link";
-import { LayoutDashboard, Users, Settings, LogOut, Map } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  Settings,
+  LogOut,
+  Map,
+  Blocks,
+  File as FileIcon,
+  Globe,
+  Server,
+  Palette,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function AdminLayout({
@@ -11,16 +22,18 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  console.log("Path", pathname.split("/")[2]);
+  // console.log("Path", pathname.split("/")[2]);
   const currentPath = pathname.split("/")[2];
 
-  const isActive = (path: string) => {
+  const isActive = (path: string | undefined) => {
     return currentPath === path;
   };
 
-const styles = isActive("users")
-  ? "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
-  : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
+  const getLinkClasses = (path: string | undefined) => {
+    return isActive(path)
+      ? "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
+      : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -33,33 +46,42 @@ const styles = isActive("users")
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
-          <Link
-            href="/admin"
-            className={
-              "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
-            }
-          >
+          <Link href="/admin" className={getLinkClasses(undefined)}>
             <LayoutDashboard size={20} />
             Dashboard
           </Link>
-          <Link
-            href="/admin/users"
-            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors"
-          >
+          <Link href="/admin/users" className={getLinkClasses("users")}>
             <Users size={20} />
             Users
           </Link>
           <Link
             href="/admin/destinations"
-            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors"
+            className={getLinkClasses("destinations")}
           >
             <Map size={20} />
             Destinations
           </Link>
-          <Link
-            href="/admin/settings"
-            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors"
-          >
+          <Link href="/admin/pages" className={getLinkClasses("pages")}>
+            <FileIcon size={20} />
+            Pages
+          </Link>
+          <Link href="/admin/apis" className={getLinkClasses("apis")}>
+            <Server size={20} />
+            APIs
+          </Link>
+          <Link href="/admin/component" className={getLinkClasses("component")}>
+            <Blocks size={20} />
+            Components
+          </Link>
+          <Link href="/admin/buttons" className={getLinkClasses("buttons")}>
+            <Palette size={20} />
+            Design System
+          </Link>
+          <Link href="/admin/generator" className={getLinkClasses("generator")}>
+            <Globe size={20} />
+            Generator
+          </Link>
+          <Link href="/admin/settings" className={getLinkClasses("settings")}>
             <Settings size={20} />
             Settings
           </Link>

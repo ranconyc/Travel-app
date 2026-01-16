@@ -20,10 +20,10 @@
   --brand: rgb(1, 167, 120);
   --surface: rgb(255, 255, 255);
   --blur: rgba(161, 165, 173, 0.5);
+  --font-intro: var(--font-inter); /* Fallback */
 }
 
 /* Dark Mode */
-
 .dark {
   --background: rgb(8, 12, 20);
   --foreground: rgb(255, 255, 255);

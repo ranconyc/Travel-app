@@ -6,6 +6,11 @@ import Button from "./component/common/Button";
 import Logo from "./component/common/Logo";
 import Input from "./component/form/Input";
 import Link from "next/link";
+import { useUser } from "./providers/UserProvider";
+import { Avatar } from "./component/common/Avatar";
+import { useUsers } from "./_hooks/useUsers";
+import { signOut } from "next-auth/react";
+import { useCountries } from "./_hooks/useCountries";
 
 interface HeaderWrapperProps {
   backButton?: boolean;
@@ -60,45 +65,61 @@ const AttractionCard = () => {
   );
 };
 
-const ListTwo = () => {
-  return (
-    <div>
-      <div className="my-2 flex items-center justify-between">
-        <h1>Nearby Attractions</h1>
-        <Link href="/attractions" className="text-xs text-secondary">
-          see all
-        </Link>
-      </div>
-      <div className="flex gap-4 overflow-x-scroll">
-        <AttractionCard />
-        <AttractionCard />
-        <AttractionCard />
-      </div>
-    </div>
-  );
-};
+/* -------------------------------------------------------------------------- */
+/*                                COMPONENTS                                  */
+/* -------------------------------------------------------------------------- */
 
-const ListThree = () => {
+const CountryList = () => {
+  const { data: countries, isLoading } = useCountries();
+
+  if (isLoading)
+    return (
+      <div className="animate-pulse h-24 bg-surface rounded-lg w-full"></div>
+    );
+
   return (
     <div>
       <div className="my-2 flex items-center justify-between">
-        <h1>Nearby Attractions</h1>
-        <Link href="/attractions" className="text-xs text-secondary">
+        <h1>Countries</h1>
+        <Link href="/admin/generator" className="text-xs text-secondary">
           see all
         </Link>
       </div>
-      <div className="flex gap-4 overflow-x-scroll">
-        <AttractionCard />
-        <AttractionCard />
-        <AttractionCard />
+      <div className="flex gap-4 overflow-x-scroll pb-4 no-scrollbar">
+        {countries?.map((country: any) => (
+          <Link
+            key={country.id}
+            href={`/countries/${country.countryId}`}
+            className="min-w-[140px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
+          >
+            {country.imageHeroUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={country.imageHeroUrl}
+                alt={country.name}
+                className="w-full h-full object-cover transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-surface-secondary flex items-center justify-center text-secondary font-bold">
+                {country.code}
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+              <span className="text-white font-bold text-sm truncate w-full">
+                {country.name}
+              </span>
+            </div>
+          </Link>
+        ))}
+        {(!countries || countries.length === 0) && (
+          <div className="text-sm text-secondary italic p-4">
+            No countries found.
+          </div>
+        )}
       </div>
     </div>
   );
 };
-import { useUser } from "./providers/UserProvider";
-import { Avatar } from "./component/common/Avatar";
-import { useUsers } from "./_hooks/useUsers";
-import { signOut } from "next-auth/react";
 
 const UserList = () => {
   const { data: users, isLoading } = useUsers();
@@ -132,6 +153,28 @@ const UserList = () => {
     </div>
   );
 };
+
+const ListThree = () => {
+  return (
+    <div>
+      <div className="my-2 flex items-center justify-between">
+        <h1>Nearby Attractions</h1>
+        <Link href="/attractions" className="text-xs text-secondary">
+          see all
+        </Link>
+      </div>
+      <div className="flex gap-4 overflow-x-scroll">
+        <AttractionCard />
+        <AttractionCard />
+        <AttractionCard />
+      </div>
+    </div>
+  );
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                   Page                                     */
+/* -------------------------------------------------------------------------- */
 
 export default function Home() {
   const user = useUser();
@@ -204,7 +247,7 @@ export default function Home() {
           )}
         </div>
         <UserList />
-        <ListTwo />
+        <CountryList />
         <ListThree />
       </main>
     </div>

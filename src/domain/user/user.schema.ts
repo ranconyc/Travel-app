@@ -1,4 +1,9 @@
 import * as z from "zod";
+import { mediaSchema, type Media } from "../media/media.schema";
+
+// --- Validations ---
+
+// --- Action / Form Schemas ---
 
 // --- Enums ---
 export const GenderEnum = z.enum(["MALE", "FEMALE", "NON_BINARY"]);
@@ -65,7 +70,7 @@ export const userSchema = z.object({
 
   // Relations
   profile: userProfileSchema.optional().nullable(),
-  media: z.array(z.any()).optional(), // Will be Media type from external schema
+  media: z.array(mediaSchema).optional(),
 
   // Travels
   visitedCountries: z.array(z.string()).default([]),
@@ -78,4 +83,47 @@ export const userSchema = z.object({
 // --- Types ---
 export type User = z.infer<typeof userSchema>;
 export type UserProfile = z.infer<typeof userProfileSchema>;
-export type UserMedia = any;
+export type UserMedia = Media;
+
+// --- Action / Form Schemas ---
+
+export const saveInterestsSchema = z.object({
+  interests: z.array(z.string()).min(1, "Please select at least one interest"),
+  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
+  travelStyle: z.string().min(1, "Please select a travel style"),
+});
+
+export type SaveInterestsFormValues = z.infer<typeof saveInterestsSchema>;
+
+export const saveTravelSchema = z.object({
+  countries: z.array(z.string()).min(1, "Please select at least one country"),
+});
+
+export type SaveTravelFormValues = z.infer<typeof saveTravelSchema>;
+
+export const savePersonaSchema = z.object({
+  areaPreferences: z.array(z.string()),
+  accommodationTypes: z.array(z.string()),
+  travelRhythm: z.string(),
+  travelStyle: z.string(),
+});
+
+export type SavePersonaFormValues = z.infer<typeof savePersonaSchema>;
+
+export const BioInputSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  occupation: z.string().min(1, "Occupation is required"),
+  hometown: z.string().min(1, "Hometown is required"),
+  birthday: z.string().min(1, "Birthday is required"),
+  languages: z
+    .array(
+      z.object({
+        code: z.string(),
+        name: z.string(),
+      })
+    )
+    .optional(),
+  gender: z.enum(["male", "female"]).optional(),
+});
+
+export type BioInput = z.infer<typeof BioInputSchema>;
