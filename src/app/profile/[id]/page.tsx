@@ -14,7 +14,7 @@ import { City } from "@prisma/client";
 import LogoutButton from "@/app/components/LogoutButton";
 import INTERESTS from "@/data/interests.json";
 import Link from "next/link";
-import Button from "@/app/components/common/Button";
+import { CurrentCitySection } from "./CurrentCitySection";
 
 // Define types locally for simple access
 type InterestItem = { id: string; label: string };
@@ -81,23 +81,6 @@ const InterestsSection = ({ interests }: { interests: string[] }) => {
           </p>
         );
       })}
-    </div>
-  );
-};
-
-const CurrentCitySection = ({ currentCity }: { currentCity: City | null }) => {
-  return (
-    <div className="flex  flex-col gap-2">
-      <h2 className="text-xs font-bold text-secondary uppercase">
-        Current City
-      </h2>
-      <p className="">
-        {currentCity?.name ? (
-          <p className="">{currentCity?.name}</p>
-        ) : (
-          <Button>Get current city</Button>
-        )}
-      </p>
     </div>
   );
 };

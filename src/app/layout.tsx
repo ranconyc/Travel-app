@@ -5,6 +5,7 @@ import ReactQueryProvider from "@/app/providers/reactQueryProvider";
 import SessionProviderWrapper from "@/app/providers/SessionProviderWrapper";
 import ConditionalNavbar from "@/app/ConditionalNavbar";
 import { SocketProvider } from "@/lib/socket/socket-context";
+import { LocationProvider } from "@/app/providers/LocationProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,7 +58,9 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <UserProvider user={user}>
             <SessionProviderWrapper>
-              <SocketProvider>{children}</SocketProvider>
+              <LocationProvider>
+                <SocketProvider>{children}</SocketProvider>
+              </LocationProvider>
             </SessionProviderWrapper>
             <ConditionalNavbar />
             <Toaster position="top-center" richColors />

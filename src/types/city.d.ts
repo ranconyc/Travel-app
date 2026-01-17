@@ -31,7 +31,8 @@ export type ReverseGeocodeResult = {
   city: string | null;
   countryCode: string | null;
   label: string | null;
-  boundingbox?: [number, number, number, number];
+  boundingbox?: [number, number, number, number]; // @deprecated use boundingBox
+  boundingBox?: [number, number, number, number];
 };
 
 /**
@@ -43,7 +44,7 @@ export type DetectedCity = {
   cityName: string | null;
   countryCode: string | null;
   label: string | null;
-  source: "db" | "locationiq" | "api-created" | "unknown";
+  source: "db" | "db-bbox" | "locationiq" | "api-created" | "unknown";
   distanceKm: number | null;
   radiusKm: number | null;
 };

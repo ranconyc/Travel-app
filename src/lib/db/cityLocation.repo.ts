@@ -102,6 +102,43 @@ export async function findNearestCity(
   return nearest ?? null;
 }
 
+// find city by bounding box
+export async function findCityByBBox(
+  lat: number,
+  lng: number,
+): Promise<NearestCityResult | null> {
+  try {
+    // We use aggregateRaw to check if the point [lng, lat] is within the boundingBox
+    // The boundingBox is stored as { south, north, west, east }
+    const res = await prisma.city.findRaw({
+      filter: {
+        "boundingBox.south": { $lte: lat },
+        "boundingBox.north": { $gte: lat },
+        "boundingBox.west": { $lte: lng },
+        "boundingBox.east": { $gte: lng },
+      },
+    });
+
+    const results = res as unknown as any[];
+    if (!results || results.length === 0) return null;
+
+    const city = results[0];
+
+    return {
+      id: city._id?.["$oid"] || city._id,
+      cityId: city.cityId || null,
+      name: city.name || null,
+      countryCode: null,
+      imageHeroUrl: city.imageHeroUrl || null,
+      radiusKm: city.radiusKm || null,
+      distanceKm: 0,
+    };
+  } catch (error) {
+    console.error("findCityByBBox error:", error);
+    return null;
+  }
+}
+
 // reverse geocode a given point to a city
 export async function reverseGeocodeLocationIQ(
   lat: number,
@@ -147,6 +184,14 @@ export async function reverseGeocodeLocationIQ(
       city,
       countryCode,
       label: city && countryCode ? `${city}, ${countryCode}` : (city ?? null),
+      boundingBox: data.boundingbox
+        ? [
+            parseFloat(data.boundingbox[0]),
+            parseFloat(data.boundingbox[1]),
+            parseFloat(data.boundingbox[2]),
+            parseFloat(data.boundingbox[3]),
+          ]
+        : undefined,
     };
   } catch (err) {
     console.error("reverseGeocodeLocationIQ error:", err);
@@ -176,6 +221,23 @@ export async function findNearestCityFromCoords(
   const searchRadiusKm = options?.searchRadiusKm ?? 500;
   const createIfMissing = options?.createIfMissing ?? false;
 
+  // 1. Try Bounding Box check first
+  const byBBox = await findCityByBBox(lat, lng);
+  if (byBBox) {
+    const label = byBBox.name ? `${byBBox.name}` : null;
+    return {
+      id: byBBox.id,
+      cityId: byBBox.cityId,
+      cityName: byBBox.name,
+      countryCode: byBBox.countryCode,
+      label,
+      source: "db-bbox",
+      distanceKm: 0,
+      radiusKm: byBBox.radiusKm ?? null,
+    };
+  }
+
+  // 2. Fallback to Nearest City (radius-based)
   const nearest = await findNearestCity(lng, lat, searchRadiusKm);
   // console.log("nearest", nearest);
 
@@ -211,7 +273,7 @@ export async function findNearestCityFromCoords(
         external.countryCode,
         lat,
         lng,
-        external.boundingbox,
+        external.boundingBox,
       );
 
       return {
@@ -380,7 +442,7 @@ export async function createCityFromAPI(
     countryCode,
     lat,
     lon: lng,
-    boundingbox,
+    boundingBox: boundingbox,
     provider: "api-created",
     placeId: "unknown",
   };

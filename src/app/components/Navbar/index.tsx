@@ -44,7 +44,7 @@ export default function Navbar() {
               className="cursor-pointer"
               image={user?.avatarUrl || ""}
               name={user?.name || ""}
-              size={30}
+              size={iconsSize}
             />
           </Link>
         </li>
