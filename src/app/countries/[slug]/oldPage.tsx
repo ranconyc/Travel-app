@@ -65,7 +65,11 @@ export default async function CountryPage({
               Best Season
             </h1>
             <p className="text-white">
-              {country?.bestSeason || "not provided"}{" "}
+              {(typeof country?.bestTimeToVisit === "string"
+                ? country.bestTimeToVisit
+                : (country?.bestTimeToVisit as any)?.peak?.months?.join(
+                    ", ",
+                  )) || "not provided"}{" "}
             </p>
           </div>
           <div className="bg-gray-800 p-4 rounded-xl">
@@ -79,7 +83,13 @@ export default async function CountryPage({
           </div>
           <div className="bg-gray-800 p-4 rounded-xl">
             <h1 className="text-xs uppercase text-gray-400 mb-1">Safety</h1>
-            <p className="text-white">{country?.safety || "not provided"}</p>
+            <p className="text-white">
+              {typeof country?.safety === "string"
+                ? country.safety
+                : country?.safety
+                  ? "See details"
+                  : "not provided"}
+            </p>
           </div>
         </div>
       </header>

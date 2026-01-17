@@ -40,21 +40,24 @@ export const CountrySchema = z.object({
   currency: z.any().optional().nullable(),
   emergency: z.any().optional().nullable(),
   visaEntry: z.any().optional().nullable(),
-  languageComm: z.any().optional().nullable(),
+  languages: z.any().optional().nullable(),
+  commonPhrases: z.any().optional().nullable(),
   utilities: z.any().optional().nullable(),
   internet: z.any().optional().nullable(),
+  budget: z.any().optional().nullable(),
+  cashCulture: z.any().optional().nullable(),
 
   // Transport UX
   gettingAround: z.any().optional().nullable(),
 
   // Media (Now using relation + simple hero string for speed)
-  imageHeroUrl: z.string().url().optional().nullable(),
+  imageHeroUrl: z.string().optional().nullable(),
   media: z.array(z.any()).optional(),
 
   // Trip meta
-  bestSeason: z.string().optional().nullable(),
+  bestTimeToVisit: z.any().optional().nullable(),
   idealDuration: z.string().optional().nullable(),
-  safety: z.string().optional().nullable(),
+  safety: z.any().optional().nullable(),
 
   // Detailed internal meta
   meta: CountryMetaSchema.optional().nullable(),

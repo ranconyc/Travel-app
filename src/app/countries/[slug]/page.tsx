@@ -40,7 +40,11 @@ export default async function CountryPage({
       ? await findBorderCountries((country.meta as any).borders)
       : [];
 
-  const season = country.bestSeason || "Year-round";
+  const season =
+    (typeof country.bestTimeToVisit === "string"
+      ? country.bestTimeToVisit
+      : (country.bestTimeToVisit as any)?.peak?.months?.join(", ")) ||
+    "Year-round";
 
   return (
     <div className="bg-appbg min-h-screen font-sans selection:bg-brand selection:text-white">
