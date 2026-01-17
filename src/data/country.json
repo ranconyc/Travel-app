@@ -1,0 +1,978 @@
+{
+  "countryId": "thailand",
+  "iso2": "TH",
+  "iso3": "THA",
+  "isoNumeric": "764",
+  "name": "Thailand",
+  "officialName": "Kingdom of Thailand",
+  "capital": "Bangkok",
+  "coords": {
+    "type": "Point",
+    "coordinates": [100.5018, 13.7563]
+  },
+  "continent": "Asia",
+  "region": "Southeast Asia",
+  "subRegion": "South-Eastern Asia",
+  "regionCode": "142",
+  "subRegionCode": "035",
+  "languages": {
+    "nativeName": "ภาษาไทย",
+    "official": ["Thai"],
+    "spoken": ["Thai", "English", "Chinese", "Malay"],
+    "primaryScript": "Thai"
+  },
+  "commonPhrases": [
+    {
+      "label": "Hello",
+      "local": "สวัสดี",
+      "romanized": "Sawasdee",
+      "pronunciation": "sah-wah-dee",
+      "category": "greetings"
+    },
+    {
+      "label": "Goodbye",
+      "local": "ลาก่อน",
+      "romanized": "La gon",
+      "pronunciation": "lah-gorn",
+      "category": "greetings"
+    },
+    {
+      "label": "Thank you",
+      "local": "ขอบคุณ",
+      "romanized": "Khob khun",
+      "pronunciation": "kop-koon",
+      "category": "polite"
+    },
+    {
+      "label": "Yes",
+      "local": "ใช่",
+      "romanized": "Chai",
+      "pronunciation": "chai",
+      "category": "basics"
+    },
+    {
+      "label": "No",
+      "local": "ไม่",
+      "romanized": "Mai",
+      "pronunciation": "mai",
+      "category": "basics"
+    },
+    {
+      "label": "Please",
+      "local": "ได้โปรด",
+      "romanized": "Dai prot",
+      "pronunciation": "dai-proht",
+      "category": "polite"
+    },
+    {
+      "label": "Excuse me",
+      "local": "ขอโทษ",
+      "romanized": "Khor thot",
+      "pronunciation": "kor-tot",
+      "category": "polite"
+    },
+    {
+      "label": "Sorry",
+      "local": "ขอโทษ",
+      "romanized": "Khor thot",
+      "pronunciation": "kor-tot",
+      "category": "polite"
+    },
+    {
+      "label": "Help!",
+      "local": "ช่วยด้วย",
+      "romanized": "Chuay duay",
+      "pronunciation": "choo-ay doo-ay",
+      "category": "emergency"
+    },
+    {
+      "label": "How much?",
+      "local": "เท่าไหร่",
+      "romanized": "Thao rai?",
+      "pronunciation": "tao-rai",
+      "category": "questions"
+    },
+    {
+      "label": "Where is...?",
+      "local": "อยู่ที่ไหน",
+      "romanized": "Yu tee nai?",
+      "pronunciation": "yoo-tee-nai",
+      "category": "questions"
+    },
+    {
+      "label": "I don't understand",
+      "local": "ไม่เข้าใจ",
+      "romanized": "Mai khao jai",
+      "pronunciation": "mai-kao-jai",
+      "category": "basics"
+    },
+    {
+      "label": "Do you speak English?",
+      "local": "คุณพูดภาษาอังกฤษได้ไหม",
+      "romanized": "Khun poot pa-sa ang-grit dai mai?",
+      "pronunciation": "koon-poot-pah-sah-ang-grit-dai-mai",
+      "category": "questions"
+    },
+    {
+      "label": "Toilet/Bathroom",
+      "local": "ห้องน้ำ",
+      "romanized": "Hong nam",
+      "pronunciation": "hong-nam",
+      "category": "basics"
+    },
+    {
+      "label": "Water",
+      "local": "น้ำ",
+      "romanized": "Nam",
+      "pronunciation": "nahm",
+      "category": "food"
+    },
+    {
+      "label": "Delicious",
+      "local": "อร่อย",
+      "romanized": "Aroi",
+      "pronunciation": "ah-roy",
+      "category": "food"
+    },
+    {
+      "label": "Not spicy",
+      "local": "ไม่เผ็ด",
+      "romanized": "Mai phet",
+      "pronunciation": "mai-pet",
+      "category": "food"
+    },
+    {
+      "label": "Very spicy",
+      "local": "เผ็ดมาก",
+      "romanized": "Phet mak",
+      "pronunciation": "pet-mahk",
+      "category": "food"
+    },
+    {
+      "label": "Vegetarian",
+      "local": "เจ",
+      "romanized": "Jae",
+      "pronunciation": "jay",
+      "category": "food"
+    },
+    {
+      "label": "Check please",
+      "local": "เช็คบิล",
+      "romanized": "Check bin",
+      "pronunciation": "check-bin",
+      "category": "food"
+    },
+    {
+      "label": "Too expensive",
+      "local": "แพงไป",
+      "romanized": "Paeng pai",
+      "pronunciation": "pang-pai",
+      "category": "basics"
+    },
+    {
+      "label": "Cheaper please",
+      "local": "ลดหน่อยได้ไหม",
+      "romanized": "Lot noi dai mai?",
+      "pronunciation": "lot-noy-dai-mai",
+      "category": "basics"
+    },
+    {
+      "label": "Left",
+      "local": "ซ้าย",
+      "romanized": "Sai",
+      "pronunciation": "sai",
+      "category": "navigation"
+    },
+    {
+      "label": "Right",
+      "local": "ขวา",
+      "romanized": "Khwa",
+      "pronunciation": "kwah",
+      "category": "navigation"
+    },
+    {
+      "label": "Straight",
+      "local": "ตรงไป",
+      "romanized": "Trong pai",
+      "pronunciation": "trong-pai",
+      "category": "navigation"
+    },
+    {
+      "label": "Stop here",
+      "local": "จอดตรงนี้",
+      "romanized": "Jot trong nee",
+      "pronunciation": "jot-trong-nee",
+      "category": "navigation"
+    },
+    {
+      "label": "One",
+      "local": "หนึ่ง",
+      "romanized": "Neung",
+      "pronunciation": "neung",
+      "category": "numbers"
+    },
+    {
+      "label": "Two",
+      "local": "สอง",
+      "romanized": "Song",
+      "pronunciation": "song",
+      "category": "numbers"
+    },
+    {
+      "label": "Three",
+      "local": "สาม",
+      "romanized": "Sam",
+      "pronunciation": "sahm",
+      "category": "numbers"
+    },
+    {
+      "label": "Four",
+      "local": "สี่",
+      "romanized": "See",
+      "pronunciation": "see",
+      "category": "numbers"
+    },
+    {
+      "label": "Five",
+      "local": "ห้า",
+      "romanized": "Ha",
+      "pronunciation": "hah",
+      "category": "numbers"
+    }
+  ],
+  "currency": {
+    "code": "THB",
+    "symbol": "฿",
+    "name": "Thai Baht",
+    "subunit": "Satang",
+    "subunitToUnit": 100
+  },
+  "budget": {
+    "daily": {
+      "budget": "800-1500",
+      "mid": "1500-3000",
+      "luxury": "3000+"
+    },
+    "currencyCode": "THB",
+    "breakdown": {
+      "accommodation": {
+        "budget": "300-600",
+        "mid": "600-1500",
+        "luxury": "1500+"
+      },
+      "meals": {
+        "budget": "200-400",
+        "mid": "400-800",
+        "luxury": "800+"
+      },
+      "transport": {
+        "budget": "100-200",
+        "mid": "200-400",
+        "luxury": "400+"
+      },
+      "activities": {
+        "budget": "200-300",
+        "mid": "300-600",
+        "luxury": "600+"
+      }
+    },
+    "note": "Street food from 40฿, pad thai 50-80฿, luxury hotels from 3000฿"
+  },
+  "cashCulture": {
+    "atmAvailability": "widespread",
+    "atmFees": {
+      "local": "0฿",
+      "international": "150-220฿"
+    },
+    "creditCardAcceptance": "moderate",
+    "cashPreferred": true,
+    "majorCards": ["Visa", "Mastercard", "Amex-limited"],
+    "mobilePay": ["PromptPay", "TrueMoney", "Rabbit LINE Pay"],
+    "tipCulture": {
+      "expected": false,
+      "restaurants": "Service charge often included, 20-100฿ for great service",
+      "taxis": "Round up or 20฿",
+      "hotels": "20-100฿ for porters/housekeeping",
+      "guides": "200-500฿ per day",
+      "spas": "10-20% if not included"
+    },
+    "bargaining": "Expected at markets, not in malls/restaurants"
+  },
+  "safety": {
+    "overall": "safe",
+    "rating": 8.0,
+    "crimeLevel": "low",
+    "pettyTheft": "moderate-in-tourist-areas",
+    "violentCrime": "rare",
+    "terrorism": "low-except-deep-south",
+    "scamsCommon": [
+      {
+        "type": "tuk-tuk-overcharge",
+        "severity": "low",
+        "tip": "Use Grab/Bolt or agree price first"
+      },
+      {
+        "type": "gem-scam",
+        "severity": "medium",
+        "tip": "Never buy gems from tuk-tuk drivers or tours"
+      },
+      {
+        "type": "taxi-meter",
+        "severity": "low",
+        "tip": "Insist on meter or use app"
+      },
+      {
+        "type": "jet-ski-rental",
+        "severity": "medium",
+        "tip": "Photograph before renting, avoid in Phuket/Pattaya"
+      },
+      {
+        "type": "closed-grand-palace",
+        "severity": "low",
+        "tip": "Tuk-tuk drivers claim palace closed - it's not, they want commission"
+      }
+    ],
+    "waterSafety": "tap-not-drinkable-bottled-water-cheap",
+    "foodSafety": "generally-safe-street-food-okay-choose-busy-stalls",
+    "areasCaution": [
+      {
+        "area": "Deep South provinces (Yala, Pattani, Narathiwat)",
+        "reason": "Ongoing insurgency"
+      },
+      {
+        "area": "Burma border areas",
+        "reason": "Occasional conflict"
+      }
+    ],
+    "nightSafety": "safe-with-normal-precautions",
+    "soloFemaleTravel": "safe-normal-precautions-dress-modestly-temples",
+    "lgbtqSafety": "very-safe-accepting-culture",
+    "lastUpdated": "2025-01-15"
+  },
+  "emergency": {
+    "police": "191",
+    "ambulance": "1669",
+    "fire": "199",
+    "touristPolice": "1155",
+    "emergencyNumbers": {
+      "highway": "1193",
+      "disaster": "1784"
+    },
+    "majorEmbassies": [
+      {
+        "country": "USA",
+        "phone": "+66-2-205-4000",
+        "emergency": "+66-2-205-4000",
+        "address": "95 Wireless Road, Lumphini, Bangkok 10330",
+        "website": "https://th.usembassy.gov"
+      },
+      {
+        "country": "UK",
+        "phone": "+66-2-305-8333",
+        "emergency": "+66-81-838-2657",
+        "address": "14 Wireless Road, Lumphini, Bangkok 10330",
+        "website": "https://www.gov.uk/world/thailand"
+      },
+      {
+        "country": "Australia",
+        "phone": "+66-2-344-6300",
+        "emergency": "+66-2-344-6300",
+        "address": "181 Wireless Road, Lumphini, Bangkok 10330",
+        "website": "https://www.australia.or.th"
+      },
+      {
+        "country": "Canada",
+        "phone": "+66-2-646-4300",
+        "emergency": "+66-81-884-6666",
+        "address": "15th Floor, Abdulrahim Place, 990 Rama IV Road, Bangkok",
+        "website": "https://www.canadainternational.gc.ca/thailand"
+      },
+      {
+        "country": "Germany",
+        "phone": "+66-2-287-9000",
+        "emergency": "+66-81-845-5224",
+        "address": "9 South Sathorn Road, Bangkok 10120"
+      },
+      {
+        "country": "France",
+        "phone": "+66-2-657-5100",
+        "emergency": "+66-2-657-5100",
+        "address": "35 Charoen Krung Road, Bangkok"
+      }
+    ],
+    "nearestHospital": "dynamic-based-on-user-location"
+  },
+  "visaEntry": {
+    "visaFreeCountries": [
+      {
+        "countries": [
+          "US",
+          "UK",
+          "CA",
+          "AU",
+          "NZ",
+          "DE",
+          "FR",
+          "IT",
+          "ES",
+          "NL",
+          "BE",
+          "SE",
+          "NO",
+          "DK",
+          "FI",
+          "IE",
+          "AT",
+          "CH",
+          "PT",
+          "GR"
+        ],
+        "duration": "30-days",
+        "type": "air-entry"
+      },
+      {
+        "countries": [
+          "US",
+          "UK",
+          "CA",
+          "AU",
+          "NZ",
+          "DE",
+          "FR",
+          "IT",
+          "ES",
+          "NL",
+          "BE",
+          "SE",
+          "NO",
+          "DK",
+          "FI",
+          "IE",
+          "AT",
+          "CH",
+          "PT",
+          "GR"
+        ],
+        "duration": "15-days",
+        "type": "land-entry"
+      }
+    ],
+    "visaOnArrival": [
+      {
+        "countries": ["IN", "CN", "KZ", "UZ", "RO", "BG"],
+        "duration": "15-days",
+        "fee": "2000฿"
+      }
+    ],
+    "eVisa": {
+      "available": true,
+      "types": ["tourist-60-days", "non-immigrant-O", "non-immigrant-B"],
+      "url": "https://www.thaievisa.go.th",
+      "processingTime": "3-5-business-days",
+      "cost": "varies-by-type"
+    },
+    "extension": {
+      "possible": true,
+      "where": "immigration-offices",
+      "cost": "1900฿",
+      "duration": "30-days"
+    },
+    "requirements": {
+      "passport": "6-months-validity-minimum",
+      "proof": "onward-ticket-may-be-checked",
+      "funds": "20000฿-cash-equivalent-rarely-checked"
+    },
+    "workPermit": "required-for-any-work",
+    "officialLink": "https://www.mfa.go.th",
+    "lastUpdated": "2025-01-15"
+  },
+  "imageHeroUrl": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a",
+  "bestTimeToVisit": {
+    "peak": {
+      "months": ["Nov", "Dec", "Jan", "Feb"],
+      "why": "Cool & dry, perfect weather, festivals",
+      "temperature": "20-30°C",
+      "crowds": "high",
+      "prices": "high-20-40%-increase"
+    },
+    "shoulder": {
+      "months": ["Mar", "Apr", "Oct"],
+      "why": "Good weather, fewer crowds, Songkran in April",
+      "temperature": "25-35°C",
+      "crowds": "moderate",
+      "prices": "moderate"
+    },
+    "low": {
+      "months": ["May", "Jun", "Jul", "Aug", "Sep"],
+      "why": "Rainy season (mostly afternoon showers), very hot, lowest prices",
+      "temperature": "25-35°C",
+      "rainfall": "high",
+      "crowds": "low",
+      "prices": "low-30-50%-discount"
+    },
+    "avoid": ["September-peak-monsoon-flooding-risk"],
+    "regional": {
+      "islands": "Best Nov-Apr, avoid monsoon",
+      "north": "Cool Nov-Feb, smoky Mar-Apr (burning season)",
+      "isaan": "Hot year-round, wet Jun-Oct"
+    }
+  },
+  "climate": {
+    "type": "tropical-monsoon",
+    "seasons": {
+      "hot": {
+        "period": "Mar-May",
+        "temp": "35-40°C",
+        "humidity": "high"
+      },
+      "rainy": {
+        "period": "May-Oct",
+        "temp": "25-35°C",
+        "rainfall": "heavy-afternoon"
+      },
+      "cool": {
+        "period": "Nov-Feb",
+        "temp": "20-30°C",
+        "humidity": "moderate"
+      }
+    },
+    "annual": {
+      "avgTemp": "28°C",
+      "avgRainfall": "1500mm",
+      "humidity": "high-year-round-66-82%"
+    },
+    "regional": {
+      "north": "Cooler in mountains (10-15°C in winter)",
+      "northeast": "Driest region",
+      "south": "Two monsoon seasons"
+    }
+  },
+  "weatherApiConfig": {
+    "provider": "openweathermap",
+    "updateFrequency": "6-hours",
+    "majorCities": ["bangkok", "chiang-mai", "phuket", "pattaya", "krabi"]
+  },
+  "transportation": {
+    "public": {
+      "quality": "excellent-bangkok-moderate-elsewhere",
+      "types": [
+        {
+          "type": "BTS-Skytrain",
+          "coverage": "Bangkok",
+          "cost": "15-60฿",
+          "efficiency": "high"
+        },
+        {
+          "type": "MRT-Metro",
+          "coverage": "Bangkok",
+          "cost": "16-42฿",
+          "efficiency": "high"
+        },
+        {
+          "type": "Airport-Rail-Link",
+          "coverage": "Bangkok-airport",
+          "cost": "15-45฿"
+        },
+        {
+          "type": "buses",
+          "coverage": "nationwide",
+          "cost": "8-24฿",
+          "efficiency": "moderate"
+        },
+        {
+          "type": "boats",
+          "coverage": "Bangkok-rivers",
+          "cost": "10-20฿",
+          "efficiency": "high"
+        },
+        {
+          "type": "songthaews",
+          "coverage": "cities",
+          "cost": "10-30฿",
+          "efficiency": "moderate"
+        }
+      ],
+      "ticketApps": ["Rabbit-card", "MRT-app", "ViaBus"],
+      "passes": {
+        "available": true,
+        "types": ["1-day", "3-day", "30-day"],
+        "worthIt": "for-heavy-use"
+      }
+    },
+    "taxi": {
+      "metered": true,
+      "starting": "35฿",
+      "apps": ["Grab", "Bolt", "InDrive"],
+      "tips": "Insist on meter, have small bills, may refuse short trips"
+    },
+    "rideshare": {
+      "available": true,
+      "services": ["Grab-dominant", "Bolt"],
+      "motorcycle": "Grab-bike-for-short-trips"
+    },
+    "rental": {
+      "cars": {
+        "available": true,
+        "license": "international-or-local",
+        "drive": "left",
+        "cost": "800-2000฿-per-day",
+        "insurance": "highly-recommended",
+        "note": "Traffic chaotic in Bangkok, good for countryside"
+      },
+      "motorcycles": {
+        "popular": true,
+        "license": "required-but-often-not-checked",
+        "cost": "150-300฿-per-day",
+        "risk": "high-accidents-common",
+        "helmet": "mandatory-200฿-fine",
+        "note": "Not recommended for inexperienced riders"
+      },
+      "bicycles": {
+        "available": true,
+        "coverage": "cities",
+        "cost": "50-200฿-per-day",
+        "apps": ["Pun-Pun-bike-share"]
+      }
+    },
+    "intercity": {
+      "trains": {
+        "quality": "basic-to-good",
+        "cost": "cheap-100-1500฿",
+        "booking": "12go.asia",
+        "scenic": true
+      },
+      "buses": {
+        "quality": "varies",
+        "coverage": "extensive",
+        "cost": "very-cheap",
+        "note": "VIP buses recommended"
+      },
+      "flights": {
+        "domestic": "cheap-500-2000฿",
+        "carriers": ["AirAsia", "Nok Air", "Thai Lion Air", "Bangkok Airways"]
+      },
+      "minivans": {
+        "popular": true,
+        "cost": "150-400฿",
+        "comfort": "cramped-but-fast"
+      }
+    },
+    "walkability": {
+      "bangkok": "moderate-broken-sidewalks",
+      "chiangmai": "good-old-city",
+      "islands": "limited-need-transport"
+    }
+  },
+  "internet": {
+    "wifiAvailability": "widespread-cafes-hotels-malls",
+    "avgSpeed": {
+      "download": "180-300Mbps",
+      "upload": "150-250Mbps",
+      "mobile4G": "20-50Mbps",
+      "mobile5G": "100-500Mbps"
+    },
+    "publicWifi": "common-but-unsecure",
+    "coworkingSpaces": {
+      "availability": "many-in-bangkok-chiangmai",
+      "cost": "150-500฿-per-day",
+      "popular": ["HUBBA", "AIS D.C.", "The Hive", "Punspace"]
+    },
+    "censorship": "minimal-some-blocked-sites",
+    "reliability": "generally-good-occasional-outages"
+  },
+  "cellular": {
+    "providers": [
+      {
+        "name": "AIS",
+        "coverage": "excellent-nationwide",
+        "tourists": true,
+        "simPrice": "299฿-unlimited-8-days",
+        "dataPacks": "399฿-20GB-30-days",
+        "network": "4G-5G",
+        "rating": "best-coverage"
+      },
+      {
+        "name": "TrueMove H",
+        "coverage": "excellent",
+        "tourists": true,
+        "simPrice": "299฿-unlimited-7-days",
+        "dataPacks": "299฿-15GB-30-days",
+        "network": "4G-5G"
+      },
+      {
+        "name": "DTAC",
+        "coverage": "good-weaker-rural",
+        "tourists": true,
+        "simPrice": "249฿-8-days",
+        "dataPacks": "250฿-15GB-30-days",
+        "network": "4G-5G"
+      }
+    ],
+    "esim": {
+      "available": true,
+      "providers": ["Airalo", "Holafly", "AIS"],
+      "recommended": true
+    },
+    "coverage": {
+      "5G": "major-cities-expanding",
+      "4G": "nationwide",
+      "rural": "3G-4G"
+    },
+    "simRegistration": {
+      "required": true,
+      "documents": "passport",
+      "where": "airports-7-Eleven-official-stores",
+      "instant": true
+    },
+    "topup": "7-Eleven-convenience-stores-apps"
+  },
+  "healthcare": {
+    "quality": "excellent-private-good-public",
+    "hospitals": {
+      "private": {
+        "quality": "world-class",
+        "english": true,
+        "cost": "moderate-by-western-standards",
+        "insurance": "widely-accepted",
+        "popular": [
+          {
+            "name": "Bumrungrad International",
+            "city": "Bangkok",
+            "specialties": "all",
+            "accreditation": "JCI"
+          },
+          {
+            "name": "Bangkok Hospital",
+            "city": "Bangkok",
+            "specialties": "all",
+            "accreditation": "JCI"
+          },
+          {
+            "name": "Samitivej Hospital",
+            "city": "Bangkok",
+            "specialties": "all"
+          },
+          {
+            "name": "Chiang Mai Ram",
+            "city": "Chiang Mai"
+          },
+          {
+            "name": "Bangkok Phuket Hospital",
+            "city": "Phuket"
+          }
+        ]
+      },
+      "public": {
+        "quality": "good-basic",
+        "english": "limited",
+        "cost": "very-cheap",
+        "wait": "long"
+      }
+    },
+    "insurance": {
+      "recommended": "highly-recommended",
+      "cost": "50-200-USD-per-month",
+      "coverage": "emergency-and-comprehensive",
+      "note": "Many travelers use Thai hospitals for procedures due to quality and cost"
+    },
+    "pharmacies": {
+      "availability": "widespread-24-hour-common",
+      "prescription": "some-drugs-available-without-prescription",
+      "cost": "cheap",
+      "chains": ["Boots", "Watsons", "Fascino"]
+    },
+    "vaccinations": {
+      "required": "yellow-fever-if-coming-from-endemic-areas",
+      "recommended": [
+        "Hepatitis-A",
+        "Typhoid",
+        "Japanese-Encephalitis-rural",
+        "Rabies-if-animal-exposure"
+      ],
+      "routine": "ensure-up-to-date-MMR-DPT"
+    },
+    "commonIssues": [
+      {
+        "issue": "heat-exhaustion",
+        "prevention": "stay-hydrated-avoid-midday-sun"
+      },
+      {
+        "issue": "stomach-bugs",
+        "prevention": "drink-bottled-water-be-cautious-first-days"
+      },
+      {
+        "issue": "dengue-fever",
+        "prevention": "mosquito-repellent-cover-up-dawn-dusk",
+        "season": "rainy"
+      },
+      {
+        "issue": "sunburn",
+        "prevention": "high-SPF-sunscreen"
+      },
+      {
+        "issue": "motion-sickness",
+        "prevention": "medication-available-pharmacies"
+      }
+    ],
+    "malaria": "rare-only-border-forests",
+    "airQuality": "moderate-poor-Mar-Apr-burning-season-north"
+  },
+  "population": 69800000,
+  "areaKm2": 513120,
+  "populationDensity": 135.9,
+  "gdpPerCapita": 7808,
+  "borderCountries": {
+    "land": ["Myanmar", "Laos", "Cambodia", "Malaysia"],
+    "maritime": [],
+    "crossings": {
+      "Myanmar": ["Mae Sai", "Mae Sot", "Three Pagodas Pass"],
+      "Laos": ["Nong Khai", "Chiang Khong", "Mukdahan"],
+      "Cambodia": ["Aranyaprathet", "Hat Lek", "Chong Chom"],
+      "Malaysia": ["Padang Besar", "Sungai Kolok", "Sadao"]
+    }
+  },
+  "timeZones": [
+    {
+      "name": "Indochina Time (ICT)",
+      "offset": "+07:00",
+      "offsetSeconds": 25200,
+      "abbr": "ICT",
+      "isDST": false,
+      "cities": ["Bangkok", "Chiang Mai", "Phuket"]
+    }
+  ],
+  "culture": {
+    "religion": {
+      "primary": {
+        "name": "Buddhism",
+        "percentage": 95,
+        "type": "Theravada"
+      },
+      "others": [
+        {
+          "name": "Islam",
+          "percentage": 4,
+          "note": "Mainly in southern provinces"
+        },
+        {
+          "name": "Christianity",
+          "percentage": 1
+        }
+      ]
+    },
+    "majorHolidays": [
+      {
+        "name": "Songkran",
+        "dates": "April 13-15",
+        "type": "water-festival",
+        "description": "Thai New Year, nationwide water fights",
+        "impact": "Banks/offices closed, streets wet, tourist peak"
+      },
+      {
+        "name": "Loy Krathong",
+        "dates": "November (full moon)",
+        "type": "festival",
+        "description": "Floating lanterns and krathongs on water",
+        "locations": "nationwide-best-in-Chiang-Mai-Sukhothai"
+      },
+      {
+        "name": "Chinese New Year",
+        "dates": "January/February",
+        "impact": "Yaowarat (Chinatown) celebrations"
+      },
+      {
+        "name": "King's Birthday",
+        "dates": "July 28",
+        "impact": "National holiday, no alcohol sales"
+      },
+      {
+        "name": "Makha Bucha",
+        "dates": "February/March (full moon)",
+        "type": "religious",
+        "impact": "No alcohol sales"
+      }
+    ],
+    "etiquette": [
+      "Remove shoes before entering temples and homes",
+      "Feet are lowest body part - don't point at people/Buddha images",
+      "Head is sacred - don't touch people's heads",
+      "Respect Buddha images - no climbing or inappropriate photos",
+      "Dress modestly at temples - cover shoulders and knees",
+      "Don't touch monks (especially if you're a woman)",
+      "Wai (prayer hands) to greet, return wai if received",
+      "Avoid public displays of affection",
+      "Don't raise voice or show anger publicly (loss of face)",
+      "Remove shoes when seeing raised threshold",
+      "Don't point with feet or step over people",
+      "Monarchy is deeply respected - never criticize"
+    ],
+    "dressCode": {
+      "general": "casual-lightweight",
+      "temples": "shoulders-and-knees-covered",
+      "grandPalace": "strict-long-pants-closed-shoes",
+      "beaches": "relaxed-but-not-nude",
+      "upscale": "smart-casual"
+    },
+    "monarchy": {
+      "respect": "extremely-important",
+      "law": "lese-majeste-strict-penalties",
+      "note": "Never criticize or disrespect the royal family"
+    }
+  },
+  "utilities": {
+    "electricity": {
+      "voltage": "220V",
+      "frequency": "50Hz",
+      "plugTypes": ["A", "B", "C", "O"],
+      "adapter": "type-A-B-most-common",
+      "reliability": "generally-good-occasional-outages"
+    },
+    "water": {
+      "tap": "not-drinkable",
+      "bottled": "cheap-7-20฿",
+      "ice": "generally-safe-in-cities"
+    },
+    "costs": {
+      "electricity": "4฿-per-kWh",
+      "water": "very-cheap-20-50฿-per-month",
+      "gas": "not-common-electric-cooking"
+    }
+  },
+  "idealDuration": "2-4 weeks to explore well, 1 week minimum for highlights",
+  "topCities": [
+    "bangkok",
+    "chiang-mai",
+    "phuket",
+    "pattaya",
+    "krabi",
+    "ayutthaya",
+    "pai",
+    "koh-samui"
+  ],
+  "popularRegions": ["north", "islands", "isaan", "central", "south"],
+  "metaDescription": "Discover Thailand: pristine beaches, ancient temples, vibrant street food, and warm hospitality. Your complete guide to the Land of Smiles.",
+  "searchKeywords": [
+    "thailand",
+    "thai",
+    "siam",
+    "southeast-asia",
+    "beaches",
+    "temples",
+    "bangkok",
+    "islands",
+    "street-food"
+  ],
+  "phoneCode": "+66",
+  "tld": ".th",
+  "autoCreated": false,
+  "needsReview": false,
+  "dataQuality": 95.0,
+  "lastVerified": "2025-01-15T00:00:00Z",
+  "dataSources": {
+    "visa": "https://www.mfa.go.th",
+    "budget": "nomadlist.com",
+    "safety": "travel.state.gov",
+    "healthcare": "bumrungrad.com",
+    "general": "multiple-sources"
+  }
+}

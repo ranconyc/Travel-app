@@ -1,7 +1,7 @@
 "use client";
 
-import { SelectionCard } from "@/app/mode/page";
-import Button from "@/app/component/common/Button";
+import SelectionCard from "@/app/components/form/SelectionCard";
+import Button from "@/app/components/common/Button";
 import { X } from "lucide-react";
 import interests from "@/data/interests.json";
 import { useEffect, useRef } from "react";
@@ -95,7 +95,10 @@ export default function InterestsModal({
           ))}
         </div>
         <div className="mt-6">
-          <Button className="w-full" onClick={onClose}>
+          <Button
+            // className="w-full"
+            onClick={onClose}
+          >
             Done
           </Button>
         </div>

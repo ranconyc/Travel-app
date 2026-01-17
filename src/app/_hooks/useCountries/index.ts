@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllCountriesAction } from "@/app/actions/locationActions";
+import { getAllCountriesAction } from "@/domain/country/country.actions";
 
 export function useCountries() {
   return useQuery({
     queryKey: ["countries"],
-    queryFn: () => getAllCountriesAction(),
+    queryFn: async () => {
+      const result = await getAllCountriesAction();
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data;
+    },
+    staleTime: 1000 * 60 * 60, // 1 hour
   });
 }

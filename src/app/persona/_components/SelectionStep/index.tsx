@@ -1,4 +1,4 @@
-import { SelectionCard } from "@/app/mode/page";
+import SelectionCard from "@/app/components/form/SelectionCard";
 import { useFormContext } from "react-hook-form";
 
 interface SelectionStepProps {

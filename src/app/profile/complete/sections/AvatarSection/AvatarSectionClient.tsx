@@ -2,7 +2,7 @@
 
 import { memo, useRef } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import AvatarUpload from "@/app/component/form/AvatarUpload";
+import AvatarUpload from "@/app/components/form/AvatarUpload";
 
 function AvatarSectionClient() {
   const { control } = useFormContext();

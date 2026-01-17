@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "@/app/component/common/Button";
-import { Input } from "@/app/mode/page";
+import Button from "@/app/components/common/Button";
+import Input from "@/app/components/form/Input";
 import { AuthHeader } from "./AuthHeader";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { SignInValues } from "../_types/form";

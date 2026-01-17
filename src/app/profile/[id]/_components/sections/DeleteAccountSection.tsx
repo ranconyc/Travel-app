@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Block from "@/app/component/common/Block";
-import Title from "@/app/component/Title";
+import Block from "@/app/components/common/Block";
+import Title from "@/app/components/Title";
 import { Trash2 } from "lucide-react";
 import { deleteAccount } from "@/domain/user/user.actions";
 

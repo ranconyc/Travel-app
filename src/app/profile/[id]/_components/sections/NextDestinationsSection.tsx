@@ -1,6 +1,6 @@
-import Block from "@/app/component/common/Block";
-import Button from "@/app/component/common/Button";
-import Title from "@/app/component/Title";
+import Block from "@/app/components/common/Block";
+import Button from "@/app/components/common/Button";
+import Title from "@/app/components/Title";
 import { City } from "@/domain/city/city.schema";
 import { PlaneTakeoff } from "lucide-react";
 

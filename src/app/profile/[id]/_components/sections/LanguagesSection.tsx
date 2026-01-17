@@ -1,5 +1,5 @@
-import Block from "@/app/component/common/Block";
-import Title from "@/app/component/Title";
+import Block from "@/app/components/common/Block";
+import Title from "@/app/components/Title";
 import { Languages, BriefcaseBusiness } from "lucide-react";
 import languages from "../../../../../data/languages.json";
 import { ProfileUser } from "@/types/user";

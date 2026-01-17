@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { AutoOption } from "@/app/component/form/Autocomplete";
+import type { AutoOption } from "@/app/components/form/Autocomplete";
 
 type UseAutocompleteOptionsArgs = {
   options?: string[];

@@ -3,7 +3,7 @@
 import { memo, useMemo } from "react";
 import { useFormContext, useController } from "react-hook-form";
 import occupationsData from "@/data/occupations.json";
-import { Autocomplete } from "@/app/component/form/Autocomplete";
+import { Autocomplete } from "@/app/components/form/Autocomplete";
 import { useLazyLoad } from "@/app/_hooks/useLazyLoad";
 
 type FormValues = {

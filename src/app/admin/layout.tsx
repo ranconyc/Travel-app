@@ -13,6 +13,7 @@ import {
   Globe,
   Server,
   Palette,
+  Code,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -69,11 +70,18 @@ export default function AdminLayout({
             <Server size={20} />
             APIs
           </Link>
+          <Link href="/admin/developer" className={getLinkClasses("developer")}>
+            <Code size={20} />
+            Actions & Hooks
+          </Link>
           <Link href="/admin/component" className={getLinkClasses("component")}>
             <Blocks size={20} />
             Components
           </Link>
-          <Link href="/admin/buttons" className={getLinkClasses("buttons")}>
+          <Link
+            href="/admin/design-system"
+            className={getLinkClasses("design-system")}
+          >
             <Palette size={20} />
             Design System
           </Link>

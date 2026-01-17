@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { hasGeolocation } from "@/app/_utils/env";
 import { getDistance } from "@/app/_utils/geo";
-import { updateUserLocationWithCityAction } from "@/app/actions/locationActions";
+import { updateUserLocationAction } from "@/domain/user/user.actions";
 import { useLocationStore } from "@/store/locationStore";
 
 import { User } from "@/domain/user/user.schema";
@@ -41,38 +41,53 @@ export function useGeo(options: UseGeoOptions = {}) {
   // Refs for logic control without triggering re-renders
   const lastSaveTimeRef = useRef<number>(0);
   const isSavingRef = useRef(false);
+  const lastSavedCoordsRef = useRef<{ lat: number; lng: number } | null>(null);
+
+  // Sync ref with store on mount/hydration
+  useEffect(() => {
+    if (lastSavedCoords && !lastSavedCoordsRef.current) {
+      lastSavedCoordsRef.current = lastSavedCoords;
+    }
+  }, [lastSavedCoords]);
 
   // EFFECT 0: Hydrate from partial server data (User) if store is empty
   useEffect(() => {
     // If we have no coords yet, but we have an initialUser with a location
     if (!coords && initialUser?.currentLocation) {
       try {
-        // Prisma Json type needs casting/checking
-        const loc = initialUser.currentLocation as any;
-        if (typeof loc.lat === "number" && typeof loc.lng === "number") {
-          const initialCoords = { lat: loc.lat, lng: loc.lng };
+        const loc = initialUser?.currentLocation as {
+          type?: string;
+          coordinates?: [number, number];
+          lat?: number;
+          lng?: number;
+        } | null;
 
-          // console.log("Hydrating useGeo from server user data:", initialCoords);
-
-          setCoords(initialCoords);
-          setLastSavedCoords(initialCoords); // Assume it's saved since it came from DB
-          setLoading(false);
+        if (loc && typeof loc === "object") {
+          // Handle GeoJSON format: { type: "Point", coordinates: [lng, lat] }
+          if (loc.type === "Point" && Array.isArray(loc.coordinates)) {
+            const [lng, lat] = loc.coordinates;
+            if (typeof lat === "number" && typeof lng === "number") {
+              const initialCoords = { lat, lng };
+              setCoords(initialCoords);
+              setLastSavedCoords(initialCoords);
+              lastSavedCoordsRef.current = initialCoords;
+              setLoading(false);
+            }
+          }
+          // Handle fallback/legacy format: { lat, lng }
+          else if (typeof loc.lat === "number" && typeof loc.lng === "number") {
+            const initialCoords = { lat: loc.lat, lng: loc.lng };
+            setCoords(initialCoords);
+            setLastSavedCoords(initialCoords);
+            lastSavedCoordsRef.current = initialCoords;
+            setLoading(false);
+          }
         }
       } catch (err) {
         console.error("Failed to parse initial user location", err);
       }
     }
   }, [initialUser, coords, setCoords, setLastSavedCoords, setLoading]);
-
-  useEffect(() => {
-    // console.count("useGeo");
-    // console.log("useGeo: coords", coords);
-    // console.log("useGeo: lastSavedCoords", lastSavedCoords);
-    // console.log("useGeo: loading", loading);
-    // console.log("useGeo: error", error);
-  }, [coords, lastSavedCoords, loading, error]);
-  // Keep the latest coords in a ref to usage in intervals/timeouts if needed,
-  // though here we rely on the effect dependency which is fine with proper debouncing.
 
   // EFFECT 1: Watch Position (Real-time tracking)
   useEffect(() => {
@@ -88,8 +103,6 @@ export function useGeo(options: UseGeoOptions = {}) {
         lng: pos.coords.longitude,
       };
 
-      // Only update store if actual change (though basic float comparison is tricky,
-      // Zustand might handle equality check, but let's just set it)
       setCoords(newCoords);
       setLoading(false);
     };
@@ -99,7 +112,6 @@ export function useGeo(options: UseGeoOptions = {}) {
       setLoading(false);
     };
 
-    // Use watchPosition for continuous updates instead of one-off getCurrentPosition
     const watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
       enableHighAccuracy: true,
       maximumAge: 0,
@@ -120,27 +132,28 @@ export function useGeo(options: UseGeoOptions = {}) {
       const now = Date.now();
 
       // 2. Debounce check (Time-based)
-      // Prevent frequent saves even if distance threshold is met (e.g. driving in circles)
       if (now - lastSaveTimeRef.current < debounceMs) {
         return;
       }
 
       // 3. Distance check
-      // Move this logic here to avoid dependency cycles with lastSavedCoords
       let shouldSave = false;
+      const lastSaved = lastSavedCoordsRef.current;
 
-      if (!lastSavedCoords) {
+      if (!lastSaved) {
         shouldSave = true; // First save
       } else {
         const distKm = getDistance(
-          lastSavedCoords.lat,
-          lastSavedCoords.lng,
+          lastSaved.lat,
+          lastSaved.lng,
           coords.lat,
           coords.lng,
           "KM"
         );
 
-        if (distKm >= distanceThresholdKm) {
+        // Movement threshold (with safety for GPS drift)
+        // Note: Browsers usually have ~5-10m drift, so threshold < 0.05 is risky.
+        if (distKm >= Math.max(distanceThresholdKm, 0.01)) {
           shouldSave = true;
         }
       }
@@ -151,10 +164,12 @@ export function useGeo(options: UseGeoOptions = {}) {
         try {
           console.log(`Saving location (moved > ${distanceThresholdKm}km)...`);
 
-          await updateUserLocationWithCityAction(session.user.id, coords);
+          await updateUserLocationAction(coords);
 
-          setLastSavedCoords(coords);
+          // Logic vs UI split: Update ref immediately, then store for UI
+          lastSavedCoordsRef.current = coords;
           lastSaveTimeRef.current = now;
+          setLastSavedCoords(coords);
         } catch (err) {
           console.error("Failed to update user location:", err);
         } finally {
@@ -164,13 +179,8 @@ export function useGeo(options: UseGeoOptions = {}) {
     };
 
     attemptSave();
-
-    // We intentionally include `lastSavedCoords` here.
-    // The debounce logic prevents infinite loops because we update `lastSaveTimeRef`
-    // and check it before proceeding.
   }, [
     coords,
-    lastSavedCoords,
     persistToDb,
     session?.user?.id,
     distanceThresholdKm,

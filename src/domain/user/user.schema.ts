@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { mediaSchema, type Media } from "../media/media.schema";
+import { mediaSchema, type Media } from "@/domain/media/media.schema";
 
 // --- Validations ---
 
@@ -11,6 +11,13 @@ export type Gender = z.infer<typeof GenderEnum>;
 
 export const RoleEnum = z.enum(["USER", "ADMIN"]);
 export type Role = z.infer<typeof RoleEnum>;
+
+/** GeoJSON Point schema */
+export const geoPointSchema = z.object({
+  type: z.literal("Point"),
+  coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
+});
+export type GeoPoint = z.infer<typeof geoPointSchema>;
 
 // --- Helper / Nested Schemas ---
 
@@ -64,7 +71,9 @@ export const userSchema = z.object({
   profileCompleted: z.boolean().default(false),
 
   // Location / Geo (Matches Prisma Json storage)
-  currentLocation: z.union([z.array(z.number()), z.any()]).nullable(), // [lng, lat]
+  currentLocation: z
+    .union([geoPointSchema, z.array(z.number()), z.any()])
+    .nullable(), // [lng, lat]
   currentCityId: z.string().nullable(),
   currentCity: cityLiteSchema.optional().nullable(),
 

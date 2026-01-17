@@ -2,9 +2,12 @@
 
 import React, { useState } from "react";
 import { useGenerateCountry } from "@/domain/country/country.hooks";
-import Button from "@/app/component/common/Button";
-import Input from "@/app/component/form/Input";
+import Button from "@/app/components/common/Button";
+import Input from "@/app/components/form/Input";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+import { ActionResponse } from "@/types/actions";
+import { GenerateCountryResult } from "@/domain/country/country.actions";
 
 type GeneratedItem = {
   id: string;
@@ -25,20 +28,38 @@ export default function GeneratorPage() {
     if (!inputVal.trim()) return;
 
     mutate(inputVal, {
-      onSuccess: (data) => {
-        setHistory((prev) => [
-          {
-            id: data.countryId || Math.random().toString(),
-            name: data.name || inputVal,
-            status: "success",
-            timestamp: new Date(),
-            message: data.created ? "Created successfully" : "Already exists",
-          },
-          ...prev,
-        ]);
-        setInputVal("");
+      onSuccess: (res: ActionResponse<GenerateCountryResult>) => {
+        if (res.success) {
+          toast.success(`Generated ${res.data.name}`);
+          setHistory((prev) => [
+            {
+              id: res.data.countryId || Math.random().toString(),
+              name: res.data.name || inputVal,
+              status: "success",
+              timestamp: new Date(),
+              message: res.data.created
+                ? "Created successfully"
+                : "Already exists",
+            },
+            ...prev,
+          ]);
+          setInputVal("");
+        } else {
+          toast.error(res.error || "Failed to generate");
+          setHistory((prev) => [
+            {
+              id: Math.random().toString(),
+              name: inputVal,
+              status: "error",
+              timestamp: new Date(),
+              message: res.error,
+            },
+            ...prev,
+          ]);
+        }
       },
       onError: (err) => {
+        toast.error(err.message || "Something went wrong");
         setHistory((prev) => [
           {
             id: Math.random().toString(),

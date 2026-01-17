@@ -1,4 +1,4 @@
-import { Avatar } from "@/app/component/common/Avatar";
+import { Avatar } from "@/app/components/common/Avatar";
 import { ProfileUser } from "@/types/user";
 
 export const UserLink = ({ user }: { user: ProfileUser }) => {

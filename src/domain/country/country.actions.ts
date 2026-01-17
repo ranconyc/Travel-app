@@ -4,22 +4,27 @@ import { createCountryFromName } from "@/lib/db/country.repo";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { z } from "zod";
+import { User } from "@/domain/user/user.schema";
 
 const GenerateInput = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
 });
 
-export type GenerateCountryResult =
-  | { success: true; countryId: string; name: string; created: boolean }
-  | { success: false; error: string; fieldErrors?: Record<string, string> };
+import { ActionResponse } from "@/types/actions";
+
+export type GenerateCountryResult = {
+  countryId: string;
+  name: string;
+  created: boolean;
+};
 
 export async function generateCountryAction(
   name: string
-): Promise<GenerateCountryResult> {
+): Promise<ActionResponse<GenerateCountryResult>> {
   try {
     // 1. Auth Check
     const session = await getServerSession(authOptions);
-    if (!session || (session.user as any).role !== "ADMIN") {
+    if (!session || (session.user as User).role !== "ADMIN") {
       return { success: false, error: "Unauthorized: Admins only" };
     }
 
@@ -43,9 +48,11 @@ export async function generateCountryAction(
 
     return {
       success: true,
-      countryId: country.countryId,
-      name: country.name,
-      created,
+      data: {
+        countryId: country.countryId,
+        name: country.name,
+        created,
+      },
     };
   } catch (error: any) {
     console.error("Generate country error:", error);
@@ -56,7 +63,7 @@ export async function generateCountryAction(
   }
 }
 
-export async function getAllCountriesAction() {
+export async function getAllCountriesAction(): Promise<ActionResponse<any[]>> {
   try {
     const { getAllCountries } = await import("@/lib/db/country.repo");
     const countries = await getAllCountries();

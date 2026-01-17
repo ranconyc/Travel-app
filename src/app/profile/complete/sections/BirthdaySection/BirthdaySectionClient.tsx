@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import Input from "@/app/component/form/Input";
+import Input from "@/app/components/form/Input";
 import { getAge } from "@/app/_utils/age";
 
 // Pre-compute today's date in YYYY-MM-DD for the <input type="date" />

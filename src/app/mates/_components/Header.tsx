@@ -1,4 +1,4 @@
-import HeaderWrapper from "@/app/component/common/Header";
+import HeaderWrapper from "@/app/components/common/Header";
 
 export default function Header() {
   return (

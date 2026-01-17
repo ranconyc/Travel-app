@@ -1,5 +1,5 @@
 import Header from "@/app/mates/_components/Header";
-import MateCard from "@/app/component/common/cards/MateCard";
+import MateCard from "@/app/components/common/cards/MateCard";
 
 export default function NearbyMatesClient({
   mates,

@@ -22,7 +22,7 @@ import AvatarSectionShell from "./sections/AvatarSection/AvatarSectionShell";
 import { useProfileDraft } from "@/app/_hooks/useProfileDraft";
 import type { User as DomainUser } from "@/domain/user/user.schema";
 import type { Gender } from "@/domain/user/user.schema";
-import Button from "@/app/component/common/Button";
+import Button from "@/app/components/common/Button";
 
 type PrismaUser = DomainUser & {
   homeBaseCity?: {

@@ -2,7 +2,7 @@
 
 import { User } from "@/domain/user/user.schema";
 import { ProfileUser } from "@/types/user";
-import Button from "@/app/component/common/Button";
+import Button from "@/app/components/common/Button";
 import { useFriendshipStatus } from "@/app/_hooks/useFriendship";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -11,7 +11,7 @@ import {
   denyFriendRequestAction,
   sendFriendRequestAction,
 } from "@/domain/friendship/friendship.actions";
-import { AvatarList } from "@/app/component/common/AvatarList";
+import { AvatarList } from "@/app/components/common/AvatarList";
 
 const SimilaritiesSection = () => (
   <div className="grid grid-cols-3 gap-2 text-xs">

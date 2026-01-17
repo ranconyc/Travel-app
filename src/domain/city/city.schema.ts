@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CountrySchema } from "../country/country.schema";
+import { CountrySchema } from "@/domain/country/country.schema";
 
 /** Budget per-day (in local currency) */
 export const BudgetSchema = z.object({
@@ -52,10 +52,10 @@ export const CitySchema = z.object({
   gettingAround: z.any().optional().nullable(),
 
   // Relations
-  places: z.array(z.any()).default([]),
+  places: z.array(z.any()).optional().default([]),
 
-  usersHomeBase: z.array(z.any()).default([]),
-  usersCurrentCity: z.array(z.any()).default([]),
+  usersHomeBase: z.array(z.any()).optional().default([]),
+  usersCurrentCity: z.array(z.any()).optional().default([]),
 
   // CMS flags
   autoCreated: z.boolean().default(false),

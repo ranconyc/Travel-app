@@ -6,8 +6,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import worldData from "@/data/world.json";
 
-import { SelectedItem } from "../mode/page";
-import Button from "@/app/component/common/Button";
+import { SelectedItem } from "@/app/components/common/SelectedItem";
+import Button from "@/app/components/common/Button";
 import { CategoryRow } from "../persona/_components/InterestsStep";
 import Modal from "./_components/Modal";
 import { travelFormSchema, TravelFormValues } from "./_types/form";

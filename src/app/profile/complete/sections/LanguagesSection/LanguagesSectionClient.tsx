@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState, useMemo } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import { MultiSelectAutocomplete } from "@/app/component/form/MultiSelectAutocomplete";
+import { MultiSelectAutocomplete } from "@/app/components/form/MultiSelectAutocomplete";
 
 type LanguageJson = {
   code: string;

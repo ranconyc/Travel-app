@@ -1,6 +1,6 @@
 "use client";
-import Button from "@/app/component/common/Button";
-import { Autocomplete } from "@/app/component/form/Autocomplete";
+import Button from "@/app/components/common/Button";
+import { Autocomplete } from "@/app/components/form/Autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import React, { useEffect } from "react";

@@ -3,6 +3,10 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { ActionResponse } from "@/types/actions";
+import { prisma } from "@/lib/db/prisma";
+import { findNearestCityFromCoords } from "@/lib/db/cityLocation.repo";
+import { DetectedCity } from "@/types/city";
 import {
   completeProfileSchema,
   type CompleteProfileFormValues,
@@ -16,6 +20,7 @@ import {
   type SaveTravelFormValues,
   type SavePersonaFormValues,
   type BioInput,
+  type User,
 } from "@/domain/user/user.schema";
 import {
   completeProfile,
@@ -307,7 +312,7 @@ export async function updateUserRoleAction(
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session || (session.user as any).role !== "ADMIN") {
+  if (!session || (session.user as User).role !== "ADMIN") {
     return { success: false, error: "Unauthorized" };
   }
 
@@ -318,5 +323,47 @@ export async function updateUserRoleAction(
   } catch (error) {
     console.error("updateUserRoleAction error:", error);
     return { success: false, error: "Failed to update role" };
+  }
+}
+
+export async function updateUserLocationAction(coords: {
+  lat: number;
+  lng: number;
+}): Promise<ActionResponse<{ detected: DetectedCity }>> {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return { success: false, error: "UNAUTHENTICATED" };
+  }
+
+  if (
+    typeof coords.lat !== "number" ||
+    typeof coords.lng !== "number" ||
+    Number.isNaN(coords.lat) ||
+    Number.isNaN(coords.lng)
+  ) {
+    return { success: false, error: "Invalid coordinates" };
+  }
+
+  try {
+    const detected = await findNearestCityFromCoords(coords.lat, coords.lng, {
+      createIfMissing: true,
+    });
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        currentLocation: {
+          type: "Point",
+          coordinates: [coords.lng, coords.lat],
+        },
+        currentCityId: detected.id ?? undefined,
+      },
+    });
+
+    return { success: true, data: { detected } };
+  } catch (error) {
+    console.error("updateUserLocationAction error:", error);
+    return { success: false, error: "Failed to update user location" };
   }
 }

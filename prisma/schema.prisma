@@ -197,9 +197,9 @@ model Country {
   countryId String @unique // e.g. "th" or "thailand"
   code      String // ISO code "TH"
   name      String
-
+  imageHeroUrl String? 
+  media        Media[]
   coords Json? // GeoJSON point for map centering
-
   continent     String?
   subRegion     String?
   officialName  String?
@@ -210,24 +210,72 @@ model Country {
   areaKm2       Float?
   
   // Practical Info
-  currency      Json?
-  emergency     Json?
-  visaEntry     Json?
-  languageComm  Json?
   utilities     Json?
   internet      Json?
   gettingAround Json?
-  
-  // Media (Now using relation + simple hero string for speed)
-  imageHeroUrl String?
-  media        Media[] // All images associated with this country
 
-  bestSeason    String?
+// language info
+  languages Json? // { official: ["Thai"], spoken: ["Thai", "English"], primaryScript: "Thai" }
+  commonPhrases Json? // { hello: { local: "สวัสดี", romanized: "Sawasdee", audio: "url?" }
+  
+//  Money info
+  currency Json // { code: "THB", symbol: "฿", name: "Thai Baht", subunit: "Satang" }
+  budget Json // { daily: { budget: "800-1500", mid: "1500-3000", luxury: "3000+" }, currencyCode: "THB", note: "Street food from 40฿" }
+  cashCulture Json // { atmAvailability: "widespread", atmFees: "150-220฿", creditCardAcceptance: "moderate", cashPreferred: true, tipCulture: { expected: false, guide: "Not expected, but appreciated for great service" } }
+  
+
+  safety Json? /* {
+    overall: "safe",
+    crimeLevel: "low",
+    pettyTheft: "moderate-tourist-areas",
+    violentCrime: "rare",
+    scamsCommon: ["tuk-tuk-overcharge", "gem-scam", "taxi-meter"],
+    waterSafety: "tap-not-drinkable",
+    foodSafety: "generally-safe-street-food-ok",
+    areasCaution: ["Deep South provinces"],
+    nightSafety: "safe-normal-precautions",
+    soloFemaleTravel: "safe-normal-precautions",
+    lastUpdated: "2025-01-15"
+  } */
+
+  emergency Json? /* {
+    police: "191",
+    ambulance: "1669",
+    fire: "199",
+    touristPolice: "1155",
+    embassies: [
+      { country: "USA", phone: "+66-2-205-4000", address: "95 Wireless Road, Bangkok" },
+      { country: "UK", phone: "+66-2-305-8333", address: "14 Wireless Road, Bangkok" }
+    ]
+  } */
+
+   // Visa & Entry (CRITICAL)
+  visaEntry Json? /* {
+    visaFreeCountries: ["US-30days", "UK-30days", "EU-30days"],
+    visaOnArrival: ["India", "China"],
+    eVisaAvailable: true,
+    workPermitInfo: "required-for-work",
+    requirements: "passport-6mo-validity",
+    officialLink: "https://www.mfa.go.th"
+  } */
+
+
+
+
+
+
   idealDuration String?
-  safety        String?
+
 
   meta    Json?
   regions String[] @default([])
+   
+  bestTimeToVisit Json /* {
+    peak: { months: ["Nov", "Dec", "Jan", "Feb"], why: "Cool & dry, festivals", crowds: "high", prices: "high" },
+    shoulder: { months: ["Mar", "Apr", "Oct"], why: "Good weather, fewer crowds", crowds: "moderate", prices: "moderate" },
+    low: { months: ["May", "Jun", "Jul", "Aug", "Sep"], why: "Rainy season, very hot", crowds: "low", prices: "low" },
+    avoid: ["September-flooding-risk"]
+  } */
 
   // Relations
   cities City[]

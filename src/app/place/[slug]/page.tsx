@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import Button from "@/app/component/common/Button";
+import Button from "@/app/components/common/Button";
 import { Place } from "@/domain/place/place.schema";
 
 interface ExtendedPlace extends Place {
@@ -10,9 +10,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getPlaceBySlug } from "@/lib/db/place.repo";
 import Link from "next/link";
-import HeaderWrapper from "@/app/component/common/Header";
+import HeaderWrapper from "@/app/components/common/Header";
 import { CalendarPlus, Users } from "lucide-react";
-import Title from "@/app/component/Title";
+import Title from "@/app/components/Title";
 
 const Header = ({ activity }: { activity: ExtendedPlace }) => {
   return (

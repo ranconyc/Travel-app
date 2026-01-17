@@ -1,7 +1,7 @@
 "use client";
-import HeaderWrapper from "../component/common/Header";
-import Input from "../component/form/Input";
-import { useCountries } from "../_hooks/useCountries";
+import HeaderWrapper from "@/app/components/common/Header";
+import Input from "@/app/components/form/Input";
+import { useCountries } from "@/app/_hooks/useCountries";
 import Link from "next/link";
 
 export default function CountriesPage() {

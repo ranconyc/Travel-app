@@ -1,5 +1,5 @@
-import Block from "@/app/component/common/Block";
-import Title from "@/app/component/Title";
+import Block from "@/app/components/common/Block";
+import Title from "@/app/components/Title";
 import { MessageCircleHeart } from "lucide-react";
 
 export const InterestsSection = () => (

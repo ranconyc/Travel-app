@@ -2,7 +2,7 @@
 
 import { memo, useEffect } from "react";
 import { useFormContext, useController } from "react-hook-form";
-import { Autocomplete, AutoOption } from "@/app/component/form/Autocomplete";
+import { Autocomplete, AutoOption } from "@/app/components/form/Autocomplete";
 import type { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
 // Extends base AutoOption with city-specific fields

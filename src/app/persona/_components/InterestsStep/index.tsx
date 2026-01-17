@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectedItem } from "@/app/mode/page";
+import SelectedItem from "@/app/components/common/SelectedItem";
 import { useMemo, useState } from "react";
 import interests from "@/data/interests.json";
 import { ChevronRight } from "lucide-react";

@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Avatar } from "@/app/component/common/Avatar";
+import { Avatar } from "@/app/components/common/Avatar";
 import { updateUserRoleAction } from "@/domain/user/user.actions";
 import { Loader2, Shield, User as UserIcon, Search } from "lucide-react";
-import Button from "@/app/component/common/Button";
+import Button from "@/app/components/common/Button";
 
 type User = {
   id: string;

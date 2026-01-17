@@ -16,6 +16,8 @@ export function useSocket() {
   return useContext(SocketContext);
 }
 
+const ENABLE_SOCKET = false; // Set to true to enable WebSocket features
+
 export function SocketProvider({ children }: { children: React.ReactNode }) {
   const [socket] = useState<Socket | null>(() => {
     return io({
@@ -31,7 +33,12 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
   // Handle connection and events
   useEffect(() => {
-    if (!socket || status !== "authenticated" || !session?.user) {
+    if (
+      !ENABLE_SOCKET ||
+      !socket ||
+      status !== "authenticated" ||
+      !session?.user
+    ) {
       return;
     }
 

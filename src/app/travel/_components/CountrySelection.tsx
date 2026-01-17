@@ -1,6 +1,8 @@
+"use client";
+
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { SelectionCard } from "../../mode/page";
+import SelectionCard from "@/app/components/form/SelectionCard";
 import { TravelFormValues } from "../_types/form";
 
 interface CountrySelectionProps {

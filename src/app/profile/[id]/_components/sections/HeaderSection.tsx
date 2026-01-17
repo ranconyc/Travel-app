@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import Button from "@/app/component/common/Button";
+import Button from "@/app/components/common/Button";
 import { MatchSection } from "../MatchSection";
 import { User } from "@/domain/user/user.schema";
 import { ProfileUser } from "@/types/user";

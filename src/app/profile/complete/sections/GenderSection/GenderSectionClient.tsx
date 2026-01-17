@@ -3,7 +3,7 @@
 
 import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import ErrorMessage from "@/app/component/form/ErrorMessage";
+import ErrorMessage from "@/app/components/form/ErrorMessage";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
 // match Prisma enum Gender { MALE, FEMALE, NON_BINARY }

@@ -5,8 +5,8 @@ import {
 } from "@/lib/db/country.repo";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import Logo from "@/app/component/common/Logo";
-import Button from "@/app/component/common/Button";
+import Logo from "@/app/components/common/Logo";
+import Button from "@/app/components/common/Button";
 import Link from "next/link";
 import {
   Heart,

@@ -1,7 +1,7 @@
-import Block from "@/app/component/common/Block";
-import Button from "@/app/component/common/Button";
-import CurrencySection from "@/app/component/sections/CurrencySection";
-import Title from "@/app/component/Title";
+import Block from "@/app/components/common/Block";
+import Button from "@/app/components/common/Button";
+import CurrencySection from "@/app/components/sections/CurrencySection";
+import Title from "@/app/components/Title";
 import { Country } from "@/domain/country/country.schema";
 import {
   findBorderCountries,

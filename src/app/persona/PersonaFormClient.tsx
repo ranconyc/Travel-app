@@ -1,16 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@/app/component/common/Button";
+import Button from "@/app/components/common/Button";
 
 import RhythmStep from "./_components/RhythmStep";
 import InterestsStep from "./_components/InterestsStep";
 import StyleStep from "./_components/StyleStep";
 import ProgressBar from "./_components/ProgressBar";
 import useStep from "./_hooks/useStep";
-import { formSchema, PersonaFormValues } from "./_types/form";
+import { PersonaFormValues } from "./_types/form";
 import { saveInterests } from "@/domain/user/user.actions";
 import { User } from "@/domain/user/user.schema";
 import { DevTool } from "@hookform/devtools";
@@ -31,25 +30,17 @@ const steps = [
   },
 ];
 
-const FormHeader = ({
-  step,
-  handleBack,
-}: {
-  step: number;
-  handleBack: () => void;
-}) => {
+const FormHeader = ({ step }: { step: number }) => {
   return (
-    <div className="fixed top-0 left-0 right-0 bg-app-bg/80 backdrop-blur-md z-40 px-4 py-6">
-      <div className="flex items-center gap-4 max-w-2xl mx-auto">
-        <button
-          onClick={handleBack}
-          className="p-1 hover:bg-surface rounded-full transition-colors"
-          aria-label="Go back"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
+    <div className="sticky top-0 left-0 right-0 bg-app-bg z-40 px-4 py-6">
+      <div className="flex items-center justify-between">
+        <Button variant="back" />
         <ProgressBar currentStep={step} totalSteps={3} />
       </div>
+      <h1 className="text-xl font-bold mb-3">{steps[step - 1].header}</h1>
+      <p className="text-xs font-medium text-secondary">
+        {steps[step - 1].description}
+      </p>
     </div>
   );
 };
@@ -122,54 +113,54 @@ export default function PersonaFormClient({
 
   return (
     <FormProvider {...methods}>
-      <div className="min-h-screen bg-app-bg p-4 pb-24">
-        <FormHeader step={step} handleBack={handleBack} />
-        <div className="mb-4 pt-20">
-          <div className="mb-2 text-center h-5">
-            {step === 1 && methods.formState.errors.dailyRhythm && (
-              <p className="text-red-500 text-sm">
-                {methods.formState.errors.dailyRhythm.message}
-              </p>
-            )}
-            {step === 2 && methods.formState.errors.travelStyle && (
-              <p className="text-red-500 text-sm">
-                {methods.formState.errors.travelStyle.message}
-              </p>
-            )}
-            {step === 3 && methods.formState.errors.interests && (
-              <p className="text-red-500 text-sm">
-                {methods.formState.errors.interests.message}
-              </p>
-            )}
+      <div className="min-h-screen">
+        <FormHeader step={step} />
+        {/* Show error for current step if exists */}
+        {step > 1 && methods.formState.errors && (
+          <div className="mb-4">
+            <div className="mb-2 text-center h-5">
+              {step === 1 && methods.formState.errors.dailyRhythm && (
+                <p className="text-red-500 text-sm">
+                  {methods.formState.errors.dailyRhythm.message}
+                </p>
+              )}
+              {step === 2 && methods.formState.errors.travelStyle && (
+                <p className="text-red-500 text-sm">
+                  {methods.formState.errors.travelStyle.message}
+                </p>
+              )}
+              {step === 3 && methods.formState.errors.interests && (
+                <p className="text-red-500 text-sm">
+                  {methods.formState.errors.interests.message}
+                </p>
+              )}
+            </div>
           </div>
-          <h1 className="text-xl font-bold mb-3">{steps[step - 1].header}</h1>
-          <p className="mb-8 font-medium">{steps[step - 1].description}</p>
-        </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="fixed bottom-0 left-0 right-0 p-4 pb-12 bg-app-bg border-t border-surface">
-            {/* Show error for current step if exists */}
-
+          <div className="p-4 pb-20 bg-app-bg border-t border-surface overflow-y-scroll">
             {stepContent(step)}
-
-            {step < 3 ? (
-              <Button
-                type="button"
-                disabled={!isStepValid()}
-                onClick={handleContinue}
-                className="w-full"
-              >
-                Continue
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                disabled={!isValid || isSubmitting}
-                className="w-full"
-              >
-                {isSubmitting ? "Saving..." : "Submit"}
-              </Button>
-            )}
+            <div className="bg-app-bg p-4 pb-8 fixed bottom-0 left-0 right-0">
+              {step < 3 ? (
+                <Button
+                  type="button"
+                  disabled={!isStepValid()}
+                  onClick={handleContinue}
+                  className="w-full"
+                >
+                  Continue
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  disabled={!isValid || isSubmitting}
+                  className="w-full"
+                >
+                  {isSubmitting ? "Saving..." : "Submit"}
+                </Button>
+              )}
+            </div>
           </div>
         </form>
         <DevTool control={control} />
