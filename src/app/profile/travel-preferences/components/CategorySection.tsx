@@ -1,10 +1,11 @@
-import { Category, Interest } from "@/app/profile/travel-preferences/page";
+import { Category } from "@/app/profile/travel-preferences/page";
+import { InterestItem } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
 import InterestsGrid from "@/app/profile/travel-preferences/components/InterestsGrid";
 import { ChevronRight } from "lucide-react";
 
 type CategorySectionProps = {
   category: Category;
-  interests: Interest[];
+  interests: InterestItem[];
   selectedIds: string[];
   isActive: boolean;
   onToggleCategory: () => void;

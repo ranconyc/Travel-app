@@ -1,19 +1,20 @@
 "use client";
 
 import { FormProvider } from "react-hook-form";
-import CATEGORIES from "@/data/categories.json";
 import INTERESTS from "@/data/interests.json";
-import { useTravelPreferencesForm } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
+import {
+  useTravelPreferencesForm,
+  InterestsData,
+} from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
 import PreferencesHeader from "@/app/profile/travel-preferences/components/PreferencesHeader";
 import SelectedPreferencesList from "@/app/profile/travel-preferences/components/SelectedPreferencesList";
 import CategorySection from "@/app/profile/travel-preferences/components/CategorySection";
 
 export type Category = { id: string; title: string };
-export type InterestsByCategory = Record<string, string[]>;
-export type CategoryId = string;
-export type Interest = string;
+// Removed unused types that conflicted with new structure
 
-const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
+const INTERESTS_DATA = INTERESTS as unknown as InterestsData;
+const CATEGORY_KEYS = Object.keys(INTERESTS_DATA);
 
 /* -------------------- PAGE -------------------- */
 
@@ -49,21 +50,24 @@ export default function TravelPreferencesPage() {
             onSubmit={handleFormSubmit}
             className="relative flex flex-col gap-4 px-4 pb-28 pt-4"
           >
-            {CATEGORIES.map((category: Category) => {
-              const interests =
-                INTERESTS_BY_CATEGORY[category.id as CategoryId] ?? [];
-              const selectedIds = preferences[category.id] ?? [];
+            {CATEGORY_KEYS.map((key) => {
+              const categoryData = INTERESTS_DATA[key];
+              if (!categoryData) return null;
+
+              const category: Category = { id: key, title: categoryData.label };
+              const interests = categoryData.items;
+              const selectedIds = preferences[key] ?? [];
 
               return (
                 <CategorySection
-                  key={category.id}
+                  key={key}
                   category={category}
                   interests={interests}
                   selectedIds={selectedIds}
-                  isActive={activeCategoryId === category.id}
-                  onToggleCategory={() => toggleCategory(category.id)}
+                  isActive={activeCategoryId === key}
+                  onToggleCategory={() => toggleCategory(key)}
                   onToggleInterest={(interestId) =>
-                    toggleInterest(category.id, interestId)
+                    toggleInterest(key, interestId)
                   }
                 />
               );

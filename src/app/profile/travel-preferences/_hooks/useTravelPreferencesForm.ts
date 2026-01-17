@@ -2,15 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import CATEGORIES from "@/data/categories.json";
 import INTERESTS from "@/data/interests.json";
 
-const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
+export type InterestItem = { id: string; label: string };
+export type CategoryData = { id: string; label: string; items: InterestItem[] };
+export type InterestsData = Record<string, CategoryData>;
 
-type Category = { id: string; title: string };
-type InterestsByCategory = Record<string, string[]>;
-type CategoryId = string;
-type Interest = string;
+const INTERESTS_DATA = INTERESTS as unknown as InterestsData;
+const CATEGORY_KEYS = Object.keys(INTERESTS_DATA);
 
 export type FormValues = {
   preferences: Record<string, string[]>;
@@ -53,25 +52,27 @@ export function useTravelPreferencesForm(onSubmit?: SubmitHandler<FormValues>) {
 
   const selectedItems: SelectedPreference[] = useMemo(
     () =>
-      CATEGORIES.flatMap((category: Category) => {
-        const categoryInterests =
-          INTERESTS_BY_CATEGORY[category.id as CategoryId] ?? [];
-        const selectedIds = preferences[category.id] ?? [];
+      CATEGORY_KEYS.flatMap((key) => {
+        const categoryCallback = INTERESTS_DATA[key];
+        // Ensure category exists
+        if (!categoryCallback) return [];
+
+        const selectedIds = preferences[key] ?? [];
 
         return selectedIds
           .map((id) => {
-            const interest = categoryInterests.find((i) => i === id);
-            if (!interest) return null;
+            const item = categoryCallback.items.find((i) => i.id === id);
+            if (!item) return null;
             return {
-              categoryId: category.id,
-              categoryTitle: category.title,
+              categoryId: key,
+              categoryTitle: categoryCallback.label,
               interestId: id,
-              label: interest,
+              label: item.label,
             };
           })
           .filter(Boolean) as SelectedPreference[];
       }),
-    [preferences]
+    [preferences],
   );
 
   const selectedCount = selectedItems.length;

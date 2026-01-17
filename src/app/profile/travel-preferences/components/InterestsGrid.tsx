@@ -1,7 +1,7 @@
-import { Interest } from "@/app/profile/travel-preferences/page";
+import { InterestItem } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
 
 type InterestsGridProps = {
-  interests: Interest[];
+  interests: InterestItem[];
   selectedIds: string[];
   onToggleInterest: (interestId: string) => void;
 };
@@ -14,12 +14,12 @@ export default function InterestsGrid({
   return (
     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
       {interests.map((interest) => {
-        const selected = selectedIds.includes(interest);
+        const selected = selectedIds.includes(interest.id);
 
         return (
           <label
-            key={interest}
-            htmlFor={interest}
+            key={interest.id}
+            htmlFor={interest.id}
             className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-sm cursor-pointer transition
               ${
                 selected
@@ -29,7 +29,7 @@ export default function InterestsGrid({
           >
             <div className="flex items-center gap-3">
               <span className="text-[15px] font-medium text-gray-900">
-                {interest}
+                {interest.label}
               </span>
             </div>
 
@@ -46,11 +46,11 @@ export default function InterestsGrid({
             </span>
 
             <input
-              id={interest}
+              id={interest.id}
               type="checkbox"
               className="sr-only"
               checked={selected}
-              onChange={() => onToggleInterest(interest)}
+              onChange={() => onToggleInterest(interest.id)}
             />
           </label>
         );
