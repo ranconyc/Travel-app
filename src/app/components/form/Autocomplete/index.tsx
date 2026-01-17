@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, forwardRef } from "react";
+import React, { useRef, useState, forwardRef } from "react";
 import ErrorMessage from "@/app/components/form/ErrorMessage";
 import { highlightMatch } from "@/app/components/form/Autocomplete/highlightMatch";
 import { useAutocompleteValue } from "@/app/_hooks/autocomplete/useAutocompleteValue";
@@ -76,7 +76,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       onChange,
       onBlur,
     },
-    ref
+    ref,
   ) {
     // refs
     const containerRef = useRef<HTMLDivElement>(null);
@@ -125,10 +125,24 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     });
 
     // 5) control open/active when results change
-    useEffect(() => {
-      setOpen(merged.length > 0 || (!!qVal && loading));
-      setActiveIndex(merged.length ? 0 : -1);
-    }, [merged.length, qVal, loading]);
+    // Using "adjusting state during rendering" pattern to avoid cascading renders
+    const [prevMerged, setPrevMerged] = useState(merged);
+    const [prevLoading, setPrevLoading] = useState(loading);
+
+    if (merged !== prevMerged || loading !== prevLoading) {
+      setPrevMerged(merged);
+      setPrevLoading(loading);
+
+      const shouldBeOpen = merged.length > 0 || (!!qVal && loading);
+      if (shouldBeOpen !== open) {
+        setOpen(shouldBeOpen);
+      }
+
+      const nextIndex = merged.length ? 0 : -1;
+      if (nextIndex !== activeIndex) {
+        setActiveIndex(nextIndex);
+      }
+    }
 
     // 6) selection logic
     const commitSelection = (opt: AutoOption) => {
@@ -185,16 +199,28 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     });
 
     return (
-      <div ref={containerRef} className={`relative ${className}`}>
+      <div
+        ref={containerRef}
+        className={`flex flex-col gap-2 w-full text-left ${className}`}
+      >
         {label && (
-          <label htmlFor={id} className="block mb-1 font-medium">
+          <label
+            htmlFor={id}
+            className="text-sm font-semibold capitalize text-app-text"
+          >
             {label}
           </label>
         )}
-        {selectedOptions && <div className="mb-2">{selectedOptions}</div>}
 
         {/* input + clear button */}
-        <div className="relative">
+        <div
+          className="relative"
+          role="combobox"
+          aria-haspopup="listbox"
+          aria-owns={`${id}-listbox`}
+          aria-controls={`${id}-listbox`}
+          aria-expanded={open}
+        >
           <input
             id={id}
             name={name}
@@ -215,20 +241,26 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             onBlur={onBlur}
             aria-autocomplete="list"
             aria-controls={`${id}-listbox`}
-            aria-expanded={open}
             aria-activedescendant={
               activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined
             }
             aria-invalid={!!error || undefined}
             aria-describedby={error ? `${id}-error` : undefined}
-            className={`${inputClassName} pr-8`}
+            className={[
+              "text-app-text px-4 h-11 rounded-md font-medium border-2 border-surface transition-all w-full",
+              "focus:outline-none focus:ring-2 focus:ring-brand/50",
+              "disabled:bg-surface-secondary disabled:cursor-not-allowed",
+              error ? "border-red-500 ring-1 ring-red-500" : "border-surface",
+              inputClassName,
+              "pr-10", // Space for clear button
+            ].join(" ")}
           />
 
           {qVal && (
             <Button
               type="button"
               onClick={handleClear}
-              className="absolute inset-y-0 right-2 flex items-center bg-transparent p-0 text-gray-400 hover:text-gray-600"
+              className="absolute inset-y-0 right-2 flex items-center bg-transparent p-0 text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Clear input"
             >
               <X size={16} />
@@ -236,13 +268,15 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           )}
         </div>
 
+        {selectedOptions && <div className="mt-1">{selectedOptions}</div>}
+
         {/* dropdown */}
         {open && (
           <div
             ref={listRef}
             id={`${id}-listbox`}
             role="listbox"
-            className={`absolute left-0 right-0 z-20 mt-1 max-h-56 overflow-auto rounded-md border border-gray-200 bg-white dark:bg-gray-900 shadow-lg ${listClassName}`}
+            className={`absolute left-0 right-0 z-20 mt-1 max-h-50 overflow-auto rounded-md border border-surface-secondary bg-surface shadow-xl ${listClassName}`}
           >
             {loading && (
               <div className="px-3 py-2 text-sm text-gray-500">Loading…</div>
@@ -271,10 +305,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                   className={
                     optionClassName
                       ? optionClassName(idx === activeIndex)
-                      : `cursor-pointer px-3 py-2 ${
+                      : `cursor-pointer px-3 py-2 transition-colors ${
                           idx === activeIndex
-                            ? "bg-cyan-900/20"
-                            : "hover:bg-gray-100"
+                            ? "bg-brand/10 text-brand font-medium"
+                            : "hover:bg-surface-secondary"
                         }`
                   }
                 >
@@ -292,5 +326,5 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         <ErrorMessage id={`${id}-error`} error={error} />
       </div>
     );
-  }
+  },
 );

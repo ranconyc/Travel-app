@@ -63,3 +63,14 @@ export const CitySchema = z.object({
 });
 
 export type City = z.infer<typeof CitySchema>;
+
+/** Update schema - all fields optional for partial updates */
+export const CityUpdateSchema = CitySchema.partial().omit({
+  id: true,
+  places: true,
+  usersHomeBase: true,
+  usersCurrentCity: true,
+  country: true,
+});
+
+export type CityUpdate = z.infer<typeof CityUpdateSchema>;

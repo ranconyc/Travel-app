@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { UserRoundSearch, Binoculars, MessageCircle } from "lucide-react";
+import {
+  UserRoundSearch,
+  Binoculars,
+  MessageCircle,
+  Settings,
+  TowerControl,
+} from "lucide-react";
 import { useUnreadCount } from "@/lib/socket/useWebSocket";
 import { NotificationBadge } from "@/app/components/Navbar/NotificationBadge";
 import { Avatar } from "@/app/components/common/Avatar";
@@ -33,14 +39,22 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link href={`/profile/${user?.id}`} className="p-0">
+          <Link href={`/profile/${user?.id}`} className="p-0 flex">
             <Avatar
+              className="cursor-pointer"
               image={user?.avatarUrl || ""}
               name={user?.name || ""}
               size={30}
             />
           </Link>
         </li>
+        {user?.role === "ADMIN" && (
+          <li>
+            <Link href="/admin/generator">
+              <TowerControl size={iconsSize} />
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

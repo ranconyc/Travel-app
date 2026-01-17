@@ -47,7 +47,7 @@ export const ProfileHeader = ({
   };
 
   return (
-    <div className="p-4 flex items-center justify-between gap-2">
+    <div className="p-4 flex items-center justify-between gap-2 sticky top-6 left-0 right-0 bg-app-bg z-40">
       <Button variant="back" />
       <div className="flex items-center justify-between gap-2">
         <div className="p-3 bg-surface rounded-full cursor-pointer">
@@ -58,29 +58,28 @@ export const ProfileHeader = ({
             <Linkedin />
           </Link>
         </div>
-        <div className="p-3 bg-surface rounded-full cursor-pointer">
-          <ShieldUser />
-        </div>
-        <div className="p-3 bg-surface rounded-full cursor-pointer">
-          {isYourProfile ? (
-            <Link href="/profile/complete">
-              <Settings />
-            </Link>
-          ) : (
+        {
+          <div className="p-3 bg-surface rounded-full cursor-pointer">
             <div role="button" onClick={handleSendFriendRequest}>
               {friendship?.status === "PENDING" ? (
                 // cancel request
                 <UserRoundX />
               ) : friendship?.status === "ACCEPTED" ? (
                 // remove friend
-                <UserRoundX />
-              ) : friendship?.status === "DENIED" ? null : (
+                <ShieldUser />
+              ) : friendship?.status === "DENIED" ? (
+                "DENIED"
+              ) : isYourProfile ? (
+                <Link href="/profile/complete">
+                  <Settings />
+                </Link>
+              ) : (
                 // send request
                 <UserRoundPlus />
               )}
             </div>
-          )}
-        </div>
+          </div>
+        }
       </div>
     </div>
   );

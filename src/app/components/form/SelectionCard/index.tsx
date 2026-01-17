@@ -21,7 +21,7 @@ export const SelectionCard = ({
   onChange?: (id: string) => void;
 }) => (
   <label
-    className={`flex items-center gap-4 rounded-xl p-3 cursor-pointer border-2 transition-all ${
+    className={`flex items-center gap-3 rounded-xl p-3 cursor-pointer border-2 transition-all ${
       isSelected
         ? "border-brand bg-brand/5 shadow-sm"
         : "border-2 border-surface hover:border-brand/30"
@@ -34,7 +34,7 @@ export const SelectionCard = ({
       onChange={() => onChange?.(id)}
       {...props}
     />
-    {Icon && (
+    {Icon ? (
       <div
         className={`p-2 rounded-md transition-colors ${
           isSelected ? "bg-brand " : "bg-surface"
@@ -42,6 +42,10 @@ export const SelectionCard = ({
       >
         <Icon size={24} />
       </div>
+    ) : (
+      <div
+        className={`p-2 rounded-full transition-colors  ${isSelected ? "bg-brand " : "bg-surface"}`}
+      />
     )}
     <div className="text-left">
       <h4 className="text-app-text leading-tight">{label}</h4>

@@ -61,19 +61,11 @@ const WeatherWidget = () => {
   );
 };
 
-const AttractionCard = () => {
-  return (
-    <div className="bg-surface rounded-lg p-4 w-40 h-40">
-      <h1>Country </h1>
-    </div>
-  );
-};
-
 const Header = () => {
   const user = useUser();
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
   return (
-    <div className="p-4 pt-10 sticky top-0 left-0 right-0 z-50">
+    <div className="p-4 pt-10 sticky top-10 left-0 right-0 z-50">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-md text-secondary capitalize">
@@ -99,7 +91,7 @@ const Header = () => {
 /* -------------------------------------------------------------------------- */
 
 const CountryList = () => {
-  const { data: countries, isLoading } = useCountries();
+  const { data: countries, isLoading } = useCountries<Country[]>();
 
   if (isLoading)
     return (
@@ -190,19 +182,60 @@ const UserList = ({ loggedUser }: { loggedUser: User }) => {
   );
 };
 
-const ListThree = () => {
+import { useCities } from "@/app/_hooks/useCities";
+
+const CityList = () => {
+  const { data: cities, isLoading } = useCities();
+
+  if (isLoading)
+    return (
+      <div className="animate-pulse h-24 bg-surface rounded-lg w-full"></div>
+    );
+
   return (
     <div>
       <div className="my-2 flex items-center justify-between">
-        <h1>Nearby Attractions</h1>
-        <Link href="/attractions" className="text-xs text-secondary">
+        <h1>Cities</h1>
+        <Link href="/cities" className="text-xs text-secondary">
           see all
         </Link>
       </div>
-      <div className="flex gap-4 overflow-x-scroll">
-        <AttractionCard />
-        <AttractionCard />
-        <AttractionCard />
+      <div className="flex gap-4 overflow-x-scroll pb-4 no-scrollbar">
+        {cities?.map((city) => (
+          <Link
+            key={city.id}
+            href={`/cities/${city.cityId}`}
+            className="min-w-[140px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
+          >
+            {city.imageHeroUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={city.imageHeroUrl}
+                alt={city.name}
+                className="w-full h-full object-cover transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-surface-secondary flex flex-col items-center justify-center text-secondary p-2 text-center">
+                <span className="font-bold text-lg">
+                  {city.name.substring(0, 2).toUpperCase()}
+                </span>
+                <span className="text-[10px] mt-1 line-clamp-1">
+                  {city.country?.code}
+                </span>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+              <span className="text-white font-bold text-sm truncate w-full">
+                {city.name}
+              </span>
+            </div>
+          </Link>
+        ))}
+        {(!cities || cities.length === 0) && (
+          <div className="text-sm text-secondary italic p-4">
+            No cities found.
+          </div>
+        )}
       </div>
     </div>
   );
@@ -234,28 +267,6 @@ export default function Home() {
         {error && <p>Error: {error}</p>}
 
         <div className="flex flex-col gap-2">
-          {loggedUser?.role === "ADMIN" && (
-            <Link
-              href="/admin/dashboard"
-              className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
-            >
-              Admin Dashboard
-            </Link>
-          )}
-          <Link
-            href="/persona?step=1"
-            className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
-          >
-            Select travel Interests
-          </Link>
-
-          <Link
-            href="/travel"
-            className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
-          >
-            Update travel history
-          </Link>
-
           {loggedUser ? (
             <Button
               onClick={() => signOut({ callbackUrl: "/signin" })}
@@ -274,7 +285,7 @@ export default function Home() {
         </div>
         <UserList loggedUser={loggedUser} />
         <CountryList />
-        <ListThree />
+        <CityList />
       </main>
     </div>
   );

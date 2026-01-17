@@ -32,7 +32,7 @@ const steps = [
 
 const FormHeader = ({ step }: { step: number }) => {
   return (
-    <div className="sticky top-0 left-0 right-0 bg-app-bg z-40 px-4 py-6">
+    <div className="px-4 py-6 sticky top-6 left-0 right-0 bg-app-bg z-40 ">
       <div className="flex items-center justify-between">
         <Button variant="back" />
         <ProgressBar currentStep={step} totalSteps={3} />

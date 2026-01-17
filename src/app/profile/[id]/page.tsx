@@ -11,6 +11,8 @@ import {
 } from "@/domain/friendship/friendship.actions";
 import world from "@/data/world.json";
 import { City } from "@prisma/client";
+import Button from "@/app/components/common/Button";
+import LogoutButton from "@/app/components/LogoutButton";
 
 const Badge = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -131,7 +133,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
       for (const [continentName, regions] of Object.entries(data)) {
         // Check if any region in this continent contains the country
         const found = Object.values(regions).some((countryList) =>
-          countryList.includes(country)
+          countryList.includes(country),
         );
 
         if (found) {
@@ -227,6 +229,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
         <p className="text-xs mt-4">
           Member since {new Date(profileUser.createdAt).toLocaleDateString()}
         </p>
+        {loggedUser && isYourProfile && <LogoutButton />}
       </main>
     </div>
   );

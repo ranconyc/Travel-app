@@ -37,6 +37,7 @@ export async function getAllCities() {
   try {
     return await prisma.city.findMany({
       orderBy: { name: "asc" },
+      include: { country: true },
     });
   } catch (err) {
     console.error("getAllCities error:", err);
@@ -49,7 +50,7 @@ export async function findNearbyCities(
   lng: number,
   lat: number,
   km = 120,
-  limit = 10
+  limit = 10,
 ): Promise<NearestCityResult[]> {
   const meters = km * 1000;
 
@@ -87,7 +88,7 @@ export async function findNearbyCities(
       imageHeroUrl: row.imageHeroUrl ?? null,
       radiusKm: typeof row.radiusKm === "number" ? row.radiusKm : null,
       distanceKm: typeof row.distanceKm === "number" ? row.distanceKm : null,
-    })
+    }),
   );
 }
 
@@ -95,7 +96,7 @@ export async function findNearbyCities(
 export async function findNearestCity(
   lng: number,
   lat: number,
-  km = 300
+  km = 300,
 ): Promise<NearestCityResult | null> {
   const [nearest] = await findNearbyCities(lng, lat, km, 1);
   return nearest ?? null;
@@ -104,7 +105,7 @@ export async function findNearestCity(
 // reverse geocode a given point to a city
 export async function reverseGeocodeLocationIQ(
   lat: number,
-  lng: number
+  lng: number,
 ): Promise<ReverseGeocodeResult> {
   try {
     const key = process.env.LOCATIONIQ_API_KEY;
@@ -145,7 +146,7 @@ export async function reverseGeocodeLocationIQ(
     return {
       city,
       countryCode,
-      label: city && countryCode ? `${city}, ${countryCode}` : city ?? null,
+      label: city && countryCode ? `${city}, ${countryCode}` : (city ?? null),
     };
   } catch (err) {
     console.error("reverseGeocodeLocationIQ error:", err);
@@ -154,7 +155,7 @@ export async function reverseGeocodeLocationIQ(
 }
 
 function estimateRadiusKmFromBBox(
-  bbox?: [number, number, number, number]
+  bbox?: [number, number, number, number],
 ): number {
   if (!bbox) return 30;
   const [south, north, west, east] = bbox;
@@ -170,7 +171,7 @@ export async function findNearestCityFromCoords(
   options?: {
     searchRadiusKm?: number;
     createIfMissing?: boolean;
-  }
+  },
 ): Promise<DetectedCity> {
   const searchRadiusKm = options?.searchRadiusKm ?? 500;
   const createIfMissing = options?.createIfMissing ?? false;
@@ -187,7 +188,7 @@ export async function findNearestCityFromCoords(
     const label =
       nearest.name && nearest.countryCode
         ? `${nearest.name}, ${nearest.countryCode}`
-        : nearest.name ?? null;
+        : (nearest.name ?? null);
 
     return {
       id: nearest.id, // Return valid ObjectId
@@ -210,7 +211,7 @@ export async function findNearestCityFromCoords(
         external.countryCode,
         lat,
         lng,
-        external.boundingbox
+        external.boundingbox,
       );
 
       return {
@@ -240,12 +241,137 @@ export async function findNearestCityFromCoords(
   };
 }
 
-async function createCityFromAPI(
+// geocode a given city name to coords
+export async function geocodeLocationIQ(
+  cityName: string,
+  countryCode?: string,
+): Promise<{
+  lat: number;
+  lng: number;
+  boundingbox: string[];
+  display_name: string;
+  countryCode: string;
+} | null> {
+  try {
+    const key = process.env.LOCATIONIQ_API_KEY;
+    if (!key) {
+      throw new Error("Missing LOCATIONIQ_API_KEY env var");
+    }
+
+    const url = new URL("https://us1.locationiq.com/v1/search");
+    url.searchParams.set("key", key);
+    let q = cityName;
+    if (countryCode) q += `, ${countryCode}`;
+    url.searchParams.set("q", q);
+    url.searchParams.set("format", "json");
+    url.searchParams.set("accept-language", "en");
+    url.searchParams.set("limit", "1");
+
+    const res = await fetch(url.toString());
+
+    if (!res.ok) {
+      console.error(`LocationIQ search failed: ${res.status}`);
+      return null;
+    }
+
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return null;
+
+    const item = data[0];
+    // console.log("geocodeLocationIQ", item);
+
+    // Extract country code from address if available, or try to guess?
+    // LocationIQ search result usually has `address` if we add addressdetails=1
+    // Re-fetch with addressdetails=1 to be sure? Or assume user provided countryCode is correct?
+
+    // Let's try to parse country code from display_name if not provided?
+    // Actually, let's use a specialized structured query if country provided?
+    // For now, simpler is better.
+
+    // To get country code reliable, use addressdetails=1
+    // ...
+
+    return {
+      lat: parseFloat(item.lat),
+      lng: parseFloat(item.lon),
+      boundingbox: item.boundingbox,
+      display_name: item.display_name,
+      countryCode: countryCode || "UNKNOWN", // we might need to fetch address details to get real country code
+    };
+  } catch (err) {
+    console.error("geocodeLocationIQ error:", err);
+    return null;
+  }
+}
+
+// Improved geocode with address details
+export async function geocodeCityFull(
+  cityName: string,
+  countryCodeInput?: string,
+) {
+  try {
+    const key = process.env.LOCATIONIQ_API_KEY;
+    if (!key) return null;
+
+    const url = new URL("https://us1.locationiq.com/v1/search");
+    url.searchParams.set("key", key);
+    url.searchParams.set(
+      "q",
+      countryCodeInput ? `${cityName}, ${countryCodeInput}` : cityName,
+    );
+    url.searchParams.set("format", "json");
+    url.searchParams.set("addressdetails", "1");
+    // Ensure results are in English
+    url.searchParams.set("accept-language", "en");
+    url.searchParams.set("limit", "1");
+
+    const res = await fetch(url.toString());
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    if (!Array.isArray(data) || !data.length) return null;
+
+    const item = data[0];
+    const address = item.address || {};
+
+    const foundCity =
+      address.city ||
+      address.town ||
+      address.village ||
+      address.suburb ||
+      address.municipality ||
+      cityName;
+    const foundCountry = address.country_code
+      ? String(address.country_code).toUpperCase()
+      : countryCodeInput || "UNKNOWN";
+
+    return {
+      lat: parseFloat(item.lat),
+      lng: parseFloat(item.lon),
+      boundingbox: item.boundingbox
+        ? ([
+            parseFloat(item.boundingbox[0]),
+            parseFloat(item.boundingbox[1]),
+            parseFloat(item.boundingbox[2]),
+            parseFloat(item.boundingbox[3]),
+          ] as [number, number, number, number])
+        : undefined,
+      name: foundCity,
+      countryCode: foundCountry,
+      displayName: item.display_name,
+    };
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+export async function createCityFromAPI(
   cityName: string,
   countryCode: string,
   lat: number,
   lng: number,
-  boundingbox?: [number, number, number, number]
+  boundingbox?: [number, number, number, number],
 ) {
   const meta = {
     city: cityName,
@@ -262,10 +388,32 @@ async function createCityFromAPI(
   return { ...city, countryCode: country.code };
 }
 
+export async function createCityFromName(
+  cityName: string,
+  countryCodeInput?: string,
+) {
+  // 1. Geocode
+  const geo = await geocodeCityFull(cityName, countryCodeInput);
+  if (!geo) {
+    throw new Error(`Could not find city: ${cityName}`);
+  }
+
+  // 2. Create
+  console.log("Found city via API:", geo);
+
+  return await createCityFromAPI(
+    geo.name,
+    geo.countryCode,
+    geo.lat,
+    geo.lng,
+    geo.boundingbox,
+  );
+}
+
 export async function findOrCreateCity(
   cityName: string,
   countryCode: string,
-  coords: { lat: number; lng: number }
+  coords: { lat: number; lng: number },
 ) {
   const meta: HomeBaseLocationMeta = {
     city: cityName,
@@ -304,39 +452,69 @@ export async function getCitiesWithCountry(slug: string) {
 }
 
 export async function ensureCountryAndCityFromLocation(
-  meta: NonNullable<HomeBaseLocationMeta>
+  meta: NonNullable<HomeBaseLocationMeta>,
 ) {
   const countryCode2 = meta.countryCode.toUpperCase();
   const countryName = meta.country || countryCode2;
 
   try {
-    const country = await prisma.country.upsert({
-      where: {
-        countryId: countryCode2.toLowerCase(),
-      },
-      update: {},
-      create: {
-        countryId: countryCode2.toLowerCase(),
-        code: countryCode2,
-        name: countryName,
-        currency: {
-          code: "USD",
-          symbol: "$",
-          name: "US Dollar",
-        },
-        budget: {
-          daily: { budget: "50-100", mid: "100-250", luxury: "250+" },
-          currencyCode: "USD",
-        },
-        cashCulture: {
-          atmAvailability: "widespread",
-          cashPreferred: false,
-        },
-        bestTimeToVisit: {
-          peak: { months: [], why: "", crowds: "", prices: "" },
-        } as unknown as any,
-      } as any,
+    const countryId = countryCode2.toLowerCase();
+
+    // Check if country exists
+    let country = await prisma.country.findUnique({
+      where: { countryId },
     });
+
+    // If country does not exist, try to generate it fully first
+    if (!country) {
+      try {
+        // Dynamic import to avoid circular dependency
+        const { createCountryFromName } = await import("@/lib/db/country.repo");
+        // Use the country name from meta, or default to code if name missing (though name is usually present from geocode)
+        // Note: RestCountries search works best with full names e.g. "France", "United States"
+        // If we only have "US", it might be ambiguous for 'name' search without fullText=false?
+        // createCountryFromName handles name search.
+        const result = await createCountryFromName(countryName);
+        country = result.country;
+        console.log(`Auto-generated missing country: ${country.name}`);
+      } catch (err) {
+        console.warn(
+          `Failed to auto-generate full country details for ${countryName}, falling back to stub:`,
+          err,
+        );
+      }
+    }
+
+    // Fallback or ensure upsert if createCountryFromName failed or wasn't called
+    if (!country) {
+      country = await prisma.country.upsert({
+        where: {
+          countryId,
+        },
+        update: {},
+        create: {
+          countryId,
+          code: countryCode2,
+          name: countryName,
+          currency: {
+            code: "USD",
+            symbol: "$",
+            name: "US Dollar",
+          },
+          budget: {
+            daily: { budget: "50-100", mid: "100-250", luxury: "250+" },
+            currencyCode: "USD",
+          },
+          cashCulture: {
+            atmAvailability: "widespread",
+            cashPreferred: false,
+          },
+          bestTimeToVisit: {
+            peak: { months: [], why: "", crowds: "", prices: "" },
+          } as unknown as any,
+        } as any,
+      });
+    }
 
     const cityName = (meta.city || meta.displayName || "Unknown City").trim();
 
@@ -346,7 +524,7 @@ export async function ensureCountryAndCityFromLocation(
 
     const cityId = makeCityId(cityName, countryCode2);
     const radiusKm = estimateRadiusKmFromBBox(
-      meta.boundingBox as [number, number, number, number] | undefined
+      meta.boundingBox as [number, number, number, number] | undefined,
     );
 
     const coordsJson = {
@@ -392,7 +570,7 @@ export async function ensureCountryAndCityFromLocation(
     throw new Error(
       `Database operation failed: ${
         error instanceof Error ? error.message : "Unknown error"
-      }`
+      }`,
     );
   }
 }
@@ -400,4 +578,27 @@ export async function ensureCountryAndCityFromLocation(
 export async function isCityExists(cityId: string) {
   const city = await prisma.city.findUnique({ where: { cityId } });
   return !!city;
+}
+
+export async function updateCity(id: string, data: any) {
+  try {
+    return await prisma.city.update({
+      where: { id },
+      data,
+    });
+  } catch (error) {
+    console.error("updateCity error:", error);
+    throw new Error("Failed to update city");
+  }
+}
+
+export async function deleteCity(id: string) {
+  try {
+    return await prisma.city.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error("deleteCity error:", error);
+    throw new Error("Failed to delete city");
+  }
 }

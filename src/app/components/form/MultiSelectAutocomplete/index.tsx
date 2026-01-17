@@ -2,6 +2,7 @@
 
 import React, { useMemo, useCallback } from "react";
 import { Autocomplete } from "@/app/components/form/Autocomplete";
+import SelectedItem from "../../common/SelectedItem";
 
 type MultiSelectAutocompleteProps<T> = {
   label?: string;
@@ -69,7 +70,7 @@ export function MultiSelectAutocomplete<T>({
   // Build the list of labels for the base Autocomplete
   const optionLabels = useMemo(
     () => items.map((item) => getLabel(item)),
-    [items, getLabel]
+    [items, getLabel],
   );
 
   // Helper to check if an item is selected
@@ -78,7 +79,7 @@ export function MultiSelectAutocomplete<T>({
       const v = getValue(item);
       return selected.some((s) => getValue(s) === v);
     },
-    [selected, getValue]
+    [selected, getValue],
   );
 
   // Handle selection from the Autocomplete
@@ -107,7 +108,7 @@ export function MultiSelectAutocomplete<T>({
       const next = [...selected, item];
       onChange(next);
     },
-    [items, selected, onChange, getLabel, getValue, maxSelected]
+    [items, selected, onChange, getLabel, getValue, maxSelected],
   );
 
   const handleRemove = useCallback(
@@ -116,7 +117,7 @@ export function MultiSelectAutocomplete<T>({
       const next = selected.filter((s) => getValue(s) !== value);
       onChange(next);
     },
-    [selected, onChange, getValue]
+    [selected, onChange, getValue],
   );
 
   return (
@@ -141,10 +142,10 @@ export function MultiSelectAutocomplete<T>({
                 const label = getLabel(item);
                 const value = getValue(item);
                 return (
-                  <Chip
+                  <SelectedItem
                     key={value}
-                    label={label}
-                    onRemove={() => handleRemove(item)}
+                    item={label}
+                    onClick={() => handleRemove(item)}
                   />
                 );
               })}

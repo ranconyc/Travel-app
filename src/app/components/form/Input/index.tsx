@@ -13,7 +13,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   { label, error, className = "", id, name, hintId, hintText, ...rest },
-  ref
+  ref,
 ) {
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -45,12 +45,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         aria-invalid={Boolean(error) || undefined}
         aria-describedby={describedBy}
         className={[
-          "bg-surface text-app-text px-4 h-11 rounded-md font-medium border transition-all",
+          "text-app-text px-4 h-11 rounded-md font-medium border-2 border-surface transition-all",
           "focus:outline-none focus:ring-2 focus:ring-brand/50",
           "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-          error
-            ? "border-red-500 ring-1 ring-red-500"
-            : "border-surface-secondary",
+          error ? "border-red-500 ring-1 ring-red-500" : "border-surface",
           className,
         ].join(" ")}
         {...rest}

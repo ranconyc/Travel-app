@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllCountriesAction } from "@/domain/country/country.actions";
+import type { Country } from "@/domain/country/country.schema";
 
-export function useCountries<T>() {
+export function useCountries<T = Country[]>() {
   return useQuery({
     queryKey: ["countries"],
     queryFn: async () => {

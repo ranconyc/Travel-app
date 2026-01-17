@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import { useGenerateCountry } from "@/domain/country/country.hooks";
+import { useGenerateCity } from "@/domain/city/city.hooks";
 import Button from "@/app/components/common/Button";
 import Input from "@/app/components/form/Input";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { ActionResponse } from "@/types/actions";
 import { GenerateCountryResult } from "@/domain/country/country.actions";
+import { GenerateCityResult } from "@/domain/city/city.actions";
 
 type GeneratedItem = {
   id: string;
@@ -18,71 +20,131 @@ type GeneratedItem = {
 };
 
 export default function GeneratorPage() {
+  const [generatorType, setGeneratorType] = useState<"country" | "city">(
+    "country",
+  );
   const [inputVal, setInputVal] = useState("");
+  const [countryCodeVal, setCountryCodeVal] = useState("");
   const [history, setHistory] = useState<GeneratedItem[]>([]);
 
-  const { mutate, isPending } = useGenerateCountry();
+  const { mutate: mutateCountry, isPending: isPendingCountry } =
+    useGenerateCountry();
+  const { mutate: mutateCity, isPending: isPendingCity } = useGenerateCity();
+
+  const isPending = isPendingCountry || isPendingCity;
 
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputVal.trim()) return;
 
-    mutate(inputVal, {
-      onSuccess: (res: ActionResponse<GenerateCountryResult>) => {
-        if (res.success) {
-          toast.success(`Generated ${res.data.name}`);
-          setHistory((prev) => [
-            {
-              id: res.data.countryId || Math.random().toString(),
-              name: res.data.name || inputVal,
-              status: "success",
-              timestamp: new Date(),
-              message: res.data.created
-                ? "Created successfully"
-                : "Already exists",
-            },
-            ...prev,
-          ]);
-          setInputVal("");
-        } else {
-          toast.error(res.error || "Failed to generate");
+    if (generatorType === "country") {
+      mutateCountry(inputVal, {
+        onSuccess: (res: ActionResponse<GenerateCountryResult>) => {
+          if (res.success) {
+            toast.success(`Generated ${res.data.name}`);
+            setHistory((prev) => [
+              {
+                id: res.data.countryId || Math.random().toString(),
+                name: res.data.name || inputVal,
+                status: "success",
+                timestamp: new Date(),
+                message: res.data.created
+                  ? "Created successfully"
+                  : "Already exists",
+              },
+              ...prev,
+            ]);
+            setInputVal("");
+          } else {
+            toast.error(res.error || "Failed to generate");
+            setHistory((prev) => [
+              {
+                id: Math.random().toString(),
+                name: inputVal,
+                status: "error",
+                timestamp: new Date(),
+                message: res.error,
+              },
+              ...prev,
+            ]);
+          }
+        },
+        onError: (err) => {
+          toast.error(err.message || "Something went wrong");
           setHistory((prev) => [
             {
               id: Math.random().toString(),
               name: inputVal,
               status: "error",
               timestamp: new Date(),
-              message: res.error,
+              message: err.message,
             },
             ...prev,
           ]);
-        }
-      },
-      onError: (err) => {
-        toast.error(err.message || "Something went wrong");
-        setHistory((prev) => [
-          {
-            id: Math.random().toString(),
-            name: inputVal,
-            status: "error",
-            timestamp: new Date(),
-            message: err.message,
+        },
+      });
+    } else {
+      mutateCity(
+        { cityName: inputVal, countryCode: countryCodeVal },
+        {
+          onSuccess: (res: ActionResponse<GenerateCityResult>) => {
+            if (res.success) {
+              toast.success(`Generated ${res.data.name}`);
+              setHistory((prev) => [
+                {
+                  id: res.data.cityId || Math.random().toString(),
+                  name: res.data.name || inputVal,
+                  status: "success",
+                  timestamp: new Date(),
+                  message: res.data.created
+                    ? "Created successfully"
+                    : "Already exists",
+                },
+                ...prev,
+              ]);
+              setInputVal("");
+              setCountryCodeVal("");
+            } else {
+              toast.error(res.error || "Failed to generate");
+              setHistory((prev) => [
+                {
+                  id: Math.random().toString(),
+                  name: inputVal,
+                  status: "error",
+                  timestamp: new Date(),
+                  message: res.error,
+                },
+                ...prev,
+              ]);
+            }
           },
-          ...prev,
-        ]);
-      },
-    });
+          onError: (err) => {
+            toast.error(err.message || "Something went wrong");
+            setHistory((prev) => [
+              {
+                id: Math.random().toString(),
+                name: inputVal,
+                status: "error",
+                timestamp: new Date(),
+                message: err.message,
+              },
+              ...prev,
+            ]);
+          },
+        },
+      );
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto py-8">
       <header className="mb-10">
         <h1 className="text-3xl font-bold font-sora text-app-text mb-2">
-          Country Generator
+          Data Generator
         </h1>
         <p className="text-secondary">
-          Manually trigger the AI/API pipeline to fetch and generate country
-          data.
+          Manually trigger the AI/API pipeline to fetch and generate country or
+          city data.
         </p>
       </header>
 
@@ -90,15 +152,63 @@ export default function GeneratorPage() {
         {/* Input Section */}
         <section className="lg:col-span-2 space-y-6">
           <div className="bg-surface border border-surface-secondary rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">Generate New</h2>
+            <div className="flex items-center gap-4 mb-6">
+              <button
+                type="button"
+                onClick={() => setGeneratorType("country")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  generatorType === "country"
+                    ? "bg-brand text-white"
+                    : "bg-surface-secondary text-secondary hover:text-primary"
+                }`}
+              >
+                Country
+              </button>
+              <button
+                type="button"
+                onClick={() => setGeneratorType("city")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  generatorType === "city"
+                    ? "bg-brand text-white"
+                    : "bg-surface-secondary text-secondary hover:text-primary"
+                }`}
+              >
+                City
+              </button>
+            </div>
+
+            <h2 className="text-lg font-semibold mb-4">
+              Generate New {generatorType === "country" ? "Country" : "City"}
+            </h2>
             <form onSubmit={handleGenerate} className="flex flex-col gap-4">
               <Input
-                label="Country Name"
-                placeholder="e.g. France, Japan, Brazil..."
+                label={
+                  generatorType === "country" ? "Country Name" : "City Name"
+                }
+                placeholder={
+                  generatorType === "country"
+                    ? "e.g. France, Japan..."
+                    : "e.g. Paris, Tokyo, New York..."
+                }
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 autoFocus
               />
+
+              {generatorType === "city" && (
+                <div>
+                  <Input
+                    label="Country Code (Optional)"
+                    placeholder="e.g. FR, JP, US..."
+                    value={countryCodeVal}
+                    onChange={(e) => setCountryCodeVal(e.target.value)}
+                  />
+                  <p className="text-xs text-secondary mt-1">
+                    Helps resolve ambiguity (e.g. Paris, TX vs Paris, FR)
+                  </p>
+                </div>
+              )}
+
               <div className="flex justify-end mt-2">
                 <Button
                   type="submit"
@@ -116,7 +226,9 @@ export default function GeneratorPage() {
                     )
                   }
                 >
-                  {isPending ? "Generating..." : "Generate Country"}
+                  {isPending
+                    ? "Generating..."
+                    : `Generate ${generatorType === "country" ? "Country" : "City"}`}
                 </Button>
               </div>
             </form>

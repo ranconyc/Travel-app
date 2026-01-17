@@ -44,3 +44,26 @@ export async function createPlace(data: any) {
     throw new Error("Failed to create place");
   }
 }
+
+export async function updatePlace(id: string, data: any) {
+  try {
+    return await prisma.place.update({
+      where: { id },
+      data,
+    });
+  } catch (error) {
+    console.error("updatePlace error:", error);
+    throw new Error("Failed to update place");
+  }
+}
+
+export async function deletePlace(id: string) {
+  try {
+    return await prisma.place.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error("deletePlace error:", error);
+    throw new Error("Failed to delete place");
+  }
+}

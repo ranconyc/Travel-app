@@ -78,3 +78,15 @@ export const CountrySchema = z.object({
 
 export type Country = z.infer<typeof CountrySchema>;
 export type CountryMeta = any;
+
+/** Update schema - all fields optional for partial updates */
+export const CountryUpdateSchema = CountrySchema.partial().omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  cities: true,
+  places: true,
+  usersHomeBase: true,
+});
+
+export type CountryUpdate = z.infer<typeof CountryUpdateSchema>;

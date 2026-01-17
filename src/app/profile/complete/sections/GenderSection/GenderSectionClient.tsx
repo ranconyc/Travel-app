@@ -3,16 +3,18 @@
 
 import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
+import SelectionCard from "@/app/components/form/SelectionCard";
+import { Mars, Venus, NonBinary, LucideIcon } from "lucide-react";
 import ErrorMessage from "@/app/components/form/ErrorMessage";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
 // match Prisma enum Gender { MALE, FEMALE, NON_BINARY }
 type GenderValue = "MALE" | "FEMALE" | "NON_BINARY";
 
-const OPTIONS: { value: GenderValue; label: string }[] = [
-  { value: "MALE", label: "Male" },
-  { value: "FEMALE", label: "Female" },
-  { value: "NON_BINARY", label: "Non Binary" },
+const OPTIONS: { value: GenderValue; label: string; icon: LucideIcon }[] = [
+  { value: "MALE", label: "Male", icon: Mars },
+  { value: "FEMALE", label: "Female", icon: Venus },
+  { value: "NON_BINARY", label: "Non Binary", icon: NonBinary },
 ];
 
 function GenderSectionClient() {
@@ -25,56 +27,22 @@ function GenderSectionClient() {
   });
 
   return (
-    <fieldset className="mb-4">
-      <legend className="block mb-2 text-sm font-semibold">
+    <fieldset className="mb-6">
+      <legend className="block mb-3 text-sm font-semibold capitalize text-app-text">
         How do you identify?
       </legend>
 
-      <div className="flex items-center gap-2">
-        {OPTIONS.map((opt) => {
-          const checked = field.value === opt.value;
-
-          return (
-            <label
-              key={opt.value}
-              className={[
-                "flex flex-1 items-center gap-2 rounded-xl border px-2 py-2 cursor-pointer select-none",
-                checked
-                  ? "border-cyan-700 bg-cyan-50"
-                  : "border-gray-300 hover:border-gray-400",
-              ].join(" ")}
-            >
-              {/* Native radio (accessible) */}
-              <input
-                type="radio"
-                className="sr-only"
-                name={field.name}
-                value={(field.value as any) ?? ""}
-                checked={checked}
-                onChange={() => field.onChange(opt.value)}
-                onBlur={field.onBlur}
-              />
-
-              {/* Custom radio UI */}
-              <span
-                aria-hidden
-                className={[
-                  "grid place-items-center h-5 w-5 rounded-full border",
-                  checked ? "border-cyan-700" : "border-gray-400",
-                ].join(" ")}
-              >
-                <span
-                  className={[
-                    "h-2.5 w-2.5 rounded-full",
-                    checked ? "bg-cyan-700" : "bg-transparent",
-                  ].join(" ")}
-                />
-              </span>
-
-              <span className="text-xs md:text-base">{opt.label}</span>
-            </label>
-          );
-        })}
+      <div className="flex gap-2">
+        {OPTIONS.map((opt) => (
+          <SelectionCard
+            key={opt.value}
+            id={opt.value}
+            label={opt.label}
+            type="radio"
+            isSelected={field.value === opt.value}
+            onChange={(val) => field.onChange(val)}
+          />
+        ))}
       </div>
 
       <ErrorMessage id="gender-error" error={fieldState.error?.message} />

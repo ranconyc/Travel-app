@@ -19,7 +19,7 @@ export type GenerateCountryResult = {
 };
 
 export async function generateCountryAction(
-  name: string
+  name: string,
 ): Promise<ActionResponse<GenerateCountryResult>> {
   try {
     // 1. Auth Check
@@ -43,7 +43,7 @@ export async function generateCountryAction(
 
     // 3. Execution using Repo
     const { country, created } = await createCountryFromName(
-      validation.data.name
+      validation.data.name,
     );
 
     return {
@@ -71,5 +71,60 @@ export async function getAllCountriesAction(): Promise<ActionResponse<any[]>> {
   } catch (error: any) {
     console.error("getAllCountriesAction error:", error);
     return { success: false, error: "Failed to fetch countries" };
+  }
+}
+
+export async function updateCountryAction(
+  id: string,
+  data: any,
+): Promise<ActionResponse<any>> {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as User).role !== "ADMIN") {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    // Validate with Zod
+    const { CountryUpdateSchema } =
+      await import("@/domain/country/country.schema");
+    const validation = CountryUpdateSchema.safeParse(data);
+
+    if (!validation.success) {
+      return {
+        success: false,
+        error: `Validation failed: ${validation.error.issues.map((e: any) => e.message).join(", ")}`,
+      };
+    }
+
+    const { updateCountry } = await import("@/lib/db/country.repo");
+    const updated = await updateCountry(id, validation.data);
+    return { success: true, data: updated };
+  } catch (error: any) {
+    console.error("updateCountryAction error:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to update country",
+    };
+  }
+}
+
+export async function deleteCountryAction(
+  id: string,
+): Promise<ActionResponse<void>> {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as User).role !== "ADMIN") {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const { deleteCountry } = await import("@/lib/db/country.repo");
+    await deleteCountry(id);
+    return { success: true, data: undefined };
+  } catch (error: any) {
+    console.error("deleteCountryAction error:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to delete country",
+    };
   }
 }

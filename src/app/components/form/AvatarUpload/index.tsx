@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { MdEdit } from "react-icons/md";
 import { CameraIcon } from "lucide-react";
 
 type Props = {
@@ -39,7 +38,10 @@ export default function AvatarUpload({
   };
 
   return (
-    <div className="grid place-items-center gap-2" aria-disabled={disabled}>
+    <div
+      className="grid place-items-center gap-2 border-b border-surface pb-2"
+      aria-disabled={disabled}
+    >
       <div className="relative inline-block" aria-disabled={disabled}>
         {/* Avatar circle */}
         <div
@@ -53,7 +55,7 @@ export default function AvatarUpload({
               src={src}
               alt="Avatar"
               fill
-              className="object-cover"
+              className="object-cover h-full w-full rounded-2xl"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority // detected as LCP in profile forms
             />
@@ -63,7 +65,7 @@ export default function AvatarUpload({
               alt="avatar"
               width={size}
               height={size}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover rounded-2xl"
               sizes="(max-width: 768px) 80px, 120px"
               priority={size > 100}
               loading={size > 100 ? "eager" : "lazy"}
@@ -81,7 +83,7 @@ export default function AvatarUpload({
           >
             <div className="flex items-center gap-2 px-3 py-2 max-w-[100px] bg-amber-300 rounded-full">
               <CameraIcon size={18} />
-              Edit
+              <span className="text-xs">Edit</span>
             </div>
           </label>
         )}
@@ -100,7 +102,7 @@ export default function AvatarUpload({
           }}
         />
       </div>
-      <div className="text-center">
+      <div className="text-center pt-4">
         <p className="text-xs">
           {src ? "Change profile picture" : "Upload profile picture"}
         </p>

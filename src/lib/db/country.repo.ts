@@ -204,10 +204,10 @@ export async function findBorderCountries(bordersCCA3: string[]) {
 
 // fetch country metadata from REST Countries
 async function fetchRestCountryByName(
-  name: string
+  name: string,
 ): Promise<RestCountry | null> {
   const url = new URL(
-    `https://restcountries.com/v3.1/name/${encodeURIComponent(name)}`
+    `https://restcountries.com/v3.1/name/${encodeURIComponent(name)}`,
   );
   // allow partial/loose name matches; you can set fullText=true if you want strict
   url.searchParams.set("fullText", "false");
@@ -270,12 +270,12 @@ async function fetchRestCountryByName(
 
 // fetch country metadata from LocationIQ
 async function fetchLocationIqCountryByName(
-  name: string
+  name: string,
 ): Promise<LocationIqCountry | null> {
   const key = process.env.LOCATIONIQ_API_KEY;
   if (!key) {
     console.warn(
-      "Missing LOCATIONIQ_API_KEY; skipping LocationIQ country lookup"
+      "Missing LOCATIONIQ_API_KEY; skipping LocationIQ country lookup",
     );
     return null;
   }
@@ -284,6 +284,7 @@ async function fetchLocationIqCountryByName(
   url.searchParams.set("key", key);
   url.searchParams.set("q", name);
   url.searchParams.set("format", "json");
+  url.searchParams.set("accept-language", "en");
   url.searchParams.set("limit", "1");
 
   const res = await fetch(url.toString());
@@ -431,6 +432,11 @@ export async function createCountryFromName(countryName: string) {
     idealDuration: null,
     safety: null,
 
+    // Save coordinates if available
+    coords: rest.latlng
+      ? { lat: rest.latlng[0], lng: rest.latlng[1] }
+      : Prisma.JsonNull,
+
     regions: [],
 
     // keep the entire REST object for future use
@@ -443,5 +449,41 @@ export async function createCountryFromName(countryName: string) {
   // 6) Create in DB
   const created = await prisma.country.create({ data });
 
+  // 7) Auto-create Capital City if available
+  // We use dynamic import to avoid circular dependency with cityLocation.repo
+  if (rest.capital?.[0]) {
+    try {
+      const { createCityFromName } = await import("@/lib/db/cityLocation.repo");
+      console.log(`Auto-generating capital city: ${rest.capital[0]}`);
+      await createCityFromName(rest.capital[0], code2);
+    } catch (error) {
+      console.error("Failed to auto-create capital city:", error);
+      // We don't throw here, as the country creation itself was successful
+    }
+  }
+
   return { country: created, created: true };
+}
+
+export async function updateCountry(id: string, data: any) {
+  try {
+    return await prisma.country.update({
+      where: { id },
+      data,
+    });
+  } catch (error) {
+    console.error("updateCountry error:", error);
+    throw new Error("Failed to update country");
+  }
+}
+
+export async function deleteCountry(id: string) {
+  try {
+    return await prisma.country.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error("deleteCountry error:", error);
+    throw new Error("Failed to delete country");
+  }
 }

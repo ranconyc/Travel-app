@@ -10,7 +10,7 @@ export const DayHours = z.union([
         z.object({
           open: z.string(), // "09:00"
           close: z.string(), // "18:00"
-        })
+        }),
       )
       .min(1),
   }),
@@ -90,3 +90,12 @@ export const PlaceSchema = z.object({
 });
 
 export type Place = z.infer<typeof PlaceSchema>;
+
+/** Update schema - all fields optional for partial updates */
+export const PlaceUpdateSchema = PlaceSchema.partial().omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type PlaceUpdate = z.infer<typeof PlaceUpdateSchema>;

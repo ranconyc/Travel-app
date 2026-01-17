@@ -111,7 +111,7 @@ export default function CompleteProfileFormClient({ user }: Props) {
       alert(
         result.error === "VALIDATION_ERROR"
           ? "Please fix the errors in the form"
-          : "Something went wrong. Please try again."
+          : "Something went wrong. Please try again.",
       );
       return;
     }
@@ -127,9 +127,18 @@ export default function CompleteProfileFormClient({ user }: Props) {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleFormSubmit} className="p-4" noValidate>
-        <div className="w-full">
+        <div>
           <AvatarSectionShell />
-          <div>
+          <div className="flex gap-2 w-full justify-center">
+            <Button onClick={() => router.push("/persona?step=1")}>
+              Travel Interests
+            </Button>
+
+            <Button onClick={() => router.push("/travel")}>
+              Travel History
+            </Button>
+          </div>
+          <div className="pt-6">
             <NameSectionShell />
             <HomeBaseSectionShell />
             <OccupationSectionShell />
@@ -138,10 +147,11 @@ export default function CompleteProfileFormClient({ user }: Props) {
             <GenderSectionShell />
           </div>
         </div>
-
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Update Profile"}
-        </Button>
+        <div className="bg-app-bg p-4 pb-8 fixed bottom-0 left-0 right-0">
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? "Saving..." : "Update Profile"}
+          </Button>
+        </div>
       </form>
     </FormProvider>
   );

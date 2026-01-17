@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   LayoutDashboard,
@@ -14,8 +14,54 @@ import {
   Server,
   Palette,
   Code,
+  Menu,
+  X,
+  ArrowLeft,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
+const ADMIN_LINKS = [
+  { href: "/admin", label: "Dashboard", Icon: LayoutDashboard, key: undefined },
+  { href: "/admin/users", label: "Users", Icon: Users, key: "users" },
+  {
+    href: "/admin/destinations",
+    label: "Destinations",
+    Icon: Map,
+    key: "destinations",
+  },
+  { href: "/admin/pages", label: "Pages", Icon: FileIcon, key: "pages" },
+  { href: "/admin/apis", label: "APIs", Icon: Server, key: "apis" },
+  {
+    href: "/admin/developer",
+    label: "Actions & Hooks",
+    Icon: Code,
+    key: "developer",
+  },
+  {
+    href: "/admin/component",
+    label: "Components",
+    Icon: Blocks,
+    key: "component",
+  },
+  {
+    href: "/admin/design-system",
+    label: "Design System",
+    Icon: Palette,
+    key: "design-system",
+  },
+  {
+    href: "/admin/generator",
+    label: "Generator",
+    Icon: Globe,
+    key: "generator",
+  },
+  {
+    href: "/admin/settings",
+    label: "Settings",
+    Icon: Settings,
+    key: "settings",
+  },
+];
 
 export default function AdminLayout({
   children,
@@ -23,22 +69,24 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  // console.log("Path", pathname.split("/")[2]);
+  const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const currentPath = pathname.split("/")[2];
 
-  const isActive = (path: string | undefined) => {
-    return currentPath === path;
+  const isActive = (key: string | undefined) => {
+    return currentPath === key;
   };
 
-  const getLinkClasses = (path: string | undefined) => {
-    return isActive(path)
+  const getLinkClasses = (key: string | undefined) => {
+    return isActive(key)
       ? "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
       : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
   };
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+      {/* Sidebar (Desktop) */}
       <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
         <div className="p-6">
           <h1 className="text-xl font-bold text-blue-600 flex items-center gap-2">
@@ -46,53 +94,17 @@ export default function AdminLayout({
           </h1>
         </div>
 
-        <nav className="flex-1 px-4 space-y-1">
-          <Link href="/admin" className={getLinkClasses(undefined)}>
-            <LayoutDashboard size={20} />
-            Dashboard
-          </Link>
-          <Link href="/admin/users" className={getLinkClasses("users")}>
-            <Users size={20} />
-            Users
-          </Link>
-          <Link
-            href="/admin/destinations"
-            className={getLinkClasses("destinations")}
-          >
-            <Map size={20} />
-            Destinations
-          </Link>
-          <Link href="/admin/pages" className={getLinkClasses("pages")}>
-            <FileIcon size={20} />
-            Pages
-          </Link>
-          <Link href="/admin/apis" className={getLinkClasses("apis")}>
-            <Server size={20} />
-            APIs
-          </Link>
-          <Link href="/admin/developer" className={getLinkClasses("developer")}>
-            <Code size={20} />
-            Actions & Hooks
-          </Link>
-          <Link href="/admin/component" className={getLinkClasses("component")}>
-            <Blocks size={20} />
-            Components
-          </Link>
-          <Link
-            href="/admin/design-system"
-            className={getLinkClasses("design-system")}
-          >
-            <Palette size={20} />
-            Design System
-          </Link>
-          <Link href="/admin/generator" className={getLinkClasses("generator")}>
-            <Globe size={20} />
-            Generator
-          </Link>
-          <Link href="/admin/settings" className={getLinkClasses("settings")}>
-            <Settings size={20} />
-            Settings
-          </Link>
+        <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
+          {ADMIN_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={getLinkClasses(link.key)}
+            >
+              <link.Icon size={20} />
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="p-4 border-t border-gray-100">
@@ -107,11 +119,73 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center px-6 md:hidden">
-          <span className="font-bold">TravelMate Admin</span>
+      <main className="flex-1 flex flex-col h-full overflow-hidden">
+        {/* Mobile Header */}
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:hidden shrink-0 z-20">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.back()}
+              className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <span className="font-bold text-lg">TM Admin</span>
+          </div>
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="p-2 -mr-2 text-gray-600 hover:bg-gray-100 rounded-full"
+          >
+            <Menu size={24} />
+          </button>
         </header>
-        <div className="p-8">{children}</div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Drawer */}
+            <aside className="absolute right-0 top-0 bottom-0 w-64 bg-white shadow-xl flex flex-col">
+              <div className="p-4 flex items-center justify-between border-b border-gray-100">
+                <span className="font-bold text-lg">Menu</span>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-gray-500 hover:bg-gray-100 rounded-full"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+                {ADMIN_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={getLinkClasses(link.key)}
+                  >
+                    <link.Icon size={20} />
+                    {link.label}
+                  </Link>
+                ))}
+                <div className="pt-4 mt-4 border-t border-gray-100">
+                  <Link
+                    href="/"
+                    className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-red-600 transition-colors"
+                  >
+                    <LogOut size={20} />
+                    Exit Admin
+                  </Link>
+                </div>
+              </nav>
+            </aside>
+          </div>
+        )}
+
+        <div className="flex-1 overflow-auto p-4 md:p-8">{children}</div>
       </main>
     </div>
   );

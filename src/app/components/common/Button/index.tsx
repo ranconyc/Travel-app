@@ -56,13 +56,14 @@ export default function Button({
     "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all active:scale-[0.97] cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none";
 
   const sizeStyles = {
-    sm: "px-3 h-9 text-xs",
-    md: "px-4 h-11 text-sm",
+    sm: "px-3 h-9 text-base",
+    md: "px-4 h-11 text-base",
     lg: "px-6 h-14 text-base",
   };
 
   const variantStyles = {
-    primary: "bg-brand text-white hover:opacity-90 shadow-sm",
+    primary:
+      "bg-brand text-white hover:opacity-90 shadow-sm border-2 border-brand",
     secondary: "bg-surface text-app-text hover:bg-brand/10",
     outline:
       "border-2 border-brand text-brand hover:bg-brand/10 bg-transparent",
