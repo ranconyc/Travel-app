@@ -22,7 +22,7 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link href="/nearby-mates">
+          <Link href="/mates">
             <UserRoundSearch size={iconsSize} />
           </Link>
         </li>

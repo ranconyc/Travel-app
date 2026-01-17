@@ -14,6 +14,7 @@ import { User } from "@/domain/user/user.schema";
 import { useGeo } from "@/app/_hooks/useGeo";
 import { redirect } from "next/navigation";
 import Logo from "@/app/components/common/Logo";
+import { Country } from "@/domain/country/country.schema";
 
 interface HeaderWrapperProps {
   backButton?: boolean;
@@ -79,11 +80,11 @@ const Header = () => {
             {isUserAtHome
               ? "there is no place like"
               : user?.currentCity
-              ? `${user?.name?.split(" ")[0]} Explore`
-              : "Explore the"}
+                ? `${user?.name?.split(" ")[0]} Explore`
+                : "Explore the"}
           </p>
           <h1 className="text-4xl font-bold capitalize mb-6">
-            {isUserAtHome ? "Home" : user?.currentCity?.name ?? "World"}
+            {isUserAtHome ? "Home" : (user?.currentCity?.name ?? "World")}
           </h1>
         </div>
         <WeatherWidget />
@@ -109,12 +110,12 @@ const CountryList = () => {
     <div>
       <div className="my-2 flex items-center justify-between">
         <h1>Countries</h1>
-        <Link href="/admin/generator" className="text-xs text-secondary">
+        <Link href="/countries" className="text-xs text-secondary">
           see all
         </Link>
       </div>
       <div className="flex gap-4 overflow-x-scroll pb-4 no-scrollbar">
-        {countries?.map((country: any) => (
+        {countries?.map((country) => (
           <Link
             key={country.id}
             href={`/countries/${country.countryId}`}
