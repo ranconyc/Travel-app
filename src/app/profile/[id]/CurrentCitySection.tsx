@@ -55,9 +55,9 @@ export const CurrentCitySection = ({
         Current City
       </h2>
       <div className="">
-        {currentCity?.name ? (
+        {currentCity?.name &&(
           <p className="text-app-text font-medium">{currentCity?.name}</p>
-        ) : (
+        ) }
           <Button
             onClick={handleGetLocation}
             disabled={loading}
@@ -66,7 +66,7 @@ export const CurrentCitySection = ({
             {loading && <Loader2 className="animate-spin w-4 h-4" />}
             Get current city
           </Button>
-        )}
+      
       </div>
     </div>
   );
