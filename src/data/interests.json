@@ -1,7 +1,7 @@
 {
   "Food_Nightlife": {
     "id": "cat_food_nightlife",
-    "label": "Food & Nightlife (Top Pick) 🍜",
+    "label": "Food & Nightlife",
     "items": [
       { "id": "street_food_markets", "label": "Street food markets" },
       { "id": "fine_dining", "label": "Fine dining" },
@@ -14,7 +14,7 @@
   },
   "Nature_Adventure": {
     "id": "cat_nature_adventure",
-    "label": "Nature & Adventure 🏔️",
+    "label": "Nature & Adventure",
     "items": [
       { "id": "national_park_hiking", "label": "National park hiking" },
       { "id": "waterfall_visits", "label": "Waterfall visits" },
@@ -30,7 +30,7 @@
   },
   "Wellness_Relaxation": {
     "id": "cat_wellness_relaxation",
-    "label": "Wellness & Relaxation 🧘",
+    "label": "Wellness & Relaxation",
     "items": [
       { "id": "spa_massage", "label": "Spa & Massage" },
       { "id": "yoga_retreats", "label": "Yoga retreats" },
@@ -42,7 +42,7 @@
   },
   "Culture_History": {
     "id": "cat_culture_history",
-    "label": "Culture & History 🏛️",
+    "label": "Culture & History",
     "items": [
       { "id": "museums", "label": "Museums" },
       { "id": "art_galleries", "label": "Art galleries" },
@@ -58,7 +58,7 @@
   },
   "Shopping_Urban": {
     "id": "cat_shopping_urban",
-    "label": "Shopping & Urban 🛍️",
+    "label": "Shopping & Urban",
     "items": [
       { "id": "shopping_malls", "label": "Shopping malls" },
       { "id": "designer_boutiques", "label": "Designer boutiques" },
