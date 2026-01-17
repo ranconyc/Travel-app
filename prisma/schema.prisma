@@ -219,9 +219,9 @@ model Country {
   commonPhrases Json? // { hello: { local: "สวัสดี", romanized: "Sawasdee", audio: "url?" }
   
 //  Money info
-  currency Json // { code: "THB", symbol: "฿", name: "Thai Baht", subunit: "Satang" }
-  budget Json // { daily: { budget: "800-1500", mid: "1500-3000", luxury: "3000+" }, currencyCode: "THB", note: "Street food from 40฿" }
-  cashCulture Json // { atmAvailability: "widespread", atmFees: "150-220฿", creditCardAcceptance: "moderate", cashPreferred: true, tipCulture: { expected: false, guide: "Not expected, but appreciated for great service" } }
+  currency    Json?
+  budget      Json?
+  cashCulture Json?
   
 
   safety Json? /* {
@@ -270,12 +270,7 @@ model Country {
   meta    Json?
   regions String[] @default([])
    
-  bestTimeToVisit Json /* {
-    peak: { months: ["Nov", "Dec", "Jan", "Feb"], why: "Cool & dry, festivals", crowds: "high", prices: "high" },
-    shoulder: { months: ["Mar", "Apr", "Oct"], why: "Good weather, fewer crowds", crowds: "moderate", prices: "moderate" },
-    low: { months: ["May", "Jun", "Jul", "Aug", "Sep"], why: "Rainy season, very hot", crowds: "low", prices: "low" },
-    avoid: ["September-flooding-risk"]
-  } */
+  bestTimeToVisit Json?
 
   // Relations
   cities City[]

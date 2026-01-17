@@ -16,7 +16,6 @@ export default function SignInFormClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const registered = searchParams.get("registered");
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,7 +48,7 @@ export default function SignInFormClient() {
       if (res?.error) {
         setError("Invalid email or password");
       } else {
-        router.push(callbackUrl);
+        router.push("/");
         router.refresh();
       }
     } catch {

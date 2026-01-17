@@ -19,14 +19,11 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       allowDangerousEmailAccountLinking: true,
       profile(profile) {
-        // console.log("google profile", profile);
         return {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
           image: profile.picture || null,
-          firstName: profile.given_name || profile.name.split(" ")[0] || null,
-          lastName: profile.family_name || profile.name.split(" ")[1] || null,
         };
       },
     }),
@@ -35,18 +32,15 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope: "public_profile", // Removed email scope for development
+          scope: "public_profile",
         },
       },
       profile(profile) {
-        // console.log("Facebook profile", profile);
         return {
           id: profile.id,
           name: profile.name,
-          email: profile.email || null, // Email might not be available
-          image: profile.picture?.data?.url || null, // Facebook profile picture
-          firstName: profile.first_name || profile.name.split(" ")[0] || null,
-          lastName: profile.last_name || profile.name.split(" ")[1] || null,
+          email: profile.email || null,
+          image: profile.picture?.data?.url || null,
         };
       },
     }),
