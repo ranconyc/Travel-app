@@ -5,7 +5,11 @@
   --color-app-text: var(--foreground);
   --color-brand: var(--brand);
   --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-hover: var(--surface-hover);
   --color-secondary: var(--secondary);
+  --color-primary: var(--primary);
+  --color-border: var(--border);
   --color-blur: var(--blur);
 
   --font-sora: var(--font-sora);
@@ -16,9 +20,13 @@
 :root {
   --background: rgb(244, 245, 247);
   --foreground: rgb(15, 23, 42);
+  --primary: rgb(15, 23, 42);
   --secondary: rgb(94, 100, 112);
   --brand: rgb(1, 167, 120);
   --surface: rgb(255, 255, 255);
+  --surface-secondary: rgb(241, 245, 249);
+  --surface-hover: rgb(248, 250, 252);
+  --border: rgb(226, 232, 240);
   --blur: rgba(161, 165, 173, 0.5);
   --font-intro: var(--font-inter); /* Fallback */
 }
@@ -26,21 +34,29 @@
 /* Dark Mode */
 .dark {
   --background: rgb(8, 12, 20);
-  --foreground: rgb(255, 255, 255);
-  --secondary: rgb(166, 173, 187);
-  --brand: rgb(65, 181, 226);
-  --surface: rgb(30, 41, 59);
-  --blur: rgba(161, 165, 173, 0.5);
+  --foreground: rgb(241, 245, 249);
+  --primary: rgb(248, 250, 252);
+  --secondary: rgb(148, 163, 184);
+  --brand: rgb(56, 189, 248);
+  --surface: rgb(15, 23, 42);
+  --surface-secondary: rgb(30, 41, 59);
+  --surface-hover: rgb(51, 65, 85);
+  --border: rgb(51, 65, 85);
+  --blur: rgba(100, 116, 139, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: rgb(8, 12, 20);
-    --foreground: rgb(255, 255, 255);
-    --secondary: rgb(166, 173, 187);
-    --brand: rgb(65, 181, 226);
-    --surface: rgb(30, 41, 59);
-    --blur: rgba(161, 165, 173, 0.5);
+    --foreground: rgb(241, 245, 249);
+    --primary: rgb(248, 250, 252);
+    --secondary: rgb(148, 163, 184);
+    --brand: rgb(56, 189, 248);
+    --surface: rgb(15, 23, 42);
+    --surface-secondary: rgb(30, 41, 59);
+    --surface-hover: rgb(51, 65, 85);
+    --border: rgb(51, 65, 85);
+    --blur: rgba(100, 116, 139, 0.5);
   }
 }
 

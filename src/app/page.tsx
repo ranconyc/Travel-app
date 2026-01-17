@@ -65,7 +65,7 @@ const Header = () => {
   const user = useUser();
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
   return (
-    <div className="p-4 pt-10 sticky top-10 left-0 right-0 z-50">
+    <div className="bg-app-bg p-4 pt-10 sticky top-0 left-0 right-0 z-50">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-md text-secondary capitalize">
@@ -183,6 +183,7 @@ const UserList = ({ loggedUser }: { loggedUser: User }) => {
 };
 
 import { useCities } from "@/app/_hooks/useCities";
+import React from "react";
 
 const CityList = () => {
   const { data: cities, isLoading } = useCities();
@@ -260,12 +261,21 @@ export default function Home() {
   if (!loggedUser) return redirect("/signin");
 
   return (
-    <div>
+    <div className="h-full border-b border-surface relative">
       <Header />
-      <main className="p-4 overflow-y-scroll h-[calc(100vh-10rem)]">
+      <main className="p-4 overflow-y-scroll">
         {locationLoading && <p>Loading location...</p>}
         {error && <p>Error: {error}</p>}
+        <UserList loggedUser={loggedUser} />
+        <CountryList />
+        <CityList />
+      </main>
+    </div>
+  );
+}
 
+{
+  /* 
         <div className="flex flex-col gap-2">
           {loggedUser ? (
             <Button
@@ -282,11 +292,5 @@ export default function Home() {
               signin
             </Link>
           )}
-        </div>
-        <UserList loggedUser={loggedUser} />
-        <CountryList />
-        <CityList />
-      </main>
-    </div>
-  );
+        </div> */
 }
