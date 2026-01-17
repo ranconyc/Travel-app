@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react";
-import SelectionStep from "@/app/persona/_components/SelectionStep";
+import SelectionStep from "@/app/profile/persona/_components/SelectionStep";
 import dailyRhythmsData from "@/data/dailyRhythms.json";
 
 interface RhythmData {

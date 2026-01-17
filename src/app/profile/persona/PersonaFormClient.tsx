@@ -4,12 +4,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/app/components/common/Button";
 
-import RhythmStep from "@/app/persona/_components/RhythmStep";
-import InterestsStep from "@/app/persona/_components/InterestsStep";
-import StyleStep from "@/app/persona/_components/StyleStep";
-import ProgressBar from "@/app/persona/_components/ProgressBar";
-import useStep from "@/app/persona/_hooks/useStep";
-import { PersonaFormValues } from "@/app/persona/_types/form";
+import RhythmStep from "@/app/profile/persona/_components/RhythmStep";
+import InterestsStep from "@/app/profile/persona/_components/InterestsStep";
+import StyleStep from "@/app/profile/persona/_components/StyleStep";
+import ProgressBar from "@/app/profile/persona/_components/ProgressBar";
+import useStep from "@/app/profile/persona/_hooks/useStep";
+import { PersonaFormValues } from "@/app/profile/persona/_types/form";
 import { saveInterests } from "@/domain/user/user.actions";
 import { User } from "@/domain/user/user.schema";
 import { DevTool } from "@hookform/devtools";

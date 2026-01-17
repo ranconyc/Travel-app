@@ -130,11 +130,11 @@ export default function CompleteProfileFormClient({ user }: Props) {
         <div>
           <AvatarSectionShell />
           <div className="flex gap-2 w-full justify-center">
-            <Button onClick={() => router.push("/persona?step=1")}>
+            <Button onClick={() => router.push("/profile/persona?step=1")}>
               Travel Interests
             </Button>
 
-            <Button onClick={() => router.push("/travel")}>
+            <Button onClick={() => router.push("/profile/travel")}>
               Travel History
             </Button>
           </div>

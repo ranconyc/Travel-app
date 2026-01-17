@@ -202,6 +202,24 @@ export async function findBorderCountries(bordersCCA3: string[]) {
   return filtered;
 }
 
+export async function getCountriesByCodes<T extends string>(codes: T[]) {
+  if (!codes?.length) return [];
+
+  try {
+    return await prisma.country.findMany({
+      where: {
+        OR: [
+          { code: { in: codes } },
+          { countryId: { in: codes.map((c) => c.toLowerCase()) } },
+        ],
+      },
+    });
+  } catch (error) {
+    console.error("getCountriesByCodes error:", error);
+    return [];
+  }
+}
+
 // fetch country metadata from REST Countries
 async function fetchRestCountryByName(
   name: string,

@@ -3,7 +3,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import SelectionCard from "@/app/components/form/SelectionCard";
-import { TravelFormValues } from "@/app/travel/_types/form";
+import { TravelFormValues } from "../_types/form";
 
 interface CountrySelectionProps {
   countries: string[];
@@ -19,7 +19,7 @@ export const CountrySelection = ({ countries }: CountrySelectionProps) => {
       setValue(
         "countries",
         current.filter((c) => c !== country),
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     } else {
       setValue("countries", [...current, country], { shouldValidate: true });

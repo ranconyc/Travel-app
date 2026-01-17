@@ -1,6 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
-import { Shield, Globe } from "lucide-react";
+import {
+  Shield,
+  Globe,
+  Database,
+  MapPin,
+  Cloud,
+  Image as ImageIcon,
+  Server,
+} from "lucide-react";
 
 type ApiInfo = {
   route: string;
@@ -42,7 +50,7 @@ async function getApiRoutes(dir: string, baseDir: string): Promise<string[]> {
     dirents.map((dirent) => {
       const res = path.resolve(dir, dirent.name);
       return dirent.isDirectory() ? getApiRoutes(res, baseDir) : res;
-    })
+    }),
   );
   return Array.prototype.concat(...files);
 }
@@ -69,7 +77,7 @@ async function getMethods(filePath: string): Promise<string[]> {
       // export function GET
       if (
         new RegExp(`export\\s+(async\\s+)?function\\s+${method}\\b`).test(
-          content
+          content,
         )
       ) {
         methods.push(method);
@@ -93,6 +101,67 @@ async function getMethods(filePath: string): Promise<string[]> {
     return [];
   }
 }
+
+type ThirdPartyApi = {
+  name: string;
+  provider: string;
+  baseUrl: string;
+  category: "DATA" | "MEDIA" | "GEO" | "AUTH";
+  status: "ACTIVE" | "INACTIVE";
+  description: string;
+};
+
+const THIRD_PARTY_APIS: ThirdPartyApi[] = [
+  {
+    name: "REST Countries",
+    provider: "Open Source",
+    baseUrl: "https://restcountries.com/v3.1",
+    category: "DATA",
+    status: "ACTIVE",
+    description:
+      "Primary source for country metadata, borders, and general info.",
+  },
+  {
+    name: "LocationIQ",
+    provider: "LocationIQ",
+    baseUrl: "https://us1.locationiq.com/v1",
+    category: "GEO",
+    status: "ACTIVE",
+    description: "Used for forward/reverse geocoding and coordinate lookup.",
+  },
+  {
+    name: "Cloudinary",
+    provider: "Cloudinary",
+    baseUrl: "https://api.cloudinary.com/v1_1",
+    category: "MEDIA",
+    status: "ACTIVE",
+    description:
+      "Hosting and transformation for user-uploaded images and avatars.",
+  },
+  {
+    name: "Google Places",
+    provider: "Google Cloud",
+    baseUrl: "https://places.googleapis.com/v1",
+    category: "GEO",
+    status: "ACTIVE",
+    description: "Detailed place information and photos.",
+  },
+];
+
+const getCategoryIcon = (category: ThirdPartyApi["category"]) => {
+  switch (category) {
+    case "DATA":
+      return <Database size={14} />;
+    case "GEO":
+      return <MapPin size={14} />;
+    case "MEDIA":
+      return <ImageIcon size={14} />;
+    case "AUTH":
+      return <Shield size={14} />;
+    default:
+      return <Server size={14} />;
+  }
+};
 
 export default async function AdminApisPage() {
   const apiDir = path.join(process.cwd(), "src/app/api");
@@ -127,7 +196,7 @@ export default async function AdminApisPage() {
           methods,
           type: isDynamic ? ("DYNAMIC" as const) : ("STATIC" as const),
         };
-      })
+      }),
   );
 
   apis.sort((a, b) => a.route.localeCompare(b.route));
@@ -175,7 +244,7 @@ export default async function AdminApisPage() {
                       <span
                         key={m}
                         className={`px-2 py-0.5 rounded text-[10px] font-bold border ${getMethodColor(
-                          m
+                          m,
                         )}`}
                       >
                         {m}
@@ -226,6 +295,58 @@ export default async function AdminApisPage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold font-sora tracking-tight mb-4 flex items-center gap-2">
+          <Cloud className="text-brand" />
+          3rd Party Integrations
+        </h2>
+        <div className="bg-surface border border-surface-secondary rounded-xl overflow-hidden shadow-sm">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-surface-secondary text-secondary uppercase text-xs font-bold border-b border-surface-secondary">
+              <tr>
+                <th className="px-6 py-4">Service</th>
+                <th className="px-6 py-4">Category</th>
+                <th className="px-6 py-4">Base URL</th>
+                <th className="px-6 py-4">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-surface-secondary/50">
+              {THIRD_PARTY_APIS.map((api) => (
+                <tr
+                  key={api.name}
+                  className="hover:bg-brand/5 transition-colors group"
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex flex-col">
+                      <span className="font-bold text-base text-app-text">
+                        {api.name}
+                      </span>
+                      <span className="text-xs text-secondary opacity-80">
+                        {api.provider}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-surface-secondary text-app-text border border-surface-secondary">
+                      {getCategoryIcon(api.category)}
+                      {api.category}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <code className="text-xs bg-surface-secondary px-2 py-1 rounded text-secondary font-mono">
+                      {api.baseUrl}
+                    </code>
+                  </td>
+                  <td className="px-6 py-4 text-secondary max-w-sm">
+                    {api.description}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

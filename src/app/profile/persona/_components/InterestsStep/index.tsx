@@ -5,8 +5,8 @@ import { useMemo, useState } from "react";
 import interests from "@/data/interests.json";
 import { ChevronRight } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { PersonaFormValues } from "@/app/persona/_types/form";
-import InterestsModal from "@/app/persona/_components/InterestsModal";
+import { PersonaFormValues } from "@/app/profile/persona/_types/form";
+import InterestsModal from "@/app/profile/persona/_components/InterestsModal";
 
 // CATEGORIES
 type InterestItem = { id: string; label: string };

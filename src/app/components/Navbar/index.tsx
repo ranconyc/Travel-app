@@ -50,7 +50,7 @@ export default function Navbar() {
         </li>
         {user?.role === "ADMIN" && (
           <li>
-            <Link href="/admin/generator">
+            <Link href="/admin">
               <TowerControl size={iconsSize} />
             </Link>
           </li>

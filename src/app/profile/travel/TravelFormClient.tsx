@@ -8,12 +8,16 @@ import worldData from "@/data/world.json";
 
 import { SelectedItem } from "@/app/components/common/SelectedItem";
 import Button from "@/app/components/common/Button";
-import { CategoryRow } from "@/app/persona/_components/InterestsStep";
-import Modal from "@/app/travel/_components/Modal";
-import { travelFormSchema, TravelFormValues } from "@/app/travel/_types/form";
-import { TravelFormHeader } from "@/app/travel/_components/TravelFormHeader";
-import { CountrySelection } from "@/app/travel/_components/CountrySelection";
+import { CategoryRow } from "@/app/profile/persona/_components/InterestsStep";
+import Modal from "./_components/Modal";
+import { travelFormSchema, TravelFormValues } from "./_types/form";
+import { TravelFormHeader } from "./_components/TravelFormHeader";
+import { CountrySelection } from "./_components/CountrySelection";
 import { saveVisitedCountries } from "@/domain/user/user.actions";
+import {
+  COUNTRY_CODE_TO_NAME,
+  COUNTRY_NAME_TO_CODE,
+} from "@/data/countryMapping";
 
 // Type assertion for the world data
 type WorldData = Record<string, Record<string, string[]>>;
@@ -34,7 +38,10 @@ export default function TravelFormClient({
     resolver: zodResolver(travelFormSchema),
     mode: "onChange",
     defaultValues: {
-      countries: initialUser?.visitedCountries || [],
+      // Map initial codes (from DB) to names (for UI/Checkbox matching against world.json)
+      countries: (initialUser?.visitedCountries || []).map(
+        (code: string) => COUNTRY_CODE_TO_NAME[code] || code,
+      ),
     },
   });
 
@@ -49,7 +56,7 @@ export default function TravelFormClient({
 
   const getSubContinentSelectedCount = (
     continent: string,
-    subContinent: string
+    subContinent: string,
   ) => {
     const subContinentCountries = world[continent][subContinent];
     return selectedCountries.filter((c) => subContinentCountries.includes(c))
@@ -70,7 +77,17 @@ export default function TravelFormClient({
   const onSubmit = async (data: TravelFormValues) => {
     setIsSubmitting(true);
     try {
-      const result = await saveVisitedCountries(data);
+      // Map selected names back to ISO codes for storage
+      const countriesAsCodes = data.countries.map(
+        (name: string) => COUNTRY_NAME_TO_CODE[name] || name, // Fallback to name if code not found
+      );
+
+      const payload = {
+        ...data,
+        countries: countriesAsCodes,
+      };
+
+      const result = await saveVisitedCountries(payload);
       if (result.success) {
         router.push(`/profile/${result.userId}`);
         router.refresh();
@@ -139,7 +156,7 @@ export default function TravelFormClient({
                   onClick={() => {
                     setValue(
                       "countries",
-                      selectedCountries.filter((c) => c !== country)
+                      selectedCountries.filter((c) => c !== country),
                     );
                     setSelectedSubContinent("");
                   }}
@@ -159,7 +176,7 @@ export default function TravelFormClient({
                   selectedCount={getContinentSelectedCount(selectedContinent)}
                   onClick={() => {
                     setSelectedSubContinent(
-                      `All countries in ${selectedContinent}`
+                      `All countries in ${selectedContinent}`,
                     );
                     setIsModalOpen(true);
                   }}
@@ -170,7 +187,7 @@ export default function TravelFormClient({
                     title={subContinent}
                     selectedCount={getSubContinentSelectedCount(
                       selectedContinent,
-                      subContinent
+                      subContinent,
                     )}
                     onClick={() => {
                       setSelectedSubContinent(subContinent);

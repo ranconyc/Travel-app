@@ -13,6 +13,8 @@ import world from "@/data/world.json";
 import { City } from "@prisma/client";
 import LogoutButton from "@/app/components/LogoutButton";
 import INTERESTS from "@/data/interests.json";
+import Link from "next/link";
+import Button from "@/app/components/common/Button";
 
 // Define types locally for simple access
 type InterestItem = { id: string; label: string };
@@ -83,62 +85,120 @@ const InterestsSection = ({ interests }: { interests: string[] }) => {
   );
 };
 
+const CurrentCitySection = ({ currentCity }: { currentCity: City | null }) => {
+  return (
+    <div className="flex  flex-col gap-2">
+      <h2 className="text-xs font-bold text-secondary uppercase">
+        Current City
+      </h2>
+      <p className="">
+        {currentCity?.name ? (
+          <p className="">{currentCity?.name}</p>
+        ) : (
+          <Button>Get current city</Button>
+        )}
+      </p>
+    </div>
+  );
+};
+
+import { getCountriesByCodes } from "@/lib/db/country.repo";
+import { Country } from "@prisma/client";
+
+// ... existing imports ...
+
+// Update VisitedCountriesSection to accept Country objects
+const VisitedCountriesSection = ({ countries }: { countries: Country[] }) => {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-between">
+        <h2 className="text-xs font-bold text-secondary uppercase">
+          Visited Countries
+        </h2>
+        <p className="text-xs text-secondary">{countries.length} countries</p>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        {countries.map((country) => {
+          return (
+            <Link
+              key={country.countryId}
+              href={`/countries/${country.countryId}`}
+              className="group relative rounded-xl overflow-hidden aspect-[4/3] w-32 shadow-sm hover:shadow-md transition-all bg-surface border border-surface-secondary block"
+            >
+              {country.imageHeroUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={country.imageHeroUrl}
+                  alt={country.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full bg-surface-secondary flex items-center justify-center text-secondary font-bold text-xl">
+                  {country.code}
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-2">
+                <span className="text-white font-bold text-sm truncate w-full group-hover:text-brand transition-colors">
+                  {country.name}
+                </span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// Update TravelSection props
 const TravelSection = ({
   visitedCountries,
   currentCity,
 }: {
-  visitedCountries: string[];
+  visitedCountries: Country[];
   currentCity: City | null;
 }) => {
-  const countries = visitedCountries.splice(0, 5);
   return (
     <div className="mb-4">
       <h1 className="text-lg font-bold">Travel</h1>
-      <div className="flex flex-col gap-2">
-        <h2 className="text-xs font-bold text-secondary uppercase">
-          Current City
-        </h2>
-        <p className="">{currentCity?.name ?? "unknoun"}</p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-xs font-bold text-secondary uppercase">
-            Visited Countries
-          </h2>
-          {countries.map((country) => {
-            return (
-              <p
-                className="text-xs text-secondary px-2 py-1 border border-brand rounded-full"
-                key={country}
-              >
-                {country}
-              </p>
-            );
-          })}
-        </div>
+      <div className="flex flex-col gap-4">
+        <CurrentCitySection currentCity={currentCity} />
+        <VisitedCountriesSection countries={visitedCountries} />
       </div>
     </div>
   );
 };
 
 export default async function Profile({ params }: { params: { id: string } }) {
-  const { id } = await params; // id of the profile user
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   const requests = await getFriendRequestsAction(id);
-  const loggedUser = session?.user; //  logged user data
+  const loggedUser = session?.user;
 
-  const profileUser = await getUserProfile(id); // profile user data
+  const profileUser = await getUserProfile(id);
   const friendship = loggedUser?.id
     ? await getFriendshipStatusAction(loggedUser.id, id)
     : null;
-
-  // if user not found return not found page
 
   if (!profileUser) {
     return <div>User not found</div>;
   }
 
-  const continentStats = getContinentStats(profileUser.visitedCountries, world);
+  // Fetch full country objects for visited country codes
+  const visitedCountriesCodes = profileUser.visitedCountries || [];
+  const visitedCountriesData = await getCountriesByCodes(visitedCountriesCodes);
+
+  // For stats, we still use codes or names?
+  // getContinentStats expects strings. If codes are passed, it should match codes in world.json?
+  // world.json only implies names.
+  // If we save Codes, getContinentStats logic (which uses world.json NAMES) will BREAK.
+  // I should fix getContinentStats to map Codes -> Names.
+
+  // Re-use existing getContinentStats but map inputs first.
+  // To fetch names, I can reuse visitedCountriesData which has names!
+  const visitedCountryNames = visitedCountriesData.map((c) => c.name);
+
+  const continentStats = getContinentStats(visitedCountryNames, world);
 
   const isYourProfile = loggedUser?.id === profileUser?.id;
 
@@ -168,7 +228,6 @@ export default async function Profile({ params }: { params: { id: string } }) {
     };
   }
 
-  // Type assertion for persona to access interests safely
   const persona = profileUser?.profile?.persona as {
     interests?: string[];
   } | null;
@@ -241,7 +300,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
 
         <InterestsSection interests={persona?.interests || []} />
         <TravelSection
-          visitedCountries={profileUser.visitedCountries || []}
+          visitedCountries={visitedCountriesData}
           currentCity={profileUser.currentCity}
         />
 
