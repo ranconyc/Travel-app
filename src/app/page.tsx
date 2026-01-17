@@ -266,9 +266,11 @@ export default function Home() {
       <main className="p-4 overflow-y-scroll">
         {locationLoading && <p>Loading location...</p>}
         {error && <p>Error: {error}</p>}
-        <UserList loggedUser={loggedUser} />
-        <CountryList />
-        <CityList />
+        <div className="flex flex-col gap-2">
+          <UserList loggedUser={loggedUser} />
+          <CountryList />
+          <CityList />
+        </div>
       </main>
     </div>
   );
