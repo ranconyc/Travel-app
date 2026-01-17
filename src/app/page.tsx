@@ -68,14 +68,14 @@ const Header = () => {
     <div className="bg-app-bg p-4 pt-10 sticky top-0 left-0 right-0 z-50">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-md text-secondary capitalize">
+          <p className="text-xl text-secondary capitalize">
             {isUserAtHome
               ? "there is no place like"
               : user?.currentCity
                 ? `${user?.name?.split(" ")[0]} Explore`
                 : "Explore the"}
           </p>
-          <h1 className="text-4xl font-bold capitalize mb-6">
+          <h1 className="text-6xl font-bold capitalize mb-6">
             {isUserAtHome ? "Home" : (user?.currentCity?.name ?? "World")}
           </h1>
         </div>
