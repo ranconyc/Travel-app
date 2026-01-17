@@ -2,13 +2,9 @@
 
 import SelectionCard from "@/app/components/form/SelectionCard";
 import Button from "@/app/components/common/Button";
-import { X } from "lucide-react";
 import interests from "@/data/interests.json";
-import { useEffect, useRef } from "react";
-
-type InterestItem = { id: string; label: string };
-type Category = { id: string; label: string; items: InterestItem[] };
-type InterestsData = Record<string, Category>;
+import { InterestsData } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
+import Modal from "@/app/components/common/Modal";
 
 const interestsData: InterestsData = interests as unknown as InterestsData;
 
@@ -25,71 +21,38 @@ export default function InterestsModal({
   selectedInterests,
   onOptionToggle,
 }: InterestsModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Focus trap and keyboard handling
-  useEffect(() => {
-    // Focus the close button when modal opens
-    closeButtonRef.current?.focus();
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
-  // Handle backdrop click
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   const category = interestsData[categoryKey];
 
   if (!category) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      className="fixed inset-0 bg-blur flex items-end z-50 animate-fade-in"
-      onClick={handleBackdropClick}
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      showCloseButton={true} // User requested exitBtn control
+      className="max-h-[600px] px-3 py-6"
     >
-      <div
-        ref={modalRef}
-        className="w-full h-fit max-h-[600px] bg-app-bg m-3 mb-4 px-3 py-6 rounded-4xl animate-slide-up"
-      >
-        <div className="flex justify-end">
-          <button
-            ref={closeButtonRef}
-            type="button"
-            onClick={onClose}
-            className="p-1 hover:bg-surface rounded-full transition-colors"
-            aria-label="Close modal"
-          >
-            <X size={20} />
-          </button>
+      <div className="flex flex-col h-full">
+        {/* Header Content handled inside children to match specific design if needed, 
+            but using Modal's structure helps consistency. 
+            Here we render title manually to keep specific layout flow or use Modal's title.
+            Current design had X separate. Let's try inside content for exact match or adapt.
+             
+            Actually, let's use Modal without title prop to keep custom layout if strict, 
+            but Modal puts X at top right. The previous design returned X at top right too.
+            So we can just put content here.
+        */}
+
+        <div className="mb-2">
+          <h1 id="modal-title" className="text-xl font-bold">
+            {category.label}
+          </h1>
+          <p className="text-sm font-bold text-secondary mt-1">
+            Select all that interest you
+          </p>
         </div>
-        <h1 id="modal-title" className="text-xl font-bold mb-2">
-          {category.label}
-        </h1>
-        <p className="mb-4 text-sm font-bold text-secondary">
-          Select all that interest you
-        </p>
-        <div className="grid gap-2 h-fit max-h-[350px] overflow-y-auto">
+
+        <div className="grid gap-2 overflow-y-auto min-h-0 flex-1 my-2 pr-1">
           {category.items.map((item) => (
             <SelectionCard
               key={item.id}
@@ -100,15 +63,11 @@ export default function InterestsModal({
             />
           ))}
         </div>
-        <div className="mt-6">
-          <Button
-            // className="w-full"
-            onClick={onClose}
-          >
-            Done
-          </Button>
+
+        <div className="mt-4">
+          <Button onClick={onClose}>Done</Button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

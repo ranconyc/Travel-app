@@ -11,8 +11,26 @@ import {
 } from "@/domain/friendship/friendship.actions";
 import world from "@/data/world.json";
 import { City } from "@prisma/client";
-import Button from "@/app/components/common/Button";
 import LogoutButton from "@/app/components/LogoutButton";
+import INTERESTS from "@/data/interests.json";
+
+// Define types locally for simple access
+type InterestItem = { id: string; label: string };
+type Category = { id: string; label: string; items: InterestItem[] };
+type InterestsData = Record<string, Category>;
+
+const interestsData = INTERESTS as unknown as InterestsData;
+
+const getInterestLabel = (interestId: string) => {
+  for (const catKey in interestsData) {
+    const category = interestsData[catKey];
+    const foundItem = category.items?.find((item) => item.id === interestId);
+    if (foundItem) {
+      return foundItem.label;
+    }
+  }
+  return interestId;
+};
 
 const Badge = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -48,6 +66,7 @@ const Avatar = ({
 };
 
 const InterestsSection = ({ interests }: { interests: string[] }) => {
+  console.log(interests, "dd");
   return (
     <div className="flex flex-wrap gap-2">
       {interests.map((interest) => {
@@ -56,7 +75,7 @@ const InterestsSection = ({ interests }: { interests: string[] }) => {
             className="text-xs text-secondary px-2 py-1 border border-brand rounded-full"
             key={interest}
           >
-            {interest}
+            {getInterestLabel(interest)}
           </p>
         );
       })}

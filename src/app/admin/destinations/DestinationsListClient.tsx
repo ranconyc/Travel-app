@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
-import Input from "@/app/components/form/Input";
 
 type Props = {
   countries: any[];
@@ -68,82 +67,88 @@ export default function DestinationsListClient({
       </div>
 
       {/* List */}
-      <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm border-collapse">
-            <thead className="bg-surface-secondary text-secondary uppercase text-xs">
-              <tr>
-                <th className="px-6 py-3">Name</th>
-                <th className="px-6 py-3">ID / Code</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="hover:bg-surface-hover transition-colors"
-                  >
-                    <td className="px-6 py-4 font-medium text-app-text">
-                      <div className="flex items-center gap-3">
-                        {item.imageHeroUrl && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={item.imageHeroUrl}
-                            alt=""
-                            className="w-8 h-8 rounded object-cover"
-                          />
-                        )}
-                        <span>{item.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-secondary font-mono text-xs">
-                      {activeTab === "countries"
-                        ? item.countryId
-                        : activeTab === "cities"
-                          ? item.cityId
-                          : item.id}
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.needsReview ? (
-                        <span className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-[10px] font-bold">
-                          NEEDS REVIEW
-                        </span>
-                      ) : (
-                        <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-[10px] font-bold">
-                          ACTIVE
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      {/* Simplified routing: we can check type to know which sub-route, or just [id] if unified */}
-                      {/* User asked for /admin/destinations/[id] */}
-                      <Link
-                        href={`/admin/destinations/${item.id}`}
-                        className="text-brand hover:underline font-medium"
-                      >
-                        Edit
-                      </Link>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="px-6 py-8 text-center text-secondary italic"
-                  >
-                    No items found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      <div className="flex flex-col gap-2">
+        {/* Desktop Header */}
+        <div className="hidden md:grid md:grid-cols-[2fr,1fr,1fr] px-4 py-2 text-xs font-bold text-secondary uppercase tracking-wider">
+          <div>Name</div>
+          <div>ID / Code</div>
+          <div>Status</div>
         </div>
+
+        {/* Items */}
+        {filteredData.length > 0 ? (
+          filteredData.map((item) => (
+            <Link
+              key={item.id}
+              href={`/admin/destinations/${item.id}`}
+              className="group block bg-surface border border-border rounded-xl hover:border-brand hover:shadow-sm transition-all p-4 md:px-4 md:py-3"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr,1fr] gap-3 md:gap-0 items-start md:items-center">
+                {/* Name */}
+                <div className="flex items-center gap-3">
+                  {item.imageHeroUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <div className="relative w-10 h-10 md:w-8 md:h-8 rounded-lg overflow-hidden flex-shrink-0 bg-surface-secondary">
+                      <img
+                        src={item.imageHeroUrl}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 md:w-8 md:h-8 rounded-lg bg-surface-secondary flex items-center justify-center text-xs font-bold text-secondary flex-shrink-0">
+                      {item.name.charAt(0)}
+                    </div>
+                  )}
+                  <span className="font-bold text-app-text group-hover:text-brand transition-colors text-base md:text-sm">
+                    {item.name}
+                  </span>
+                </div>
+
+                {/* ID / Code */}
+                <div className="flex md:block items-center justify-between text-xs md:text-sm font-mono text-secondary">
+                  <span className="md:hidden font-bold uppercase tracking-wider text-[10px] text-tertiary">
+                    ID / Code
+                  </span>
+                  <span>
+                    {activeTab === "countries"
+                      ? item.countryId
+                      : activeTab === "cities"
+                        ? item.cityId
+                        : item.id}
+                  </span>
+                </div>
+
+                {/* Status */}
+                <div className="flex md:block items-center justify-between">
+                  <span className="md:hidden font-bold uppercase tracking-wider text-[10px] text-tertiary">
+                    Status
+                  </span>
+                  <div>
+                    {item.needsReview ? (
+                      <span className="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold bg-yellow-100 text-yellow-800">
+                        NEEDS REVIEW
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold bg-green-100 text-green-800">
+                        ACTIVE
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="bg-surface rounded-xl border border-dashed border-border p-8 text-center">
+            <p className="text-secondary italic">
+              No items found matching your search.
+            </p>
+          </div>
+        )}
       </div>
-      <div className="text-right text-xs text-secondary mt-2">
+
+      <div className="text-right text-xs text-secondary mt-1">
         Showing {filteredData.length} items
       </div>
     </div>
