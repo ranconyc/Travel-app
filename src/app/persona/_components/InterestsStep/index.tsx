@@ -9,8 +9,12 @@ import { PersonaFormValues } from "@/app/persona/_types/form";
 import InterestsModal from "@/app/persona/_components/InterestsModal";
 
 // CATEGORIES
-const categories: { [key: string]: string[] } = interests;
-const categoryNames = Object.keys(categories);
+type InterestItem = { id: string; label: string };
+type Category = { id: string; label: string; items: InterestItem[] };
+type InterestsData = Record<string, Category>;
+
+const interestsData: InterestsData = interests as unknown as InterestsData;
+const categoryKeys = Object.keys(interestsData);
 
 // CategoryRow Component
 interface CategoryRowProps {
@@ -31,7 +35,7 @@ export const CategoryRow = ({
       className="text-left border-2 border-surface hover:border-brand transition-colors rounded-xl px-3 py-2 flex justify-between items-center group"
     >
       <div>
-        <h1>{title}</h1>
+        <h1 className="font-semibold">{title}</h1>
         <p
           className={`text-xs ${
             selectedCount > 0 ? "text-brand" : "text-secondary"
@@ -52,37 +56,53 @@ export const CategoryRow = ({
 // Main InterestsStep Component
 export default function InterestsStep() {
   const [showModal, setShowModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategoryKey, setSelectedCategoryKey] = useState<string | null>(
+    null,
+  );
 
   const { watch, setValue } = useFormContext<PersonaFormValues>();
   const selectedInterests = watch("interests");
 
-  const handleOptionToggle = (option: string) => {
-    const isSelected = selectedInterests.includes(option);
+  // Helper to get label by ID
+  const getLabelById = (id: string) => {
+    for (const cat of Object.values(interestsData)) {
+      const item = cat.items.find((i) => i.id === id);
+      if (item) return item.label;
+    }
+    return id;
+  };
+
+  const handleOptionToggle = (optionId: string) => {
+    const isSelected = selectedInterests.includes(optionId);
     if (isSelected) {
       setValue(
         "interests",
-        selectedInterests.filter((i) => i !== option)
+        selectedInterests.filter((i) => i !== optionId),
       );
     } else {
-      setValue("interests", [...selectedInterests, option]);
+      setValue("interests", [...selectedInterests, optionId]);
     }
   };
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category);
+  const handleCategoryClick = (categoryKey: string) => {
+    setSelectedCategoryKey(categoryKey);
     setShowModal(true);
   };
 
   // Memoize category counts for performance
   const categoryCounts = useMemo(() => {
-    return categoryNames.reduce((acc, category) => {
-      const options = categories[category];
-      acc[category] = selectedInterests.filter((interest) =>
-        options.includes(interest)
-      ).length;
-      return acc;
-    }, {} as Record<string, number>);
+    return categoryKeys.reduce(
+      (acc, key) => {
+        const category = interestsData[key];
+        // Count how many items in this category are currently selected (by ID)
+        const count = category.items.filter((item) =>
+          selectedInterests.includes(item.id),
+        ).length;
+        acc[key] = count;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
   }, [selectedInterests]);
 
   return (
@@ -92,11 +112,11 @@ export default function InterestsStep() {
         <div className="mb-8">
           <h1 className="text-xl font-bold mb-4">You&apos;re into:</h1>
           <ul className="flex flex-wrap gap-2">
-            {selectedInterests.map((interest) => (
+            {selectedInterests.map((interestId) => (
               <SelectedItem
-                key={interest}
-                item={interest}
-                onClick={() => handleOptionToggle(interest)}
+                key={interestId}
+                item={getLabelById(interestId)}
+                onClick={() => handleOptionToggle(interestId)}
               />
             ))}
           </ul>
@@ -108,20 +128,20 @@ export default function InterestsStep() {
         <h2 className="text-xs font-bold text-secondary">
           Select all that interest you
         </h2>
-        {categoryNames.map((category) => (
+        {categoryKeys.map((key) => (
           <CategoryRow
-            key={category}
-            title={category}
-            selectedCount={categoryCounts[category]}
-            onClick={() => handleCategoryClick(category)}
+            key={key}
+            title={interestsData[key].label}
+            selectedCount={categoryCounts[key]}
+            onClick={() => handleCategoryClick(key)}
           />
         ))}
       </div>
 
       {/* Modal */}
-      {showModal && selectedCategory && (
+      {showModal && selectedCategoryKey && (
         <InterestsModal
-          category={selectedCategory}
+          categoryKey={selectedCategoryKey}
           onClose={() => setShowModal(false)}
           selectedInterests={selectedInterests}
           onOptionToggle={handleOptionToggle}

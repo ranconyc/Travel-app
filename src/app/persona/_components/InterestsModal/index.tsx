@@ -6,17 +6,21 @@ import { X } from "lucide-react";
 import interests from "@/data/interests.json";
 import { useEffect, useRef } from "react";
 
-const categories: { [key: string]: string[] } = interests;
+type InterestItem = { id: string; label: string };
+type Category = { id: string; label: string; items: InterestItem[] };
+type InterestsData = Record<string, Category>;
+
+const interestsData: InterestsData = interests as unknown as InterestsData;
 
 interface InterestsModalProps {
-  category: string;
+  categoryKey: string;
   onClose: () => void;
   selectedInterests: string[];
   onOptionToggle: (option: string) => void;
 }
 
 export default function InterestsModal({
-  category,
+  categoryKey,
   onClose,
   selectedInterests,
   onOptionToggle,
@@ -52,7 +56,9 @@ export default function InterestsModal({
     }
   };
 
-  if (!categories[category]) return null;
+  const category = interestsData[categoryKey];
+
+  if (!category) return null;
 
   return (
     <div
@@ -78,19 +84,19 @@ export default function InterestsModal({
           </button>
         </div>
         <h1 id="modal-title" className="text-xl font-bold mb-2">
-          {category}
+          {category.label}
         </h1>
         <p className="mb-4 text-sm font-bold text-secondary">
           Select all that interest you
         </p>
         <div className="grid gap-2 h-fit max-h-[350px] overflow-y-auto">
-          {categories[category].map((option) => (
+          {category.items.map((item) => (
             <SelectionCard
-              key={option}
-              id={option}
-              label={option}
-              isSelected={selectedInterests.includes(option)}
-              onChange={() => onOptionToggle(option)}
+              key={item.id}
+              id={item.id}
+              label={item.label}
+              isSelected={selectedInterests.includes(item.id)}
+              onChange={() => onOptionToggle(item.id)}
             />
           ))}
         </div>

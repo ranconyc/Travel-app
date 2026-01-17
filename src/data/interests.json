@@ -1,80 +1,85 @@
 {
-  "Shopping": [
-    "Local markets",
-    "Designer boutiques",
-    "Shopping malls",
-    "Souvenir hunting",
-    "Night bazaars",
-    "Street shopping"
-  ],
-  "Sport & Adventure": [
-    "Surfing",
-    "Snorkeling",
-    "Scuba diving",
-    "Kayaking",
-    "Jet skiing",
-    "Rock climbing",
-    "Zip-lining",
-    "Cycling tours",
-    "Skiing",
-    "Golfing",
-    "Paragliding",
-    "Skydiving"
-  ],
-  "Art & Culture": [
-    "Museums",
-    "Art galleries",
-    "Historic landmarks",
-    "Temples or churches",
-    "Cultural festivals",
-    "Live performances",
-    "Cooking classes",
-    "Craft workshops"
-  ],
-  "Nature & Hiking": [
-    "National park hiking",
-    "Waterfall visits",
-    "Cave exploration",
-    "Mountain trekking",
-    "Nature walks",
-    "Wildlife safaris",
-    "Camping",
-    "Stargazing"
-  ],
-  "Wellness & Relaxation": [
-    "Spa treatments",
-    "Yoga retreats",
-    "Meditation",
-    "Beach lounging",
-    "Hot springs",
-    "Wellness resorts",
-    "Detox programs"
-  ],
-  "Food & Drink": [
-    "Street food tours",
-    "Fine dining",
-    "Wine tasting",
-    "Brewery tours",
-    "Cooking classes",
-    "Nightlife",
-    "Bars & clubs"
-  ],
-  "Sightseeing & Experiences": [
-    "City tours",
-    "Sunset cruises",
-    "Island hopping",
-    "Scenic train rides",
-    "Boat tours",
-    "Theme parks",
-    "Local festivals",
-    "Markets"
-  ],
-  "Social & Local Experiences": [
-    "Volunteering",
-    "Meeting locals",
-    "Joining group tours",
-    "Homestays",
-    "Cultural exchanges",
-    "Travel meetups"
-  ]
+  "Food_Nightlife": {
+    "id": "cat_food_nightlife",
+    "label": "Food & Nightlife (Top Pick) 🍜",
+    "items": [
+      { "id": "street_food_markets", "label": "Street food markets" },
+      { "id": "fine_dining", "label": "Fine dining" },
+      { "id": "wine_brewery_tours", "label": "Wine & Brewery tours" },
+      { "id": "cooking_classes", "label": "Cooking classes" },
+      { "id": "nightclubs_dancing", "label": "Nightclubs & Dancing" },
+      { "id": "rooftop_bars", "label": "Rooftop bars" },
+      { "id": "live_music_venues", "label": "Live music venues" }
+    ]
+  },
+  "Nature_Adventure": {
+    "id": "cat_nature_adventure",
+    "label": "Nature & Adventure 🏔️",
+    "items": [
+      { "id": "national_park_hiking", "label": "National park hiking" },
+      { "id": "waterfall_visits", "label": "Waterfall visits" },
+      { "id": "cave_exploration", "label": "Cave exploration" },
+      { "id": "mountain_trekking", "label": "Mountain trekking" },
+      { "id": "wildlife_safaris", "label": "Wildlife safaris" },
+      { "id": "surfing", "label": "Surfing" },
+      { "id": "scuba_diving", "label": "Scuba diving" },
+      { "id": "rock_climbing", "label": "Rock climbing" },
+      { "id": "zip_lining", "label": "Zip-lining" },
+      { "id": "skydiving", "label": "Skydiving" }
+    ]
+  },
+  "Wellness_Relaxation": {
+    "id": "cat_wellness_relaxation",
+    "label": "Wellness & Relaxation 🧘",
+    "items": [
+      { "id": "spa_massage", "label": "Spa & Massage" },
+      { "id": "yoga_retreats", "label": "Yoga retreats" },
+      { "id": "meditation_centers", "label": "Meditation centers" },
+      { "id": "beach_lounging", "label": "Beach lounging" },
+      { "id": "hot_springs", "label": "Hot springs" },
+      { "id": "wellness_resorts", "label": "Wellness resorts" }
+    ]
+  },
+  "Culture_History": {
+    "id": "cat_culture_history",
+    "label": "Culture & History 🏛️",
+    "items": [
+      { "id": "museums", "label": "Museums" },
+      { "id": "art_galleries", "label": "Art galleries" },
+      { "id": "historic_landmarks", "label": "Historic landmarks" },
+      { "id": "archaeological_sites", "label": "Archaeological sites" },
+      { "id": "cultural_festivals", "label": "Cultural festivals" },
+      {
+        "id": "religious_sites",
+        "label": "Religious sites (Temples/Churches)"
+      },
+      { "id": "craft_workshops", "label": "Craft workshops" }
+    ]
+  },
+  "Shopping_Urban": {
+    "id": "cat_shopping_urban",
+    "label": "Shopping & Urban 🛍️",
+    "items": [
+      { "id": "shopping_malls", "label": "Shopping malls" },
+      { "id": "designer_boutiques", "label": "Designer boutiques" },
+      { "id": "local_artisan_markets", "label": "Local artisan markets" },
+      { "id": "souvenir_hunting", "label": "Souvenir hunting" },
+      { "id": "city_viewpoints", "label": "City viewpoints" },
+      { "id": "instagrammable_spots", "label": "Instagrammable spots" },
+      { "id": "theme_parks", "label": "Theme parks" }
+    ]
+  },
+  "Social_Work": {
+    "id": "cat_social_work",
+    "label": "Social & Digital Nomad",
+    "items": [
+      { "id": "coworking_spaces", "label": "Coworking spaces" },
+      { "id": "work_friendly_cafes", "label": "Work-friendly cafes" },
+      { "id": "meeting_locals", "label": "Meeting locals" },
+      { "id": "group_tours", "label": "Group tours" },
+      { "id": "volunteering", "label": "Volunteering" },
+      { "id": "homestays", "label": "Homestays" },
+      { "id": "traveler_meetups", "label": "Traveler meetups" }
+    ]
+  }
 }
