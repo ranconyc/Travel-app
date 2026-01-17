@@ -1,7 +1,7 @@
 import Block from "@/app/components/common/Block";
 import Title from "@/app/components/Title";
 import { Users } from "lucide-react";
-import { UserLink } from "../UserLink";
+import { UserLink } from "@/app/profile/[id]/_components/UserLink";
 import { ProfileUser } from "@/types/user";
 
 export const TravelPartnersSection = ({ user }: { user: ProfileUser }) => (

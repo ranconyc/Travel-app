@@ -73,7 +73,7 @@ async function getPageSpecificComponents(): Promise<ComponentInfo[]> {
   }
 }
 
-import ComponentViewer from "./ComponentViewer";
+import ComponentViewer from "@/app/admin/component/ComponentViewer";
 
 // ... (keep scan functions: getFiles, isComponentFile, getCommonComponents, getPageSpecificComponents)
 

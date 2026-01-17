@@ -1,6 +1,5 @@
-import { Category, Interest } from "../page";
-import CategoryCard from "./CategoryCard";
-import InterestsGrid from "./InterestsGrid";
+import { Category, Interest } from "@/app/profile/travel-preferences/page";
+import InterestsGrid from "@/app/profile/travel-preferences/components/InterestsGrid";
 import { ChevronRight } from "lucide-react";
 
 type CategorySectionProps = {

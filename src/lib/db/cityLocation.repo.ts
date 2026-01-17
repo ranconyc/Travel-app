@@ -319,7 +319,23 @@ export async function ensureCountryAndCityFromLocation(
         countryId: countryCode2.toLowerCase(),
         code: countryCode2,
         name: countryName,
-      },
+        currency: {
+          code: "USD",
+          symbol: "$",
+          name: "US Dollar",
+        },
+        budget: {
+          daily: { budget: "50-100", mid: "100-250", luxury: "250+" },
+          currencyCode: "USD",
+        },
+        cashCulture: {
+          atmAvailability: "widespread",
+          cashPreferred: false,
+        },
+        bestTimeToVisit: {
+          peak: { months: [], why: "", crowds: "", prices: "" },
+        } as unknown as any,
+      } as any,
     });
 
     const cityName = (meta.city || meta.displayName || "Unknown City").trim();

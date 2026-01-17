@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, forwardRef } from "react";
 import ErrorMessage from "@/app/components/form/ErrorMessage";
-import { highlightMatch } from "./highlightMatch";
+import { highlightMatch } from "@/app/components/form/Autocomplete/highlightMatch";
 import { useAutocompleteValue } from "@/app/_hooks/autocomplete/useAutocompleteValue";
 import { useAutocompleteKeyboardNavigation } from "@/app/_hooks/autocomplete/useAutocompleteKeyboard";
 import { useClickOutside } from "@/app/_hooks/useClickOutside";

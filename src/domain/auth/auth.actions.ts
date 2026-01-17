@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from "bcrypt";
-import { signupSchema, SignupValues } from "./signup.schema";
+import { signupSchema, SignupValues } from "@/domain/auth/signup.schema";
 import { createUser, findUserByEmail } from "@/lib/db/user.repo";
 
 export async function signupAction(values: SignupValues) {

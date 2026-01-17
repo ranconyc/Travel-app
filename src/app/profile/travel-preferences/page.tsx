@@ -1,18 +1,12 @@
 "use client";
 
 import { FormProvider } from "react-hook-form";
-import Button from "@/app/components/common/Button";
-import Logo from "@/app/components/common/Logo";
 import CATEGORIES from "@/data/categories.json";
 import INTERESTS from "@/data/interests.json";
-import {
-  useTravelPreferencesForm,
-  type FormValues,
-  type SelectedPreference,
-} from "./_hooks/useTravelPreferencesForm";
-import PreferencesHeader from "./components/PreferencesHeader";
-import SelectedPreferencesList from "./components/SelectedPreferencesList";
-import CategorySection from "./components/CategorySection";
+import { useTravelPreferencesForm } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
+import PreferencesHeader from "@/app/profile/travel-preferences/components/PreferencesHeader";
+import SelectedPreferencesList from "@/app/profile/travel-preferences/components/SelectedPreferencesList";
+import CategorySection from "@/app/profile/travel-preferences/components/CategorySection";
 
 export type Category = { id: string; title: string };
 export type InterestsByCategory = Record<string, string[]>;
@@ -24,8 +18,8 @@ const INTERESTS_BY_CATEGORY = INTERESTS as InterestsByCategory;
 /* -------------------- PAGE -------------------- */
 
 export default function TravelPreferencesPage() {
-  const onSubmit = (data: FormValues) => {
-    // console.log("travel preferences submitted", data.preferences);
+  const onSubmit = () => {
+    // console.log("travel preferences submitted");
     // TODO: send to API
   };
 
@@ -87,6 +81,7 @@ export default function TravelPreferencesPage() {
 /* -------------------- COMPONENTS -------------------- */
 
 // Optional sticky footer if/when you need navigation
+/*
 type FooterActionsProps = {
   canContinue: boolean;
 };
@@ -103,3 +98,4 @@ function FooterActions({ canContinue }: FooterActionsProps) {
     </div>
   );
 }
+*/

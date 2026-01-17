@@ -5,19 +5,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import NameSectionShell from "./sections/NameSection/NameSectionShell";
+import NameSectionShell from "@/app/profile/complete/sections/NameSection/NameSectionShell";
 import {
   CompleteProfileFormValues,
   completeProfileSchema,
 } from "@/domain/user/completeProfile.schema";
 
 import { updateProfile } from "@/domain/user/user.actions";
-import HomeBaseSectionShell from "./sections/HomeBaseSection/HomeBaseSectionShell";
-import GenderSectionShell from "./sections/GenderSection/GenderSectionShell";
-import OccupationSectionShell from "./sections/OccupationSection/OccupationSectionShell";
-import LanguagesSectionShell from "./sections/LanguagesSection/LanguagesSectionShell";
-import BirthdaySectionShell from "./sections/BirthdaySection/BirthdaySectionShell";
-import AvatarSectionShell from "./sections/AvatarSection/AvatarSectionShell";
+import HomeBaseSectionShell from "@/app/profile/complete/sections/HomeBaseSection/HomeBaseSectionShell";
+import GenderSectionShell from "@/app/profile/complete/sections/GenderSection/GenderSectionShell";
+import OccupationSectionShell from "@/app/profile/complete/sections/OccupationSection/OccupationSectionShell";
+import LanguagesSectionShell from "@/app/profile/complete/sections/LanguagesSection/LanguagesSectionShell";
+import BirthdaySectionShell from "@/app/profile/complete/sections/BirthdaySection/BirthdaySectionShell";
+import AvatarSectionShell from "@/app/profile/complete/sections/AvatarSection/AvatarSectionShell";
 
 import { useProfileDraft } from "@/app/_hooks/useProfileDraft";
 import type { User as DomainUser } from "@/domain/user/user.schema";

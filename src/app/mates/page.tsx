@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getAllUsersQuery, getUserProfile } from "@/domain/user/user.queries";
 import { redirect } from "next/navigation";
-import NearbyMatesClient from "./_components/NearbyMatesClient";
+import NearbyMatesClient from "@/app/mates/_components/NearbyMatesClient";
 
 export default async function NearbyMatesPage() {
   const session = await getServerSession(authOptions);

@@ -1,4 +1,4 @@
-import { type SelectedPreference } from "../_hooks/useTravelPreferencesForm";
+import { type SelectedPreference } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
 type SelectedPreferencesListProps = {
   items: SelectedPreference[];
   onRemove: (categoryId: string, interestId: string) => void;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { getComponentPreview } from "./ComponentRegistry";
+import { getComponentPreview } from "@/app/admin/component/ComponentRegistry";
 import { Search } from "lucide-react";
 
 type ComponentInfo = {

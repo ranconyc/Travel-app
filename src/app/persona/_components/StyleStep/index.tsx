@@ -1,5 +1,5 @@
 import * as Icons from "lucide-react";
-import SelectionStep from "../SelectionStep";
+import SelectionStep from "@/app/persona/_components/SelectionStep";
 import travelStylesData from "@/data/travelStyles.json";
 
 interface StyleData {

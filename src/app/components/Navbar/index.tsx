@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { UserRoundSearch, Binoculars, MessageCircle } from "lucide-react";
 import { useUnreadCount } from "@/lib/socket/useWebSocket";
-import { NotificationBadge } from "./NotificationBadge";
+import { NotificationBadge } from "@/app/components/Navbar/NotificationBadge";
 import { Avatar } from "@/app/components/common/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
 

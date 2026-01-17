@@ -1,4 +1,4 @@
-import { Interest } from "../page";
+import { Interest } from "@/app/profile/travel-preferences/page";
 
 type InterestsGridProps = {
   interests: Interest[];

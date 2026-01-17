@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useState } from "react";
-import { useSocket } from "./socket-context";
+import { useSocket } from "@/lib/socket/socket-context";
 import type { EventCallback } from "@/types/socket";
 
 /* Custom hook for using WebSocket in components */

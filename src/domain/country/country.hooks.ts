@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   generateCountryAction,
   GenerateCountryResult,
-} from "./country.actions";
+} from "@/domain/country/country.actions";
 import { ActionResponse } from "@/types/actions";
 
 export function useGenerateCountry() {

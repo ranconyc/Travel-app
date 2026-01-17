@@ -6,11 +6,11 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema, SignInValues } from "./_types/form";
-import { LandingView } from "./_components/LandingView";
-import { LoginView } from "./_components/LoginView";
-import { SignupView } from "./_components/SignupView";
-import useAuthView from "./_hooks/useAuthView";
+import { signInSchema, SignInValues } from "@/app/signin/_types/form";
+import { LandingView } from "@/app/signin/_components/LandingView";
+import { LoginView } from "@/app/signin/_components/LoginView";
+import { SignupView } from "@/app/signin/_components/SignupView";
+import useAuthView from "@/app/signin/_hooks/useAuthView";
 
 export default function SignInFormClient() {
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function SignInFormClient() {
         router.push(callbackUrl);
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);

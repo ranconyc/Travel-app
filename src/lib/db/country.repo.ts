@@ -391,8 +391,25 @@ export async function createCountryFromName(countryName: string) {
     population: rest.population ?? null,
     areaKm2: typeof rest.area === "number" ? rest.area : null,
 
-    currency: rest.currencies ?? undefined,
-    languageComm: rest.languages ?? undefined,
+    currency: rest.currencies
+      ? Object.entries(rest.currencies).map(([code, cur]: [string, any]) => ({
+          code,
+          name: cur.name,
+          symbol: cur.symbol,
+        }))[0] || { code: "USD", symbol: "$", name: "US Dollar" }
+      : { code: "USD", symbol: "$", name: "US Dollar" },
+
+    budget: {
+      daily: { budget: "50-100", mid: "100-250", luxury: "250+" },
+      currencyCode: "USD",
+    },
+
+    cashCulture: {
+      atmAvailability: "widespread",
+      cashPreferred: false,
+    },
+
+    languages: rest.languages ?? null,
 
     utilities: utilitiesJson,
     gettingAround: gettingAroundJson,
@@ -402,7 +419,15 @@ export async function createCountryFromName(countryName: string) {
 
     imageHeroUrl,
 
-    bestSeason: null,
+    bestTimeToVisit: {
+      peak: {
+        months: ["Nov", "Dec", "Jan", "Feb"],
+        why: "Cool & dry",
+        crowds: "high",
+        prices: "high",
+      },
+    } as unknown as any,
+
     idealDuration: null,
     safety: null,
 
@@ -413,7 +438,7 @@ export async function createCountryFromName(countryName: string) {
 
     autoCreated: true,
     needsReview: true,
-  };
+  } as any;
 
   // 6) Create in DB
   const created = await prisma.country.create({ data });

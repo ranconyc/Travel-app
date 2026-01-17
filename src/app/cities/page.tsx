@@ -1,5 +1,5 @@
 import Link from "next/link";
-import citiesData from "../../data/cities.json";
+import citiesData from "@/data/cities.json";
 import Image from "next/image";
 export default function CityPage() {
   console.log("city", citiesData[0]);

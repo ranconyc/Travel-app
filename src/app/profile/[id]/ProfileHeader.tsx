@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "../../components/common/Button";
+import Button from "@/app/components/common/Button";
 import {
   Linkedin,
   ShieldUser,

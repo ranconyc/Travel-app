@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getUserById } from "@/lib/db/user.repo";
-import CompleteProfileShell from "./CompleteProfileShell";
+import CompleteProfileShell from "@/app/profile/complete/CompleteProfileShell";
 import { User } from "@/domain/user/user.schema";
 
 export default async function CompleteProfilePage() {

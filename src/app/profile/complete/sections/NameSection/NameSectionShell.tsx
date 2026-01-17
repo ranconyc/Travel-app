@@ -1,5 +1,5 @@
-import FirstNameSectionClient from "./FirstNameSectionClient";
-import LastNameSectionClient from "./LastNameSectionClient";
+import FirstNameSectionClient from "@/app/profile/complete/sections/NameSection/FirstNameSectionClient";
+import LastNameSectionClient from "@/app/profile/complete/sections/NameSection/LastNameSectionClient";
 
 export default function NameSectionShell() {
   return (

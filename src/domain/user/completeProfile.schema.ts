@@ -6,7 +6,7 @@ const languageSchema = z.string().min(2);
  * Gender enum used in the profile.
  * Adjust values if your Prisma enum uses different casing.
  */
-import { GenderEnum } from "./user.schema";
+import { GenderEnum } from "@/domain/user/user.schema";
 
 /**
  * Gender enum used in the profile.

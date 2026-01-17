@@ -4,12 +4,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Image from "next/image";
 
-import { ProfileHeader } from "./ProfileHeader";
+import { ProfileHeader } from "@/app/profile/[id]/ProfileHeader";
 import {
   getFriendRequestsAction,
   getFriendshipStatusAction,
 } from "@/domain/friendship/friendship.actions";
-import world from "../../../data/world.json";
+import world from "@/data/world.json";
 import { City } from "@prisma/client";
 
 const Badge = ({ children }: { children: React.ReactNode }) => {
@@ -148,7 +148,9 @@ export default async function Profile({ params }: { params: { id: string } }) {
   }
 
   // Type assertion for persona to access interests safely
-  const persona = profileUser?.profile?.persona as { interests?: string[] } | null;
+  const persona = profileUser?.profile?.persona as {
+    interests?: string[];
+  } | null;
 
   return (
     <div>

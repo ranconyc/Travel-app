@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Inter, Sora } from "next/font/google";
-import ReactQueryProvider from "./providers/reactQueryProvider";
-import SessionProviderWrapper from "./providers/SessionProviderWrapper";
-import ConditionalNavbar from "./ConditionalNavbar";
+import ReactQueryProvider from "@/app/providers/reactQueryProvider";
+import SessionProviderWrapper from "@/app/providers/SessionProviderWrapper";
+import ConditionalNavbar from "@/app/ConditionalNavbar";
 import { SocketProvider } from "@/lib/socket/socket-context";
 
 const inter = Inter({
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 import { getCurrentUser } from "@/lib/auth/get-current-user";
-import { UserProvider } from "./providers/UserProvider";
+import { UserProvider } from "@/app/providers/UserProvider";
 import React from "react";
 import { Toaster } from "sonner";
 

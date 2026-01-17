@@ -1,4 +1,4 @@
-import SignInFormClient from "./SignInFormClient";
+import SignInFormClient from "@/app/signin/SignInFormClient";
 import { Suspense } from "react";
 
 export default function SignInPage() {

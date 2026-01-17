@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/app/components/common/Button";
-import { MatchSection } from "../MatchSection";
+import { MatchSection } from "@/app/profile/[id]/_components/MatchSection";
 import { User } from "@/domain/user/user.schema";
 import { ProfileUser } from "@/types/user";
 import { MessageCircle } from "lucide-react";
 import { UserRoundPen } from "lucide-react";
 
-import StatusIndector from "../StatusIndector";
+import StatusIndector from "@/app/profile/[id]/_components/StatusIndector";
 
 type HeaderSectionProps = {
   profileUser: ProfileUser;

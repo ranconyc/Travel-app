@@ -1,8 +1,8 @@
 "use client";
 
-import { useGeo } from "../../_hooks/useGeo";
-import { useUser } from "../../providers/UserProvider";
-import Button from "../../components/common/Button";
+import { useGeo } from "@/app/_hooks/useGeo";
+import { useUser } from "@/app/providers/UserProvider";
+import Button from "@/app/components/common/Button";
 
 export default function GeoDebugPage() {
   const loggedUser = useUser();

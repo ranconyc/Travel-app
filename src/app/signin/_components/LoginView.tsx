@@ -1,9 +1,9 @@
 import React from "react";
 import Button from "@/app/components/common/Button";
 import Input from "@/app/components/form/Input";
-import { AuthHeader } from "./AuthHeader";
+import { AuthHeader } from "@/app/signin/_components/AuthHeader";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { SignInValues } from "../_types/form";
+import { SignInValues } from "@/app/signin/_types/form";
 
 interface LoginViewProps {
   onSwitch: () => void;

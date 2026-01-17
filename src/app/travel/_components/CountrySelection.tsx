@@ -3,7 +3,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import SelectionCard from "@/app/components/form/SelectionCard";
-import { TravelFormValues } from "../_types/form";
+import { TravelFormValues } from "@/app/travel/_types/form";
 
 interface CountrySelectionProps {
   countries: string[];

@@ -5,8 +5,7 @@ export function useCities() {
     queryKey: ["cities"],
     queryFn: async () => {
       const res = await getAllCitiesAction();
-      if (!res.success) throw new Error(res.error);
-      return res.data;
+      return res;
     },
     staleTime: 1000 * 60 * 60, // 1 hour - cities don't change often
   });

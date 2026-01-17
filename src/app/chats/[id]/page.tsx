@@ -8,8 +8,8 @@ import {
 } from "@/domain/chat/chat.utils";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { MessageList } from "../_components/MessageList";
-import { MessageInput } from "../_components/MessageInput";
+import { MessageList } from "@/app/chats/_components/MessageList";
+import { MessageInput } from "@/app/chats/_components/MessageInput";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -48,7 +48,7 @@ export default async function ChatPage({ params }: Props) {
   let chat;
   try {
     chat = await getChatById(id);
-  } catch (error) {
+  } catch {
     return (
       <div>
         <HeaderWrapper backButton>

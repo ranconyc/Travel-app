@@ -1,5 +1,5 @@
 import { getAllUsersQuery } from "@/domain/user/user.queries";
-import UsersTable from "./UsersTable";
+import UsersTable from "@/app/admin/users/UsersTable";
 
 export default async function AdminUsersPage() {
   const users = await getAllUsersQuery();

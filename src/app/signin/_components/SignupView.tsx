@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Button from "@/app/components/common/Button";
 import Input from "@/app/components/form/Input";
-import { AuthHeader } from "./AuthHeader";
-import { signupSchema, SignupValues } from "../_types/signup";
+import { AuthHeader } from "@/app/signin/_components/AuthHeader";
+import { signupSchema, SignupValues } from "@/app/signin/_types/signup";
 import { signupAction } from "@/domain/auth/auth.actions";
 
 interface SignupViewProps {

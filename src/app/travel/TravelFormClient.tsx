@@ -8,11 +8,11 @@ import worldData from "@/data/world.json";
 
 import { SelectedItem } from "@/app/components/common/SelectedItem";
 import Button from "@/app/components/common/Button";
-import { CategoryRow } from "../persona/_components/InterestsStep";
-import Modal from "./_components/Modal";
-import { travelFormSchema, TravelFormValues } from "./_types/form";
-import { TravelFormHeader } from "./_components/TravelFormHeader";
-import { CountrySelection } from "./_components/CountrySelection";
+import { CategoryRow } from "@/app/persona/_components/InterestsStep";
+import Modal from "@/app/travel/_components/Modal";
+import { travelFormSchema, TravelFormValues } from "@/app/travel/_types/form";
+import { TravelFormHeader } from "@/app/travel/_components/TravelFormHeader";
+import { CountrySelection } from "@/app/travel/_components/CountrySelection";
 import { saveVisitedCountries } from "@/domain/user/user.actions";
 
 // Type assertion for the world data
