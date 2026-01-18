@@ -75,7 +75,7 @@ const Header = () => {
                 ? `${user?.name?.split(" ")[0]} Explore`
                 : "Explore the"}
           </p>
-          <h1 className="text-6xl font-bold capitalize mb-6">
+          <h1 className="text-4xl font-bold capitalize mb-6">
             {isUserAtHome ? "Home" : (user?.currentCity?.name ?? "World")}
           </h1>
         </div>

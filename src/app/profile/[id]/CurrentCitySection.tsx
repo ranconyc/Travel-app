@@ -73,6 +73,7 @@ export const CurrentCitySection = ({
       <h2 className="text-xs font-bold text-secondary uppercase">
         Current City
       </h2>
+<<<<<<< HEAD
 
       <div className="flex flex-wrap gap-3">
         {currentCity ? (
@@ -87,6 +88,21 @@ export const CurrentCitySection = ({
             No location set
           </div>
         )}
+=======
+      <div className="">
+        {currentCity?.name &&(
+          <p className="text-app-text font-medium">{currentCity?.name}</p>
+        ) }
+          <Button
+            onClick={handleGetLocation}
+            disabled={loading}
+            className="flex gap-2 items-center"
+          >
+            {loading && <Loader2 className="animate-spin w-4 h-4" />}
+            Get current city
+          </Button>
+      
+>>>>>>> 133172fbedcf2e5b61c808167d6063872fb577a0
       </div>
 
       <Button
