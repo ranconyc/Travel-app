@@ -9,8 +9,8 @@ type StampStyle =
   | "wavy-circle"
   | "octagon"
   | "square"
-  | "triangle"
-  | "dashed-rect";
+  | "ticket"
+  | "badge";
 
 interface CityStampProps {
   cityName: string;
@@ -21,24 +21,24 @@ interface CityStampProps {
 
 const stampVariants: Record<StampStyle, string> = {
   circle:
-    "rounded-full border-2 border-[#e63946] rotate-2 w-24 h-24 flex items-center justify-center",
-  oval: "rounded-[50%] border-2 border-[#457b9d] -rotate-1 w-28 h-20 flex items-center justify-center",
+    "rounded-full border-[3px] border-[#e63946] rotate-2 w-24 h-24 flex items-center justify-center relative",
+  oval: "rounded-full border-[3px] border-[#457b9d] -rotate-1 w-28 h-20 flex items-center justify-center relative",
   hexagon:
-    "clip-hexagon border-2 border-[#2a9d8f] rotate-1 w-24 h-24 flex items-center justify-center",
+    "border-[3px] border-[#2a9d8f] rotate-3 w-24 h-24 flex items-center justify-center relative hexagon-shape",
   diamond:
-    "rotate-45 border-2 border-[#e76f51] w-20 h-20 flex items-center justify-center",
+    "rotate-45 border-[3px] border-[#e76f51] w-20 h-20 flex items-center justify-center relative",
   "rounded-rect":
-    "rounded-lg border-2 border-[#f4a261] -rotate-2 w-28 h-20 flex items-center justify-center px-3",
+    "rounded-lg border-[3px] border-[#f4a261] -rotate-2 w-28 h-20 flex items-center justify-center px-3 relative",
   "wavy-circle":
-    "rounded-full border-2 border-dashed border-[#219ebc] rotate-3 w-24 h-24 flex items-center justify-center",
+    "rounded-full border-[3px] border-dashed border-[#219ebc] rotate-3 w-24 h-24 flex items-center justify-center relative",
   octagon:
-    "clip-octagon border-2 border-[#8338ec] -rotate-2 w-24 h-24 flex items-center justify-center",
+    "border-[3px] border-[#8338ec] -rotate-2 w-24 h-24 flex items-center justify-center relative octagon-shape",
   square:
-    "border-2 border-[#06a77d] rotate-2 w-24 h-24 flex items-center justify-center",
-  triangle:
-    "clip-triangle border-2 border-[#d62828] w-24 h-24 flex items-center justify-center",
-  "dashed-rect":
-    "rounded border-2 border-dashed border-[#6a4c93] rotate-1 w-28 h-20 flex items-center justify-center px-2",
+    "border-[3px] border-[#06a77d] rotate-2 w-24 h-24 flex items-center justify-center relative",
+  ticket:
+    "rounded-sm border-[3px] border-double border-[#d62828] rotate-1 w-28 h-20 flex items-center justify-center px-2 relative",
+  badge:
+    "rounded border-[3px] border-dashed border-[#6a4c93] -rotate-1 w-28 h-20 flex items-center justify-center px-2 relative",
 };
 
 const textColorVariants: Record<StampStyle, string> = {
@@ -50,8 +50,8 @@ const textColorVariants: Record<StampStyle, string> = {
   "wavy-circle": "text-[#219ebc]",
   octagon: "text-[#8338ec]",
   square: "text-[#06a77d]",
-  triangle: "text-[#d62828]",
-  "dashed-rect": "text-[#6a4c93]",
+  ticket: "text-[#d62828]",
+  badge: "text-[#6a4c93]",
 };
 
 export const CityStamp: React.FC<CityStampProps> = ({
@@ -65,24 +65,25 @@ export const CityStamp: React.FC<CityStampProps> = ({
 
   const renderContent = () => {
     const isDiamond = variant === "diamond";
-    const isTriangle = variant === "triangle";
 
     return (
       <div
-        className={`${isDiamond || isTriangle ? "-rotate-45" : ""} flex flex-col items-center justify-center text-center gap-0.5`}
+        className={`${isDiamond ? "-rotate-45" : ""} flex flex-col items-center justify-center text-center gap-0.5 px-2`}
       >
         <div
-          className={`text-[10px] font-bold uppercase ${textColor} leading-tight`}
+          className={`text-[11px] font-black uppercase ${textColor} leading-tight tracking-wide`}
         >
           {cityName}
         </div>
         <div
-          className={`text-[7px] uppercase ${textColor} opacity-80 leading-tight`}
+          className={`text-[8px] font-semibold uppercase ${textColor} opacity-70 leading-tight tracking-wider`}
         >
           {countryName}
         </div>
         {date && (
-          <div className={`text-[7px] ${textColor} opacity-70 mt-0.5`}>
+          <div
+            className={`text-[7px] font-medium ${textColor} opacity-60 mt-0.5`}
+          >
             {date}
           </div>
         )}
@@ -92,12 +93,18 @@ export const CityStamp: React.FC<CityStampProps> = ({
 
   return (
     <div className="inline-block">
-      <div className={stampClass}>{renderContent()}</div>
+      <div className={stampClass}>
+        {/* Inner decorative border for some variants */}
+        {(variant === "circle" || variant === "oval") && (
+          <div className="absolute inset-1 rounded-full border border-current opacity-30" />
+        )}
+        {renderContent()}
+      </div>
     </div>
   );
 };
 
-// Export all 10 stamp variants for easy usage
+// Export all stamp variants for easy usage
 export const stampStyles: StampStyle[] = [
   "circle",
   "oval",
@@ -107,6 +114,6 @@ export const stampStyles: StampStyle[] = [
   "wavy-circle",
   "octagon",
   "square",
-  "triangle",
-  "dashed-rect",
+  "ticket",
+  "badge",
 ];

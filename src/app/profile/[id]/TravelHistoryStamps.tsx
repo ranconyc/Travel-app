@@ -35,8 +35,8 @@ function getCityStampVariant(cityName: string) {
     "wavy-circle",
     "octagon",
     "square",
-    "triangle",
-    "dashed-rect",
+    "ticket",
+    "badge",
   ] as const;
 
   let hash = 0;

@@ -1,9 +1,30 @@
-/* Clip paths for passport stamp shapes */
-.clip-hexagon {
-  clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+/* Passport stamp shapes using background styling */
+
+/* Hexagon shape using border styling */
+.hexagon-shape {
+  position: relative;
 }
 
-.clip-octagon {
+.hexagon-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Octagon shape using border styling */
+.octagon-shape {
+  position: relative;
+}
+
+.octagon-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
   clip-path: polygon(
     30% 0%,
     70% 0%,
@@ -14,8 +35,6 @@
     0% 70%,
     0% 30%
   );
-}
-
-.clip-triangle {
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border: 3px solid currentColor;
+  pointer-events: none;
 }
