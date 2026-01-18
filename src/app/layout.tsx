@@ -6,6 +6,7 @@ import SessionProviderWrapper from "@/app/providers/SessionProviderWrapper";
 import ConditionalNavbar from "@/app/ConditionalNavbar";
 import { SocketProvider } from "@/lib/socket/socket-context";
 import { LocationProvider } from "@/app/providers/LocationProvider";
+import AutoLocationUpdater from "@/app/components/AutoLocationUpdater";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,6 +60,7 @@ export default async function RootLayout({
           <UserProvider user={user}>
             <SessionProviderWrapper>
               <LocationProvider>
+                <AutoLocationUpdater />
                 <SocketProvider>{children}</SocketProvider>
               </LocationProvider>
             </SessionProviderWrapper>

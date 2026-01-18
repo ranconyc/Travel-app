@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { toast } from "sonner";
 
 interface Location {
@@ -12,7 +18,9 @@ interface LocationContextType {
   location: Location | null;
   error: string | null;
   isLoading: boolean;
-  requestLocation: () => Promise<Location | null>;
+  requestLocation: (silent?: boolean) => Promise<Location | null>;
+  autoUpdateEnabled: boolean;
+  setAutoUpdateEnabled: (enabled: boolean) => void;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(
@@ -23,8 +31,9 @@ export function LocationProvider({ children }: { children: ReactNode }) {
   const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [autoUpdateEnabled, setAutoUpdateEnabled] = useState(true);
 
-  const requestLocation = async (): Promise<Location | null> => {
+  const requestLocation = async (silent = false): Promise<Location | null> => {
     setIsLoading(true);
     setError(null);
 
@@ -32,7 +41,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
       if (!navigator.geolocation) {
         const msg = "Geolocation is not supported by your browser";
         setError(msg);
-        toast.error(msg);
+        if (!silent) toast.error(msg);
         setIsLoading(false);
         resolve(null);
         return;
@@ -54,7 +63,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
             msg = "Location permission denied";
           }
           setError(msg);
-          toast.error(msg);
+          if (!silent) toast.error(msg);
           setIsLoading(false);
           resolve(null);
         },
@@ -63,9 +72,25 @@ export function LocationProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  // Auto-fetch location on mount if enabled
+  useEffect(() => {
+    if (autoUpdateEnabled) {
+      // Silent fetch on mount (no error toasts)
+      requestLocation(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
   return (
     <LocationContext.Provider
-      value={{ location, error, isLoading, requestLocation }}
+      value={{
+        location,
+        error,
+        isLoading,
+        requestLocation,
+        autoUpdateEnabled,
+        setAutoUpdateEnabled,
+      }}
     >
       {children}
     </LocationContext.Provider>

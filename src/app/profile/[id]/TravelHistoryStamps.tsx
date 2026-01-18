@@ -5,19 +5,15 @@ import "@/app/components/CityStamp/styles.css";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
-type CityVisit = {
+type TravelHistoryItem = {
   id: string;
-  cityId: string;
-  startDate: Date;
-  endDate: Date | null;
-  city: {
-    name: string;
-    cityId: string;
-    country?: {
-      name: string;
-      code: string;
-    } | null;
-  };
+  type: "city" | "country";
+  cityId: string | null;
+  cityName: string;
+  countryName: string;
+  countryCode: string;
+  date: Date | null;
+  isCurrent: boolean;
 };
 
 interface TravelHistoryStampsProps {
@@ -50,7 +46,7 @@ function getCityStampVariant(cityName: string) {
 export default function TravelHistoryStamps({
   userId,
 }: TravelHistoryStampsProps) {
-  const [visits, setVisits] = useState<CityVisit[]>([]);
+  const [visits, setVisits] = useState<TravelHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -91,29 +87,34 @@ export default function TravelHistoryStamps({
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xs font-bold text-secondary uppercase">
-          Visited Cities
+          Travel History
         </h2>
-        <p className="text-xs text-secondary">{visits.length} cities</p>
+        <p className="text-xs text-secondary">{visits.length} places</p>
       </div>
       <div className="flex flex-wrap gap-4">
-        {visits.map((visit) => {
-          const arrivalDate = new Date(visit.startDate).toLocaleDateString(
-            "en-GB",
-            {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            },
-          );
+        {visits.map((item) => {
+          const displayDate = item.date
+            ? new Date(item.date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })
+            : undefined;
 
           return (
-            <CityStamp
-              key={visit.id}
-              cityName={visit.city.name}
-              countryName={visit.city.country?.name || ""}
-              date={arrivalDate}
-              variant={getCityStampVariant(visit.city.name)}
-            />
+            <div key={item.id} className="relative">
+              <CityStamp
+                cityName={item.cityName}
+                countryName={item.countryName}
+                date={displayDate}
+                variant={getCityStampVariant(item.cityName)}
+              />
+              {item.isCurrent && (
+                <div className="absolute -top-2 -right-2 bg-brand text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
+                  CURRENT
+                </div>
+              )}
+            </div>
           );
         })}
       </div>

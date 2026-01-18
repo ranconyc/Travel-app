@@ -1,4 +1,6 @@
 import { getTravelHistory } from "@/domain/user/travelHistory.queries";
+import { getUserById } from "@/lib/db/user.repo";
+import { getCountriesByCodes } from "@/lib/db/country.repo";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -8,9 +10,86 @@ export async function GET(
   try {
     const { userId } = await params;
 
-    const visits = await getTravelHistory(userId, 50);
+    // Get all travel data sources
+    const [cityVisits, user] = await Promise.all([
+      getTravelHistory(userId, 100),
+      getUserById(userId),
+    ]);
 
-    return NextResponse.json({ visits });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Get visited countries data
+    const visitedCountryCodes = user.visitedCountries || [];
+    const visitedCountries = await getCountriesByCodes(visitedCountryCodes);
+
+    // Create a Set of city IDs that have detailed visit records
+    const cityVisitIds = new Set(cityVisits.map((v) => v.cityId));
+
+    // Merge all sources into a unified display list
+    const mergedHistory = [];
+
+    // 1. Add all city visits (most detailed data)
+    cityVisits.forEach((visit) => {
+      mergedHistory.push({
+        id: visit.id,
+        type: "city" as const,
+        cityId: visit.cityId,
+        cityName: visit.city.name,
+        countryName: visit.city.country?.name || "",
+        countryCode: visit.city.country?.code || "",
+        date: visit.startDate,
+        isCurrent: visit.endDate === null,
+      });
+    });
+
+    // 2. Add visited countries (only if no city visit exists for cities in those countries)
+    // For now, we'll show countries at the country level since we don't have city details
+    visitedCountries.forEach((country) => {
+      // Check if this country already has city visits
+      const hasVisitsInCountry = cityVisits.some(
+        (v) => v.city.country?.code === country.code,
+      );
+
+      // Only add if no detailed city visits exist for this country
+      if (!hasVisitsInCountry) {
+        mergedHistory.push({
+          id: `country-${country.code}`,
+          type: "country" as const,
+          cityId: null,
+          cityName: country.name,
+          countryName: country.name,
+          countryCode: country.code,
+          date: null,
+          isCurrent: false,
+        });
+      }
+    });
+
+    // 3. Ensure current city is included (if not already in visits)
+    if (user.currentCity && !cityVisitIds.has(user.currentCityId!)) {
+      mergedHistory.push({
+        id: `current-${user.currentCityId}`,
+        type: "city" as const,
+        cityId: user.currentCityId!,
+        cityName: user.currentCity.name,
+        countryName: user.currentCity.country?.name || "",
+        countryCode: user.currentCity.country?.code || "",
+        date: new Date(),
+        isCurrent: true,
+      });
+    }
+
+    // Sort by date (most recent first), putting items without dates at the end
+    mergedHistory.sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+
+    return NextResponse.json({ visits: mergedHistory });
   } catch (error) {
     console.error("Travel history API error:", error);
     return NextResponse.json(

@@ -50,6 +50,12 @@ model User {
   currentCityId   String? @db.ObjectId
   currentCity     City?   @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
+ /* ---- TRAVELS ---- */
+  visitedCountries String[] @default([])
+    
+    /* ---- TRAVEL HISTORY ---- */
+  cityVisits CityVisit[]
+
   /* ---- AUTH ---- */
   accounts Account[]
   sessions Session[]
@@ -63,8 +69,7 @@ model User {
   // Helper for quick avatar access (optional, can also query Media model directly)
   avatarUrl    String? 
   
-  /* ---- TRAVELS ---- */
-  visitedCountries String[] @default([])
+ 
 
   /* ---- FRIENDSHIP ---- */
   friendshipsRequested Friendship[] @relation("FriendshipsRequested")
@@ -74,8 +79,7 @@ model User {
   chats        ChatMember[]
   sentMessages Message[]    @relation("SentMessages")
 
-  /* ---- TRAVEL HISTORY ---- */
-  cityVisits CityVisit[]
+  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
