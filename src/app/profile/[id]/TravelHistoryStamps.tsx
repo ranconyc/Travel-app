@@ -20,28 +20,7 @@ interface TravelHistoryStampsProps {
   userId: string;
 }
 
-// Hash city name to consistently get the same stamp style
-function getCityStampVariant(cityName: string) {
-  const stampStyles = [
-    "circle",
-    "oval",
-    "hexagon",
-    "diamond",
-    "rounded-rect",
-    "wavy-circle",
-    "octagon",
-    "square",
-    "ticket",
-    "badge",
-  ] as const;
-
-  let hash = 0;
-  for (let i = 0; i < cityName.length; i++) {
-    hash = cityName.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % stampStyles.length;
-  return stampStyles[index];
-}
+import { getCityConfig } from "@/data/cityStamps";
 
 export default function TravelHistoryStamps({
   userId,
@@ -101,13 +80,17 @@ export default function TravelHistoryStamps({
               })
             : undefined;
 
+          // Get config (style + icon) for this city
+          const config = getCityConfig(item.cityName);
+
           return (
             <div key={item.id} className="relative">
               <CityStamp
                 cityName={item.cityName}
                 countryName={item.countryName}
                 date={displayDate}
-                variant={getCityStampVariant(item.cityName)}
+                variant={config.variant}
+                icon={config.icon}
               />
               {item.isCurrent && (
                 <div className="absolute -top-2 -right-2 bg-brand text-white text-[8px] font-bold px-2 py-0.5 rounded-full">

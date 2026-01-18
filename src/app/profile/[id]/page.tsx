@@ -295,7 +295,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
         <p className="text-xs mt-4">
           Member since {new Date(profileUser.createdAt).toLocaleDateString()}
         </p>
-        {loggedUser && isYourProfile && <LogoutButton />}
+        {isYourProfile && <LogoutButton />}
       </main>
     </div>
   );

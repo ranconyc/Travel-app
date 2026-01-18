@@ -72,9 +72,7 @@ const Header = () => {
           {isUserAtHome ? (
             "there is no place like"
           ) : user?.currentCity ? (
-            <>
-              <SplitFlapText text={user?.name?.split(" ")[0] || ""} /> Explore
-            </>
+            <p>{user?.name?.split(" ")[0] || ""} Explore</p>
           ) : (
             "Explore the"
           )}

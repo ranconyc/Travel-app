@@ -38,3 +38,245 @@
   border: 3px solid currentColor;
   pointer-events: none;
 }
+
+/* --- New Shapes --- */
+
+/* Triangle */
+.triangle-shape {
+  position: relative;
+}
+.triangle-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Pentagon */
+.pentagon-shape {
+  position: relative;
+}
+.pentagon-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Heptagon */
+.heptagon-shape {
+  position: relative;
+}
+.heptagon-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(
+    50% 0%,
+    90% 20%,
+    100% 60%,
+    75% 100%,
+    25% 100%,
+    0% 60%,
+    10% 20%
+  );
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Star 5 */
+.star-5-shape {
+  position: relative;
+}
+.star-5-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Shield */
+.shield-shape {
+  position: relative;
+}
+.shield-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(10% 0, 90% 0, 100% 20%, 50% 100%, 0 20%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Banner */
+.banner-shape {
+  position: relative;
+}
+.banner-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Cloud-ish */
+.cloud-shape {
+  position: relative;
+  border-radius: 50%; /* Fallback */
+}
+/* Clouds are hard with just clip-path borders, using a simpler approximation or just border-radius tricks in main CSS usually works better for pure CSS borders, but let's try a polygon approx */
+.cloud-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(
+    25% 5%,
+    55% 8%,
+    75% 0%,
+    100% 25%,
+    95% 55%,
+    100% 75%,
+    75% 100%,
+    55% 92%,
+    25% 100%,
+    0% 75%,
+    5% 55%,
+    0% 25%
+  ); /* Not a real cloud but a raggedy shape */
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Decagon */
+.decagon-shape {
+  position: relative;
+}
+.decagon-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(
+    50% 0%,
+    80% 10%,
+    100% 35%,
+    100% 70%,
+    80% 90%,
+    50% 100%,
+    20% 90%,
+    0% 70%,
+    0% 35%,
+    20% 10%
+  );
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Rhombus */
+.rhombus-shape {
+  position: relative;
+}
+.rhombus-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Parallelogram */
+.parallelogram-shape {
+  position: relative;
+}
+.parallelogram-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Trapezoid */
+.trapezoid-shape {
+  position: relative;
+}
+.trapezoid-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Chevron */
+.chevron-shape {
+  position: relative;
+}
+.chevron-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%);
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
+
+/* Cross */
+.cross-shape {
+  position: relative;
+}
+.cross-shape::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: transparent;
+  clip-path: polygon(
+    10% 25%,
+    35% 25%,
+    35% 0%,
+    65% 0%,
+    65% 25%,
+    90% 25%,
+    90% 50%,
+    65% 50%,
+    65% 100%,
+    35% 100%,
+    35% 50%,
+    10% 50%
+  );
+  border: 3px solid currentColor;
+  pointer-events: none;
+}
