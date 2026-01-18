@@ -40,7 +40,8 @@ export async function GET(
         countryName: visit.city.country?.name || "",
         countryCode: visit.city.country?.code || "",
         date: visit.startDate,
-        isCurrent: visit.endDate === null,
+        isCurrent:
+          visit.endDate === null && visit.cityId === user.currentCityId,
       });
     });
 

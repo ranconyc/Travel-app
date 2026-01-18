@@ -135,9 +135,9 @@ function makeCountryId(code2: string): string {
 // get all countries
 export async function getAllCountries(): Promise<Country[]> {
   try {
-    return await prisma.country.findMany({
+    return (await prisma.country.findMany({
       orderBy: { name: "asc" },
-    });
+    })) as unknown as Country[];
   } catch (error) {
     console.error("getAllCountries error:", error);
     throw new Error("Failed to fetch countries");

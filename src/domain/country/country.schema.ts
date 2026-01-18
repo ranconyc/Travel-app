@@ -37,15 +37,78 @@ export const CountrySchema = z.object({
   areaKm2: z.number().optional().nullable(),
 
   // JSON fields
-  currency: z.any().optional().nullable(),
-  emergency: z.any().optional().nullable(),
+  currency: z
+    .object({
+      code: z.string(),
+      symbol: z.string(),
+      name: z.string(),
+      subunit: z.string().optional(),
+      subunitToUnit: z.number().optional(),
+    })
+    .optional()
+    .nullable(),
+
+  budget: z
+    .object({
+      daily: z
+        .object({
+          budget: z.string(),
+          mid: z.string(),
+          luxury: z.string(),
+        })
+        .optional(),
+      currencyCode: z.string().optional(),
+      note: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
+
+  cashCulture: z
+    .object({
+      atmAvailability: z.string().optional(),
+      creditCardAcceptance: z.string().optional(),
+      cashPreferred: z.boolean().optional(),
+      tipping: z.any().optional(), // Or detailed schema
+    })
+    .optional()
+    .nullable(),
+
+  languages: z
+    .object({
+      official: z.array(z.string()).optional(),
+      spoken: z.array(z.string()).optional(),
+      nativeName: z.string().optional(),
+      primaryScript: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
+
+  commonPhrases: z
+    .array(
+      z.object({
+        label: z.string(),
+        local: z.string(),
+        romanized: z.string().optional(),
+        pronunciation: z.string().optional(),
+        category: z.string().optional(),
+      }),
+    )
+    .optional()
+    .nullable(),
+
+  emergency: z
+    .object({
+      police: z.string().optional(),
+      ambulance: z.string().optional(),
+      fire: z.string().optional(),
+      touristPolice: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
+
   visaEntry: z.any().optional().nullable(),
-  languages: z.any().optional().nullable(),
-  commonPhrases: z.any().optional().nullable(),
   utilities: z.any().optional().nullable(),
   internet: z.any().optional().nullable(),
-  budget: z.any().optional().nullable(),
-  cashCulture: z.any().optional().nullable(),
 
   // Transport UX
   gettingAround: z.any().optional().nullable(),
@@ -57,7 +120,25 @@ export const CountrySchema = z.object({
   // Trip meta
   bestTimeToVisit: z.any().optional().nullable(),
   idealDuration: z.string().optional().nullable(),
-  safety: z.any().optional().nullable(),
+
+  safety: z
+    .object({
+      overall: z.string().optional(),
+      rating: z.number().optional(),
+      crimeLevel: z.string().optional(),
+      scamsCommon: z
+        .array(
+          z.object({
+            type: z.string(),
+            severity: z.string(),
+            tip: z.string(),
+          }),
+        )
+        .optional(),
+      areasCaution: z.array(z.any()).optional(),
+    })
+    .optional()
+    .nullable(),
 
   // Detailed internal meta
   meta: CountryMetaSchema.optional().nullable(),

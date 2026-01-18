@@ -15,6 +15,7 @@ import { useGeo } from "@/app/_hooks/useGeo";
 import { redirect } from "next/navigation";
 import Logo from "@/app/components/common/Logo";
 import { Country } from "@/domain/country/country.schema";
+import SplitFlapText from "@/app/components/common/SplitFlapText";
 
 interface HeaderWrapperProps {
   backButton?: boolean;
@@ -54,7 +55,7 @@ function HeaderWrapper({
 
 const WeatherWidget = () => {
   return (
-    <div className="flex items-center gap-2 bg-surface rounded-full px-2 py-1.5">
+    <div className="min-w-fit flex items-center gap-2 bg-surface rounded-full px-2 py-1.5">
       <Sun />
       <h1>25°C</h1>
     </div>
@@ -66,21 +67,31 @@ const Header = () => {
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
   return (
     <div className="bg-app-bg p-4 pt-10 sticky top-0 left-0 right-0 z-50">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xl text-secondary capitalize">
-            {isUserAtHome
-              ? "there is no place like"
-              : user?.currentCity
-                ? `${user?.name?.split(" ")[0]} Explore`
-                : "Explore the"}
-          </p>
-          <h1 className="text-4xl font-bold capitalize mb-6">
-            {isUserAtHome ? "Home" : (user?.currentCity?.name ?? "World")}
-          </h1>
-        </div>
+      <div className="flex items-center justify-between">
+        <p className="text-xl text-secondary capitalize">
+          {isUserAtHome ? (
+            "there is no place like"
+          ) : user?.currentCity ? (
+            <>
+              <SplitFlapText text={user?.name?.split(" ")[0] || ""} /> Explore
+            </>
+          ) : (
+            "Explore the"
+          )}
+        </p>
         <WeatherWidget />
       </div>
+      <div className="text-4xl font-bold capitalize mb-6 min-h-[40px] flex items-center">
+        {isUserAtHome ? (
+          "Home"
+        ) : (
+          <SplitFlapText
+            text={user?.currentCity?.name ?? "World"}
+            className="text-4xl font-bold"
+          />
+        )}
+      </div>
+
       <Input placeholder="Search destination" type="text" />
     </div>
   );
@@ -256,6 +267,7 @@ export default function Home() {
     persistToDb: true,
     distanceThresholdKm: 1, // Save to DB if user moves more than 1km
     initialUser: loggedUser,
+    refreshOnUpdate: true,
   });
 
   if (!loggedUser) return redirect("/signin");
@@ -274,25 +286,4 @@ export default function Home() {
       </main>
     </div>
   );
-}
-
-{
-  /* 
-        <div className="flex flex-col gap-2">
-          {loggedUser ? (
-            <Button
-              onClick={() => signOut({ callbackUrl: "/signin" })}
-              className="bg-transparent hover:bg-gray-800"
-            >
-              Logout
-            </Button>
-          ) : (
-            <Link
-              href="/signin"
-              className="text-secondary border-2 border-surface px-2 py-1 rounded-lg hover:bg-brand hover:text-white transition-colors"
-            >
-              signin
-            </Link>
-          )}
-        </div> */
 }

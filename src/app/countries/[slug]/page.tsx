@@ -1,25 +1,15 @@
 import { Country } from "@/domain/country/country.schema";
-import {
-  findBorderCountries,
-  getCountryWithCities,
-} from "@/lib/db/country.repo";
+import { findBorderCountries } from "@/lib/db/country.repo";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import Logo from "@/app/components/common/Logo";
-import Button from "@/app/components/common/Button";
 import Link from "next/link";
-import {
-  Heart,
-  Shield,
-  Instagram,
-  Plane,
-  Users,
-  Sun,
-  MapPin,
-  ChevronRight,
-  Info,
-} from "lucide-react";
+import { Heart, Shield, Instagram, MapPin, Info } from "lucide-react";
 import { formatPopulation } from "@/app/_utils/formatNumber";
+import { SafetySection } from "@/app/countries/_components/SafetySection";
+import { MoneySection } from "@/app/countries/_components/MoneySection";
+import { LanguageSection } from "@/app/countries/_components/LanguageSection";
+import thailand from "@/data/country.json";
+import Button from "@/app/components/common/Button";
 
 export default async function CountryPage({
   params,
@@ -27,9 +17,11 @@ export default async function CountryPage({
   params: { slug: string };
 }) {
   const { slug } = await params;
-  const country = (await getCountryWithCities(slug)) as unknown as Country & {
-    cities: any[];
-  };
+  // const country = (await getCountryWithCities(slug)) as unknown as Country & {
+  //   cities: any[];
+  // };
+
+  const country = thailand as unknown as Country;
 
   if (!country) {
     notFound();
@@ -218,71 +210,66 @@ export default async function CountryPage({
         {/* Content List - Cities & Info */}
         <div className="flex flex-col gap-6">
           {/* Cities Cards */}
-          {country.cities?.length > 0 ? (
-            <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
-              {country.cities.slice(0, 3).map((city: any) => (
-                <div
-                  key={city.cityId}
-                  className="w-32 flex-shrink-0 relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-800 group"
-                >
-                  {city.images?.[0] && (
-                    <Image
-                      src={city.images[0]}
-                      alt={city.name}
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3">
-                    <span className="font-bold text-sm">{city.name}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-gray-500 italic text-sm">
-              Explore cities coming soon
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xl font-bold font-sora">Popular Cities</h3>
+            {country.cities && country.cities.length > 0 ? (
+              <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+                {country.cities.slice(0, 5).map((city: any) => (
+                  <Link
+                    href={`/cities/${city.cityId}`}
+                    key={city.cityId}
+                    className="min-w-[140px] w-[140px] flex-shrink-0 relative aspect-[3/4] rounded-2xl overflow-hidden bg-gray-800 group shadow-lg"
+                  >
+                    {city.images?.[0] || city.imageHeroUrl ? (
+                      <Image
+                        src={city.images?.[0] || city.imageHeroUrl}
+                        alt={city.name}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                        <MapPin className="text-gray-500" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                      <span className="font-bold text-white text-md leading-tight">
+                        {city.name}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center bg-surface/30 rounded-2xl border border-dashed border-surface-secondary">
+                <MapPin className="w-8 h-8 mx-auto text-secondary mb-2 opacity-50" />
+                <p className="text-secondary italic text-sm">
+                  Explore cities coming soon
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Separator */}
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-surface-secondary to-transparent" />
+
+          {/* Rich Information Sections */}
+          <div className="flex flex-col gap-8">
+            <SafetySection data={country.safety as any} />
+            <MoneySection data={country as any} />
+            <LanguageSection data={country as any} />
+          </div>
+
+          {/* Fallback for missing data */}
+          {!country.safety && !country.budget && !country.languages && (
+            <div className="p-6 bg-surface/30 rounded-2xl border border-surface-secondary text-center">
+              <Info className="w-8 h-8 mx-auto text-secondary mb-3" />
+              <p className="text-secondary text-sm">
+                Detailed travel information for {country.name} is being
+                gathered. Check back soon!
+              </p>
             </div>
           )}
-
-          {/* Info List */}
-          <div className="flex flex-col gap-4">
-            {/* Safety */}
-            <div className="flex items-center justify-between group cursor-pointer">
-              <span className="text-gray-300 font-bold text-sm uppercase tracking-wide">
-                Safety
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-brand font-bold text-sm">
-                  {country.safety || "Moderate"}
-                </span>
-              </div>
-            </div>
-
-            {/* Money */}
-            <div className="flex items-center justify-between group cursor-pointer">
-              <span className="text-gray-300 font-bold text-sm uppercase tracking-wide">
-                Money
-              </span>
-              {country.currency && (
-                <span className="text-gray-500 font-bold text-sm text-right">
-                  {Object.values(country.currency)
-                    .map((c: any) => c.name)
-                    .join(", ")}
-                </span>
-              )}
-            </div>
-
-            {/* Payment */}
-            <div className="flex items-center justify-between group cursor-pointer">
-              <span className="text-gray-300 font-bold text-sm uppercase tracking-wide">
-                Payment Method
-              </span>
-              <span className="text-gray-500 font-bold text-sm">
-                Cash / Card
-              </span>
-            </div>
-          </div>
         </div>
       </main>
     </div>

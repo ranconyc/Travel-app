@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { hasGeolocation } from "@/app/_utils/env";
 import { getDistance } from "@/app/_utils/geo";
 import { updateUserLocationAction } from "@/domain/user/user.actions";
+import { useRouter } from "next/navigation";
 import { useLocationStore } from "@/store/locationStore";
 
 import { User } from "@/domain/user/user.schema";
@@ -14,6 +15,7 @@ type UseGeoOptions = {
   distanceThresholdKm?: number;
   debounceMs?: number; // Minimum time between DB updates
   initialUser?: User | null;
+  refreshOnUpdate?: boolean;
 };
 
 export function useGeo(options: UseGeoOptions = {}) {
@@ -22,7 +24,10 @@ export function useGeo(options: UseGeoOptions = {}) {
     distanceThresholdKm = 1,
     debounceMs = 30000, // Global debounce
     initialUser,
+    refreshOnUpdate = false,
   } = options;
+
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -148,7 +153,7 @@ export function useGeo(options: UseGeoOptions = {}) {
           lastSaved.lng,
           coords.lat,
           coords.lng,
-          "KM"
+          "KM",
         );
 
         // Movement threshold (with safety for GPS drift)
@@ -166,10 +171,13 @@ export function useGeo(options: UseGeoOptions = {}) {
 
           await updateUserLocationAction(coords);
 
-          // Logic vs UI split: Update ref immediately, then store for UI
           lastSavedCoordsRef.current = coords;
           lastSaveTimeRef.current = now;
           setLastSavedCoords(coords);
+
+          if (refreshOnUpdate) {
+            router.refresh();
+          }
         } catch (err) {
           console.error("Failed to update user location:", err);
         } finally {
@@ -186,6 +194,8 @@ export function useGeo(options: UseGeoOptions = {}) {
     distanceThresholdKm,
     debounceMs,
     setLastSavedCoords,
+    refreshOnUpdate,
+    router,
   ]);
 
   return { coords, error, loading };
