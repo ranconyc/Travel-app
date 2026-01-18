@@ -15,6 +15,7 @@ import LogoutButton from "@/app/components/LogoutButton";
 import INTERESTS from "@/data/interests.json";
 import Link from "next/link";
 import { CurrentCitySection } from "./CurrentCitySection";
+import TravelHistoryStamps from "./TravelHistoryStamps";
 
 // Define types locally for simple access
 type InterestItem = { id: string; label: string };
@@ -137,15 +138,18 @@ const VisitedCountriesSection = ({ countries }: { countries: Country[] }) => {
 const TravelSection = ({
   visitedCountries,
   currentCity,
+  userId,
 }: {
   visitedCountries: Country[];
   currentCity: City | null;
+  userId: string;
 }) => {
   return (
     <div className="mb-4">
       <h1 className="text-lg font-bold">Travel</h1>
       <div className="flex flex-col gap-4">
         <CurrentCitySection currentCity={currentCity} />
+        <TravelHistoryStamps userId={userId} />
         <VisitedCountriesSection countries={visitedCountries} />
       </div>
     </div>
@@ -285,6 +289,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
         <TravelSection
           visitedCountries={visitedCountriesData}
           currentCity={profileUser.currentCity}
+          userId={profileUser.id}
         />
 
         <p className="text-xs mt-4">

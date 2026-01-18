@@ -156,8 +156,14 @@ export async function reverseGeocodeLocationIQ(
     url.searchParams.set("lon", lng.toString());
     url.searchParams.set("format", "json");
     url.searchParams.set("accept-language", "en");
+    url.searchParams.set("normalizecity", "1");
+    url.searchParams.set("normalizeaddress", "1");
+    url.searchParams.set("statecode", "1");
+    url.searchParams.set("countrycode", "1");
 
     const res = await fetch(url.toString());
+
+    console.log("reverseGeocodeLocationIQ ---------> ", res);
 
     if (!res.ok) {
       throw new Error(`LocationIQ reverse failed: ${res.status}`);
