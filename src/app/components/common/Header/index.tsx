@@ -28,7 +28,6 @@ export default function HeaderWrapper({
           ) : leftComponent ? (
             leftComponent
           ) : null}
-          <Logo />
           {rightComponent ? rightComponent : <div className="w-12" />}
         </div>
       </div>

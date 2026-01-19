@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { formatPopulation } from "@/app/_utils/formatNumber";
 import { City } from "@/domain/city/city.schema";
+import { AiFillTikTok } from "react-icons/ai";
 
 export default async function CityPage({
   params,
@@ -54,11 +55,18 @@ export default async function CityPage({
             <Shield size={20} className="text-white" />
           </button>
           <Link
-            href={`https://instagram.com/explore/tags/${city.cityId}`}
+            href={`https://instagram.com/explore/tags/${city.name}`}
             target="_blank"
             className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800/70 transition-colors"
           >
             <Instagram size={20} className="text-white" />
+          </Link>
+          <Link
+            href={`https://www.tiktok.com/search?q=%23${city.name}`}
+            target="_blank"
+            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800/70 transition-colors"
+          >
+            <AiFillTikTok size={20} className="text-white" />
           </Link>
         </div>
       </div>

@@ -1,6 +1,9 @@
 import { getUserProfile } from "@/domain/user/user.queries";
 import { getServerSession } from "next-auth";
-import { calculateMatchScore } from "@/domain/match/match.queries";
+import {
+  calculateMatchScore,
+  calculateMatchScoreBatch,
+} from "@/domain/match/match.queries";
 import { MatchScoreCard } from "@/app/components/MatchScoreCard";
 
 import { authOptions } from "@/lib/auth";
@@ -113,17 +116,17 @@ export default async function Profile({
   }
 
   // Calculate Match Score
-  const isYourProfile = loggedUser?.id === profileUser?.id;
+  const isMyProfile = loggedUser?.id === profileUser?.id;
   let matchData = null;
   const matchMode = (searchParams?.mode === "travel" ? "travel" : "current") as
     | "current"
     | "travel";
 
-  if (loggedUser?.id && !isYourProfile) {
+  if (loggedUser?.id && !isMyProfile) {
     try {
-      matchData = await calculateMatchScore(
-        loggedUser.id,
-        profileUser.id,
+      matchData = await calculateMatchScoreBatch(
+        loggedUser,
+        profileUser,
         matchMode,
       );
     } catch (e) {
@@ -180,7 +183,7 @@ export default async function Profile({
   return (
     <div>
       <ProfileHeader
-        isYourProfile={isYourProfile}
+        isMyProfile={isMyProfile}
         loggedUser={loggedUser}
         friendship={friendship}
         profileUserId={profileUser.id}
@@ -220,7 +223,7 @@ export default async function Profile({
         </div>
 
         {/* MATCH SCORE CARD with TOGGLE */}
-        {!isYourProfile && matchData && (
+        {!isMyProfile && matchData && (
           <div className="my-6 flex flex-col gap-4">
             {/* Mode Toggle */}
             <div className="flex justify-center">
@@ -268,13 +271,13 @@ export default async function Profile({
           userId={profileUser.id}
           visitedCountries={visitedCountriesData}
           currentCity={profileUser.currentCity}
-          isOwnProfile={isYourProfile}
+          isOwnProfile={isMyProfile}
         />
 
         <p className="text-xs mt-4">
           Member since {new Date(profileUser.createdAt).toLocaleDateString()}
         </p>
-        {isYourProfile && <LogoutButton />}
+        {isMyProfile && <LogoutButton />}
       </main>
     </div>
   );

@@ -9,15 +9,24 @@ import { useSocket } from "@/lib/socket/socket-context";
 const ResidentOrVisitorBadge = ({ isResident }: { isResident: boolean }) => (
   <div
     className={`${
-      isResident ? "bg-blue-500" : "bg-yellow-500"
-    } text-white px-2 py-1 rounded-full text-xs capitalize w-fit`}
+      isResident ? "bg-orange-500" : "bg-yellow-500"
+    } text-white px-3 py-1 rounded text-xs font-semibold uppercase w-fit`}
   >
-    {isResident ? "local" : "visitor"}
+    {isResident ? "Local" : "Visitor"}
   </div>
 );
 
 const LocationBadge = ({ location }: { location: string }) => (
-  <div className="text-white text-sm">{location}</div>
+  <div className="flex items-center gap-1 text-white text-xs">
+    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        fillRule="evenodd"
+        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+        clipRule="evenodd"
+      />
+    </svg>
+    <span>{location}</span>
+  </div>
 );
 
 export default function MateCard({
@@ -29,13 +38,10 @@ export default function MateCard({
   loggedUser: User;
   priority: boolean;
 }) {
-  const { id: userId, avatarUrl, name, currentCity: location } = mate;
+  const { id: userId, avatarUrl, name, currentCity: location, match } = mate;
   const birthday = mate.profile?.birthday;
   const mainImage =
     mate.media?.find((img: any) => img.category === "AVATAR")?.url || avatarUrl;
-  const loggedMainImage =
-    loggedUser?.media?.find((img: any) => img.category === "AVATAR")?.url ||
-    loggedUser?.avatarUrl;
 
   const isResident =
     !!mate.currentCityId &&
@@ -45,42 +51,53 @@ export default function MateCard({
   const { isUserOnline } = useSocket();
   const isOnline = isUserOnline(userId);
 
+  const firstName =
+    mate.profile?.firstName || mate.name?.split(" ")[0] || mate.name;
+  const lastName = mate.profile?.lastName || mate.name?.split(" ")[1] || "";
+  const age = birthday ? getAge(birthday.toISOString()) : null;
+
   return (
     <BaseCard
       linkHref={`/profile/${userId}`}
       image={{ src: mainImage ?? undefined, alt: name ?? undefined }}
       priority={priority}
     >
-      <div className="h-full flex flex-col justify-between">
-        {loggedUser?.id === userId ? (
-          <h1 className="text-white">this is you</h1>
-        ) : (
-          <AvatarList
-            list={[{ ...mate }, { ...loggedUser }]}
-            matchPercentage={56}
-            showMatch
-          />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80" />
+
+      <div className="relative h-full flex flex-col justify-between p-4">
+        {/* Top section - Match percentage */}
+        {loggedUser?.id !== userId && (
+          <div className="flex justify-end">
+            <AvatarList
+              list={[{ ...mate }, { ...loggedUser }]}
+              matchPercentage={match?.score || 0}
+              showMatch
+            />
+          </div>
         )}
-        <div>
-          <div className="flex items-center gap-2">
-            <StatusIndicator isOnline={isOnline} />
+
+        {/* Bottom section - User info */}
+        <div className="space-y-2">
+          {/* Status and Location Badge */}
+          {!isResident && location && (
             <LocationBadge
               location={
-                typeof location === "string"
-                  ? location
-                  : location?.name || "Location not set"
+                typeof location === "string" ? location : location?.name || ""
               }
             />
-            <ResidentOrVisitorBadge isResident={isResident} />
+          )}
+
+          {/* Local/Visitor Badge */}
+          <ResidentOrVisitorBadge isResident={isResident} />
+
+          {/* Name and Age */}
+          <div className="flex items-baseline gap-2">
+            <h3 className="text-white font-bold text-xl leading-tight">
+              {firstName}
+              {lastName && ` ${lastName}`}
+            </h3>
+            {isOnline && <StatusIndicator isOnline={isOnline} />}
           </div>
-          <h3 className="text-white font-bold leading-tight text-[clamp(18px,2.8vw,24px)] line-clamp-2 mt-2">
-            {mate.profile?.firstName
-              ? `${mate.profile.firstName} ${
-                  mate.profile.lastName || ""
-                }`.trim()
-              : mate.name}
-            {birthday && `, ${getAge(birthday.toISOString())}`}
-          </h3>
         </div>
       </div>
     </BaseCard>

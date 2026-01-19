@@ -119,13 +119,14 @@ export default function TravelHistoryStamps({
 
           // Get config (style + icon) for this city
           const config = getCityConfig(item.cityName);
+          console.log(item?.countryCode);
+
+          const link = item?.countryCode
+            ? `/countries/${item.countryCode}`
+            : `/cities/${item.cityId}`;
 
           return (
-            <Link
-              href={`/cities/${item.cityId}`}
-              key={item.id}
-              className="relative"
-            >
+            <Link href={link} key={item.id} className="relative">
               <PassportStamp
                 city={item.cityName}
                 country={item.countryName}

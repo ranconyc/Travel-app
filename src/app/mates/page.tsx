@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { getAllUsersQuery, getUserProfile } from "@/domain/user/user.queries";
 import { redirect } from "next/navigation";
 import NearbyMatesClient from "@/app/mates/_components/NearbyMatesClient";
+import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 
 export default async function NearbyMatesPage() {
   const session = await getServerSession(authOptions);
@@ -19,9 +20,17 @@ export default async function NearbyMatesPage() {
 
   console.log("NearbyMates", userLocation);
   const mates = await getAllUsersQuery();
-  console.log("mates", mates);
+  const matesWithMatch = await Promise.all(
+    mates.map(async (mate) => {
+      const match = await calculateMatchScoreBatch(loggedUser, mate, "current");
+      return { match, ...mate };
+    }),
+  );
+  // console.log("mates", matesWithMatch);
 
   return (
-    <div>{<NearbyMatesClient mates={mates} loggedUser={loggedUser} />}</div>
+    <div>
+      {<NearbyMatesClient mates={matesWithMatch} loggedUser={loggedUser} />}
+    </div>
   );
 }
