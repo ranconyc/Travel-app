@@ -3,7 +3,7 @@
 import { CityStamp } from "@/app/components/CityStamp";
 import "@/app/components/CityStamp/styles.css";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 type TravelHistoryItem = {
   id: string;
@@ -18,13 +18,29 @@ type TravelHistoryItem = {
 
 interface TravelHistoryStampsProps {
   userId: string;
+  isOwnProfile?: boolean;
 }
 
 import { getCityConfig } from "@/data/cityStamps";
+import PassportStamp from "@/app/components/common/PassportStamp";
+import Link from "next/link";
+import Button from "@/app/components/common/Button";
 
 export default function TravelHistoryStamps({
   userId,
+  isOwnProfile,
 }: TravelHistoryStampsProps) {
+  // ...
+  // ... in return ...
+  {
+    isOwnProfile && (
+      <Link href="/travel">
+        <Button>
+          <Plus size={20} />
+        </Button>
+      </Link>
+    );
+  }
   const [visits, setVisits] = useState<TravelHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +50,27 @@ export default function TravelHistoryStamps({
         const res = await fetch(`/api/users/${userId}/travel-history`);
         if (res.ok) {
           const data = await res.json();
-          setVisits(data.visits || []);
+          const rawVisits: TravelHistoryItem[] = data.visits || [];
+
+          // Filter out duplicates: show a city only once per year
+          const seen = new Set<string>();
+          const filtered = rawVisits.filter((visit) => {
+            const year = visit.date
+              ? new Date(visit.date).getFullYear()
+              : "no-date";
+            // Create a unique key for city+year
+            // If cityId is null (e.g. older data or just country), fallback to cityName
+            const cityKey = visit.cityId || visit.cityName;
+            const key = `${cityKey}-${year}`;
+
+            if (seen.has(key)) {
+              return false;
+            }
+            seen.add(key);
+            return true;
+          });
+
+          setVisits(filtered);
         }
       } catch (error) {
         console.error("Failed to fetch travel history:", error);
@@ -57,7 +93,8 @@ export default function TravelHistoryStamps({
   if (visits.length === 0) {
     return (
       <div className="text-sm text-secondary opacity-60 py-4">
-        No cities visited yet. Start exploring!
+        No stamps yet. Start exploring!
+        <Link href="/profile/travel">Add cities you visited</Link>
       </div>
     );
   }
@@ -70,8 +107,8 @@ export default function TravelHistoryStamps({
         </h2>
         <p className="text-xs text-secondary">{visits.length} places</p>
       </div>
-      <div className="flex flex-wrap gap-4">
-        {visits.map((item) => {
+      <div className="p-8 flex items-center gap-8 overflow-x-scroll">
+        {[...new Set(visits)].map((item, index) => {
           const displayDate = item.date
             ? new Date(item.date).toLocaleDateString("en-GB", {
                 day: "2-digit",
@@ -84,22 +121,34 @@ export default function TravelHistoryStamps({
           const config = getCityConfig(item.cityName);
 
           return (
-            <div key={item.id} className="relative">
-              <CityStamp
-                cityName={item.cityName}
-                countryName={item.countryName}
+            <Link
+              href={`/cities/${item.cityId}`}
+              key={item.id}
+              className="relative"
+            >
+              <PassportStamp
+                city={item.cityName}
+                country={item.countryName}
                 date={displayDate}
-                variant={config.variant}
-                icon={config.icon}
+                index={index}
+                size="sm"
               />
               {item.isCurrent && (
                 <div className="absolute -top-2 -right-2 bg-brand text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
                   CURRENT
                 </div>
               )}
-            </div>
+            </Link>
           );
         })}
+
+        {isOwnProfile && (
+          <Link href="/travel">
+            <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
+              <Plus className="text-secondary" />
+            </div>
+          </Link>
+        )}
       </div>
     </div>
   );

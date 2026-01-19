@@ -25,7 +25,7 @@ export type UserWithRelations = Prisma.UserGetPayload<{
 }>;
 
 export async function getUserById(
-  id: string
+  id: string,
 ): Promise<UserWithRelations | null> {
   if (!id) return null;
   // Validate MongoDB ObjectId format (24 hex characters)
@@ -62,7 +62,7 @@ export async function getUserById(
 
 export async function completeProfile(
   userId: string,
-  data: CompleteProfileFormValues
+  data: CompleteProfileFormValues,
 ): Promise<void> {
   if (!userId) {
     throw new Error("User ID missing");
@@ -153,7 +153,7 @@ export async function getAllUsers() {
 export async function getNearbyUsers(
   coords: Coordinates,
   km = 50,
-  limit = 50
+  limit = 50,
 ): Promise<NearbyUserResult[]> {
   try {
     if (
@@ -225,7 +225,7 @@ export async function isUserExists(userId: string) {
 
 export async function updateUserProfilePersona(
   userId: string,
-  newPersonaData: Record<string, any>
+  newPersonaData: Record<string, any>,
 ): Promise<void> {
   if (!userId) {
     throw new Error("User ID missing");
@@ -269,7 +269,7 @@ export async function saveUserInterests(
     interests: string[];
     dailyRhythm: string;
     travelStyle: string;
-  }
+  },
 ): Promise<void> {
   return updateUserProfilePersona(userId, data);
 }
@@ -304,7 +304,7 @@ export async function deleteUserAccount(userId: string): Promise<void> {
 
 export async function updateVisitedCountries(
   userId: string,
-  countries: string[]
+  countries: string[],
 ): Promise<void> {
   if (!userId) {
     throw new Error("User ID missing");
@@ -357,4 +357,38 @@ export async function updateUserRole(userId: string, role: "USER" | "ADMIN") {
     where: { id: userId },
     data: { role },
   });
+}
+
+export async function getUsersForMatching(userIds: string[]) {
+  if (!userIds || userIds.length === 0) return [];
+
+  try {
+    return await prisma.user.findMany({
+      where: { id: { in: userIds } },
+      include: {
+        profile: {
+          include: {
+            homeBaseCity: {
+              include: {
+                country: true,
+              },
+            },
+          },
+        },
+        currentCity: {
+          include: {
+            country: true,
+          },
+        },
+        cityVisits: {
+          include: { city: true },
+        },
+        friendshipsRequested: true,
+        friendshipsReceived: true,
+      },
+    });
+  } catch (error) {
+    console.error("getUsersForMatching error:", error);
+    return [];
+  }
 }

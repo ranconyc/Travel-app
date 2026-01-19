@@ -114,3 +114,9 @@ body {
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
 }
+
+/* PASSPORT STAMPS */
+.stamp-container {
+  filter: contrast(120%) brightness(90%);
+  mix-blend-mode: multiply; /* This makes the stamp "soak" into the background color */
+}

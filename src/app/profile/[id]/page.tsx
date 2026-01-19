@@ -1,5 +1,7 @@
 import { getUserProfile } from "@/domain/user/user.queries";
 import { getServerSession } from "next-auth";
+import { calculateMatchScore } from "@/domain/match/match.queries";
+import { MatchScoreCard } from "@/app/components/MatchScoreCard";
 
 import { authOptions } from "@/lib/auth";
 import Image from "next/image";
@@ -9,6 +11,8 @@ import {
   getFriendRequestsAction,
   getFriendshipStatusAction,
 } from "@/domain/friendship/friendship.actions";
+import { getCountriesByCodes } from "@/lib/db/country.repo";
+import TravelSection from "./TravelSection";
 import world from "@/data/world.json";
 import { City } from "@prisma/client";
 import LogoutButton from "@/app/components/LogoutButton";
@@ -16,6 +20,7 @@ import INTERESTS from "@/data/interests.json";
 import Link from "next/link";
 import { CurrentCitySection } from "./CurrentCitySection";
 import TravelHistoryStamps from "./TravelHistoryStamps";
+import StatsSection from "./StatsSection";
 
 // Define types locally for simple access
 type InterestItem = { id: string; label: string };
@@ -86,77 +91,13 @@ const InterestsSection = ({ interests }: { interests: string[] }) => {
   );
 };
 
-import { getCountriesByCodes } from "@/lib/db/country.repo";
-import { Country } from "@prisma/client";
-
-// ... existing imports ...
-
-// Update VisitedCountriesSection to accept Country objects
-const VisitedCountriesSection = ({ countries }: { countries: Country[] }) => {
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify-between">
-        <h2 className="text-xs font-bold text-secondary uppercase">
-          Visited Countries
-        </h2>
-        <p className="text-xs text-secondary">{countries.length} countries</p>
-      </div>
-      <div className="flex gap-2 flex-wrap">
-        {countries.map((country) => {
-          return (
-            <Link
-              key={country.countryId}
-              href={`/countries/${country.countryId}`}
-              className="group relative rounded-xl overflow-hidden aspect-[4/3] w-32 shadow-sm hover:shadow-md transition-all bg-surface border border-surface-secondary block"
-            >
-              {country.imageHeroUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={country.imageHeroUrl}
-                  alt={country.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              ) : (
-                <div className="w-full h-full bg-surface-secondary flex items-center justify-center text-secondary font-bold text-xl">
-                  {country.code}
-                </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-2">
-                <span className="text-white font-bold text-sm truncate w-full group-hover:text-brand transition-colors">
-                  {country.name}
-                </span>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-// Update TravelSection props
-const TravelSection = ({
-  visitedCountries,
-  currentCity,
-  userId,
+export default async function Profile({
+  params,
+  searchParams,
 }: {
-  visitedCountries: Country[];
-  currentCity: City | null;
-  userId: string;
-}) => {
-  return (
-    <div className="mb-4">
-      <h1 className="text-lg font-bold">Travel</h1>
-      <div className="flex flex-col gap-4">
-        <CurrentCitySection currentCity={currentCity} />
-        <TravelHistoryStamps userId={userId} />
-        <VisitedCountriesSection countries={visitedCountries} />
-      </div>
-    </div>
-  );
-};
-
-export default async function Profile({ params }: { params: { id: string } }) {
+  params: { id: string };
+  searchParams?: { mode?: string };
+}) {
   const { id } = await params;
   const session = await getServerSession(authOptions);
   const requests = await getFriendRequestsAction(id);
@@ -169,6 +110,25 @@ export default async function Profile({ params }: { params: { id: string } }) {
 
   if (!profileUser) {
     return <div>User not found</div>;
+  }
+
+  // Calculate Match Score
+  const isYourProfile = loggedUser?.id === profileUser?.id;
+  let matchData = null;
+  const matchMode = (searchParams?.mode === "travel" ? "travel" : "current") as
+    | "current"
+    | "travel";
+
+  if (loggedUser?.id && !isYourProfile) {
+    try {
+      matchData = await calculateMatchScore(
+        loggedUser.id,
+        profileUser.id,
+        matchMode,
+      );
+    } catch (e) {
+      console.error("Match calculation failed", e);
+    }
   }
 
   // Fetch full country objects for visited country codes
@@ -186,8 +146,6 @@ export default async function Profile({ params }: { params: { id: string } }) {
   const visitedCountryNames = visitedCountriesData.map((c) => c.name);
 
   const continentStats = getContinentStats(visitedCountryNames, world);
-
-  const isYourProfile = loggedUser?.id === profileUser?.id;
 
   type GeoData = Record<string, Record<string, string[]>>;
 
@@ -229,67 +187,88 @@ export default async function Profile({ params }: { params: { id: string } }) {
       />
 
       <main className="p-4 flex flex-col gap-8">
-        <div>
-          <div className="pt-4 flex flex-col gap-6 items-center">
-            <Avatar
-              src={
-                profileUser.media?.find((img) => img.category === "AVATAR")
-                  ?.url ||
-                profileUser.avatarUrl ||
-                "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
-              }
-              alt={profileUser.name || "User"}
-              width={128}
-              height={128}
-            />
-            <div className="text-center">
-              <h1 className="text-2xl font-bold">
-                {profileUser.profile?.firstName
-                  ? `${profileUser.profile.firstName} ${
-                      profileUser.profile.lastName || ""
-                    }`.trim()
-                  : profileUser.name}
-              </h1>
-              {profileUser.currentCity && (
-                <p className="text-xs">
-                  {profileUser.currentCity?.name},
-                  {profileUser.currentCity?.country?.name ===
-                  "United States of America"
-                    ? "USA"
-                    : profileUser.currentCity?.country?.name}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center justify-between gap-2">
-            <div>
-              <h1 className="text-lg font-bold">{requests?.length || 0}</h1>
-              <h2 className="text-xs font-bold text-secondary uppercase">
-                {requests?.length > 1 ? "Friends" : "Friend"}
-              </h2>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold">{continentStats.count}</h1>
-              <h2 className="text-xs font-bold text-secondary uppercase">
-                {continentStats.count > 1 ? "Continents" : "Continent"}
-              </h2>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold">
-                {profileUser.visitedCountries?.length || 0}
-              </h1>
-              <h2 className="text-xs font-bold text-secondary uppercase">
-                countries
-              </h2>
-            </div>
+        <div className="pt-4 flex flex-col gap-6 items-center">
+          <Avatar
+            src={
+              profileUser.media?.find((img) => img.category === "AVATAR")
+                ?.url ||
+              profileUser.avatarUrl ||
+              "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+            }
+            alt={profileUser.name || "User"}
+            width={128}
+            height={128}
+          />
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">
+              {profileUser.profile?.firstName
+                ? `${profileUser.profile.firstName} ${
+                    profileUser.profile.lastName || ""
+                  }`.trim()
+                : profileUser.name}
+            </h1>
+            {profileUser.currentCity && (
+              <p className="text-xs">
+                {profileUser.currentCity?.name},
+                {profileUser.currentCity?.country?.name ===
+                "United States of America"
+                  ? "USA"
+                  : profileUser.currentCity?.country?.name}
+              </p>
+            )}
           </div>
         </div>
 
+        {/* MATCH SCORE CARD with TOGGLE */}
+        {!isYourProfile && matchData && (
+          <div className="my-6 flex flex-col gap-4">
+            {/* Mode Toggle */}
+            <div className="flex justify-center">
+              <div className="bg-surface-secondary/50 p-1 rounded-full flex items-center shadow-inner">
+                <Link
+                  href={`/profile/${profileUser.id}?mode=current`}
+                  scroll={false}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${matchMode === "current" ? "bg-surface shadow text-primary" : "text-secondary hover:text-primary"}`}
+                >
+                  Current Mode
+                </Link>
+                <Link
+                  href={`/profile/${profileUser.id}?mode=travel`}
+                  scroll={false}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${matchMode === "travel" ? "bg-brand text-white shadow" : "text-secondary hover:text-primary"}`}
+                >
+                  Travel Mode
+                </Link>
+              </div>
+            </div>
+
+            <div className="text-center text-xs text-secondary -mt-2">
+              {matchMode === "current"
+                ? "Prioritizing location & proximity"
+                : "Prioritizing future plans & travel style"}
+            </div>
+
+            <MatchScoreCard
+              matchData={matchData}
+              targetUserName={
+                profileUser.profile?.firstName || profileUser.name || "User"
+              }
+            />
+          </div>
+        )}
+
+        <StatsSection
+          requests={requests}
+          continentStats={continentStats}
+          visitedCountries={profileUser.visitedCountries}
+        />
+
         <InterestsSection interests={persona?.interests || []} />
         <TravelSection
+          userId={profileUser.id}
           visitedCountries={visitedCountriesData}
           currentCity={profileUser.currentCity}
-          userId={profileUser.id}
+          isOwnProfile={isYourProfile}
         />
 
         <p className="text-xs mt-4">
