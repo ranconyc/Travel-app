@@ -1,5 +1,8 @@
 import { Country } from "@/domain/country/country.schema";
-import { findBorderCountries } from "@/lib/db/country.repo";
+import {
+  findBorderCountries,
+  getCountryWithCities,
+} from "@/lib/db/country.repo";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -17,11 +20,11 @@ export default async function CountryPage({
   params: { slug: string };
 }) {
   const { slug } = await params;
-  // const country = (await getCountryWithCities(slug)) as unknown as Country & {
-  //   cities: any[];
-  // };
+  const country = (await getCountryWithCities(slug)) as unknown as Country & {
+    cities: any[];
+  };
 
-  const country = thailand as unknown as Country;
+  // const country = thailand as unknown as Country;
 
   if (!country) {
     notFound();
