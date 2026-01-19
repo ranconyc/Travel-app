@@ -11,17 +11,21 @@ import { formatPopulation } from "@/app/_utils/formatNumber";
 import { SafetySection } from "@/app/countries/_components/SafetySection";
 import { MoneySection } from "@/app/countries/_components/MoneySection";
 import { LanguageSection } from "@/app/countries/_components/LanguageSection";
-import thailand from "@/data/country.json";
 import Button from "@/app/components/common/Button";
+import { getDistance } from "@/app/_utils/geo";
+import { City } from "@/domain/city/city.schema";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
+import DictanceSection from "./_components/DictanceSection";
 
 export default async function CountryPage({
   params,
 }: {
   params: { slug: string };
 }) {
+  const loggedUser = await getCurrentUser();
   const { slug } = await params;
   const country = (await getCountryWithCities(slug)) as unknown as Country & {
-    cities: any[];
+    cities: City[];
   };
 
   // const country = thailand as unknown as Country;
@@ -35,6 +39,9 @@ export default async function CountryPage({
       ? await findBorderCountries((country.meta as any).borders)
       : [];
 
+  console.log("country", country);
+  console.log("borderCountries", borderCountries);
+
   const season =
     (typeof country.bestTimeToVisit === "string"
       ? country.bestTimeToVisit
@@ -44,18 +51,13 @@ export default async function CountryPage({
   return (
     <div className="bg-appbg min-h-screen font-sans selection:bg-brand selection:text-white">
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
+
+      <div className="bg-app-bg fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
         <Button
           variant="back"
-          className="bg-gray-800/50 backdrop-blur-md text-white hover:bg-gray-800"
+          className="bg-gray-800/50 backdrop-blur-md hover:bg-gray-800"
         />
         <div className="flex items-center gap-3">
-          <button className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors">
-            <Heart size={20} className="text-white" />
-          </button>
-          <button className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors">
-            <Shield size={20} className="text-white" />
-          </button>
           <Link
             href={`https://instagram.com/explore/tags/${country.countryId}`}
             target="_blank"
@@ -63,6 +65,12 @@ export default async function CountryPage({
           >
             <Instagram size={20} className="text-white" />
           </Link>
+          <button className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors">
+            <Shield size={20} className="text-white" />
+          </button>
+          <button className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors">
+            <Heart size={20} className="text-white" />
+          </button>
         </div>
       </div>
 
@@ -87,18 +95,6 @@ export default async function CountryPage({
                 <span className="text-6xl font-bold ">{country.code}</span>
               </div>
             )}
-            {/* Sparkle decoration */}
-            <div className="absolute bottom-4 right-4 text-gray-500 opacity-50">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M12 2L14.39 9.61L22 12L14.39 14.39L12 22L9.61 14.39L2 12L9.61 9.61L12 2Z" />
-              </svg>
-            </div>
           </div>
 
           <div className="text-center">
@@ -118,12 +114,7 @@ export default async function CountryPage({
         {/* Stats Row */}
         <div className="flex items-center justify-between px-2">
           <div className="text-center">
-            <div className="text-lg font-bold flex flex-col">
-              <span>12hr</span>
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
-                Flight
-              </span>
-            </div>
+            <DictanceSection country={country} />
           </div>
           <div className="text-center border-l border-r border-gray-800 px-8">
             <div className="text-lg font-bold flex flex-col">
@@ -259,12 +250,12 @@ export default async function CountryPage({
           {/* Rich Information Sections */}
           <div className="flex flex-col gap-8">
             <SafetySection data={country.safety as any} />
-            <MoneySection data={country as any} />
-            <LanguageSection data={country as any} />
+            <MoneySection data={country.currency as any} />
+            <LanguageSection data={country.languages as any} />
           </div>
 
           {/* Fallback for missing data */}
-          {!country.safety && !country.budget && !country.languages && (
+          {!country.safety && !country.currency && !country.languages && (
             <div className="p-6 bg-surface/30 rounded-2xl border border-surface-secondary text-center">
               <Info className="w-8 h-8 mx-auto text-secondary mb-3" />
               <p className="text-secondary text-sm">

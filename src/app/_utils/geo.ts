@@ -9,7 +9,7 @@ export function getDistance(
   lon1: number,
   lat2: number,
   lon2: number,
-  unit: DistanceUnit = "KM"
+  unit: DistanceUnit = "KM",
 ): number {
   // Normalize: ensure numbers, avoid accidental NaN
   lat1 = Number(lat1);
@@ -51,7 +51,7 @@ export function getDistance(
 export function isPointInBoundingBox(
   lat: number,
   lng: number,
-  bounding: [string, string, string, string]
+  bounding: [string, string, string, string],
 ) {
   const south = parseFloat(bounding[0]); // minLat
   const north = parseFloat(bounding[1]); // maxLat
@@ -66,7 +66,7 @@ export function isPointInBoundingBox(
 /* ------------------------------------------------------------------ */
 
 /** Internal: normalize any distance + unit to KM */
-function distanceToKm(distance: number, unit: DistanceUnit): number {
+export function distanceToKm(distance: number, unit: DistanceUnit): number {
   if (!Number.isFinite(distance)) return 0;
 
   switch (unit) {
@@ -88,7 +88,7 @@ function distanceToKm(distance: number, unit: DistanceUnit): number {
 
 export function formatDistanceLabel(
   distance: number,
-  unit: DistanceUnit = "KM"
+  unit: DistanceUnit = "KM",
 ): string {
   if (!Number.isFinite(distance)) return "";
 
@@ -142,7 +142,7 @@ export function formatDistanceLabel(
  */
 export function estimateFlightTimeHoursFromDistance(
   distance: number,
-  unit: DistanceUnit = "KM"
+  unit: DistanceUnit = "KM",
 ): number {
   const km = distanceToKm(distance, unit);
   if (km <= 0) return 0;
@@ -165,7 +165,7 @@ export function estimateFlightTimeHoursFromDistance(
  */
 export function formatFlightTimeLabelFromDistance(
   distance: number,
-  unit: DistanceUnit = "KM"
+  unit: DistanceUnit = "KM",
 ): string {
   const hours = estimateFlightTimeHoursFromDistance(distance, unit);
   if (hours === 0) return "";
@@ -186,7 +186,7 @@ export function formatFlightTimeLabelFromDistance(
  */
 export function formatDistanceWithFlightHint(
   distance: number,
-  unit: DistanceUnit = "KM"
+  unit: DistanceUnit = "KM",
 ): string {
   const km = distanceToKm(distance, unit);
 
@@ -200,27 +200,19 @@ export function formatDistanceWithFlightHint(
   return flight ? `${base} (${flight})` : base;
 }
 
-
-
 export function radiusFromBoundingBox(bounding: string[] | number[]) {
   if (!bounding || bounding.length < 4) return null;
 
   const south = parseFloat(String(bounding[0]));
   const north = parseFloat(String(bounding[1]));
-  const west  = parseFloat(String(bounding[2]));
-  const east  = parseFloat(String(bounding[3]));
+  const west = parseFloat(String(bounding[2]));
+  const east = parseFloat(String(bounding[3]));
 
   const centerLat = (south + north) / 2;
   const centerLng = (west + east) / 2;
 
   // distance from center → north edge = radius
-  const radiusKm = getDistance(
-    centerLat,
-    centerLng,
-    north,
-    centerLng,
-    "KM"
-  );
+  const radiusKm = getDistance(centerLat, centerLng, north, centerLng, "KM");
 
   return radiusKm;
 }

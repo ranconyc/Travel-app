@@ -17,7 +17,7 @@ interface LanguageData {
 }
 
 export const LanguageSection = ({ data }: { data: LanguageData }) => {
-  if (!data.languages && !data.commonPhrases) return null;
+  if (!data?.languages && !data?.commonPhrases) return null;
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
@@ -29,7 +29,7 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
       </div>
 
       {/* Main Language Info */}
-      {data.languages && (
+      {data?.languages && (
         <div className="bg-app-bg p-4 rounded-2xl border border-surface-secondary">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs text-secondary uppercase font-bold tracking-wider">
@@ -50,13 +50,13 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
       )}
 
       {/* Phrases */}
-      {data.commonPhrases && data.commonPhrases.length > 0 && (
+      {data?.commonPhrases && data.commonPhrases.length > 0 && (
         <div className="flex flex-col gap-3">
           <h3 className="text-xs text-secondary uppercase font-bold tracking-wider mb-1">
             Essential Phrases
           </h3>
           <div className="grid gap-2">
-            {data.commonPhrases.slice(0, 5).map((phrase, idx) => (
+            {data?.commonPhrases.slice(0, 5).map((phrase, idx) => (
               <div
                 key={idx}
                 className="flex items-center justify-between p-3 bg-app-bg/50 rounded-xl group cursor-pointer hover:bg-app-bg transition-colors"
