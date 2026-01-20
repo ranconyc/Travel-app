@@ -34,7 +34,7 @@ export default function MateCard({
   loggedUser,
   priority,
 }: {
-  mate: User;
+  mate: User & { match?: { score: number } };
   loggedUser: User;
   priority: boolean;
 }) {

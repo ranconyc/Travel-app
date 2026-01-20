@@ -1,7 +1,6 @@
 import { getUserProfile } from "@/domain/user/user.queries";
 import { getServerSession } from "next-auth";
 import {
-  calculateMatchScore,
   calculateMatchScoreBatch,
 } from "@/domain/match/match.queries";
 import { MatchScoreCard } from "@/app/components/MatchScoreCard";
@@ -107,6 +106,9 @@ export default async function Profile({
   const loggedUser = session?.user;
 
   const profileUser = await getUserProfile(id);
+  const loggedUserProfile = session?.user?.id
+    ? await getUserProfile(session.user.id)
+    : null;
   const friendship = loggedUser?.id
     ? await getFriendshipStatusAction(loggedUser.id, id)
     : null;
@@ -122,10 +124,10 @@ export default async function Profile({
     | "current"
     | "travel";
 
-  if (loggedUser?.id && !isMyProfile) {
+  if (loggedUserProfile && !isMyProfile) {
     try {
       matchData = await calculateMatchScoreBatch(
-        loggedUser,
+        loggedUserProfile,
         profileUser,
         matchMode,
       );
@@ -148,7 +150,7 @@ export default async function Profile({
   // To fetch names, I can reuse visitedCountriesData which has names!
   const visitedCountryNames = visitedCountriesData.map((c) => c.name);
 
-  const continentStats = getContinentStats(visitedCountryNames, world);
+  const continentStats = getContinentStats(visitedCountryNames, world as any);
 
   type GeoData = Record<string, Record<string, string[]>>;
 
@@ -183,7 +185,7 @@ export default async function Profile({
   return (
     <div>
       <ProfileHeader
-        isMyProfile={isMyProfile}
+        isYourProfile={isMyProfile}
         loggedUser={loggedUser}
         friendship={friendship}
         profileUserId={profileUser.id}

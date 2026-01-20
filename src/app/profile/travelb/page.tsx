@@ -1,48 +1,18 @@
 "use client";
 
-import world from "@/data/world.json";
+import { getStructuredWorld, Country } from "@/lib/utils/world.utils";
 import SelectionCard from "@/app/components/form/SelectionCard";
 import { useForm } from "react-hook-form";
 import ProgressBar from "../persona/_components/ProgressBar";
 import Button from "@/app/components/common/Button";
-const continentOrder = ["Europe", "Asia", "Americas", "Africa", "Antarctic"];
 
-interface Country {
-  name: {
-    common: string;
-    official: string;
-  };
-  cca2: string;
-  cca3: string;
-  region: string;
-  subregion: string;
-  continents: string[];
-}
-
-//   order SubRegions by regions
-const getStructuredWorld = () => {
-  const structure: Record<string, string[]> = {};
-
-  // for each region create an empty array
-  continentOrder.forEach((region) => {
-    structure[region] = [];
-  });
-
-  // for each country add the subregion to the array of the region
-  world.forEach((country) => {
-    const { region, subregion } = country;
-    if (structure[region] && !structure[region].includes(subregion)) {
-      structure[region].push(subregion);
-    }
-  });
-
-  return structure;
-};
+const {
+  structure: structuredWorld,
+  continentOrder,
+  allCountries: world,
+} = getStructuredWorld();
 
 export default function TravelFormB() {
-  const structuredWorld = getStructuredWorld();
-  console.log("structuredWorld", structuredWorld);
-
   const { watch, handleSubmit, setValue } = useForm<{ countries: string[] }>({
     defaultValues: {
       countries: [],
@@ -114,7 +84,7 @@ export default function TravelFormB() {
             {/* הצגת תת-האזורים של אותה יבשת */}
             <div className="grid grid-col-1 gap-6">
               {structuredWorld[region].map((sub) => (
-                <div key={sub} className="">
+                <div key={sub} className="grid grid-col-1 gap-2">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg text-secondary mb-2">
                       {sub || "Antarctic"}

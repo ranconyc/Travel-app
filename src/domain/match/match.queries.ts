@@ -28,8 +28,8 @@ export function calculateMatchScoreBatch(
         score: 0,
         sameCity: currentUser.currentCityId === targetUser.currentCityId,
         sameCountry:
-          currentUser.currentCity?.countryId ===
-          targetUser.currentCity?.countryId,
+          (currentUser.currentCity?.countryRefId ?? "current") ===
+          (targetUser.currentCity?.countryRefId ?? "target"),
         city: targetUser.currentCity?.name,
         country: targetUser.currentCity?.country?.name,
       },

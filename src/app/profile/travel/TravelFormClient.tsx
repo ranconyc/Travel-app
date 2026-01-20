@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import worldData from "@/data/world.json";
-
+import { getStructuredWorld } from "@/lib/utils/world.utils";
 import { SelectedItem } from "@/app/components/common/SelectedItem";
 import Button from "@/app/components/common/Button";
 import { CategoryRow } from "@/app/profile/persona/_components/InterestsStep";
@@ -19,9 +18,7 @@ import {
   COUNTRY_NAME_TO_CODE,
 } from "@/data/countryMapping";
 
-// Type assertion for the world data
-type WorldData = Record<string, Record<string, string[]>>;
-const world = worldData as WorldData;
+const { structure: world, continentOrder: continents } = getStructuredWorld();
 
 export default function TravelFormClient({
   initialUser,
@@ -48,8 +45,20 @@ export default function TravelFormClient({
   const { watch, handleSubmit, setValue } = methods;
   const selectedCountries = watch("countries");
 
+  const getCountriesInSubRegion = (continent: string, sub: string) => {
+    const { allCountries } = getStructuredWorld();
+    return allCountries
+      .filter(
+        (c) => c.region === continent && (c.subregion || "Antarctic") === sub,
+      )
+      .map((c) => c.name.common);
+  };
+
   const getContinentSelectedCount = (continent: string) => {
-    const continentCountries = Object.values(world[continent]).flat();
+    const subRegions = world[continent] || [];
+    const continentCountries = subRegions.flatMap((sub) =>
+      getCountriesInSubRegion(continent, sub),
+    );
     return selectedCountries.filter((c) => continentCountries.includes(c))
       .length;
   };
@@ -58,20 +67,23 @@ export default function TravelFormClient({
     continent: string,
     subContinent: string,
   ) => {
-    const subContinentCountries = world[continent][subContinent];
+    const subContinentCountries = getCountriesInSubRegion(
+      continent,
+      subContinent,
+    );
     return selectedCountries.filter((c) => subContinentCountries.includes(c))
       .length;
   };
 
-  const continents = Object.keys(world);
-  const subContinents = selectedContinent
-    ? Object.keys(world[selectedContinent])
-    : [];
+  const subContinents = selectedContinent ? world[selectedContinent] : [];
+
   const countries =
     selectedContinent && selectedSubContinent
       ? selectedSubContinent === `All countries in ${selectedContinent}`
-        ? Object.values(world[selectedContinent]).flat()
-        : world[selectedContinent][selectedSubContinent]
+        ? world[selectedContinent].flatMap((sub) =>
+            getCountriesInSubRegion(selectedContinent, sub),
+          )
+        : getCountriesInSubRegion(selectedContinent, selectedSubContinent)
       : [];
 
   const onSubmit = async (data: TravelFormValues) => {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs/promises";
 import * as path from "path";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   const world = await fetch(
     "https://restcountries.com/v3.1/all?fields=name,cca2,cca3,region,subregion,continents",
   ).then((res) => res.json());
