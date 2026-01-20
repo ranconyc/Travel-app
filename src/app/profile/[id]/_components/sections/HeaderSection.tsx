@@ -25,7 +25,7 @@ export const HeaderSection = ({
       <div className="flex items-center justify-between mb-4">
         <Button variant="back" />
         {isYourProfile ? (
-          <Link href={`/profile/complete`}>
+          <Link href={`/app/profile/edit`}>
             <UserRoundPen size={24} />
           </Link>
         ) : (

@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { mediaSchema, type Media } from "@/domain/media/media.schema";
+import { UserSocialLinksSchema } from "./completeProfile.schema";
 
 // --- Validations ---
 
@@ -53,6 +54,7 @@ export const userProfileSchema = z.object({
   persona: z.any().nullable(), // { dailyRhythm, travelStyle, interests }
   socials: z.any().nullable(), // { instagram, tiktok }
   updatedAt: z.date(),
+  socialLinks: UserSocialLinksSchema.optional(),
 });
 
 // --- Main User Schema ---
@@ -129,7 +131,7 @@ export const BioInputSchema = z.object({
       z.object({
         code: z.string(),
         name: z.string(),
-      })
+      }),
     )
     .optional(),
   gender: z.enum(["male", "female"]).optional(),

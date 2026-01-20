@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getUserById } from "@/lib/db/user.repo";
-import CompleteProfileShell from "@/app/profile/complete/CompleteProfileShell";
+import CompleteProfileShell from "@/app/profile/edit/CompleteProfileShell";
 import { User } from "@/domain/user/user.schema";
 
 export default async function CompleteProfilePage() {
@@ -16,6 +16,7 @@ export default async function CompleteProfilePage() {
   if (!rawUser) {
     throw new Error("User not found");
   }
+
   const user: User = {
     ...rawUser,
     id: rawUser.id ?? "",

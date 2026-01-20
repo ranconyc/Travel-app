@@ -19,19 +19,20 @@ import {
   useRemoveFriend,
 } from "@/domain/friendship/friendship.hooks";
 import { useRouter } from "next/navigation";
+import SocialMediaLink from "./_components/socialMediaLink";
+import { User } from "@/domain/user/user.schema";
 
 export const ProfileHeader = ({
   isYourProfile,
   loggedUser,
-  profileUserId,
+  profileUser,
   friendship,
 }: {
   friendship: { status: string; requesterId: string } | null;
   isYourProfile: boolean;
   loggedUser?: { id: string } | null;
-  profileUserId: string;
+  profileUser: User;
 }) => {
-  const linkedinUsername = "rancodesign";
   const router = useRouter();
 
   // Friendship mutations
@@ -57,26 +58,26 @@ export const ProfileHeader = ({
         // If I sent the request, cancel it
         if (isSentByMe) {
           await cancelRequest.mutateAsync({
-            targetUserId: profileUserId,
+            targetUserId: profileUser.id,
             currentUserId: loggedUser.id,
           });
         } else {
           // If I received the request, accept it
           await acceptRequest.mutateAsync({
-            targetUserId: profileUserId,
+            targetUserId: profileUser.id,
             currentUserId: loggedUser.id,
           });
         }
       } else if (friendship?.status === "ACCEPTED") {
         // Remove friend
         await removeFriend.mutateAsync({
-          targetUserId: profileUserId,
+          targetUserId: profileUser.id,
           currentUserId: loggedUser.id,
         });
       } else {
         // Send friend request
         await sendRequest.mutateAsync({
-          targetUserId: profileUserId,
+          targetUserId: profileUser.id,
           currentUserId: loggedUser.id,
         });
       }
@@ -89,7 +90,7 @@ export const ProfileHeader = ({
   const renderFriendshipIcon = () => {
     if (isYourProfile) {
       return (
-        <Link href="/profile/complete">
+        <Link href="/profile/edit">
           <Settings className="w-5 h-5" />
         </Link>
       );
@@ -121,17 +122,23 @@ export const ProfileHeader = ({
   };
 
   return (
-    <div className="p-4 flex items-center justify-between gap-2 sticky top-6 left-0 right-0 bg-app-bg z-40">
+    <div className="p-4 pt-8 flex items-center justify-between gap-2 sticky top-0 left-0 right-0 bg-app-bg z-40">
       <Button variant="back" />
       <div className="flex items-center justify-between gap-2">
-        <div className="p-3 bg-surface rounded-full cursor-pointer hover:bg-surface-hover transition-colors">
-          <Link
-            href={`https://www.linkedin.com/in/${linkedinUsername}`}
-            target="_blank"
-          >
-            <Linkedin className="w-5 h-5" />
-          </Link>
-        </div>
+        {profileUser?.profile?.socials && (
+          <div className="p-3 bg-surface rounded-full cursor-pointer hover:bg-surface-hover transition-colors">
+            {profileUser?.profile?.socials.map(
+              (social: { platform: string; url: string }) => (
+                <SocialMediaLink
+                  key={social?.url}
+                  platform={social?.platform}
+                  url={social?.url}
+                />
+              ),
+            )}
+          </div>
+        )}
+
         <div
           className={`p-3 bg-surface rounded-full transition-colors ${
             !isYourProfile && !isLoading

@@ -12,6 +12,7 @@ export interface Country {
   region: string;
   subregion: string;
   continents: string[];
+  flag: string;
 }
 
 export const getStructuredWorld = () => {

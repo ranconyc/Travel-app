@@ -15,7 +15,7 @@ async function getFiles(dir: string): Promise<string[]> {
     dirents.map((dirent) => {
       const res = path.resolve(dir, dirent.name);
       return dirent.isDirectory() ? getFiles(res) : res;
-    })
+    }),
   );
   return Array.prototype.concat(...files);
 }
@@ -34,7 +34,7 @@ function isComponentFile(filename: string) {
 }
 
 async function getCommonComponents(): Promise<ComponentInfo[]> {
-  const componentsDir = path.join(process.cwd(), "src/app/component");
+  const componentsDir = path.join(process.cwd(), "src/app/components");
   try {
     const allFiles = await getFiles(componentsDir);
     return allFiles

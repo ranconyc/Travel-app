@@ -220,7 +220,7 @@ export default function PassportStamp({
 
   return (
     <div
-      className={`text-center opacity-70 ${sizeClasses.padding} ${specialStyles.container} h-fit w-fit border-2 ${radiusClass} ${specialStyles.extraBorder || ""} transition-all duration-300 hover:scale-110 hover:opacity-90 hover:shadow-lg`}
+      className={`text-center opacity-70 dark:opacity-100 ${sizeClasses.padding} ${specialStyles.container} h-fit w-fit border-2 ${radiusClass} ${specialStyles.extraBorder || ""} transition-all duration-300 hover:scale-110 hover:opacity-90 hover:shadow-lg`}
       style={{
         borderColor: stampColor,
         borderStyle: borderTop,

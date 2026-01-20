@@ -109,13 +109,14 @@ export default function TravelHistoryStamps({
       </div>
       <div className="p-8 flex items-center gap-8 overflow-x-scroll">
         {[...new Set(visits)].map((item, index) => {
+          // console.log("item", item);
           const displayDate = item.date
             ? new Date(item.date).toLocaleDateString("en-GB", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
               })
-            : undefined;
+            : "undefined";
 
           // Get config (style + icon) for this city
           const config = getCityConfig(item.cityName);
@@ -144,7 +145,7 @@ export default function TravelHistoryStamps({
         })}
 
         {isOwnProfile && (
-          <Link href="/travel">
+          <Link href="/profile/travelb">
             <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
               <Plus className="text-secondary" />
             </div>

@@ -90,7 +90,7 @@ export async function completeProfile(
               birthday: birthdayDate,
               gender: genderEnum,
               occupation: data.occupation || null,
-              homeBaseCityId: data.homeBaseCityId,
+              socials: data.socialLinks || null,
               languages: data.languages,
             },
             update: {
@@ -99,7 +99,7 @@ export async function completeProfile(
               birthday: birthdayDate,
               gender: genderEnum,
               occupation: data.occupation || null,
-              homeBaseCityId: data.homeBaseCityId,
+              socials: data.socialLinks || null,
               languages: data.languages,
             },
           },

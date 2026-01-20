@@ -6,7 +6,15 @@ import {
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Heart, Shield, Instagram, MapPin, Info } from "lucide-react";
+import {
+  Heart,
+  Shield,
+  Instagram,
+  MapPin,
+  Info,
+  Factory,
+  Facebook,
+} from "lucide-react";
 import { formatPopulation } from "@/app/_utils/formatNumber";
 import { SafetySection } from "@/app/countries/_components/SafetySection";
 import { MoneySection } from "@/app/countries/_components/MoneySection";
@@ -16,6 +24,8 @@ import { getDistance } from "@/app/_utils/geo";
 import { City } from "@/domain/city/city.schema";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import DictanceSection from "./_components/DictanceSection";
+import social from "@/data/social.json";
+import { AiFillRedditCircle, AiFillTikTok } from "react-icons/ai";
 
 export default async function CountryPage({
   params,
@@ -59,7 +69,28 @@ export default async function CountryPage({
         />
         <div className="flex items-center gap-3">
           <Link
-            href={`https://instagram.com/explore/tags/${country.countryId}`}
+            href={`${social.filter((s) => s.name === "tiktok")[0].groupsURL}${country.name}`}
+            target="_blank"
+            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
+          >
+            <AiFillTikTok size={20} className="text-white" />
+          </Link>
+          <Link
+            href={`${social.filter((s) => s.name === "facebook")[0].groupsURL}${country.name}`}
+            target="_blank"
+            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
+          >
+            <Facebook size={20} className="text-white" />
+          </Link>
+          <Link
+            href={`${social.filter((s) => s.name === "reddit")[0].groupsURL}${country.name} travel`}
+            target="_blank"
+            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
+          >
+            <AiFillRedditCircle size={20} className="text-white" />
+          </Link>
+          <Link
+            href={`${social.filter((s) => s.name === "instagram")[0].groupsURL}${country.name}`}
             target="_blank"
             className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
           >

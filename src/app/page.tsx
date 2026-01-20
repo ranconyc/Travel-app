@@ -69,13 +69,11 @@ const Header = () => {
     <div className="bg-app-bg p-4 pt-10 sticky top-0 left-0 right-0 z-50">
       <div className="flex items-center justify-between">
         <p className="text-xl text-secondary capitalize">
-          {isUserAtHome ? (
-            "there is no place like"
-          ) : user?.currentCity ? (
-            <p>{user?.name?.split(" ")[0] || ""} Explore</p>
-          ) : (
-            "Explore the"
-          )}
+          {isUserAtHome
+            ? "there is no place like"
+            : user?.currentCity
+              ? `${user?.profile?.firstName || ""} Explore`
+              : "Explore the"}
         </p>
         <WeatherWidget />
       </div>
@@ -122,22 +120,24 @@ const CountryList = () => {
             href={`/countries/${country.countryId}`}
             className="min-w-[140px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
           >
-            {country.imageHeroUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={country.imageHeroUrl}
-                alt={country.name}
-                className="w-full h-full object-cover transition-transform group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full bg-surface-secondary flex items-center justify-center text-secondary font-bold">
-                {country.code}
+            <div className="bg-white">
+              {country.imageHeroUrl ? (
+                <Image
+                  src={country.imageHeroUrl}
+                  alt={country.name}
+                  fill
+                  className="object-cover group-hover:scale-105 z-10"
+                />
+              ) : (
+                <div className="w-full h-full bg-surface-secondary flex items-center justify-center text-secondary font-bold">
+                  {country.code}
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+                <span className="text-white font-bold text-sm truncate w-full">
+                  {country.name}
+                </span>
               </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
-              <span className="text-white font-bold text-sm truncate w-full">
-                {country.name}
-              </span>
             </div>
           </Link>
         ))}
@@ -193,6 +193,7 @@ const UserList = ({ loggedUser }: { loggedUser: User }) => {
 
 import { useCities } from "@/app/_hooks/useCities";
 import React from "react";
+import Image from "next/image";
 
 const CityList = () => {
   const { data: cities, isLoading } = useCities();
@@ -222,7 +223,7 @@ const CityList = () => {
               <img
                 src={city.imageHeroUrl}
                 alt={city.name}
-                className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                className=" w-full h-full object-cover transition-transform group-hover:scale-105"
               />
             ) : (
               <div className="w-full h-full bg-surface-secondary flex flex-col items-center justify-center text-secondary p-2 text-center">

@@ -339,6 +339,7 @@ export async function createCountryFromName(countryName: string) {
 
   // 1) Fetch from REST Countries
   const rest = await fetchRestCountryByName(nameTrimmed);
+
   if (!rest || !rest.cca2) {
     throw new Error("Country not found in REST Countries API");
   }

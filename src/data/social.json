@@ -1,0 +1,50 @@
+[
+  {
+    "name": "instagram",
+    "iconName": "Instagram",
+    "profileURL": "https://www.instagram.com/",
+    "groupsURL": "https://www.instagram.com/explore/tags/",
+    "locationURL": "https://www.instagram.com/explore/locations/",
+    "color": "#E4405F"
+  },
+  {
+    "name": "tiktok",
+    "iconName": "Video",
+    "profileURL": "https://www.tiktok.com/",
+    "groupsURL": "https://www.tiktok.com/search?q=",
+    "locationURL": "https://www.tiktok.com/search?q=travel+",
+    "color": "#000000"
+  },
+  {
+    "name": "facebook",
+    "iconName": "Facebook",
+    "profileURL": "https://www.facebook.com/",
+    "groupsURL": "https://www.facebook.com/search/groups?q=",
+    "locationURL": "https://www.facebook.com/search/places?q=",
+    "color": "#1877F2"
+  },
+  {
+    "name": "reddit",
+    "iconName": "Share2",
+    "profileURL": "https://www.reddit.com/",
+    "groupsURL": "https://www.reddit.com/search/?q=",
+    "locationURL": "https://www.reddit.com/r/",
+    "color": "#FF4500"
+  },
+  {
+    "name": "linkedin",
+    "iconName": "Linkedin",
+    "profileURL": "https://www.linkedin.com/",
+    "groupsURL": "https://www.linkedin.com/search/results/groups/?keywords=",
+    "locationURL": "https://www.linkedin.com/search/results/all/?keywords=",
+    "color": "#0A66C2"
+  },
+  {
+    "name": "whatsapp",
+    "iconName": "MessageCircle",
+    "profileURL": "https://wa.me/",
+    "groupsURL": "https://chat.whatsapp.com/invite/",
+    "locationURL": "https://wa.me/?text=",
+    "color": "#25D366"
+  }
+]

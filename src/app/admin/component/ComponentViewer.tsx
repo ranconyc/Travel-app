@@ -23,7 +23,7 @@ export default function ComponentViewer({ common, pageSpecific }: Props) {
     list.filter(
       (c) =>
         c.name.toLowerCase().includes(filter.toLowerCase()) ||
-        c.path.toLowerCase().includes(filter.toLowerCase())
+        c.path.toLowerCase().includes(filter.toLowerCase()),
     );
 
   const filteredCommon = filterList(common);
@@ -50,7 +50,7 @@ export default function ComponentViewer({ common, pageSpecific }: Props) {
         <div className="flex items-center gap-4 mb-6">
           <h2 className="text-xl font-bold text-brand">Common Components</h2>
           <span className="bg-brand/10 text-brand px-2 py-1 rounded text-sm font-mono">
-            src/app/component
+            src/app/components
           </span>
           <span className="ml-auto text-sm text-secondary">
             {filteredCommon.length} items

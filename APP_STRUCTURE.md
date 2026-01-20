@@ -11,7 +11,7 @@
 | `/chats`                      | **Chats List**: List of active conversations.               |
 | `/chat/[id]`                  | **Chat Room**: Individual chat interface.                   |
 | `/profile/[id]`               | **User Profile**: Public/Private profile view.              |
-| `/profile/complete`           | **Onboarding**: Profile completion flow.                    |
+| `/app/profile/edit`           | **Onboarding**: Profile completion flow.                    |
 | `/profile/travel-persona`     | **Persona**: Edit travel persona settings.                  |
 | `/profile/travel-preferences` | **Preferences**: Edit travel preferences.                   |
 | `/country/[id]`               | **Country Detail**: View country info.                      |

@@ -1,8 +1,6 @@
 import { getUserProfile } from "@/domain/user/user.queries";
 import { getServerSession } from "next-auth";
-import {
-  calculateMatchScoreBatch,
-} from "@/domain/match/match.queries";
+import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 import { MatchScoreCard } from "@/app/components/MatchScoreCard";
 
 import { authOptions } from "@/lib/auth";
@@ -76,19 +74,22 @@ const Avatar = ({
 };
 
 const InterestsSection = ({ interests }: { interests: string[] }) => {
-  console.log(interests, "dd");
   return (
-    <div className="flex flex-wrap gap-2">
-      {interests.map((interest) => {
-        return (
+    <div>
+      <div className="w-full mb-3 flex items-center justify-between">
+        <h1 className="text-lg font-bold ">{interests?.length} Interests</h1>
+        <h1 className="text-xs font-bold "> See all</h1>
+      </div>
+      <div className="flex flex-wrap gap-1">
+        {interests.splice(0, 5).map((interest) => (
           <p
-            className="text-xs text-secondary px-2 py-1 border border-brand rounded-full"
             key={interest}
+            className="w-fit text-xs text-secondary px-2 py-1 border border-brand rounded-2xl"
           >
             {getInterestLabel(interest)}
           </p>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 };
@@ -150,25 +151,15 @@ export default async function Profile({
   // To fetch names, I can reuse visitedCountriesData which has names!
   const visitedCountryNames = visitedCountriesData.map((c) => c.name);
 
-  const continentStats = getContinentStats(visitedCountryNames, world as any);
-
-  type GeoData = Record<string, Record<string, string[]>>;
-
-  function getContinentStats(visitedCountries: string[], data: GeoData) {
+  function getContinentStats(visitedCountries: string[]) {
     const visitedContinents = new Set<string>();
 
-    visitedCountries.forEach((country) => {
-      // Look through each continent in the JSON
-      for (const [continentName, regions] of Object.entries(data)) {
-        // Check if any region in this continent contains the country
-        const found = Object.values(regions).some((countryList) =>
-          countryList.includes(country),
-        );
-
-        if (found) {
-          visitedContinents.add(continentName);
-          break; // Move to the next country in the user's list
-        }
+    visitedCountries.forEach((countryName) => {
+      const country = (world as any[]).find(
+        (c) => c.name.common === countryName,
+      );
+      if (country?.region) {
+        visitedContinents.add(country.region);
       }
     });
 
@@ -177,6 +168,7 @@ export default async function Profile({
       continents: Array.from(visitedContinents),
     };
   }
+  const continentStats = getContinentStats(visitedCountryNames);
 
   const persona = profileUser?.profile?.persona as {
     interests?: string[];
@@ -188,7 +180,7 @@ export default async function Profile({
         isYourProfile={isMyProfile}
         loggedUser={loggedUser}
         friendship={friendship}
-        profileUserId={profileUser.id}
+        profileUser={profileUser}
       />
 
       <main className="p-4 flex flex-col gap-8">
@@ -223,36 +215,10 @@ export default async function Profile({
             )}
           </div>
         </div>
-
+        {isMyProfile && <LogoutButton />}
         {/* MATCH SCORE CARD with TOGGLE */}
         {!isMyProfile && matchData && (
           <div className="my-6 flex flex-col gap-4">
-            {/* Mode Toggle */}
-            <div className="flex justify-center">
-              <div className="bg-surface-secondary/50 p-1 rounded-full flex items-center shadow-inner">
-                <Link
-                  href={`/profile/${profileUser.id}?mode=current`}
-                  scroll={false}
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${matchMode === "current" ? "bg-surface shadow text-primary" : "text-secondary hover:text-primary"}`}
-                >
-                  Current Mode
-                </Link>
-                <Link
-                  href={`/profile/${profileUser.id}?mode=travel`}
-                  scroll={false}
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${matchMode === "travel" ? "bg-brand text-white shadow" : "text-secondary hover:text-primary"}`}
-                >
-                  Travel Mode
-                </Link>
-              </div>
-            </div>
-
-            <div className="text-center text-xs text-secondary -mt-2">
-              {matchMode === "current"
-                ? "Prioritizing location & proximity"
-                : "Prioritizing future plans & travel style"}
-            </div>
-
             <MatchScoreCard
               matchData={matchData}
               targetUserName={
@@ -279,7 +245,6 @@ export default async function Profile({
         <p className="text-xs mt-4">
           Member since {new Date(profileUser.createdAt).toLocaleDateString()}
         </p>
-        {isMyProfile && <LogoutButton />}
       </main>
     </div>
   );

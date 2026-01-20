@@ -5,6 +5,8 @@ import SelectionCard from "@/app/components/form/SelectionCard";
 import { useForm } from "react-hook-form";
 import ProgressBar from "../persona/_components/ProgressBar";
 import Button from "@/app/components/common/Button";
+import { useUser } from "@/app/providers/UserProvider";
+import SelectedItem from "@/app/components/common/SelectedItem";
 
 const {
   structure: structuredWorld,
@@ -12,10 +14,16 @@ const {
   allCountries: world,
 } = getStructuredWorld();
 
+const getCountryByCode = (code: string) => {
+  return world.find((country) => country.cca2 === code);
+};
+
 export default function TravelFormB() {
+  const user = useUser();
+  console.log("ddd", user);
   const { watch, handleSubmit, setValue } = useForm<{ countries: string[] }>({
     defaultValues: {
-      countries: [],
+      countries: user?.visitedCountries || [],
     },
   });
 
@@ -69,7 +77,25 @@ export default function TravelFormB() {
         <h1 className="text-2xl font-bold mb-2">
           Tell us about your jerny so far,
         </h1>
-        <p>select all the countries you visited</p>
+        {selectedCountries.length > 0 ? (
+          <div>
+            <p>{selectedCountries.length} countries selected</p>
+            <div className="flex flex-wrap gap-2">
+              {selectedCountries.map((country) => {
+                const countryData = getCountryByCode(country);
+                return (
+                  <SelectedItem
+                    key={country}
+                    item={countryData?.flag ?? ""}
+                    onClick={() => toggleCountry(countryData!)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <p>select all the countries you visited</p>
+        )}
       </header>
 
       <form
@@ -78,10 +104,8 @@ export default function TravelFormB() {
       >
         {continentOrder.map((region) => (
           <div key={region} className="mb-8">
-            {/* הצגת היבשת */}
             <h2 className="text-2xl font-bold mb-3">{region}</h2>
 
-            {/* הצגת תת-האזורים של אותה יבשת */}
             <div className="grid grid-col-1 gap-6">
               {structuredWorld[region].map((sub) => (
                 <div key={sub} className="grid grid-col-1 gap-2">
@@ -102,7 +126,7 @@ export default function TravelFormB() {
                     {world
                       .filter((country) => country.subregion === sub)
                       .map((country) => {
-                        console.log(country);
+                        // console.log(country);
                         return country;
                       })
                       .map((country) => (
@@ -110,7 +134,7 @@ export default function TravelFormB() {
                           type="checkbox"
                           key={country.cca2}
                           id={country.cca2}
-                          label={country.name.common}
+                          label={`${country.flag} ${country.name.common}`}
                           isSelected={selectedCountries.includes(country.cca2)}
                           onChange={() => toggleCountry(country)}
                         />

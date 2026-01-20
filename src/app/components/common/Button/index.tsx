@@ -22,6 +22,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconPosition?: "left" | "right";
   loading?: boolean;
   variant?: ButtonVariant;
+  href?: string | false;
   size?: ButtonSize;
   fullWidth?: boolean;
 }
@@ -35,6 +36,7 @@ export default function Button({
   variant = "primary",
   size = "md",
   fullWidth = false,
+  href,
   ...props
 }: ButtonProps) {
   const router = useRouter();
@@ -44,7 +46,7 @@ export default function Button({
       <button
         type="button"
         className={`text-app-text bg-transparent p-2 -ml-2 hover:bg-surface rounded-full transition-all active:scale-95 disabled:opacity-50 ${className}`}
-        onClick={() => router.back()}
+        onClick={href ? () => router.push(href) : () => router.back()}
         disabled={props.disabled}
       >
         <ChevronLeft size={30} />
