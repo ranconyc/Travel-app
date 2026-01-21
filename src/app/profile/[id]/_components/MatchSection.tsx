@@ -121,7 +121,7 @@ export const MatchSection = ({
   const queryClient = useQueryClient();
   const { data, isLoading } = useFriendshipStatus(
     loggedUser?.id,
-    profileUser?.id
+    profileUser?.id,
   );
 
   const friendStatus = data?.status || "NONE";
@@ -136,25 +136,25 @@ export const MatchSection = ({
 
   // friend request handler
   const handleConnect = async () => {
-    await sendFriendRequestAction(profileUser.id, loggedUser.id);
+    await sendFriendRequestAction({ targetUserId: profileUser.id });
     refresh();
   };
 
   // friend request cancel handler
   const handleCancel = async () => {
-    await cancelFriendRequestAction(profileUser.id, loggedUser.id);
+    await cancelFriendRequestAction({ targetUserId: profileUser.id });
     refresh();
   };
 
   // friend request accept handler
   const handleAccept = async () => {
-    await acceptFriendRequestAction(profileUser.id, loggedUser.id);
+    await acceptFriendRequestAction({ targetUserId: profileUser.id });
     refresh();
   };
 
   // friend request decline handler
   const handleDecline = async () => {
-    await denyFriendRequestAction(profileUser.id, loggedUser.id);
+    await denyFriendRequestAction({ targetUserId: profileUser.id });
     refresh();
   };
 

@@ -51,7 +51,7 @@ export default function CitiesPage() {
           </div>
         ) : isSuccess && filteredCities && filteredCities.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {filteredCities.map((city: City) => (
+            {filteredCities.map((city: any) => (
               <Link
                 key={city.id}
                 href={`/cities/${city.cityId}`}

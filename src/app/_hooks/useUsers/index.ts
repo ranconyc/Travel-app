@@ -5,7 +5,7 @@ export function useUsers() {
   return useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const result = await getAllUsersAction();
+      const result = await getAllUsersAction(undefined);
       if (!result.success) {
         throw new Error(result.error);
       }

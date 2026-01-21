@@ -1,24 +1,22 @@
 import * as z from "zod";
 import { mediaSchema, type Media } from "@/domain/media/media.schema";
 import { UserSocialLinksSchema } from "./completeProfile.schema";
+import {
+  GenderEnum,
+  type Gender,
+  RoleEnum,
+  type Role,
+  type GeoPoint,
+  geoPointSchema,
+} from "@/domain/common.schema";
+
+export { GenderEnum, Gender, RoleEnum, Role, GeoPoint, geoPointSchema };
 
 // --- Validations ---
 
 // --- Action / Form Schemas ---
 
-// --- Enums ---
-export const GenderEnum = z.enum(["MALE", "FEMALE", "NON_BINARY"]);
-export type Gender = z.infer<typeof GenderEnum>;
-
-export const RoleEnum = z.enum(["USER", "ADMIN"]);
-export type Role = z.infer<typeof RoleEnum>;
-
-/** GeoJSON Point schema */
-export const geoPointSchema = z.object({
-  type: z.literal("Point"),
-  coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
-});
-export type GeoPoint = z.infer<typeof geoPointSchema>;
+// Enums and GeoPoint moved to common.schema.ts
 
 // --- Helper / Nested Schemas ---
 

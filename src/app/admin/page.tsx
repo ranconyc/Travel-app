@@ -9,11 +9,23 @@ import { Users, MapPin, Globe, Activity } from "lucide-react";
 import { Avatar } from "@/app/components/common/Avatar";
 
 export default async function AdminDashboardPage() {
-  const [stats, topCities, latestUsers] = await Promise.all([
-    getDashboardStats(),
-    getTopCities(),
-    getLatestUsers(),
+  const [statsRes, topCitiesRes, latestUsersRes] = await Promise.all([
+    getDashboardStats(undefined),
+    getTopCities(undefined),
+    getLatestUsers(undefined),
   ]);
+
+  const stats = statsRes.success ? statsRes.data : null;
+  const topCities = topCitiesRes.success ? topCitiesRes.data : [];
+  const latestUsers = latestUsersRes.success ? latestUsersRes.data : [];
+
+  if (!stats) {
+    return (
+      <div className="p-8 text-center text-red-600">
+        Error loading dashboard stats. Please check your permissions.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -34,7 +46,7 @@ export default async function AdminDashboardPage() {
           value={stats.activeUsers}
           icon={<Activity size={24} />}
           trend={`${Math.round(
-            (stats.activeUsers / stats.totalUsers) * 100
+            (stats.activeUsers / stats.totalUsers) * 100,
           )}% Engagement`}
           trendUp={true}
         />

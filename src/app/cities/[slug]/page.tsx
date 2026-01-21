@@ -1,6 +1,5 @@
 import React from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { getCitiesWithCountry } from "@/lib/db/cityLocation.repo";
@@ -21,13 +20,14 @@ import { City } from "@/domain/city/city.schema";
 import { AiFillTikTok } from "react-icons/ai";
 import social from "@/data/social.json";
 import { AiFillRedditCircle } from "react-icons/ai";
+import HeroImage from "./_components/HeroImage";
 
 export default async function CityPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   if (!session?.user) {
     redirect("/signin");
   }
@@ -92,36 +92,10 @@ export default async function CityPage({
       <main className="pt-24 px-4 max-w-md mx-auto min-h-screen flex flex-col gap-8">
         {/* Identity & Hero */}
         <div className="flex flex-col items-center gap-4 mt-4">
-          <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
-            {city.imageHeroUrl ? (
-              <div className="relative w-full h-full">
-                <Image
-                  src={city.imageHeroUrl}
-                  alt={city.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              </div>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-surface text-secondary">
-                <span className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-gray-400 to-gray-600">
-                  {city.name.substring(0, 2).toUpperCase()}
-                </span>
-              </div>
-            )}
-
-            {/* Country Badge */}
-            <div className="absolute bottom-4 left-4 right-4 text-center">
-              {/* Sparkle decoration */}
-            </div>
-          </div>
-
+          <HeroImage src={city?.imageHeroUrl} name={city.name} />
           <div className="text-center">
             <Link
-              href={`/countries/${city.country?.countryId || ""}`}
+              href={`/countries/${city.country?.cca3 || ""}`}
               className="text-brand text-sm uppercase tracking-wider font-bold hover:underline mb-1 inline-block"
             >
               {countryName}

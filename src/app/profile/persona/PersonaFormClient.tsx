@@ -82,7 +82,7 @@ export default function PersonaFormClient({
     try {
       const result = await saveInterests(data);
       if (result.success) {
-        router.push(`/profile/${result.userId}`);
+        router.push(`/profile/${result.data.userId}`);
       } else {
         console.error("Failed to save interests:", result.error);
       }

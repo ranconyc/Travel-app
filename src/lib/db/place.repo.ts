@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
+import { placeFullInclude } from "./prisma.presets";
 
 export async function getPlaceBySlug(slug: string) {
   if (!slug) return null;
@@ -6,14 +7,7 @@ export async function getPlaceBySlug(slug: string) {
   try {
     return await prisma.place.findUnique({
       where: { slug },
-      include: {
-        media: true,
-        city: {
-          include: {
-            country: true,
-          },
-        },
-      },
+      include: placeFullInclude,
     });
   } catch (error) {
     console.error("getPlaceBySlug error:", error);

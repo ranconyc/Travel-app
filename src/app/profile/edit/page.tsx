@@ -1,11 +1,10 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import { getUserById } from "@/lib/db/user.repo";
 import CompleteProfileShell from "@/app/profile/edit/CompleteProfileShell";
 import { User } from "@/domain/user/user.schema";
 
 export default async function CompleteProfilePage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const userId = session?.user?.id;
 
   if (!userId) {

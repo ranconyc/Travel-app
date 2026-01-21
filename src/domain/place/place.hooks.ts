@@ -8,7 +8,11 @@ export function useCreatePlace() {
   return useMutation<Place, Error, any>({
     mutationFn: async (data) => {
       // Data type is 'any' in action currently, likely TPlaceInput or similar
-      return await createPlaceAction(data);
+      const res = await createPlaceAction(data);
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: (place) => {
       queryClient.invalidateQueries({ queryKey: ["places"] });

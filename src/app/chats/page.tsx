@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 
 export default async function ChatPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   if (!session?.user) {
     redirect("/auth/signin");
   }

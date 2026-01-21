@@ -11,7 +11,11 @@ export function useSendMessage() {
 
   return useMutation<TMessage, Error, { chatId: string; content: string }>({
     mutationFn: async ({ chatId, content }) => {
-      return await sendMessage(chatId, content);
+      const res = await sendMessage({ chatId, content });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["chat", variables.chatId] });
@@ -25,7 +29,11 @@ export function useMarkMessagesAsRead() {
 
   return useMutation<any, Error, { chatId: string; userId: string }>({
     mutationFn: async ({ chatId, userId }) => {
-      return await markMessagesAsRead(chatId, userId);
+      const res = await markMessagesAsRead({ chatId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["chat", variables.chatId] });
@@ -41,7 +49,11 @@ export function useCreateOrGetChat() {
 
   return useMutation<string, Error, { otherUserId: string }>({
     mutationFn: async ({ otherUserId }) => {
-      return await createOrGetChat(otherUserId);
+      const res = await createOrGetChat({ otherUserId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["chats"] });

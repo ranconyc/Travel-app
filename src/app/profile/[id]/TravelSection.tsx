@@ -16,8 +16,8 @@ const VisitedCountriesSection = ({ countries }: { countries: Country[] }) => {
         {countries.map((country) => {
           return (
             <Link
-              key={country.countryId}
-              href={`/countries/${country.countryId}`}
+              key={country.cca3}
+              href={`/countries/${country.cca3}`}
               className="group relative rounded-xl overflow-hidden aspect-[4/3] w-32 shadow-sm hover:shadow-md transition-all bg-surface border border-surface-secondary block"
             >
               {country.imageHeroUrl ? (

@@ -16,8 +16,12 @@ export function useSendFriendRequest() {
     Error,
     { targetUserId: string; currentUserId: string }
   >({
-    mutationFn: async ({ targetUserId, currentUserId }) => {
-      return await sendFriendRequestAction(targetUserId, currentUserId);
+    mutationFn: async ({ targetUserId }) => {
+      const res = await sendFriendRequestAction({ targetUserId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendship"] }); // Broadest key
@@ -34,8 +38,12 @@ export function useCancelFriendRequest() {
     Error,
     { targetUserId: string; currentUserId: string }
   >({
-    mutationFn: async ({ targetUserId, currentUserId }) => {
-      return await cancelFriendRequestAction(targetUserId, currentUserId);
+    mutationFn: async ({ targetUserId }) => {
+      const res = await cancelFriendRequestAction({ targetUserId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendship"] });
@@ -52,8 +60,12 @@ export function useAcceptFriendRequest() {
     Error,
     { targetUserId: string; currentUserId: string }
   >({
-    mutationFn: async ({ targetUserId, currentUserId }) => {
-      return await acceptFriendRequestAction(targetUserId, currentUserId);
+    mutationFn: async ({ targetUserId }) => {
+      const res = await acceptFriendRequestAction({ targetUserId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendship"] });
@@ -71,8 +83,12 @@ export function useDenyFriendRequest() {
     Error,
     { targetUserId: string; currentUserId: string }
   >({
-    mutationFn: async ({ targetUserId, currentUserId }) => {
-      return await denyFriendRequestAction(targetUserId, currentUserId);
+    mutationFn: async ({ targetUserId }) => {
+      const res = await denyFriendRequestAction({ targetUserId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendship"] });
@@ -89,8 +105,12 @@ export function useRemoveFriend() {
     Error,
     { targetUserId: string; currentUserId: string }
   >({
-    mutationFn: async ({ targetUserId, currentUserId }) => {
-      return await removeFriendAction(targetUserId, currentUserId);
+    mutationFn: async ({ targetUserId }) => {
+      const res = await removeFriendAction({ targetUserId });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendship"] });

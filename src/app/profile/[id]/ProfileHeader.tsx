@@ -126,7 +126,7 @@ export const ProfileHeader = ({
       <Button variant="back" />
       <div className="flex items-center justify-between gap-2">
         {profileUser?.profile?.socials && (
-          <div className="p-3 bg-surface rounded-full cursor-pointer hover:bg-surface-hover transition-colors">
+          <button className="p-3 bg-surface rounded-full cursor-pointer hover:bg-surface-hover transition-colors">
             {profileUser?.profile?.socials.map(
               (social: { platform: string; url: string }) => (
                 <SocialMediaLink
@@ -136,7 +136,7 @@ export const ProfileHeader = ({
                 />
               ),
             )}
-          </div>
+          </button>
         )}
 
         <div
@@ -148,14 +148,14 @@ export const ProfileHeader = ({
                 : ""
           }`}
         >
-          <div
+          <button
             role="button"
             onClick={handleFriendshipAction}
             className="flex items-center justify-center"
             aria-disabled={isLoading || isYourProfile}
           >
             {renderFriendshipIcon()}
-          </div>
+          </button>
         </div>
       </div>
     </div>

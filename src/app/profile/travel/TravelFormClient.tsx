@@ -101,7 +101,7 @@ export default function TravelFormClient({
 
       const result = await saveVisitedCountries(payload);
       if (result.success) {
-        router.push(`/profile/${result.userId}`);
+        router.push(`/profile/${result.data.userId}`);
         router.refresh();
       } else {
         console.error("Failed to save countries:", result.error);

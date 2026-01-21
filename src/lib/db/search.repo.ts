@@ -59,10 +59,10 @@ export async function searchCountries(query: string): Promise<SearchResult[]> {
     label: country.name,
     subtitle: country.code,
     type: "country" as const,
-    entityId: country.countryId, // Use countryId slug for routing
+    entityId: country.cca3, // Use cca3 slug for routing
     meta: {
       countryName: country.name,
-      continent: country.continent,
+      region: (country as any).region,
     },
   }));
 }
@@ -106,7 +106,7 @@ export async function searchActivities(query: string): Promise<SearchResult[]> {
  * Save a search event for analytics
  */
 export async function saveSearchEvent(
-  data: SearchEventData
+  data: SearchEventData,
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await prisma.searchEvent.create({

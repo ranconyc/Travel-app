@@ -116,8 +116,8 @@ const CountryList = () => {
       <div className="flex gap-4 overflow-x-scroll pb-4 no-scrollbar">
         {countries?.map((country) => (
           <Link
-            key={country.id}
-            href={`/countries/${country.countryId}`}
+            key={country.cca3}
+            href={`/countries/${country.cca3}`}
             className="min-w-[140px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
           >
             <div className="bg-white">

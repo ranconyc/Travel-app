@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useUser } from "@/app/providers/UserProvider";
 import { useLocation } from "@/app/providers/LocationProvider";
 import { updateUserLocationAction } from "@/domain/user/location.actions";
 
@@ -29,13 +29,13 @@ function calculateDistance(
 }
 
 export default function AutoLocationUpdater() {
-  const { data: session } = useSession();
+  const user = useUser();
   const { location } = useLocation();
   const hasUpdatedRef = useRef(false);
 
   useEffect(() => {
     // Only update if user is logged in and we have location
-    if (session?.user && location && !hasUpdatedRef.current) {
+    if (user && location && !hasUpdatedRef.current) {
       const updateLocation = async () => {
         try {
           // Get last location from localStorage
@@ -69,10 +69,10 @@ export default function AutoLocationUpdater() {
           }
 
           if (shouldUpdate) {
-            await updateUserLocationAction(
-              location.latitude,
-              location.longitude,
-            );
+            await updateUserLocationAction({
+              lat: location.latitude,
+              lng: location.longitude,
+            });
 
             // Store new location in localStorage
             localStorage.setItem(
@@ -91,7 +91,7 @@ export default function AutoLocationUpdater() {
 
       updateLocation();
     }
-  }, [location, session]);
+  }, [location, user]);
 
   // This component doesn't render anything
   return null;

@@ -9,9 +9,10 @@ import { Loader2, Search, Map } from "lucide-react";
 
 export default function CountriesPage() {
   const { data: countries, isLoading, isSuccess } = useCountries();
+  const typedCountries = countries as any[];
   const [search, setSearch] = useState("");
 
-  const filteredCountries = countries?.filter(
+  const filteredCountries = typedCountries?.filter(
     (country) =>
       country.name.toLowerCase().includes(search.toLowerCase()) ||
       country.code.toLowerCase().includes(search.toLowerCase()),
@@ -49,10 +50,10 @@ export default function CountriesPage() {
           </div>
         ) : isSuccess && filteredCountries && filteredCountries.length > 0 ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredCountries.map((country) => (
+            {filteredCountries.map((country: any) => (
               <Link
                 key={country.id}
-                href={`/countries/${country.countryId}`}
+                href={`/countries/${country.cca3}`}
                 className="group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all bg-surface border border-surface-secondary block"
               >
                 {country.imageHeroUrl ? (

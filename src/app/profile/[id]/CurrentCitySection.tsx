@@ -39,14 +39,15 @@ export const CurrentCitySection = ({
         return; // requestLocation handles toasts
       }
 
-      const res = await updateUserLocationAction(
-        location.latitude,
-        location.longitude,
-      );
+      const res = await updateUserLocationAction({
+        lat: location.latitude,
+        lng: location.longitude,
+      });
 
-      if (res.success && res.city) {
+      if (res.success) {
+        const detected = res.data;
         toast.success(
-          `Updated location to ${res.city.cityName || res.city.label}`,
+          `Updated location to ${detected.cityName || (detected as any).label}`,
         );
       } else {
         toast.error(res.error || "Failed to identify city");

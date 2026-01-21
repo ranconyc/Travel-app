@@ -23,15 +23,15 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
 
   const handleRoleChange = async (
     userId: string,
-    newRole: "USER" | "ADMIN"
+    newRole: "USER" | "ADMIN",
   ) => {
     setLoadingId(userId);
-    const res = await updateUserRoleAction(userId, newRole);
+    const res = await updateUserRoleAction({ userId, role: newRole });
     setLoadingId(null);
 
     if (res.success) {
       setUsers((prev) =>
-        prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u))
+        prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u)),
       );
     } else {
       alert("Failed to update role");
@@ -41,7 +41,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
   const filtered = users.filter(
     (u) =>
       (u.name?.toLowerCase() || "").includes(filter.toLowerCase()) ||
-      (u.email?.toLowerCase() || "").includes(filter.toLowerCase())
+      (u.email?.toLowerCase() || "").includes(filter.toLowerCase()),
   );
 
   return (
@@ -123,7 +123,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                           onChange={(e) =>
                             handleRoleChange(
                               user.id,
-                              e.target.value as "USER" | "ADMIN"
+                              e.target.value as "USER" | "ADMIN",
                             )
                           }
                           className="text-xs border border-surface-secondary rounded px-2 py-1 bg-surface hover:border-brand cursor-pointer focus:outline-none focus:border-brand"

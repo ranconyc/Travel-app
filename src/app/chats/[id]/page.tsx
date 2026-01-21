@@ -6,8 +6,7 @@ import {
   getChatDisplayName,
   getChatDisplayImage,
 } from "@/domain/chat/chat.utils";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import { MessageList } from "@/app/chats/_components/MessageList";
 import { MessageInput } from "@/app/chats/_components/MessageInput";
 import { redirect } from "next/navigation";
@@ -35,20 +34,15 @@ async function ChatHeader({
 
 export default async function ChatPage({ params }: Props) {
   const { id } = await params;
-  const session = await getServerSession(authOptions);
-
-  // TODO: check if user is in chat
-  // if not, redirect to chat list
-  // if yes, continue
+  const session = await getSession();
 
   if (!session?.user?.id) {
     redirect("/signin");
   }
 
-  let chat;
-  try {
-    chat = await getChatById(id);
-  } catch {
+  const result = await getChatById({ chatId: id });
+
+  if (!result.success) {
     return (
       <div>
         <HeaderWrapper backButton>
@@ -56,16 +50,15 @@ export default async function ChatPage({ params }: Props) {
         </HeaderWrapper>
         <main className="p-4">
           <p className="text-center text-gray-500">
-            This chat doesn&apos;t exist or you don&apos;t have access to it.
+            {result.error ||
+              "This chat doesn't exist or you don't have access to it."}
           </p>
         </main>
       </div>
     );
   }
 
-  if (!chat) {
-    return <div>Chat not found</div>;
-  }
+  const chat = result.data;
   const chatName = getChatDisplayName(chat, session.user.id);
   const chatImage = getChatDisplayImage(chat, session.user.id);
 

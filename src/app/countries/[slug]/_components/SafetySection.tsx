@@ -14,11 +14,11 @@ interface SafetyData {
 }
 
 export const SafetySection = ({ data }: { data: SafetyData }) => {
-  if (!data) return null;
+  if (!data) return <div>SafetySection</div>;
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
-      <div className="flex items-center gap-3 mb-2">
+      <div className="w-64 flex items-center gap-3 mb-2">
         <div className="bg-blue-500/10 p-2 rounded-full">
           <Shield className="w-6 h-6 text-brand" />
         </div>

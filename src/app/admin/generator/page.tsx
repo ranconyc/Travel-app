@@ -44,7 +44,7 @@ export default function GeneratorPage() {
             toast.success(`Generated ${res.data.name}`);
             setHistory((prev) => [
               {
-                id: res.data.countryId || Math.random().toString(),
+                id: res.data.cca3 || Math.random().toString(),
                 name: res.data.name || inputVal,
                 status: "success",
                 timestamp: new Date(),

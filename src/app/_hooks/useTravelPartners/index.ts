@@ -5,7 +5,7 @@ import { getTravelPartnersAction } from "@/domain/friendship/friendship.actions"
 export function useTravelPartners(userId: string) {
   return useQuery({
     queryKey: ["travel-partners", userId],
-    queryFn: () => getTravelPartnersAction(),
+    queryFn: () => getTravelPartnersAction(undefined),
     enabled: !!userId,
     // Stale time: friends don't change every second. 1-5 minutes is fine.
     staleTime: 1000 * 60 * 5,

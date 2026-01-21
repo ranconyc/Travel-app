@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { Prisma } from "@prisma/client";
+import { baseUserSelect, chatInclude } from "./prisma.presets";
 
 export async function findUserChats(userId: string) {
   return prisma.chat.findMany({
@@ -9,37 +10,7 @@ export async function findUserChats(userId: string) {
       },
     },
     include: {
-      members: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              avatarUrl: true,
-              profile: {
-                select: {
-                  firstName: true,
-                  lastName: true,
-                },
-              },
-              media: {
-                where: { category: "AVATAR" },
-                take: 1,
-              },
-            },
-          },
-        },
-      },
-      lastMessage: {
-        include: {
-          sender: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
+      ...chatInclude,
       messages: {
         where: {
           NOT: {
@@ -61,40 +32,11 @@ export async function findUserChats(userId: string) {
 
 // Type for chat with all related data
 export type ChatWithMembers = Prisma.ChatGetPayload<{
-  include: {
-    members: {
-      include: {
-        user: {
-          select: {
-            id: true;
-            name: true;
-            avatarUrl: true;
-            profile: {
-              select: {
-                firstName: true;
-                lastName: true;
-              };
-            };
-            media: true;
-          };
-        };
-      };
-    };
+  include: typeof chatInclude & {
     messages: {
       include: {
         sender: {
-          select: {
-            id: true;
-            name: true;
-            avatarUrl: true;
-            profile: {
-              select: {
-                firstName: true;
-                lastName: true;
-              };
-            };
-            media: true;
-          };
+          select: typeof baseUserSelect;
         };
       };
     };
@@ -102,50 +44,16 @@ export type ChatWithMembers = Prisma.ChatGetPayload<{
 }>;
 
 export async function findChatById(
-  chatId: string
+  chatId: string,
 ): Promise<ChatWithMembers | null> {
   return prisma.chat.findUnique({
     where: { id: chatId },
     include: {
-      members: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              avatarUrl: true,
-              profile: {
-                select: {
-                  firstName: true,
-                  lastName: true,
-                },
-              },
-              media: {
-                where: { category: "AVATAR" },
-                take: 1,
-              },
-            },
-          },
-        },
-      },
+      ...chatInclude,
       messages: {
         include: {
           sender: {
-            select: {
-              id: true,
-              name: true,
-              avatarUrl: true,
-              profile: {
-                select: {
-                  firstName: true,
-                  lastName: true,
-                },
-              },
-              media: {
-                where: { category: "AVATAR" },
-                take: 1,
-              },
-            },
+            select: baseUserSelect,
           },
         },
         orderBy: {
@@ -168,7 +76,7 @@ export async function findChatMember(chatId: string, userId: string) {
 export async function createMessage(
   chatId: string,
   senderId: string,
-  content: string
+  content: string,
 ) {
   // Create the message
   const message = await prisma.message.create({
@@ -180,21 +88,7 @@ export async function createMessage(
     },
     include: {
       sender: {
-        select: {
-          id: true,
-          name: true,
-          avatarUrl: true,
-          profile: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
-          },
-          media: {
-            where: { category: "AVATAR" },
-            take: 1,
-          },
-        },
+        select: baseUserSelect,
       },
     },
   });
@@ -238,8 +132,8 @@ export async function markMessagesAsRead(chatId: string, userId: string) {
             push: userId,
           },
         },
-      })
-    )
+      }),
+    ),
   );
 
   // Update user's lastReadAt in ChatMember
@@ -256,7 +150,7 @@ export async function markMessagesAsRead(chatId: string, userId: string) {
 
 export async function findOrCreatePrivateChat(
   userId1: string,
-  userId2: string
+  userId2: string,
 ) {
   if (userId1 === userId2) {
     throw new Error("Cannot chat with yourself");

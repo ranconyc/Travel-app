@@ -21,11 +21,14 @@ export function useFriendshipStatus(userA: string, userB: string) {
 
     queryFn: async () => {
       if (!userA || !userB) return { status: "NONE" };
-      const res = await getFriendshipStatusAction(userA, userB);
-      if (!res) return { status: "NONE" };
+      const res = await getFriendshipStatusAction({ targetUserId: userB });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to retrieve friendship status.");
+      }
+      if (!res.data) return { status: "NONE" }; // This case means success but no data, which implies no friendship found.
       return {
-        status: res.status,
-        requesterId: res.requesterId,
+        status: res.data.status as FriendshipStatus,
+        requesterId: res.data.requesterId,
       };
     },
 

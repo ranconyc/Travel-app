@@ -6,7 +6,7 @@ export function useCountries<T = Country[]>() {
   return useQuery({
     queryKey: ["countries"],
     queryFn: async () => {
-      const result = await getAllCountriesAction();
+      const result = await getAllCountriesAction(undefined);
       if (!result.success) {
         throw new Error(result.error);
       }

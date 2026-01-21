@@ -1,53 +1,28 @@
 "use server";
 
+import { createPublicAction } from "@/lib/safe-action";
 import bcrypt from "bcrypt";
-import { signupSchema, SignupValues } from "@/domain/auth/signup.schema";
+import { signupSchema } from "@/domain/auth/signup.schema";
 import { createUser, findUserByEmail } from "@/lib/db/user.repo";
 
-export async function signupAction(values: SignupValues) {
-  // 1. Validate the input
-  const validatedFields = signupSchema.safeParse(values);
+export const signupAction = createPublicAction(signupSchema, async (values) => {
+  const { email, password, name } = values;
 
-  if (!validatedFields.success) {
-    return {
-      success: false,
-      error: "Invalid fields",
-      fieldErrors: validatedFields.error.flatten().fieldErrors,
-    };
+  // 1. Check if user already exists
+  const existingUser = await findUserByEmail(email);
+
+  if (existingUser) {
+    throw new Error("User already exists");
   }
 
-  const { email, password, name } = validatedFields.data;
+  // 2. Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  try {
-    // 2. Check if user already exists
-    const existingUser = await findUserByEmail(email);
-
-    if (existingUser) {
-      return {
-        success: false,
-        error: "User already exists",
-      };
-    }
-
-    // 3. Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 4. Create the user
-    await createUser({
-      email,
-      name,
-      passwordHash: hashedPassword,
-      role: "USER",
-    });
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error("Signup error:", error);
-    return {
-      success: false,
-      error: "An unexpected error occurred. Please try again.",
-    };
-  }
-}
+  // 3. Create the user
+  await createUser({
+    email,
+    name,
+    passwordHash: hashedPassword,
+    role: "USER",
+  });
+});

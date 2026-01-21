@@ -150,9 +150,9 @@ export default function DestinationEditorClient({
     setLoading(true);
     try {
       let res;
-      if (type === "country") res = await updateCountryAction(id, data);
-      else if (type === "city") res = await updateCityAction(id, data);
-      else res = await updatePlaceAction(id, data);
+      if (type === "country") res = await updateCountryAction({ id, data });
+      else if (type === "city") res = await updateCityAction({ id, data });
+      else res = await updatePlaceAction({ id, data });
 
       if (res.success) {
         toast.success("Saved successfully");
@@ -179,9 +179,9 @@ export default function DestinationEditorClient({
     setLoading(true);
     try {
       let res;
-      if (type === "country") res = await deleteCountryAction(id);
-      else if (type === "city") res = await deleteCityAction(id);
-      else res = await deletePlaceAction(id);
+      if (type === "country") res = await deleteCountryAction({ id });
+      else if (type === "city") res = await deleteCityAction({ id });
+      else res = await deletePlaceAction({ id });
 
       if (res.success) {
         toast.success("Deleted successfully");
@@ -590,6 +590,506 @@ export default function DestinationEditorClient({
                 />
               </div>
             </div>
+
+            {type === "country" && (
+              <>
+                <h4 className="text-secondary text-xs uppercase font-bold tracking-wider mb-3">
+                  Schema Field Status
+                </h4>
+                <div className="space-y-3 mb-6 max-h-[400px] overflow-y-auto">
+                  {/* Core Identity */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      CORE IDENTITY
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.cca3 ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <AlertTriangle size={12} className="text-red-400" />
+                        )}
+                        <span>
+                          cca3:{" "}
+                          {data.cca3 || (
+                            <span className="text-red-400">missing</span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.code ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <AlertTriangle size={12} className="text-red-400" />
+                        )}
+                        <span>
+                          code:{" "}
+                          {data.code || (
+                            <span className="text-red-400">missing</span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.name ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <AlertTriangle size={12} className="text-red-400" />
+                        )}
+                        <span>
+                          name:{" "}
+                          {data.name || (
+                            <span className="text-red-400">missing</span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.officialName ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.officialName ? "text-gray-500" : ""}
+                        >
+                          officialName
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.imageHeroUrl ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.imageHeroUrl ? "text-gray-500" : ""}
+                        >
+                          imageHeroUrl
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Geography */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      GEOGRAPHY
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.coords ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <AlertTriangle size={12} className="text-red-400" />
+                        )}
+                        <span>coords</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.region ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.region ? "text-gray-500" : ""}>
+                          region
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.subRegion ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.subRegion ? "text-gray-500" : ""}
+                        >
+                          subRegion
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.capitalName ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.capitalName ? "text-gray-500" : ""}
+                        >
+                          capitalName
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.population ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.population ? "text-gray-500" : ""}
+                        >
+                          population
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.areaKm2 ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.areaKm2 ? "text-gray-500" : ""}>
+                          areaKm2
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.borders?.length ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={
+                            !data.borders?.length ? "text-gray-500" : ""
+                          }
+                        >
+                          borders
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Logistics */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      LOGISTICS
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.logistics ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.logistics ? "text-gray-500" : ""}
+                        >
+                          logistics (full object)
+                        </span>
+                      </div>
+                      {data.logistics && (
+                        <>
+                          <div className="flex items-center gap-2 pl-4">
+                            {data.logistics.car ? (
+                              <CheckCircle
+                                size={12}
+                                className="text-green-500"
+                              />
+                            ) : (
+                              <span className="w-3 h-3 rounded-full bg-gray-500" />
+                            )}
+                            <span
+                              className={
+                                !data.logistics.car ? "text-gray-500" : ""
+                              }
+                            >
+                              ↳ car
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 pl-4">
+                            {data.logistics.idd ? (
+                              <CheckCircle
+                                size={12}
+                                className="text-green-500"
+                              />
+                            ) : (
+                              <span className="w-3 h-3 rounded-full bg-gray-500" />
+                            )}
+                            <span
+                              className={
+                                !data.logistics.idd ? "text-gray-500" : ""
+                              }
+                            >
+                              ↳ idd
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 pl-4">
+                            {data.logistics.timezones?.length ? (
+                              <CheckCircle
+                                size={12}
+                                className="text-green-500"
+                              />
+                            ) : (
+                              <span className="w-3 h-3 rounded-full bg-gray-500" />
+                            )}
+                            <span
+                              className={
+                                !data.logistics.timezones?.length
+                                  ? "text-gray-500"
+                                  : ""
+                              }
+                            >
+                              ↳ timezones
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Finance */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      FINANCE
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.finance ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.finance ? "text-gray-500" : ""}>
+                          finance (full object)
+                        </span>
+                      </div>
+                      {data.finance && (
+                        <>
+                          <div className="flex items-center gap-2 pl-4">
+                            {data.finance.currency ? (
+                              <CheckCircle
+                                size={12}
+                                className="text-green-500"
+                              />
+                            ) : (
+                              <span className="w-3 h-3 rounded-full bg-gray-500" />
+                            )}
+                            <span
+                              className={
+                                !data.finance.currency ? "text-gray-500" : ""
+                              }
+                            >
+                              ↳ currency
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 pl-4">
+                            {data.finance.avgDailyCost ? (
+                              <CheckCircle
+                                size={12}
+                                className="text-green-500"
+                              />
+                            ) : (
+                              <span className="w-3 h-3 rounded-full bg-gray-500" />
+                            )}
+                            <span
+                              className={
+                                !data.finance.avgDailyCost
+                                  ? "text-gray-500"
+                                  : ""
+                              }
+                            >
+                              ↳ avgDailyCost
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 pl-4">
+                            {data.finance.cashCulture ? (
+                              <CheckCircle
+                                size={12}
+                                className="text-green-500"
+                              />
+                            ) : (
+                              <span className="w-3 h-3 rounded-full bg-gray-500" />
+                            )}
+                            <span
+                              className={
+                                !data.finance.cashCulture ? "text-gray-500" : ""
+                              }
+                            >
+                              ↳ cashCulture
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Safety & Health */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      SAFETY & HEALTH
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.safety ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.safety ? "text-gray-500" : ""}>
+                          safety
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.health ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.health ? "text-gray-500" : ""}>
+                          health
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.visaEntry ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.visaEntry ? "text-gray-500" : ""}
+                        >
+                          visaEntry
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Culture & Language */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      CULTURE & LANGUAGE
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.languages ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.languages ? "text-gray-500" : ""}
+                        >
+                          languages
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.commonPhrases?.length ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={
+                            !data.commonPhrases?.length ? "text-gray-500" : ""
+                          }
+                        >
+                          commonPhrases
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.culture ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.culture ? "text-gray-500" : ""}>
+                          culture
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Seasons */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      SEASONS
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.seasons ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.seasons ? "text-gray-500" : ""}>
+                          seasons
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Metadata */}
+                  <div>
+                    <div className="text-xs font-bold text-secondary mb-1">
+                      METADATA
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-2">
+                        {data.flags ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.flags ? "text-gray-500" : ""}>
+                          flags
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.maps ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span className={!data.maps ? "text-gray-500" : ""}>
+                          maps
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {data.tld?.length ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={!data.tld?.length ? "text-gray-500" : ""}
+                        >
+                          tld
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {typeof data.independent !== "undefined" ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={
+                            typeof data.independent === "undefined"
+                              ? "text-gray-500"
+                              : ""
+                          }
+                        >
+                          independent
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {typeof data.unMember !== "undefined" ? (
+                          <CheckCircle size={12} className="text-green-500" />
+                        ) : (
+                          <span className="w-3 h-3 rounded-full bg-gray-500" />
+                        )}
+                        <span
+                          className={
+                            typeof data.unMember === "undefined"
+                              ? "text-gray-500"
+                              : ""
+                          }
+                        >
+                          unMember
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
             <h4 className="text-secondary text-xs uppercase font-bold tracking-wider mb-3">
               Missing / Empty Fields

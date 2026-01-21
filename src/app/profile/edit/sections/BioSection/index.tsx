@@ -29,7 +29,7 @@ function BioSectionInner() {
         gender: values.gender,
       });
 
-      if (!res.ok) {
+      if (!res.success) {
         // console.log("onGenerate", res.error);
         if (res.error) {
           setGenerateBioError(res.error);
@@ -41,9 +41,11 @@ function BioSectionInner() {
         return;
       }
 
-      setSuggestions(res.options);
+      setSuggestions(res.data.options);
       // Optionally set the first as default
-      setValue("description", res.options[0].text, { shouldValidate: true });
+      setValue("description", res.data.options[0].text, {
+        shouldValidate: true,
+      });
     } finally {
       setPending(false);
     }

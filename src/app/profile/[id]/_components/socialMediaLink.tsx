@@ -1,4 +1,4 @@
-import { Facebook, Instagram } from "lucide-react";
+import { Facebook, FacebookIcon, Instagram } from "lucide-react";
 import Link from "next/link";
 import {
   AiFillLinkedin,
@@ -19,7 +19,7 @@ export default function SocialMediaLink({
       case "whatsapp":
         return <AiOutlineWhatsApp size={20} />;
       case "facebook":
-        return <Facebook size={20} />;
+        return <FacebookIcon size={20} />;
       case "instagram":
         return <Instagram size={20} />;
       case "tiktok":
@@ -33,7 +33,7 @@ export default function SocialMediaLink({
     }
   };
   return (
-    <Link href={url} target="_blank" className="p-3">
+    <Link href={url} target="_blank" className="w-5 h-5">
       {getIcon(platform)}
     </Link>
   );

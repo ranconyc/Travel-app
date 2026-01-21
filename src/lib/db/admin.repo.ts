@@ -93,11 +93,11 @@ export async function getTopTrendingCities(limit = 5): Promise<TopCity[]> {
         countryCode: city?.country?.code || "",
         visitors: item._count.id,
       };
-    })
+    }),
   );
 
   return citiesWithDetails.filter(
-    (c): c is NonNullable<typeof c> => c !== null
+    (c): c is NonNullable<typeof c> => c !== null,
   );
 }
 
@@ -127,7 +127,7 @@ export async function getItemsNeedingReview() {
       where: { needsReview: true },
       select: {
         id: true,
-        countryId: true,
+        cca3: true,
         name: true,
         code: true,
         autoCreated: true,

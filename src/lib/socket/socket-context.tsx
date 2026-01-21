@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useSession } from "next-auth/react";
+import { useUser } from "@/app/providers/UserProvider";
 import type { SocketContextType } from "@/types/socket";
 
 const SocketContext = createContext<SocketContextType>({
@@ -29,31 +29,24 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
   });
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
-  const { data: session, status } = useSession();
+  const user = useUser();
 
   // Handle connection and events
   useEffect(() => {
-    if (
-      !ENABLE_SOCKET ||
-      !socket ||
-      status !== "authenticated" ||
-      !session?.user
-    ) {
+    if (!ENABLE_SOCKET || !socket || !user) {
       return;
     }
 
     const onConnect = () => {
-      console.log(`✅ Connected to WebSocket server ${session.user?.name}`);
+      console.log(`✅ Connected to WebSocket server ${user?.name}`);
       setIsConnected(true);
-      if (session.user?.id) {
-        socket.emit("register-user", session.user.id);
+      if (user?.id) {
+        socket.emit("register-user", user.id);
       }
     };
 
     const onDisconnect = () => {
-      console.log(
-        `❌ Disconnected from WebSocket server ${session.user?.name}`
-      );
+      console.log(`❌ Disconnected from WebSocket server ${user?.name}`);
       setIsConnected(false);
     };
 
@@ -68,7 +61,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
     const onUserOnline = (newUserId: string) => {
       setOnlineUsers((prev) =>
-        !prev.includes(newUserId) ? [...prev, newUserId] : prev
+        !prev.includes(newUserId) ? [...prev, newUserId] : prev,
       );
     };
 
@@ -100,10 +93,10 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
       socket.off("user-online", onUserOnline);
       socket.off("user-offline", onUserOffline);
 
-      console.log(`🔌 Disconnecting socket ${session.user?.name}`);
+      console.log(`🔌 Disconnecting socket ${user?.name}`);
       socket.disconnect();
     };
-  }, [socket, status, session?.user]); // Re-run if user/session changes
+  }, [socket, user]); // Re-run if user/session changes
 
   const isUserOnline = (userId: string) => onlineUsers.includes(userId);
 
@@ -112,7 +105,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
       value={{
         socket,
         isConnected,
-        userId: session?.user?.id,
+        userId: user?.id,
         onlineUsers,
         isUserOnline,
       }}

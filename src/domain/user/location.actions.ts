@@ -1,25 +1,22 @@
 "use server";
 
-import { authOptions } from "@/lib/auth";
-import { findNearestCityFromCoords } from "@/lib/db/cityLocation.repo";
+import { z } from "zod";
+import { createSafeAction } from "@/lib/safe-action";
+import { findNearestCityFromCoords } from "@/domain/city/city.service";
 import { prisma } from "@/lib/db/prisma";
 import {
   getActiveVisit,
   createCityVisit,
   closeCityVisit,
 } from "@/lib/db/cityVisit.repo";
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-export async function updateUserLocationAction(lat: number, lng: number) {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
-
-  if (!user) {
-    throw new Error("Unauthorized");
-  }
-
-  try {
+export const updateUserLocationAction = createSafeAction(
+  z.object({
+    lat: z.number(),
+    lng: z.number(),
+  }),
+  async ({ lat, lng }, userId) => {
     // 1. Resolve city from coordinates (DB or API)
     const detectedCity = await findNearestCityFromCoords(lat, lng, {
       createIfMissing: true,
@@ -27,38 +24,38 @@ export async function updateUserLocationAction(lat: number, lng: number) {
     });
 
     if (!detectedCity || !detectedCity.id) {
-      return { success: false, error: "Could not identify city" };
+      throw new Error("Could not identify city");
     }
 
     // 2. Get user's active city visit
-    const activeVisit = await getActiveVisit(user.id);
+    const activeVisit = await getActiveVisit(userId);
 
     // 3. Handle city visit tracking
     if (!activeVisit) {
       // First visit or no active visit - create new one
-      await createCityVisit(user.id, detectedCity.id, { lat, lng });
+      await createCityVisit(userId, detectedCity.id, { lat, lng });
     } else if (activeVisit.cityId !== detectedCity.id) {
       // Changed cities - close current visit and create new one
       await closeCityVisit(activeVisit.id, { lat, lng });
-      await createCityVisit(user.id, detectedCity.id, { lat, lng });
+      await createCityVisit(userId, detectedCity.id, { lat, lng });
     }
     // else: Same city - do nothing (visit remains open)
 
     // 4. Update user's current location
     await prisma.user.update({
-      where: { id: user.id },
+      where: { id: userId },
       data: {
         currentCityId: detectedCity.id,
-        currentLocation: [lng, lat],
+        currentLocation: {
+          type: "Point",
+          coordinates: [lng, lat],
+        },
       },
     });
 
     // 5. Revalidate profile
-    revalidatePath(`/profile/${user.id}`);
+    revalidatePath(`/profile/${userId}`);
 
-    return { success: true, city: detectedCity };
-  } catch (error) {
-    console.error("updateUserLocationAction error:", error);
-    return { success: false, error: "Failed to update location" };
-  }
-}
+    return detectedCity;
+  },
+);

@@ -196,98 +196,96 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-/**
- * ------------------------- COUNTRY -------------------------
- */
 model Country {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  countryId String @unique // e.g. "th" or "thailand"
-  code      String // ISO code "TH"
-  name      String
-  imageHeroUrl String? 
-  media        Media[]
-  coords Json? // GeoJSON point for map centering
-  continent     String?
-  subRegion     String?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  cca3          String   @unique // "THA", "DEU" (Primary lookup key)
+  code          String   // "TH", "DE" (ISO 3166-1 alpha-2)
+  name          String
   officialName  String?
-  capital       String?
-  regionCode    String?
-  subRegionCode String?
+  imageHeroUrl  String?
+  unMember Boolean?
+  independent Boolean?
+
+
+
+
   population    Int?
   areaKm2       Float?
-  
-  // Practical Info
-  utilities     Json?
-  internet      Json?
-  gettingAround Json?
+  flags         Json?    // { png, svg, alt }
+  borders       String[] // cca3 codes for "Nearby" features
+  idd Json?
+  tld Json?
 
-// language info
-  languages Json? // { official: ["Thai"], spoken: ["Thai", "English"], primaryScript: "Thai" }
-  commonPhrases Json? // { hello: { local: "สวัสดี", romanized: "Sawasdee", audio: "url?" }
-  
-//  Money info
-  currency    Json?
-  budget      Json?
-  cashCulture Json?
-  
+  // MongoDB Geospatial Standard
+  // Index this in DB: db.Country.createIndex({ "coords": "2dsphere" })
+  coords        Json?    // { type: "Point", coordinates: [lng, lat] }
+  maps          Json?    // { googleMaps, openStreetMaps }
 
-  safety Json? /* {
-    overall: "safe",
-    crimeLevel: "low",
-    pettyTheft: "moderate-tourist-areas",
-    violentCrime: "rare",
-    scamsCommon: ["tuk-tuk-overcharge", "gem-scam", "taxi-meter"],
-    waterSafety: "tap-not-drinkable",
-    foodSafety: "generally-safe-street-food-ok",
-    areasCaution: ["Deep South provinces"],
-    nightSafety: "safe-normal-precautions",
-    soloFemaleTravel: "safe-normal-precautions",
-    lastUpdated: "2025-01-15"
+  // 1. LOGISTICS & UTILITIES
+  logistics     Json?    /* {
+      car: { side: "left", signs: ["T"] },
+      plugs: ["A", "B", "C"], // Standardized plug types
+      voltage: 220,
+      timezones: ["UTC+07:00"],
+      startOfWeek: "monday"
   } */
 
-  emergency Json? /* {
-    police: "191",
-    ambulance: "1669",
-    fire: "199",
-    touristPolice: "1155",
-    embassies: [
-      { country: "USA", phone: "+66-2-205-4000", address: "95 Wireless Road, Bangkok" },
-      { country: "UK", phone: "+66-2-305-8333", address: "14 Wireless Road, Bangkok" }
-    ]
+  // 2. FINANCE & BUDGET
+  finance       Json?    /* {
+      currency: { code: "THB", symbol: "฿", name: "Thai Baht" },
+      avgDailyCost: 45, // Numeric for filtering/sorting
+      cashCulture: { tipping: "10%", atmAvailability: "High" }
   } */
 
-   // Visa & Entry (CRITICAL)
-  visaEntry Json? /* {
-    visaFreeCountries: ["US-30days", "UK-30days", "EU-30days"],
-    visaOnArrival: ["India", "China"],
-    eVisaAvailable: true,
-    workPermitInfo: "required-for-work",
-    requirements: "passport-6mo-validity",
-    officialLink: "https://www.mfa.go.th"
+  // 3. SAFETY & EMERGENCY
+  safety        Json?    /* {
+      overallScore: 4.5,
+      soloFemaleFriendly: 5, // 1-5 rating
+      crimeLevel: "Low",
+      scams: [{ type: "Tuk-Tuk", tip: "..." }]
   } */
 
+  emergency     Json?    // { police: "191", touristPolice: "1155" }
+
+  // 4. HEALTH & MEDICAL
+  health        Json?    /* {
+      tapWaterSafe: false,
+      vaccines: ["Hepatitis A", "Typhoid"],
+      medicalStandard: "International (Cities)"
+  } */
+
+  // 5. SEASONS LOGIC (Improved)
+  seasons       Json?    /* {
+      peakMonths: [11, 12, 1, 2], // Nov to Feb
+      shoulderMonths: [3, 4, 10],
+      note: "Avoid monsoon in September"
+  } */
+
+  // 6. LANGUAGES & PHRASES
+  // Structure: { official: string[], spoken: string[], nativeName: string, codes: string[] }
+  languages     Json?
+  commonPhrases Json?    // Array: [{ label: "Hello", category: "Basics", audioUrl: "..." }]
 
 
-
-
-
-  idealDuration String?
-
-
-  meta    Json?
-  regions String[] @default([])
-   
-  bestTimeToVisit Json?
-
+  // Geography & Relations
+  region        String?
+  subRegion     String?
+  capitalName   String?
+  capitalId     String?  @unique @db.ObjectId
+  capitalCity   City?    @relation("CountryCapital", fields: [capitalId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
   // Relations
-  cities City[]
-  places Place[]
+  cities        City[]
+  places        Place[]
+  media         Media[]
 
-  autoCreated Boolean @default(false)
-  needsReview Boolean @default(false)
+  needsReview   Boolean  @default(false)
+  autoCreated   Boolean  @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([coords], map: "coords_2dsphere")
 }
 
 /**
@@ -334,6 +332,8 @@ model City {
 
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
+
+  capitalOf Country? @relation("CountryCapital")
 
   @@index([countryRefId])
 }

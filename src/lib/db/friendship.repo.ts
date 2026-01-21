@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { FriendStatus } from "@prisma/client";
+import { baseUserSelect } from "./prisma.presets";
 
 /**
  * Find relationship between two users in ANY direction.
@@ -21,7 +22,7 @@ export async function findFriendshipBetween(userA: string, userB: string) {
  */
 export async function sendFriendRequest(
   requesterId: string,
-  addresseeId: string
+  addresseeId: string,
 ) {
   if (requesterId === addresseeId) throw new Error("Cannot friend yourself");
 
@@ -68,7 +69,7 @@ export async function sendFriendRequest(
  */
 export async function getFriendshipStatus(
   userA: string,
-  userB: string
+  userB: string,
 ): Promise<FriendStatus | "NONE"> {
   const friendship = await findFriendshipBetween(userA, userB);
   return friendship?.status ?? "NONE";
@@ -79,7 +80,7 @@ export async function getFriendshipStatus(
  */
 export async function acceptFriendRequest(
   friendshipId: string,
-  currentUserId: string
+  currentUserId: string,
 ) {
   const request = await prisma.friendship.findUnique({
     where: { id: friendshipId },
@@ -104,7 +105,7 @@ export async function acceptFriendRequest(
  */
 export async function denyFriendRequest(
   friendshipId: string,
-  currentUserId: string
+  currentUserId: string,
 ) {
   const request = await prisma.friendship.findUnique({
     where: { id: friendshipId },
@@ -144,7 +145,7 @@ export async function removeFriend(userA: string, userB: string) {
  */
 export async function cancelFriendRequest(
   requesterId: string,
-  addresseeId: string
+  addresseeId: string,
 ) {
   const existing = await findFriendshipBetween(requesterId, addresseeId);
 
@@ -226,50 +227,10 @@ export async function getFriends(userId: string) {
     },
     include: {
       requester: {
-        select: {
-          id: true,
-          name: true,
-          avatarUrl: true,
-          profile: {
-            select: {
-              firstName: true,
-              lastName: true,
-              homeBaseCity: {
-                select: {
-                  name: true,
-                  country: { select: { name: true } },
-                },
-              },
-            },
-          },
-          media: {
-            where: { category: "AVATAR" },
-            take: 1,
-          },
-        },
+        select: baseUserSelect,
       },
       addressee: {
-        select: {
-          id: true,
-          name: true,
-          avatarUrl: true,
-          profile: {
-            select: {
-              firstName: true,
-              lastName: true,
-              homeBaseCity: {
-                select: {
-                  name: true,
-                  country: { select: { name: true } },
-                },
-              },
-            },
-          },
-          media: {
-            where: { category: "AVATAR" },
-            take: 1,
-          },
-        },
+        select: baseUserSelect,
       },
     },
   });

@@ -30,17 +30,6 @@ export default function TravelHistoryStamps({
   userId,
   isOwnProfile,
 }: TravelHistoryStampsProps) {
-  // ...
-  // ... in return ...
-  {
-    isOwnProfile && (
-      <Link href="/travel">
-        <Button>
-          <Plus size={20} />
-        </Button>
-      </Link>
-    );
-  }
   const [visits, setVisits] = useState<TravelHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -116,7 +105,7 @@ export default function TravelHistoryStamps({
                 month: "2-digit",
                 year: "numeric",
               })
-            : "undefined";
+            : `${item.type.toUpperCase()} OF ${item.countryName.toUpperCase()}`;
 
           // Get config (style + icon) for this city
           const config = getCityConfig(item.cityName);

@@ -1,5 +1,5 @@
 import { getCityById } from "@/lib/db/cityLocation.repo";
-import { createCountryFromName } from "@/lib/db/country.repo";
+import { createCountryFromName } from "@/domain/country/country.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     if (!name || name.trim().length < 2) {
       return NextResponse.json(
         { error: "Missing or invalid query param 'q'" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     console.log(
       `${name.toLowerCase()}-${countryId?.toLowerCase()},DBResult`,
-      DBResult
+      DBResult,
     );
     if (DBResult) {
       return NextResponse.json(
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
           created: false,
           city: DBResult,
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
     console.error("GET /api/cities/create error:", err);
     return NextResponse.json(
       { error: err?.message ?? "Failed to create city" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

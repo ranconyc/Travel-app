@@ -6,7 +6,7 @@ export function useCities<T = City[]>() {
   return useQuery({
     queryKey: ["cities"],
     queryFn: async () => {
-      const res = await getAllCitiesAction();
+      const res = await getAllCitiesAction(undefined);
       if (!res.success) {
         throw new Error(res.error || "Failed to fetch cities");
       }

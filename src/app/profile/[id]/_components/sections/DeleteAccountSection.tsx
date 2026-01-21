@@ -4,7 +4,7 @@ import { useState } from "react";
 import Block from "@/app/components/common/Block";
 import Title from "@/app/components/Title";
 import { Trash2 } from "lucide-react";
-import { deleteAccount } from "@/domain/user/user.actions";
+import { deleteAccountAction } from "@/domain/user/user.actions";
 
 export const DeleteAccountSection = () => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -12,7 +12,7 @@ export const DeleteAccountSection = () => {
   const handleDelete = async () => {
     if (
       !confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
+        "Are you sure you want to delete your account? This action cannot be undone.",
       )
     ) {
       return;
@@ -20,7 +20,10 @@ export const DeleteAccountSection = () => {
 
     setIsDeleting(true);
     try {
-      await deleteAccount();
+      const res = await deleteAccountAction(undefined);
+      if (!res.success) {
+        alert(res.error || "Failed to delete account");
+      }
     } catch (error) {
       console.error("Error deleting account:", error);
       alert("Failed to delete account. Please try again.");

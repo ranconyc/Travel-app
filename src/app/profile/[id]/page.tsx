@@ -1,11 +1,5 @@
-import { getUserProfile } from "@/domain/user/user.queries";
-import { getServerSession } from "next-auth";
-import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
-import { MatchScoreCard } from "@/app/components/MatchScoreCard";
-
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import Image from "next/image";
-
 import { ProfileHeader } from "@/app/profile/[id]/ProfileHeader";
 import {
   getFriendRequestsAction,
@@ -14,12 +8,8 @@ import {
 import { getCountriesByCodes } from "@/lib/db/country.repo";
 import TravelSection from "./TravelSection";
 import world from "@/data/world.json";
-import { City } from "@prisma/client";
 import LogoutButton from "@/app/components/LogoutButton";
 import INTERESTS from "@/data/interests.json";
-import Link from "next/link";
-import { CurrentCitySection } from "./CurrentCitySection";
-import TravelHistoryStamps from "./TravelHistoryStamps";
 import StatsSection from "./StatsSection";
 
 // Define types locally for simple access
@@ -94,25 +84,35 @@ const InterestsSection = ({ interests }: { interests: string[] }) => {
   );
 };
 
+import { getUserProfile } from "@/domain/user/user.queries";
+import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
+import { MatchScoreCard } from "@/app/components/MatchScoreCard";
+
 export default async function Profile({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams?: { mode?: string };
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ mode?: string }>;
 }) {
   const { id } = await params;
-  const session = await getServerSession(authOptions);
-  const requests = await getFriendRequestsAction(id);
+  const session = await getSession();
+  const requestsResult = await getFriendRequestsAction(id);
+  const requests = requestsResult.success ? requestsResult.data : [];
   const loggedUser = session?.user;
 
   const profileUser = await getUserProfile(id);
   const loggedUserProfile = session?.user?.id
     ? await getUserProfile(session.user.id)
     : null;
-  const friendship = loggedUser?.id
-    ? await getFriendshipStatusAction(loggedUser.id, id)
-    : null;
+
+  let friendship = null;
+  if (loggedUser?.id) {
+    const friendshipResult = await getFriendshipStatusAction({
+      targetUserId: id,
+    });
+    friendship = friendshipResult.success ? friendshipResult.data : null;
+  }
 
   if (!profileUser) {
     return <div>User not found</div>;
@@ -121,7 +121,8 @@ export default async function Profile({
   // Calculate Match Score
   const isMyProfile = loggedUser?.id === profileUser?.id;
   let matchData = null;
-  const matchMode = (searchParams?.mode === "travel" ? "travel" : "current") as
+  const { mode: rawMode } = (await searchParams) || {};
+  const matchMode = (rawMode === "travel" ? "travel" : "current") as
     | "current"
     | "travel";
 
@@ -151,11 +152,16 @@ export default async function Profile({
   // To fetch names, I can reuse visitedCountriesData which has names!
   const visitedCountryNames = visitedCountriesData.map((c) => c.name);
 
+  interface WorldCountry {
+    name: { common: string };
+    region: string;
+  }
+
   function getContinentStats(visitedCountries: string[]) {
     const visitedContinents = new Set<string>();
 
     visitedCountries.forEach((countryName) => {
-      const country = (world as any[]).find(
+      const country = (world as unknown as WorldCountry[]).find(
         (c) => c.name.common === countryName,
       );
       if (country?.region) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useUser } from "@/app/providers/UserProvider";
 import { hasGeolocation } from "@/app/_utils/env";
 import { getDistance } from "@/app/_utils/geo";
 import { updateUserLocationAction } from "@/domain/user/user.actions";
@@ -29,7 +29,7 @@ export function useGeo(options: UseGeoOptions = {}) {
 
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const user = useUser();
 
   // Store state
   const {
@@ -131,7 +131,7 @@ export function useGeo(options: UseGeoOptions = {}) {
   // EFFECT 2: Persist to DB (Debounced & Threshold check)
   useEffect(() => {
     // 1. Basic checks
-    if (!persistToDb || !coords || !session?.user?.id) return;
+    if (!persistToDb || !coords || !user?.id) return;
 
     const attemptSave = async () => {
       const now = Date.now();
@@ -190,7 +190,7 @@ export function useGeo(options: UseGeoOptions = {}) {
   }, [
     coords,
     persistToDb,
-    session?.user?.id,
+    user?.id,
     distanceThresholdKm,
     debounceMs,
     setLastSavedCoords,

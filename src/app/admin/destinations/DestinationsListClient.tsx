@@ -77,7 +77,7 @@ export default function DestinationsListClient({
 
         {/* Items */}
         {filteredData.length > 0 ? (
-          filteredData.map((item) => (
+          (filteredData as any[]).map((item) => (
             <Link
               key={item.id}
               href={`/admin/destinations/${item.id}`}
@@ -112,7 +112,7 @@ export default function DestinationsListClient({
                   </span>
                   <span>
                     {activeTab === "countries"
-                      ? item.countryId
+                      ? item.cca3
                       : activeTab === "cities"
                         ? item.cityId
                         : item.id}

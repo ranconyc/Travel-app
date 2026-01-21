@@ -1,156 +1,64 @@
 "use server";
 
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { ActionResponse } from "@/types/actions";
-import { prisma } from "@/lib/db/prisma";
-import { findNearestCityFromCoords } from "@/lib/db/cityLocation.repo";
-import { DetectedCity } from "@/types/city";
+import { z } from "zod";
 import {
-  completeProfileSchema,
-  type CompleteProfileFormValues,
-} from "@/domain/user/completeProfile.schema";
+  createSafeAction,
+  createPublicAction,
+  createAdminAction,
+} from "@/lib/safe-action";
+import { prisma } from "@/lib/db/prisma";
+import { findNearestCityFromCoords } from "@/domain/city/city.service";
+import { completeProfileSchema } from "@/domain/user/completeProfile.schema";
 import {
   saveInterestsSchema,
   saveTravelSchema,
   savePersonaSchema,
   BioInputSchema,
-  type SaveInterestsFormValues,
-  type SaveTravelFormValues,
-  type SavePersonaFormValues,
-  type BioInput,
-  type User,
 } from "@/domain/user/user.schema";
 import {
-  completeProfile,
   deleteUserAccount,
   getAllUsers,
-  saveUserInterests,
-  updateUserProfilePersona,
   updateVisitedCountries,
 } from "@/lib/db/user.repo";
+import {
+  completeProfile,
+  saveUserInterests,
+  updateUserProfilePersona,
+} from "@/domain/user/user.service";
 
 /* -------------------------------------------------------------------------- */
 /*                                USER ACTIONS                                */
 /* -------------------------------------------------------------------------- */
 
-export type UpdateProfileResult =
-  | { success: true }
-  | {
-      success: false;
-      error: string;
-      fieldErrors?: Record<string, string>;
-    };
+// Standardized ActionResponse is imported from @/types/actions
 
-export async function updateProfile(
-  rawValues: CompleteProfileFormValues
-): Promise<UpdateProfileResult> {
-  const session = await getServerSession(authOptions);
+export const updateProfile = createSafeAction(
+  completeProfileSchema,
+  async (data, userId) => {
+    await completeProfile(userId, data);
+  },
+);
 
-  if (!session?.user?.id) {
-    return { success: false, error: "UNAUTHENTICATED" };
-  }
-
-  const parsed = completeProfileSchema.safeParse(rawValues);
-
-  if (!parsed.success) {
-    const flat = parsed.error.flatten();
-    const fieldErrors: Record<string, string> = {};
-    for (const [name, messages] of Object.entries(flat.fieldErrors)) {
-      if (messages && messages[0]) {
-        fieldErrors[name] = messages[0];
-      }
-    }
-
-    return {
-      success: false,
-      error: "VALIDATION_ERROR",
-      fieldErrors,
-    };
-  }
-
-  try {
-    await completeProfile(session.user.id, parsed.data);
-    return { success: true };
-  } catch (error) {
-    console.error("updateProfile action error:", error);
-    return {
-      success: false,
-      error: "INTERNAL_SERVER_ERROR",
-    };
-  }
-}
-
-export async function deleteAccount() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    throw new Error("Unauthorized");
-  }
-
-  const userId = session.user.id;
-
-  try {
+export const deleteAccountAction = createSafeAction(
+  z.any(),
+  async (_, userId) => {
     await deleteUserAccount(userId);
-  } catch (error) {
-    console.error("Failed to delete user account:", error);
-    throw new Error("Failed to delete account");
-  }
-
-  redirect("/");
-}
+  },
+);
 
 /* -------------------------------------------------------------------------- */
 /*                            TRAVEL PREFERENCES                              */
 /* -------------------------------------------------------------------------- */
 
-export type SaveInterestsResult =
-  | { success: true; userId: string }
-  | {
-      success: false;
-      error: string;
-      fieldErrors?: Record<string, string>;
-    };
+// Standardized ActionResponse used
 
-export async function saveInterests(
-  rawValues: SaveInterestsFormValues
-): Promise<SaveInterestsResult> {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return { success: false, error: "UNAUTHENTICATED" };
-  }
-
-  const parsed = saveInterestsSchema.safeParse(rawValues);
-
-  if (!parsed.success) {
-    const flat = parsed.error.flatten();
-    const fieldErrors: Record<string, string> = {};
-    for (const [name, messages] of Object.entries(flat.fieldErrors)) {
-      if (messages && messages[0]) {
-        fieldErrors[name] = messages[0];
-      }
-    }
-
-    return {
-      success: false,
-      error: "VALIDATION_ERROR",
-      fieldErrors,
-    };
-  }
-
-  try {
-    await saveUserInterests(session.user.id, parsed.data);
-    return { success: true, userId: session.user.id };
-  } catch (error) {
-    console.error("saveInterests action error:", error);
-    return {
-      success: false,
-      error: "INTERNAL_SERVER_ERROR",
-    };
-  }
-}
+export const saveInterests = createSafeAction(
+  saveInterestsSchema,
+  async (data, userId) => {
+    await saveUserInterests(userId, data);
+    return { userId };
+  },
+);
 
 /* -------------------------------------------------------------------------- */
 /*                               BIO GENERATION                               */
@@ -166,7 +74,9 @@ function safeAge(birthday: string): number | null {
   return age >= 0 && age < 120 ? age : null;
 }
 
-function formatLanguages(langs?: BioInput["languages"]): string | null {
+function formatLanguages(
+  langs?: { code: string; name: string }[],
+): string | null {
   if (!langs || langs.length === 0) return null;
   const names = langs.map((l) => l.name).slice(0, 3);
   if (names.length === 1) return names[0];
@@ -174,17 +84,8 @@ function formatLanguages(langs?: BioInput["languages"]): string | null {
   return `${names[0]}, ${names[1]} and ${names[2]}`;
 }
 
-export async function generateBio(input: BioInput) {
-  const parsed = BioInputSchema.safeParse(input);
-  if (!parsed.success) {
-    return {
-      ok: false as const,
-      error: "Missing or invalid required fields",
-      issues: parsed.error.flatten(),
-    };
-  }
-
-  const { firstName, occupation, hometown, birthday, languages } = parsed.data;
+export const generateBio = createPublicAction(BioInputSchema, async (data) => {
+  const { firstName, occupation, hometown, birthday, languages } = data;
   const ageMaybe = safeAge(birthday);
   const ageText = ageMaybe ? `${ageMaybe}-year-old` : "";
   const langsText = formatLanguages(languages);
@@ -194,7 +95,6 @@ export async function generateBio(input: BioInput) {
   }${occupation} from ${hometown}.`;
 
   return {
-    ok: true as const,
     options: [
       {
         id: "formal",
@@ -213,145 +113,57 @@ export async function generateBio(input: BioInput) {
       },
     ],
   };
-}
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                TRAVEL DATA                                 */
 /* -------------------------------------------------------------------------- */
 
-export type SaveTravelResult =
-  | { success: true; userId: string }
-  | {
-      success: false;
-      error: string;
-      fieldErrors?: Record<string, string>;
-    };
+// Standardized ActionResponse used
 
-export async function saveVisitedCountries(
-  rawValues: SaveTravelFormValues
-): Promise<SaveTravelResult> {
-  const session = await getServerSession(authOptions);
+export const saveVisitedCountries = createSafeAction(
+  saveTravelSchema,
+  async (data, userId) => {
+    await updateVisitedCountries(userId, data.countries);
+    return { userId };
+  },
+);
 
-  if (!session?.user?.id) {
-    return { success: false, error: "UNAUTHENTICATED" };
-  }
+export const saveTravelPersona = createSafeAction(
+  savePersonaSchema,
+  async (data, userId) => {
+    await updateUserProfilePersona(userId, data);
+    return { userId };
+  },
+);
 
-  const parsed = saveTravelSchema.safeParse(rawValues);
+export const getAllUsersAction = createAdminAction(z.any(), async () => {
+  return getAllUsers();
+});
 
-  if (!parsed.success) {
-    const flat = parsed.error.flatten();
-    const fieldErrors: Record<string, string> = {};
-    for (const [name, messages] of Object.entries(flat.fieldErrors)) {
-      if (messages && messages[0]) {
-        fieldErrors[name] = messages[0];
-      }
-    }
-
-    return {
-      success: false,
-      error: "VALIDATION_ERROR",
-      fieldErrors,
-    };
-  }
-
-  try {
-    await updateVisitedCountries(session.user.id, parsed.data.countries);
-    return { success: true, userId: session.user.id };
-  } catch (error) {
-    console.error("saveVisitedCountries action error:", error);
-    return {
-      success: false,
-      error: "INTERNAL_SERVER_ERROR",
-    };
-  }
-}
-
-export async function saveTravelPersona(
-  rawValues: SavePersonaFormValues
-): Promise<SaveTravelResult> {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return { success: false, error: "UNAUTHENTICATED" };
-  }
-
-  const parsed = savePersonaSchema.safeParse(rawValues);
-
-  if (!parsed.success) {
-    return {
-      success: false,
-      error: "VALIDATION_ERROR",
-    };
-  }
-
-  try {
-    await updateUserProfilePersona(session.user.id, parsed.data);
-    return { success: true, userId: session.user.id };
-  } catch (error) {
-    console.error("saveTravelPersona action error:", error);
-    return {
-      success: false,
-      error: "INTERNAL_SERVER_ERROR",
-    };
-  }
-}
-
-export async function getAllUsersAction() {
-  try {
-    const users = await getAllUsers();
-    return { success: true, data: users };
-  } catch (error) {
-    console.error("getAllUsersAction error:", error);
-    return { success: false, error: "Failed to fetch users" };
-  }
-}
-
-export async function updateUserRoleAction(
-  userId: string,
-  role: "USER" | "ADMIN"
-) {
-  const session = await getServerSession(authOptions);
-
-  if (!session || (session.user as User).role !== "ADMIN") {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  try {
+export const updateUserRoleAction = createAdminAction(
+  z.object({
+    userId: z.string(),
+    role: z.enum(["USER", "ADMIN"]),
+  }),
+  async (data) => {
     const { updateUserRole } = await import("@/lib/db/user.repo");
-    await updateUserRole(userId, role);
-    return { success: true };
-  } catch (error) {
-    console.error("updateUserRoleAction error:", error);
-    return { success: false, error: "Failed to update role" };
-  }
-}
+    await updateUserRole(data.userId, data.role);
+  },
+);
 
-export async function updateUserLocationAction(coords: {
-  lat: number;
-  lng: number;
-}): Promise<ActionResponse<{ detected: DetectedCity }>> {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return { success: false, error: "UNAUTHENTICATED" };
-  }
-
-  if (
-    typeof coords.lat !== "number" ||
-    typeof coords.lng !== "number" ||
-    Number.isNaN(coords.lat) ||
-    Number.isNaN(coords.lng)
-  ) {
-    return { success: false, error: "Invalid coordinates" };
-  }
-
-  try {
+export const updateUserLocationAction = createSafeAction(
+  z.object({
+    lat: z.number(),
+    lng: z.number(),
+  }),
+  async (coords, userId) => {
     const detected = await findNearestCityFromCoords(coords.lat, coords.lng, {
       createIfMissing: true,
     });
 
     await prisma.user.update({
-      where: { id: session.user.id },
+      where: { id: userId },
       data: {
         currentLocation: {
           type: "Point",
@@ -361,9 +173,6 @@ export async function updateUserLocationAction(coords: {
       },
     });
 
-    return { success: true, data: { detected } };
-  } catch (error) {
-    console.error("updateUserLocationAction error:", error);
-    return { success: false, error: "Failed to update user location" };
-  }
-}
+    return { detected };
+  },
+);

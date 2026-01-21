@@ -1,12 +1,11 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import { getAllUsersQuery, getUserProfile } from "@/domain/user/user.queries";
 import { redirect } from "next/navigation";
 import NearbyMatesClient from "@/app/mates/_components/NearbyMatesClient";
 import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 
 export default async function NearbyMatesPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   if (!session?.user) {
     redirect("/signin");
   }

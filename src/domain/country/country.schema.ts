@@ -1,84 +1,193 @@
 import { z } from "zod";
 
-/** Transportation item (used in country + city) */
-export const TransportItem = z.object({
-  name: z.string(),
-  note: z.string().optional(),
-  badge: z
-    .object({
-      text: z.string(),
-      tone: z.enum(["green", "orange", "red", "blue", "neutral"]),
-    })
-    .optional(),
-});
-
-/** Detailed internal JSON blob for country metadata */
-export const CountryMetaSchema = z.any();
-
-/** Country Schema (aligned with Prisma `Country` model) */
 export const CountrySchema = z.object({
-  // Core identity
-  id: z.string(), // Mongo ObjectId (string)
-  countryId: z.string().min(1), // "thailand"
-  code: z.string().min(1), // e.g. "TH"
-  name: z.string().min(1),
-
-  // Geospatial
-  coords: z.any().optional().nullable(),
-
-  // Basic meta
-  continent: z.string().optional().nullable(),
-  subRegion: z.string().optional().nullable(),
+  // --- CORE IDENTITY ---
+  id: z.string().optional(), // MongoDB ObjectId
+  cca3: z.string().length(3), // "THA"
+  code: z.string().length(2), // "TH"
+  name: z.string(),
   officialName: z.string().optional().nullable(),
-  capital: z.string().optional().nullable(),
-  regionCode: z.string().optional().nullable(),
-  subRegionCode: z.string().optional().nullable(),
-  population: z.number().int().optional().nullable(),
-  areaKm2: z.number().optional().nullable(),
+  imageHeroUrl: z.string().url().optional().nullable(), // Curated cover image
 
-  // JSON fields
-  currency: z
+  // REST Countries "Hidden Gems"
+  population: z.number().optional(),
+  areaKm2: z.number().optional(),
+  borders: z.array(z.string()).optional(), // cca3 codes of neighbors
+  tld: z.array(z.string()).optional(), // e.g. [".th"]
+  independent: z.boolean().optional(),
+  unMember: z.boolean().optional(),
+  maps: z
     .object({
-      code: z.string(),
-      symbol: z.string(),
-      name: z.string(),
-      subunit: z.string().optional(),
-      subunitToUnit: z.number().optional(),
+      googleMaps: z.string().url().optional(),
+      openStreetMaps: z.string().url().optional(),
+    })
+    .optional()
+    .nullable(),
+  flags: z
+    .object({
+      png: z.string().url(),
+      svg: z.string().url(),
+      alt: z.string().optional(),
     })
     .optional()
     .nullable(),
 
-  budget: z
+  // GeoJSON Standard (optional to match Prisma)
+  coords: z
     .object({
-      daily: z
+      type: z.literal("Point"),
+      coordinates: z.tuple([
+        z.number().min(-180).max(180), // Longitude
+        z.number().min(-90).max(90), // Latitude
+      ]),
+    })
+    .optional()
+    .nullable(),
+
+  // --- GEOGRAPHY & RELATIONS ---
+  region: z.string().optional().nullable(),
+  subRegion: z.string().optional().nullable(),
+  capitalName: z.string().optional().nullable(),
+  capitalId: z.string().optional().nullable(),
+
+  // --- TRAVEL INSIGHTS ---
+  logistics: z
+    .object({
+      car: z
         .object({
-          budget: z.string(),
-          mid: z.string(),
-          luxury: z.string(),
+          side: z.enum(["left", "right"]),
+          signs: z.array(z.string()),
         })
         .optional(),
-      currencyCode: z.string().optional(),
-      note: z.string().optional(),
+      idd: z
+        .object({
+          root: z.string().optional(),
+          suffixes: z.array(z.string()).optional(),
+        })
+        .optional(),
+      electricity: z
+        .object({
+          plugs: z.array(z.string()), // e.g. ["A", "B", "C"]
+          voltage: z.number().int(), // e.g. 230
+          frequency: z.number().int().optional(), // e.g. 50Hz
+        })
+        .optional(),
+      timezones: z.array(z.string()).optional(),
+      startOfWeek: z.string().optional(),
+      emergency: z
+        .object({
+          police: z.string(),
+          ambulance: z.string(),
+          fire: z.string(),
+        })
+        .optional(),
     })
     .optional()
     .nullable(),
 
-  cashCulture: z
+  // Separate emergency field (from Prisma schema)
+  emergency: z
     .object({
-      atmAvailability: z.string().optional(),
-      creditCardAcceptance: z.string().optional(),
-      cashPreferred: z.boolean().optional(),
-      tipping: z.any().optional(), // Or detailed schema
+      police: z.string().optional(),
+      touristPolice: z.string().optional(),
+      ambulance: z.string().optional(),
+      fire: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
+
+  finance: z
+    .object({
+      currency: z.object({
+        code: z.string(),
+        symbol: z.string(),
+        name: z.string(),
+      }),
+      avgDailyCost: z.object({
+        budget: z.number(),
+        mid: z.number(),
+        luxury: z.number(),
+        currencyCode: z.string().default("USD"),
+      }),
+      cashCulture: z.object({
+        tipping: z.string(),
+        atmAvailability: z.string(),
+        atmFees: z.string().optional(),
+        primaryPayment: z.string().optional(), // e.g. "Cash Preferred"
+        tapToPay: z.boolean().optional(),
+      }),
+    })
+    .optional()
+    .nullable(),
+
+  // Culture (separate from logistics)
+  culture: z
+    .object({
+      dressCode: z.string().optional(),
+      taboos: z.array(z.string()).optional(),
+      holidays: z
+        .array(
+          z.object({
+            name: z.string(),
+            date: z.string(),
+          }),
+        )
+        .optional(),
+    })
+    .optional()
+    .nullable(),
+
+  visaEntry: z
+    .object({
+      status: z.string(), // e.g. "Visa Free"
+      duration: z.string().optional(), // e.g. "60 Days"
+      notes: z.string().optional(),
+    })
+    .optional()
+    .nullable(),
+
+  safety: z
+    .object({
+      overallScore: z.number().min(1).max(5),
+      soloFemaleFriendly: z.number().min(1).max(5),
+      crimeLevel: z.string(),
+      scams: z
+        .array(
+          z.object({
+            type: z.string(),
+            severity: z.string(),
+            tip: z.string(),
+          }),
+        )
+        .default([]),
+    })
+    .optional()
+    .nullable(),
+
+  health: z
+    .object({
+      tapWaterSafe: z.boolean(),
+      vaccines: z.array(z.string()),
+      medicalStandard: z.string(),
+    })
+    .optional()
+    .nullable(),
+
+  seasons: z
+    .object({
+      peakMonths: z.array(z.number().min(1).max(12)),
+      shoulderMonths: z.array(z.number().min(1).max(12)),
+      bestTimeDisplay: z.string(),
     })
     .optional()
     .nullable(),
 
   languages: z
     .object({
-      official: z.array(z.string()).optional(),
+      official: z.array(z.string()),
       spoken: z.array(z.string()).optional(),
       nativeName: z.string().optional(),
-      primaryScript: z.string().optional(),
+      codes: z.array(z.string()).optional(),
     })
     .optional()
     .nullable(),
@@ -89,85 +198,24 @@ export const CountrySchema = z.object({
         label: z.string(),
         local: z.string(),
         romanized: z.string().optional(),
-        pronunciation: z.string().optional(),
-        category: z.string().optional(),
+        category: z.enum(["Basics", "Dining", "Emergency", "Transport"]),
       }),
     )
-    .optional()
-    .nullable(),
+    .default([]),
 
-  emergency: z
-    .object({
-      police: z.string().optional(),
-      ambulance: z.string().optional(),
-      fire: z.string().optional(),
-      touristPolice: z.string().optional(),
-    })
-    .optional()
-    .nullable(),
+  // --- RELATIONS (optional, for when data is populated) ---
+  cities: z.array(z.any()).optional(), // City[]
+  places: z.array(z.any()).optional(), // Place[]
+  media: z.array(z.any()).optional(), // Media[]
+  capitalCity: z.any().optional().nullable(), // City relation
 
-  visaEntry: z.any().optional().nullable(),
-  utilities: z.any().optional().nullable(),
-  internet: z.any().optional().nullable(),
-
-  // Transport UX
-  gettingAround: z.any().optional().nullable(),
-
-  // Media (Now using relation + simple hero string for speed)
-  imageHeroUrl: z.string().optional().nullable(),
-  media: z.array(z.any()).optional(),
-
-  // Trip meta
-  bestTimeToVisit: z.any().optional().nullable(),
-  idealDuration: z.string().optional().nullable(),
-
-  safety: z
-    .object({
-      overall: z.string().optional(),
-      rating: z.number().optional(),
-      crimeLevel: z.string().optional(),
-      scamsCommon: z
-        .array(
-          z.object({
-            type: z.string(),
-            severity: z.string(),
-            tip: z.string(),
-          }),
-        )
-        .optional(),
-      areasCaution: z.array(z.any()).optional(),
-    })
-    .optional()
-    .nullable(),
-
-  // Detailed internal meta
-  meta: CountryMetaSchema.optional().nullable(),
-  regions: z.array(z.string()).default([]),
-
-  // Relations
-  cities: z.array(z.any()).optional(),
-  places: z.array(z.any()).optional(),
-
-  // CMS flags
-  autoCreated: z.boolean().default(false),
-  needsReview: z.boolean().default(false),
-
-  // Timestamps (Prisma returns Date in JS)
+  // --- META & TIMESTAMPS ---
+  needsReview: z.boolean().default(true),
+  autoCreated: z.boolean().default(true),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
-
 export type Country = z.infer<typeof CountrySchema>;
-export type CountryMeta = any;
 
-/** Update schema - all fields optional for partial updates */
-export const CountryUpdateSchema = CountrySchema.partial().omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  cities: true,
-  places: true,
-  usersHomeBase: true,
-});
-
-export type CountryUpdate = z.infer<typeof CountryUpdateSchema>;
+export const CountryUpdateSchema = CountrySchema.partial();
+export type CountryUpdateInput = z.infer<typeof CountryUpdateSchema>;

@@ -1,7 +1,7 @@
 "use server";
 
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { z } from "zod";
+import { createSafeAction } from "@/lib/safe-action";
 import {
   acceptFriendRequest,
   cancelFriendRequest,
@@ -17,80 +17,71 @@ import {
 /*                                FRIEND ACTIONS                               */
 /* -------------------------------------------------------------------------- */
 
-export async function sendFriendRequestAction(
-  targetUserId: string,
-  currentUserId: string
-) {
-  const res = await sendFriendRequest(currentUserId, targetUserId);
-  return res;
-}
+export const sendFriendRequestAction = createSafeAction(
+  z.object({ targetUserId: z.string() }),
+  async (data, userId) => {
+    return await sendFriendRequest(userId, data.targetUserId);
+  },
+);
 
-export async function cancelFriendRequestAction(
-  targetUserId: string,
-  currentUserId: string
-) {
-  const res = await cancelFriendRequest(currentUserId, targetUserId);
-  return res;
-}
+export const cancelFriendRequestAction = createSafeAction(
+  z.object({ targetUserId: z.string() }),
+  async (data, userId) => {
+    return await cancelFriendRequest(userId, data.targetUserId);
+  },
+);
 
-export async function acceptFriendRequestAction(
-  targetUserId: string,
-  currentUserId: string
-) {
-  const friendship = await findFriendshipBetween(currentUserId, targetUserId);
-  if (!friendship) throw new Error("Friendship not found");
+export const acceptFriendRequestAction = createSafeAction(
+  z.object({ targetUserId: z.string() }),
+  async (data, userId) => {
+    const friendship = await findFriendshipBetween(userId, data.targetUserId);
+    if (!friendship) throw new Error("Friendship not found");
+    return await acceptFriendRequest(friendship.id, userId);
+  },
+);
 
-  const res = await acceptFriendRequest(friendship.id, currentUserId);
-  return res;
-}
+export const denyFriendRequestAction = createSafeAction(
+  z.object({ targetUserId: z.string() }),
+  async (data, userId) => {
+    const friendship = await findFriendshipBetween(userId, data.targetUserId);
+    if (!friendship) throw new Error("Friendship not found");
+    return await denyFriendRequest(friendship.id, userId);
+  },
+);
 
-export async function denyFriendRequestAction(
-  targetUserId: string,
-  currentUserId: string
-) {
-  const friendship = await findFriendshipBetween(currentUserId, targetUserId);
-  if (!friendship) throw new Error("Friendship not found");
+export const removeFriendAction = createSafeAction(
+  z.object({ targetUserId: z.string() }),
+  async (data, userId) => {
+    return await removeFriend(userId, data.targetUserId);
+  },
+);
 
-  const res = await denyFriendRequest(friendship.id, currentUserId);
-  return res;
-}
+export const getFriendRequestsAction = createSafeAction(
+  z.any(),
+  async (_, userId) => {
+    return await getIncomingFriendRequests(userId);
+  },
+);
 
-export async function removeFriendAction(
-  targetUserId: string,
-  currentUserId: string
-) {
-  const res = await removeFriend(currentUserId, targetUserId);
-  return res;
-}
-
-export async function getFriendRequestsAction(userId: string) {
-  const res = await getIncomingFriendRequests(userId);
-  return res;
-}
-
-export async function getFriendshipStatusAction(userA: string, userB: string) {
-  const friendship = await findFriendshipBetween(userA, userB);
-  if (!friendship) return null;
-  return {
-    status: friendship.status,
-    requesterId: friendship.requesterId,
-  };
-}
+export const getFriendshipStatusAction = createSafeAction(
+  z.object({ targetUserId: z.string() }),
+  async (data, userId) => {
+    const friendship = await findFriendshipBetween(userId, data.targetUserId);
+    if (!friendship) return null;
+    return {
+      status: friendship.status,
+      requesterId: friendship.requesterId,
+    };
+  },
+);
 
 /* -------------------------------------------------------------------------- */
 /*                                TRAVEL PARTNER                               */
 /* -------------------------------------------------------------------------- */
 
-export async function getTravelPartnersAction() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return [];
-  }
-
-  try {
-    return await getFriends(session.user.id);
-  } catch (error) {
-    console.error("getTravelPartnersAction error:", error);
-    return [];
-  }
-}
+export const getTravelPartnersAction = createSafeAction(
+  z.any(),
+  async (_, userId) => {
+    return await getFriends(userId);
+  },
+);

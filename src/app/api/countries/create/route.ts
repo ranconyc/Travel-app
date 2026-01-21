@@ -1,4 +1,4 @@
-import { createCountryFromName } from "@/lib/db/country.repo";
+import { createCountryFromName } from "@/domain/country/country.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     if (!name || name.trim().length < 2) {
       return NextResponse.json(
         { error: "Missing or invalid query param 'q'" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,13 +21,13 @@ export async function GET(req: NextRequest) {
         created: result.created,
         country: result.country,
       },
-      { status: result.created ? 201 : 200 }
+      { status: result.created ? 201 : 200 },
     );
   } catch (err: any) {
     console.error("GET /api/countries/create error:", err);
     return NextResponse.json(
       { error: err?.message ?? "Failed to create country" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

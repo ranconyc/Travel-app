@@ -9,9 +9,7 @@ export function useGenerateCountry() {
   const queryClient = useQueryClient();
 
   return useMutation<ActionResponse<GenerateCountryResult>, Error, string>({
-    mutationFn: async (name: string) => {
-      return await generateCountryAction(name);
-    },
+    mutationFn: async (name: string) => await generateCountryAction({ name }),
     onSuccess: (res: ActionResponse<GenerateCountryResult>) => {
       if (res.success) {
         const data = res.data;
@@ -23,9 +21,9 @@ export function useGenerateCountry() {
         // Invalidate country lists so UI updates
         queryClient.invalidateQueries({ queryKey: ["countries"] });
         // Also maybe specific country query if needed
-        if (data.countryId) {
+        if (data.cca3) {
           queryClient.invalidateQueries({
-            queryKey: ["country", data.countryId],
+            queryKey: ["country", data.cca3],
           });
         }
       }

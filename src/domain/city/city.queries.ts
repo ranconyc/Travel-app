@@ -5,8 +5,8 @@ import {
   findNearbyCities,
   findNearestCity,
   isCityExists,
-  reverseGeocodeLocationIQ,
 } from "@/lib/db/cityLocation.repo";
+import { reverseGeocodeLocationIQ } from "@/domain/city/city.service";
 
 export async function getAllCitiesQuery() {
   const cities = await getAllCities();
@@ -27,7 +27,7 @@ export async function findNearbyCitiesQuery(
   lng: number,
   lat: number,
   km?: number,
-  limit?: number
+  limit?: number,
 ) {
   const cities = await findNearbyCities(lng, lat, km, limit);
   return cities;
@@ -36,7 +36,7 @@ export async function findNearbyCitiesQuery(
 export async function findNearestCityQuery(
   lng: number,
   lat: number,
-  km?: number
+  km?: number,
 ) {
   const city = await findNearestCity(lng, lat, km);
   return city;

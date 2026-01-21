@@ -3,6 +3,7 @@
 import { createOrGetChat } from "@/domain/chat/chat.actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function MessageButton({ friendId }: { friendId: string }) {
   const router = useRouter();
@@ -11,8 +12,12 @@ export function MessageButton({ friendId }: { friendId: string }) {
   const handleMessageClick = async () => {
     setIsLoading(true);
     try {
-      const chatId = await createOrGetChat(friendId);
-      router.push(`/chat/${chatId}`);
+      const res = await createOrGetChat({ otherUserId: friendId });
+      if (res.success) {
+        router.push(`/chats/${res.data}`);
+      } else {
+        toast.error(res.error || "Failed to start chat");
+      }
     } catch (error) {
       console.error("Failed to create/get chat:", error);
       alert("Failed to start chat. Please try again.");

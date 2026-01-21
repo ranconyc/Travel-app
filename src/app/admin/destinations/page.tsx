@@ -7,9 +7,9 @@ export const dynamic = "force-dynamic";
 
 export default async function DestinationsPage() {
   const [countriesRes, citiesRes, placesRes] = await Promise.all([
-    getAllCountriesAction(),
-    getAllCitiesAction(),
-    getAllPlacesAction(),
+    getAllCountriesAction(undefined),
+    getAllCitiesAction(undefined),
+    getAllPlacesAction(undefined),
   ]);
 
   const countries = countriesRes.success ? (countriesRes.data ?? []) : [];

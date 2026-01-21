@@ -7,7 +7,7 @@ import { findBorderCountries } from "@/lib/db/country.repo";
 
 type Country = {
   id: string;
-  countryId: string;
+  cca3: string;
   code: string;
   name: string;
   imageHeroUrl?: string | null;

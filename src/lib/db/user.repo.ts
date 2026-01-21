@@ -1,27 +1,12 @@
 import { prisma } from "@/lib/db/prisma";
 import type { Prisma } from "@prisma/client";
 import type { Coordinates, NearbyUserResult } from "@/types/user";
-import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
+
+import { userFullInclude } from "./prisma.presets";
 
 // Type for user with all related data
 export type UserWithRelations = Prisma.UserGetPayload<{
-  include: {
-    profile: {
-      include: {
-        homeBaseCity: {
-          include: {
-            country: true;
-          };
-        };
-      };
-    };
-    media: true;
-    currentCity: {
-      include: {
-        country: true;
-      };
-    };
-  };
+  include: typeof userFullInclude;
 }>;
 
 export async function getUserById(
@@ -36,23 +21,7 @@ export async function getUserById(
   try {
     return await prisma.user.findUnique({
       where: { id },
-      include: {
-        profile: {
-          include: {
-            homeBaseCity: {
-              include: {
-                country: true,
-              },
-            },
-          },
-        },
-        media: true,
-        currentCity: {
-          include: {
-            country: true,
-          },
-        },
-      },
+      include: userFullInclude,
     });
   } catch (error) {
     console.error("getUserById error:", error);
@@ -60,86 +29,11 @@ export async function getUserById(
   }
 }
 
-export async function completeProfile(
-  userId: string,
-  data: CompleteProfileFormValues,
-): Promise<void> {
-  if (!userId) {
-    throw new Error("User ID missing");
-  }
-
-  const birthdayDate =
-    data.birthday && data.birthday.length > 0 ? new Date(data.birthday) : null;
-
-  const genderEnum =
-    data.gender === ""
-      ? null
-      : (data.gender as "MALE" | "FEMALE" | "NON_BINARY");
-
-  try {
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        profileCompleted: true,
-        name: `${data.firstName} ${data.lastName}`.trim(),
-        profile: {
-          upsert: {
-            create: {
-              firstName: data.firstName,
-              lastName: data.lastName || null,
-              birthday: birthdayDate,
-              gender: genderEnum,
-              occupation: data.occupation || null,
-              socials: data.socialLinks || null,
-              languages: data.languages,
-            },
-            update: {
-              firstName: data.firstName,
-              lastName: data.lastName || null,
-              birthday: birthdayDate,
-              gender: genderEnum,
-              occupation: data.occupation || null,
-              socials: data.socialLinks || null,
-              languages: data.languages,
-            },
-          },
-        },
-      },
-    });
-
-    // Unified avatar update
-    if (data.image) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: { avatarUrl: data.image },
-      });
-    }
-  } catch (error) {
-    console.error("completeProfile error:", error);
-    throw new Error("Failed to update profile");
-  }
-}
-
+// get all users
 export async function getAllUsers() {
   try {
     return await prisma.user.findMany({
-      include: {
-        profile: {
-          include: {
-            homeBaseCity: {
-              include: {
-                country: true,
-              },
-            },
-          },
-        },
-        media: true,
-        currentCity: {
-          include: {
-            country: true,
-          },
-        },
-      },
+      include: userFullInclude,
       orderBy: {
         createdAt: "desc",
       },
@@ -153,7 +47,6 @@ export async function getAllUsers() {
 export async function getNearbyUsers(
   coords: Coordinates,
   km = 50,
-  limit = 50,
 ): Promise<NearbyUserResult[]> {
   try {
     if (
@@ -194,7 +87,7 @@ export async function getNearbyUsers(
       ],
     });
 
-    return (res as unknown as any[]).map((row) => ({
+    return (res as unknown as Record<string, any>[]).map((row) => ({
       id: row._id?.$oid ?? row._id ?? null,
       firstName: row.profile?.firstName ?? row.firstName ?? null,
       lastName: row.profile?.lastName ?? row.lastName ?? null,
@@ -223,56 +116,6 @@ export async function isUserExists(userId: string) {
   return !!user;
 }
 
-export async function updateUserProfilePersona(
-  userId: string,
-  newPersonaData: Record<string, any>,
-): Promise<void> {
-  if (!userId) {
-    throw new Error("User ID missing");
-  }
-
-  try {
-    // 1. Fetch existing persona to merge
-    const userProfile = await prisma.userProfile.findUnique({
-      where: { userId },
-      select: { persona: true },
-    });
-
-    const existingPersona = (userProfile?.persona as Record<string, any>) || {};
-    const mergedPersona = { ...existingPersona, ...newPersonaData };
-
-    // 2. Update with merged data
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        profile: {
-          upsert: {
-            create: {
-              persona: mergedPersona,
-            },
-            update: {
-              persona: mergedPersona,
-            },
-          },
-        },
-      },
-    });
-  } catch (error) {
-    console.error("updateUserProfilePersona error:", error);
-    throw new Error("Failed to update user persona");
-  }
-}
-
-export async function saveUserInterests(
-  userId: string,
-  data: {
-    interests: string[];
-    dailyRhythm: string;
-    travelStyle: string;
-  },
-): Promise<void> {
-  return updateUserProfilePersona(userId, data);
-}
 export async function deleteUserAccount(userId: string): Promise<void> {
   if (!userId) throw new Error("User ID missing");
 
@@ -366,20 +209,7 @@ export async function getUsersForMatching(userIds: string[]) {
     return await prisma.user.findMany({
       where: { id: { in: userIds } },
       include: {
-        profile: {
-          include: {
-            homeBaseCity: {
-              include: {
-                country: true,
-              },
-            },
-          },
-        },
-        currentCity: {
-          include: {
-            country: true,
-          },
-        },
+        ...userFullInclude,
         cityVisits: {
           include: { city: true },
         },

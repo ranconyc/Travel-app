@@ -24,7 +24,8 @@ export default function DictanceSection({ country }: { country: Country }) {
 
   return (
     <div className="text-lg font-bold flex flex-col">
-      {loggedUser?.currentCity?.country?.id === country.id ? (
+      {(loggedUser?.currentCity?.country as any)?.cca3 ===
+      (country as any).cca3 ? (
         <>
           <span>You</span>
           <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
@@ -36,8 +37,8 @@ export default function DictanceSection({ country }: { country: Country }) {
           <span>
             {formatFlightTimeLabelFromDistance(
               getDistance(
-                country.meta?.latlng?.[0] ?? 0,
-                country.meta?.latlng?.[1] ?? 0,
+                (country.coords as any)?.coordinates?.[1] ?? 0,
+                (country.coords as any)?.coordinates?.[0] ?? 0,
                 coords?.lat ?? 0,
                 coords?.lng ?? 0,
               ),

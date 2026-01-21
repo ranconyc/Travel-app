@@ -2,9 +2,10 @@
 
 import { sendMessage } from "@/domain/chat/chat.actions";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useWebSocket } from "@/lib/socket/useWebSocket";
-import { useSession } from "next-auth/react";
+import { useUser } from "@/app/providers/UserProvider";
 import type { MessageInputProps } from "@/types/chat";
 
 export function MessageInput({ chatId }: MessageInputProps) {
@@ -12,7 +13,7 @@ export function MessageInput({ chatId }: MessageInputProps) {
   const [isSending, setIsSending] = useState(false);
   const router = useRouter();
   const { emit, isConnected } = useWebSocket();
-  const { data: session } = useSession();
+  const user = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,12 +26,12 @@ export function MessageInput({ chatId }: MessageInputProps) {
 
     try {
       // Try WebSocket first
-      if (isConnected && session?.user?.id) {
+      if (isConnected && user?.id) {
         const success = emit("send-message", {
           chatId,
           content: messageContent,
           tempId,
-          userId: session.user.id,
+          userId: user.id,
         });
 
         if (success) {
@@ -42,7 +43,10 @@ export function MessageInput({ chatId }: MessageInputProps) {
 
       // Fallback to HTTP if WebSocket not available
       console.log("⚠️ WebSocket not available, using HTTP fallback");
-      await sendMessage(chatId, messageContent);
+      const res = await sendMessage({ chatId, content: messageContent });
+      if (!res.success) {
+        toast.error(res.error || "Failed to send message");
+      }
       router.refresh();
       setIsSending(false);
     } catch (error) {

@@ -22,12 +22,12 @@ interface MoneyData {
   };
 }
 
-export const MoneySection = ({ data }: { data: MoneyData }) => {
-  if (!data.currency && !data.budget) return null;
+export const FinanceSection = ({ data }: { data: MoneyData }) => {
+  if (!data.currency && !data.budget) return <div>FinanceSection</div>;
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
-      <div className="flex items-center gap-3 mb-2">
+    <div className="min-w-fit flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
+      <div className="w-40 flex items-center gap-3 mb-2">
         <div className="bg-green-500/10 p-2 rounded-full">
           <Wallet className="w-6 h-6 text-green-500" />
         </div>

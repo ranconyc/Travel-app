@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 import {
   getAdminStats,
@@ -21,7 +20,7 @@ interface AdminDashboardProps {
 export default async function AdminDashboardPage({
   searchParams,
 }: AdminDashboardProps) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   const user = session?.user;
 
   // 1. Access Control

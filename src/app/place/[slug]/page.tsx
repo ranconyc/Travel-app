@@ -6,8 +6,7 @@ import { Place } from "@/domain/place/place.schema";
 interface ExtendedPlace extends Place {
   city: { name: string; country: { name: string } };
 }
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/auth/get-current-user";
 import { getPlaceBySlug } from "@/lib/db/place.repo";
 import Link from "next/link";
 import HeaderWrapper from "@/app/components/common/Header";
@@ -90,8 +89,12 @@ const TravelerCard = ({ session }: { session: any }) => {
   );
 };
 
-export default async function ActivityPage({ params }: any) {
-  const session = await getServerSession(authOptions);
+export default async function ActivityPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const session = await getSession();
 
   const { slug } = await params;
   console.log("slug", slug);

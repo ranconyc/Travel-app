@@ -2,44 +2,14 @@
 import * as z from "zod";
 
 // 1. Define allowed platforms based on our JSON metadata
-const PlatformEnum = z.enum([
-  "whatsapp",
-  "facebook",
-  "instagram",
-  "tiktok",
-  "reddit",
-  "linkedin",
-]);
+import {
+  GenderEnum,
+  PlatformEnum,
+  socialLinkSchema as SocialLinkSchema,
+} from "@/domain/common.schema";
 
-// 2. Define a single social link object with strict validation
-const SocialLinkSchema = z
-  .object({
-    platform: PlatformEnum,
-    // Ensure the string is a valid URL and provide a custom error in Hebrew
-    url: z.string().url({ message: "Invalid URL format" }),
-  })
-  .refine(
-    (data) => {
-      // Advanced validation: check if the URL contains the platform name
-      // This prevents putting a TikTok link into a Facebook field
-      const domainMap: Record<string, string> = {
-        whatsapp: "wa.me",
-        facebook: "facebook.com",
-        instagram: "instagram.com",
-        tiktok: "tiktok.com",
-        reddit: "reddit.com",
-        linkedin: "linkedin.com",
-      };
-
-      return data.url.includes(domainMap[data.platform]);
-    },
-    {
-      message: "URL does not match the selected platform",
-      path: ["url"], // Highlights the 'url' field in form errors
-    },
-  );
-
-// 3. Define the main schema for a User or Place in the Database
+// SocialLinkSchema is now imported and aliased if needed, or we just use it directly.
+// The array schema remains here as it's specific to this domain.
 export const UserSocialLinksSchema = z.array(SocialLinkSchema);
 
 // 4. Extract the TypeScript type from the schema for frontend use
@@ -50,7 +20,7 @@ const languageSchema = z.string().min(2);
  * Gender enum used in the profile.
  * Adjust values if your Prisma enum uses different casing.
  */
-import { GenderEnum } from "@/domain/user/user.schema";
+// GenderEnum now imported from common.schema via the block above
 
 /**
  * Gender enum used in the profile.

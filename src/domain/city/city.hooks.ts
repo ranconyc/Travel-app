@@ -14,7 +14,7 @@ export function useGenerateCity() {
     { cityName: string; countryCode?: string }
   >({
     mutationFn: async ({ cityName, countryCode }) => {
-      return await generateCityAction(cityName, countryCode);
+      return await generateCityAction({ cityName, countryCode });
     },
     onSuccess: (res) => {
       if (res.success) {

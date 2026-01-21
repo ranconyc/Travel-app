@@ -6,7 +6,7 @@ export function useCities() {
   return useQuery({
     queryKey: ["cities"],
     queryFn: async () => {
-      const res = await getAllCitiesAction();
+      const res = await getAllCitiesAction(undefined);
       if (res.success) {
         return res.data;
       }
