@@ -203,11 +203,8 @@ model Country {
   name          String
   officialName  String?
   imageHeroUrl  String?
-  unMember Boolean?
-  independent Boolean?
-
-
-
+  isUnMember Boolean?
+  isIndependent Boolean?
 
   population    Int?
   areaKm2       Float?
@@ -265,6 +262,15 @@ model Country {
   // Structure: { official: string[], spoken: string[], nativeName: string, codes: string[] }
   languages     Json?
   commonPhrases Json?    // Array: [{ label: "Hello", category: "Basics", audioUrl: "..." }]
+
+  visaInfo Json? /* {
+  requiresVisa: boolean,
+  type: "Visa Free" | "e-Visa" | "Visa on Arrival" | "Embassy Visa",
+  durationDays: 30,
+  notes: "Israeli passport holders...",
+  processingTime: "Instant" | "3-5 days",
+  cost: { amount: 0, currency: "USD" }
+} */
 
 
   // Geography & Relations

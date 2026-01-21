@@ -119,3 +119,64 @@ export function useRemoveFriend() {
     },
   });
 }
+
+export function useFriendshipAction({
+  profileUserId,
+  loggedUserId,
+  friendship,
+}: {
+  profileUserId: string;
+  loggedUserId?: string | null;
+  friendship: { status: string; requesterId: string } | null;
+}) {
+  const sendRequest = useSendFriendRequest();
+  const cancelRequest = useCancelFriendRequest();
+  const acceptRequest = useAcceptFriendRequest();
+  const removeFriend = useRemoveFriend();
+
+  const isLoading =
+    sendRequest.isPending ||
+    cancelRequest.isPending ||
+    acceptRequest.isPending ||
+    removeFriend.isPending;
+
+  const isSentByMe = friendship?.requesterId === loggedUserId;
+
+  const handleFriendshipAction = async () => {
+    if (!loggedUserId) return;
+
+    try {
+      if (friendship?.status === "PENDING") {
+        if (isSentByMe) {
+          await cancelRequest.mutateAsync({
+            targetUserId: profileUserId,
+            currentUserId: loggedUserId,
+          });
+        } else {
+          await acceptRequest.mutateAsync({
+            targetUserId: profileUserId,
+            currentUserId: loggedUserId,
+          });
+        }
+      } else if (friendship?.status === "ACCEPTED") {
+        await removeFriend.mutateAsync({
+          targetUserId: profileUserId,
+          currentUserId: loggedUserId,
+        });
+      } else {
+        await sendRequest.mutateAsync({
+          targetUserId: profileUserId,
+          currentUserId: loggedUserId,
+        });
+      }
+    } catch (error) {
+      console.error("Friendship action failed:", error);
+    }
+  };
+
+  return {
+    handleFriendshipAction,
+    isLoading,
+    isSentByMe,
+  };
+}

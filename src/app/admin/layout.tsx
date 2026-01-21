@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   ArrowLeft,
+  Database,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -30,6 +31,7 @@ const ADMIN_LINKS = [
     key: "destinations",
   },
   { href: "/admin/pages", label: "Pages", Icon: FileIcon, key: "pages" },
+  { href: "/admin/schema", label: "Schema", Icon: Database, key: "schema" },
   { href: "/admin/apis", label: "APIs", Icon: Server, key: "apis" },
   {
     href: "/admin/developer",

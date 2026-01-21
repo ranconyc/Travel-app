@@ -78,9 +78,9 @@ const ARRAY_FIELDS: Record<string, string[]> = {
 // Complex JSON fields that need structured inputs
 const JSON_FIELDS: Record<string, string[]> = {
   country: [
-    "currency",
+    "finance",
     "emergency",
-    "visaEntry",
+    "visaInfo",
     "languages",
     "commonPhrases",
     "utilities",
@@ -937,15 +937,13 @@ export default function DestinationEditorClient({
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {data.visaEntry ? (
+                        {data.visaInfo ? (
                           <CheckCircle size={12} className="text-green-500" />
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span
-                          className={!data.visaEntry ? "text-gray-500" : ""}
-                        >
-                          visaEntry
+                        <span className={!data.visaInfo ? "text-gray-500" : ""}>
+                          visaInfo
                         </span>
                       </div>
                     </div>

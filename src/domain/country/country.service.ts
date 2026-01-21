@@ -148,6 +148,7 @@ export async function createCountryFromName(countryName: string) {
   const countryRef = world.find(
     (c) => c.name.common.toLowerCase() === nameTrimmed.toLowerCase(),
   );
+  console.log("Country ref", countryRef);
   if (!countryRef) {
     throw new Error("Country not found in the world");
   }
@@ -191,7 +192,6 @@ export async function createCountryFromName(countryName: string) {
       : (Prisma.DbNull as any),
     region,
     subRegion,
-    capitalName: rest.capital?.[0] ?? null,
     logistics: {
       idd: rest.idd?.root ?? null,
       car: rest.car
@@ -244,17 +244,37 @@ export async function createCountryFromName(countryName: string) {
     },
     languages: rest.languages ?? null,
     commonPhrases: [],
+
+    // Meta flags for auto-created countries
+    autoCreated: true,
+    needsReview: true,
   };
 
-  // 4) Save to DB
+  // 4) Save to DB (without capitalId first)
   const created = await prisma.country.create({ data });
 
-  // 5) Auto-create Capital City if available
+  // 5) Auto-create Capital City if available, then link it back
   if (rest.capital?.[0]) {
     try {
       const { createCityFromName } = await import("@/domain/city/city.service");
       console.log(`Auto-generating capital city: ${rest.capital[0]}`);
-      await createCityFromName(rest.capital[0], code2);
+
+      const capitalCity = await createCityFromName(rest.capital[0], code2);
+      console.log("Capital city created:", capitalCity);
+
+      // Update the country to link to the capital city
+      if (capitalCity?.id) {
+        await prisma.country.update({
+          where: { id: created.id },
+          data: {
+            capitalId: capitalCity?.id,
+            capitalName: rest.capital?.[0],
+          },
+        });
+        console.log(
+          `✅ Linked capital city ${rest.capital[0]} to ${created.name}`,
+        );
+      }
     } catch (error) {
       console.error("Failed to auto-create capital city:", error);
     }

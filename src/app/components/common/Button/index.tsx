@@ -12,7 +12,8 @@ type ButtonVariant =
   | "back"
   | "teal"
   | "dark"
-  | "outline-white";
+  | "outline-white"
+  | "icon";
 
 type ButtonSize = "sm" | "md" | "lg";
 
@@ -55,7 +56,7 @@ export default function Button({
   }
 
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all active:scale-[0.97] cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none";
+    "inline-flex items-center justify-center gap-2 font-medium transition-all active:scale-[0.97] cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none";
 
   const sizeStyles = {
     sm: "px-3 h-9 text-base",
@@ -65,16 +66,17 @@ export default function Button({
 
   const variantStyles = {
     primary:
-      "bg-brand text-white hover:opacity-90 shadow-sm border-2 border-brand",
-    secondary: "bg-surface text-app-text hover:bg-brand/10",
+      "bg-brand text-white hover:opacity-90 shadow-sm border-2 border-brand rounded-md",
+    secondary: "bg-surface text-app-text hover:bg-brand/10 rounded-md",
     outline:
-      "border-2 border-brand text-brand hover:bg-brand/10 bg-transparent",
+      "border-2 border-brand text-brand hover:bg-brand/10 bg-transparent rounded-md",
     ghost: "text-secondary hover:bg-surface hover:text-app-text",
     teal: "bg-[#1A5F70] hover:bg-[#237082] text-white border border-[#2A7F90]",
     dark: "bg-gray-800 hover:bg-gray-700 text-white",
     "outline-white":
       "bg-transparent border border-white/20 hover:bg-white/10 text-white",
-    back: "", // Handled above
+    // back: "bg-secondary/50 text-white rounded-full hover:bg-secondary/10", // Handled above
+    icon: "bg-gray-800/50 text-white rounded-full p-4 hover:bg-secondary/10",
   };
 
   const combinedClasses = [

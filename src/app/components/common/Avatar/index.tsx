@@ -6,6 +6,8 @@ type AvatarProps = {
   size?: number; // size in pixels
   className?: string;
   style?: React.CSSProperties;
+  variant?: "circle" | "square";
+  border?: boolean;
 };
 
 // cleaner, more flexible avatar component
@@ -15,13 +17,23 @@ export function Avatar({
   size = 40, // default size
   className = "",
   style,
+  variant = "circle",
+  border = false,
   ...props
 }: AvatarProps) {
+  const borderRadius = variant === "circle" ? "9999px" : "12px";
+  const borderStyles = border ? "border-2 border-surface shadow-sm" : "";
+
   return (
     <div
       // inline size keeps flexibility (Tailwind can't generate dynamic px classes)
-      style={{ width: size, height: size, ...style }}
-      className={`relative inline-block rounded-full overflow-hidden bg-white ${className}`}
+      style={{
+        width: size,
+        height: size,
+        borderRadius,
+        ...style,
+      }}
+      className={`relative inline-block overflow-hidden bg-surface ${borderStyles} ${className}`}
       {...props}
     >
       <Image

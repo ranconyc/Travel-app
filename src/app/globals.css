@@ -120,3 +120,15 @@ body {
   /* filter: contrast(120%) brightness(90%); */
   /* mix-blend-mode: multiply; This makes the stamp "soak" into the background color */
 }
+
+@utility header-1 {
+  @apply text-xl font-bold capitalize text-app-text;
+}
+
+@utility header-2 {
+  @apply text-xs font-bold text-secondary uppercase;
+}
+
+@utility subheader {
+  @apply text-xs text-secondary capitalize;
+}

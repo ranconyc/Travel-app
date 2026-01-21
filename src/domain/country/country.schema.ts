@@ -137,11 +137,19 @@ export const CountrySchema = z.object({
     .optional()
     .nullable(),
 
-  visaEntry: z
+  visaInfo: z
     .object({
-      status: z.string(), // e.g. "Visa Free"
-      duration: z.string().optional(), // e.g. "60 Days"
+      requiresVisa: z.boolean(),
+      type: z.enum(["Visa Free", "e-Visa", "Visa on Arrival", "Embassy Visa"]),
+      durationDays: z.number(),
       notes: z.string().optional(),
+      processingTime: z.string().optional(), // e.g. "Instant" | "3-5 days"
+      cost: z
+        .object({
+          amount: z.number(),
+          currency: z.string().default("USD"),
+        })
+        .optional(),
     })
     .optional()
     .nullable(),

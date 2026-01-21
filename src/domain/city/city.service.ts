@@ -194,10 +194,13 @@ export async function geocodeCityFull(
     url.searchParams.set("limit", "1");
 
     const res = await fetch(url.toString());
+    console.log("locationiq geocode response:", res);
     if (!res.ok) return null;
 
     const data = await res.json();
     if (!Array.isArray(data) || !data.length) return null;
+
+    console.log("locationiq geocode data:", data);
 
     const item = data[0];
     const address = item.address || {};
