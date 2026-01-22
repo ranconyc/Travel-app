@@ -1,7 +1,5 @@
-import { PrismaClient, Gender } from "@prisma/client";
-import * as fs from "fs";
 import * as path from "path";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -40,46 +38,48 @@ async function main() {
     return;
   }
 
-  const firstNames = [
+  const maleNames = [
     "James",
-    "Emma",
     "Liam",
-    "Olivia",
     "Noah",
-    "Ava",
     "Lucas",
-    "Isabella",
     "Ethan",
-    "Sophia",
     "Mason",
-    "Mia",
     "Logan",
-    "Charlotte",
     "Caleb",
-    "Amelia",
     "Jack",
-    "Harper",
     "Aiden",
-    "Evelyn",
     "Mateo",
-    "Abigail",
     "Sebastian",
-    "Emily",
     "Kai",
-    "Luna",
     "Zane",
-    "Aria",
     "Leo",
-    "Maya",
     "Felix",
-    "Nora",
     "Jasper",
-    "Zara",
     "Hugo",
-    "Elena",
     "Milo",
-    "Sasha",
     "Arlo",
+  ];
+  const femaleNames = [
+    "Emma",
+    "Olivia",
+    "Ava",
+    "Isabella",
+    "Sophia",
+    "Mia",
+    "Charlotte",
+    "Amelia",
+    "Harper",
+    "Evelyn",
+    "Abigail",
+    "Emily",
+    "Luna",
+    "Aria",
+    "Maya",
+    "Nora",
+    "Zara",
+    "Elena",
+    "Sasha",
     "Clara",
   ];
   const lastNames = [
@@ -116,7 +116,7 @@ async function main() {
     "Walker",
     "Young",
     "Allen",
-    "King",
+    " King",
     "Wright",
     "Scott",
     "Torres",
@@ -127,12 +127,53 @@ async function main() {
 
   const genders: Gender[] = [Gender.MALE, Gender.FEMALE, Gender.NON_BINARY];
 
+  // Track unique portrait indices (0-99 available on randomuser.me)
+  const usedMen = new Set<number>();
+  const usedWomen = new Set<number>();
+
+  // Optional: Delete existing seeded users to start fresh
+  await prisma.user.deleteMany({
+    where: { email: { endsWith: "@example.com" } },
+  });
+  console.log("Cleared existing example users.");
+
   for (let i = 0; i < 50; i++) {
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const gender = genders[Math.floor(Math.random() * genders.length)];
+
+    let firstName = "";
+    if (gender === Gender.MALE) {
+      firstName = maleNames[Math.floor(Math.random() * maleNames.length)];
+    } else if (gender === Gender.FEMALE) {
+      firstName = femaleNames[Math.floor(Math.random() * femaleNames.length)];
+    } else {
+      firstName = [...maleNames, ...femaleNames][
+        Math.floor(Math.random() * (maleNames.length + femaleNames.length))
+      ];
+    }
+
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
     const name = `${firstName} ${lastName}`;
     const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${Math.floor(Math.random() * 1000)}@example.com`;
-    const gender = genders[Math.floor(Math.random() * genders.length)];
+
+    // --- GENDER SPECIFIC UNIQUE AVATAR ---
+    let avatarUrl = "";
+    if (gender === Gender.MALE) {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * 100);
+      } while (usedMen.has(idx));
+      usedMen.add(idx);
+      avatarUrl = `https://randomuser.me/api/portraits/men/${idx}.jpg`;
+    } else if (gender === Gender.FEMALE) {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * 100);
+      } while (usedWomen.has(idx));
+      usedWomen.add(idx);
+      avatarUrl = `https://randomuser.me/api/portraits/women/${idx}.jpg`;
+    } else {
+      avatarUrl = `https://i.pravatar.cc/300?u=${randomUUID()}`;
+    }
 
     // Random city & country
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
@@ -141,9 +182,6 @@ async function main() {
       .sort(() => 0.5 - Math.random())
       .slice(0, visitedCount)
       .map((c) => c.cca3);
-
-    const userId = uuidv4();
-    const avatarUrl = `https://i.pravatar.cc/300?u=${userId}`;
 
     // Persona
     const rhythm =
@@ -161,7 +199,7 @@ async function main() {
       .map((l: any) => l.name);
 
     // 3. Create User
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email,
         name,
@@ -198,7 +236,7 @@ async function main() {
       },
     });
 
-    console.log(`Created user ${i + 1}/50: ${name}`);
+    console.log(`Created user ${i + 1}/50: ${name} (${gender})`);
   }
 
   console.log("User seeding completed successfully!");
