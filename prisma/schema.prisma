@@ -212,6 +212,7 @@ model Country {
   borders       String[] // cca3 codes for "Nearby" features
   idd Json?
   tld Json?
+  translations Json?
 
   // MongoDB Geospatial Standard
   // Index this in DB: db.Country.createIndex({ "coords": "2dsphere" })
@@ -277,10 +278,11 @@ model Country {
   region        String?
   subRegion     String?
   capitalName   String?
-  capitalId     String?  @unique @db.ObjectId
+  capitalId     String?  @db.ObjectId
   capitalCity   City?    @relation("CountryCapital", fields: [capitalId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   
   // Relations
+  states        State[]
   cities        City[]
   places        Place[]
   media         Media[]
@@ -300,7 +302,9 @@ model Country {
 model City {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   cityId       String   @unique // "bangkok"
+  externalId   Int?     @unique // ID from countries+states+cities.json
   name         String
+
   countryRefId String?  @db.ObjectId
   country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
@@ -317,7 +321,9 @@ model City {
   media        Media[]
 
   // Meta
-  state         String?
+  stateName     String?  // Legacy or free text
+  stateId       String?  @db.ObjectId
+  state         State?   @relation(fields: [stateId], references: [id])
   district      String?
   population    Int?
   bestSeason    String?
@@ -339,7 +345,33 @@ model City {
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
 
-  capitalOf Country? @relation("CountryCapital")
+  capitalOf Country[] @relation("CountryCapital")
+
+  @@index([countryRefId])
+  @@index([stateId])
+}
+
+/**
+ * ------------------------- STATE / PROVINCE -------------------------
+ */
+model State {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  stateId      Int?     @unique // ID from countries+states+cities.json
+  name         String
+  native       String?
+  code         String?  // "BDS", "CA"
+  type         String?  // "province", "state", etc.
+  
+  countryRefId String   @db.ObjectId
+  country      Country  @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+
+  coords       Json?    // { type: "Point", coordinates: [lng, lat] }
+  translations Json?
+
+  cities       City[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([countryRefId])
 }

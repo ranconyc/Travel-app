@@ -1,10 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   sendFriendRequestAction,
   cancelFriendRequestAction,
   acceptFriendRequestAction,
   denyFriendRequestAction,
   removeFriendAction,
+  getFriendshipStatusAction,
+  getTravelPartnersAction,
 } from "@/domain/friendship/friendship.actions";
 import { Friendship } from "@prisma/client";
 
@@ -213,4 +215,50 @@ export function useFriendshipAction({
     isSentByMe,
     isIncoming,
   };
+}
+
+export type FriendshipStatus =
+  | "NONE"
+  | "PENDING"
+  | "ACCEPTED"
+  | "DENIED"
+  | "BLOCKED";
+
+export type FriendshipData = {
+  status: FriendshipStatus;
+  requesterId?: string;
+  addresseeId?: string;
+};
+
+export function useFriendshipStatus(userA: string, userB: string) {
+  return useQuery<FriendshipData>({
+    queryKey: ["friendship-status", userA, userB],
+
+    queryFn: async () => {
+      if (!userA || !userB) return { status: "NONE" };
+      const res = await getFriendshipStatusAction({ targetUserId: userB });
+      if (!res.success) {
+        throw new Error(res.error || "Failed to retrieve friendship status.");
+      }
+      if (!res.data) return { status: "NONE" };
+      return {
+        status: res.data.status as FriendshipStatus,
+        requesterId: res.data.requesterId,
+        addresseeId: res.data.addresseeId,
+      };
+    },
+
+    staleTime: 1000 * 10,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+  });
+}
+
+export function useTravelPartners(userId: string) {
+  return useQuery({
+    queryKey: ["travel-partners", userId],
+    queryFn: () => getTravelPartnersAction(undefined),
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
+  });
 }

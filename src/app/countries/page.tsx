@@ -3,13 +3,13 @@
 import { useState } from "react";
 import HeaderWrapper from "@/app/components/common/Header";
 import Input from "@/app/components/form/Input";
-import { useCountries } from "@/app/_hooks/useCountries";
+import { useCountries } from "@/domain/country/country.hooks";
 import Link from "next/link";
 import { Loader2, Search, Map } from "lucide-react";
 
 export default function CountriesPage() {
   const { data: countries, isLoading, isSuccess } = useCountries();
-  const typedCountries = countries as any[];
+  const typedCountries = (countries as any[]) || [];
   const [search, setSearch] = useState("");
 
   const filteredCountries = typedCountries?.filter(

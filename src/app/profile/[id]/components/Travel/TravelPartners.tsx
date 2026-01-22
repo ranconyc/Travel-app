@@ -1,12 +1,13 @@
 import AddSection from "@/app/components/common/AddSection";
 import { Avatar } from "@/app/components/common/Avatar";
 import { User } from "@/domain/user/user.schema";
-import Link from "next/link";
+import SectionHeader from "@/app/components/common/SectionHeader";
 
 export default function TravelPartners({ partner }: { partner: User | null }) {
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="header-2">Travel Partners</h2>
+      <SectionHeader title="Travel Partners" />
+
       {!partner ? (
         <AddSection
           title="Traveling without a partner?"

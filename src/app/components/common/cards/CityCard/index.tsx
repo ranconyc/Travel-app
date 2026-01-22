@@ -9,7 +9,7 @@ import {
 } from "@/app/_utils/geo";
 import BaseCard from "@/app/components/common/cards/BaseCard";
 import DistanceBadge from "@/app/components/common/DistanceBadge";
-import useStorageState from "@/app/_hooks/useStorageState";
+import useStorageState from "../../hooks/useStorageState";
 import { useLocationStore } from "@/store/locationStore";
 
 // Cache entry type
@@ -21,11 +21,11 @@ type CacheEntry = {
 // Generate a unique cache key for this city-location pair
 const getCacheKey = (
   cityId: string,
-  userLocation: { lat: number; lng: number } | null
+  userLocation: { lat: number; lng: number } | null,
 ) => {
   if (!userLocation) return null;
   const locationKey = `${userLocation.lat.toFixed(
-    2
+    2,
   )}_${userLocation.lng.toFixed(2)}`;
   return `distance_${cityId}_${locationKey}`;
 };
@@ -48,13 +48,13 @@ export default function CityCard({ city, userLocation, index }: CityCardProps) {
   // Memoize the cache key to avoid recalculating
   const cacheKey = useMemo(
     () => getCacheKey(city.cityId, effectiveLocation ?? null),
-    [city.cityId, effectiveLocation]
+    [city.cityId, effectiveLocation],
   );
 
   // Use the existing useStorageState hook for caching
   const [cachedEntry, setCachedEntry] = useStorageState<CacheEntry | null>(
     cacheKey || "",
-    null
+    null,
   );
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function CityCard({ city, userLocation, index }: CityCardProps) {
           effectiveLocation!.lat,
           effectiveLocation!.lng,
           city.coords!.coordinates[1],
-          city.coords!.coordinates[0]
+          city.coords!.coordinates[0],
         );
 
         // Round distance to prevent hydration mismatch between server and client

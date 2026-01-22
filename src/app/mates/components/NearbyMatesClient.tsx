@@ -96,7 +96,7 @@ export default function NearbyMatesClient({
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-secondary text-lg mt-1">
-              {loggedUser.currentCity?.name || "Bangkok"}
+              {loggedUser.currentCity?.name || "Worldwide"}
             </p>
             <h1 className="text-app-text text-4xl font-bold">Mates</h1>
           </div>

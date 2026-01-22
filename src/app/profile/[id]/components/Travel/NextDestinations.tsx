@@ -1,6 +1,6 @@
 import AddSection from "@/app/components/common/AddSection";
 import { MapPin } from "lucide-react";
-import Link from "next/link";
+import SectionHeader from "@/app/components/common/SectionHeader";
 
 interface NextDestination {
   id: string;
@@ -16,7 +16,7 @@ export default function NextDestinations({
 }) {
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="header-2">Next Destinations</h2>
+      <SectionHeader title="Next Destinations" />
 
       {nextDestinations.length > 0 ? (
         <div className="flex flex-col gap-2">

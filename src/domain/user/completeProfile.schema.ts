@@ -57,6 +57,8 @@ export const homeBaseLocationMetaSchema = z.object({
   lat: z.number(),
   lon: z.number(),
   city: z.string().nullable().optional(),
+  state: z.string().nullable().optional(),
+  stateCode: z.string().nullable().optional(),
   country: z.string().nullable().optional(),
   countryCode: z.string().min(2),
   displayName: z.string().nullable().optional(),

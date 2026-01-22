@@ -1,6 +1,6 @@
 "use client";
 
-import { useGeo } from "@/app/_hooks/useGeo";
+import { useGeo } from "@/domain/user/user.hooks";
 import { useUser } from "@/app/providers/UserProvider";
 import Button from "@/app/components/common/Button";
 

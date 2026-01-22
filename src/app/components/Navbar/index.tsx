@@ -21,7 +21,7 @@ export default function Navbar({ pathname }: { pathname: string }) {
 
   return (
     <nav className="fixed bottom-8 left-16 right-16">
-      <ul className="text-secondary flex items-center justify-around bg-surface px-4 py-2 rounded-full shadow-xl">
+      <ul className="p-4 bg-surface/40 backdrop-blur-sm text-secondary flex items-center justify-around rounded-full shadow-xl">
         <li className={pathname === "/" ? "text-brand" : ""}>
           <Link href="/">
             <Binoculars size={iconsSize} />

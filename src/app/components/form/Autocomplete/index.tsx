@@ -3,11 +3,11 @@
 import React, { useRef, useState, forwardRef } from "react";
 import ErrorMessage from "@/app/components/form/ErrorMessage";
 import { highlightMatch } from "@/app/components/form/Autocomplete/highlightMatch";
-import { useAutocompleteValue } from "@/app/_hooks/autocomplete/useAutocompleteValue";
-import { useAutocompleteKeyboardNavigation } from "@/app/_hooks/autocomplete/useAutocompleteKeyboard";
-import { useClickOutside } from "@/app/_hooks/useClickOutside";
-import { useAutocompleteRemote } from "@/app/_hooks/autocomplete/useAutocompleteRemote";
-import { useAutocompleteOptions } from "@/app/_hooks/autocomplete/useAutocompleteOptions";
+import { useAutocompleteValue } from "./hooks/useAutocompleteValue";
+import { useAutocompleteKeyboardNavigation } from "./hooks/useAutocompleteKeyboard";
+import { useClickOutside } from "../../common/hooks/useClickOutside";
+import { useAutocompleteRemote } from "./hooks/useAutocompleteRemote";
+import { useAutocompleteOptions } from "./hooks/useAutocompleteOptions";
 import Button from "@/app/components/common/Button";
 import { X } from "lucide-react";
 

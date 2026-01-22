@@ -3,9 +3,8 @@
 import { useState } from "react";
 import HeaderWrapper from "@/app/components/common/Header";
 import Input from "@/app/components/form/Input";
-import { useCities } from "@/app/_hooks/useCities";
+import { useCities } from "@/domain/city/city.hooks";
 import Link from "next/link";
-import { City } from "@/domain/city/city.schema";
 import { Loader2, Search, MapPin } from "lucide-react";
 
 export default function CitiesPage() {

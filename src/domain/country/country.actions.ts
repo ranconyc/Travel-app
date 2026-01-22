@@ -3,11 +3,11 @@
 import { z } from "zod";
 import { createAdminAction, createPublicAction } from "@/lib/safe-action";
 import {
-  getAllCountries,
-  updateCountry,
-  deleteCountry,
-} from "@/lib/db/country.repo";
-import { createCountryFromName } from "@/domain/country/country.service";
+  createCountryFromName,
+  handleUpdateCountry,
+  handleDeleteCountry,
+  handleGetAllCountries,
+} from "@/domain/country/country.service";
 import { CountryUpdateSchema } from "@/domain/country/country.schema";
 
 export type GenerateCountryResult = {
@@ -30,7 +30,7 @@ export const generateCountryAction = createAdminAction(
 );
 
 export const getAllCountriesAction = createPublicAction(z.any(), async () => {
-  return await getAllCountries();
+  return await handleGetAllCountries();
 });
 
 export const updateCountryAction = createAdminAction(
@@ -39,13 +39,13 @@ export const updateCountryAction = createAdminAction(
     data: CountryUpdateSchema,
   }),
   async ({ id, data }) => {
-    return await updateCountry(id, data);
+    return await handleUpdateCountry(id, data);
   },
 );
 
 export const deleteCountryAction = createAdminAction(
   z.object({ id: z.string() }),
   async ({ id }) => {
-    await deleteCountry(id);
+    await handleDeleteCountry(id);
   },
 );

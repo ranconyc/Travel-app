@@ -15,6 +15,8 @@ type TravelHistoryItem = {
   isCurrent: boolean;
 };
 
+import SectionHeader from "@/app/components/common/SectionHeader";
+import HorizontalList from "@/app/components/common/HorizontalList";
 import PassportStamp from "@/app/components/common/PassportStamp";
 import Link from "next/link";
 import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
@@ -80,11 +82,12 @@ export default function TravelHistory({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between items-center">
-        <h2 className="header-2">Travel History</h2>
-        <p className="subheader">{visits.length} places</p>
-      </div>
-      <div className="p-8 flex items-center gap-8 overflow-x-scroll no-scrollbar">
+      <SectionHeader
+        title="Travel History"
+        linkText={`${visits.length} places`}
+        href={isMyProfile ? "/profile/travelc?content=europe" : undefined}
+      />
+      <HorizontalList className="p-8 items-center h-40">
         {visits.length === 0 && isMyProfile ? (
           <AddSection
             title="Start adding your travel history"
@@ -108,7 +111,7 @@ export default function TravelHistory({
               : `/cities/${item.cityId}`;
 
             return (
-              <Link href={link} key={item.id} className="relative">
+              <Link href={link} key={item.id} className="relative shrink-0">
                 <PassportStamp
                   city={item.cityName}
                   country={item.countryName}
@@ -126,13 +129,13 @@ export default function TravelHistory({
           })
         )}
         {isMyProfile && visits.length > 0 && (
-          <Link href="/profile/travelc?content=europe">
+          <Link href="/profile/travelc?content=europe" className="shrink-0">
             <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
               <Plus className="text-secondary" />
             </div>
           </Link>
         )}
-      </div>
+      </HorizontalList>
     </div>
   );
 }

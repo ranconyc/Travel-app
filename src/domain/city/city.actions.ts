@@ -3,20 +3,19 @@
 import { z } from "zod";
 import { createAdminAction, createPublicAction } from "@/lib/safe-action";
 import {
-  getAllCities,
-  updateCity,
-  deleteCity,
-} from "@/lib/db/cityLocation.repo";
-import {
   findOrCreateCity,
   ensureCountryAndCityFromLocation,
   findNearestCityFromCoords,
   createCityFromName,
+  handleUpdateCity,
+  handleDeleteCity,
+  handleGetAllCities,
 } from "@/domain/city/city.service";
 import { HomeBaseLocationMeta } from "@/domain/user/completeProfile.schema";
 import { CityUpdateSchema } from "@/domain/city/city.schema";
+
 export const getAllCitiesAction = createPublicAction(z.any(), async () => {
-  const cities = await getAllCities();
+  const cities = await handleGetAllCities();
   // Map to ensure relation arrays exist as per City schema
   return (cities || []).map((c) => ({
     ...c,
@@ -91,13 +90,13 @@ export const updateCityAction = createAdminAction(
     data: CityUpdateSchema,
   }),
   async ({ id, data }) => {
-    return await updateCity(id, data);
+    return await handleUpdateCity(id, data);
   },
 );
 
 export const deleteCityAction = createAdminAction(
   z.object({ id: z.string() }),
   async ({ id }) => {
-    await deleteCity(id);
+    await handleDeleteCity(id);
   },
 );

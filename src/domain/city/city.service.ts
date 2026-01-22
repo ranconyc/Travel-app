@@ -5,6 +5,8 @@ import {
   findCityByBBox,
   findNearestCity,
   makeCityId,
+  updateCity,
+  deleteCity,
 } from "@/lib/db/cityLocation.repo";
 
 // reverse geocode a given point to a city
@@ -52,6 +54,10 @@ export async function reverseGeocodeLocationIQ(
 
     return {
       city,
+      state: address.state || null,
+      stateCode: address.state_code
+        ? String(address.state_code).toUpperCase()
+        : null,
       countryCode,
       label: city && countryCode ? `${city}, ${countryCode}` : (city ?? null),
       boundingBox: data.boundingbox
@@ -143,6 +149,8 @@ export async function findNearestCityFromCoords(
         lat,
         lng,
         external.boundingBox,
+        external.state,
+        external.stateCode,
       );
 
       return {
@@ -228,6 +236,10 @@ export async function geocodeCityFull(
           ] as [number, number, number, number])
         : undefined,
       name: foundCity,
+      state: address.state || null,
+      stateCode: address.state_code
+        ? String(address.state_code).toUpperCase()
+        : null,
       countryCode: foundCountry,
       displayName: item.display_name,
     };
@@ -243,10 +255,14 @@ export async function createCityFromAPI(
   lat: number,
   lng: number,
   boundingbox?: [number, number, number, number],
+  state?: string | null,
+  stateCode?: string | null,
 ) {
   const meta = {
     city: cityName,
     displayName: cityName,
+    state: state || null,
+    stateCode: stateCode || null,
     country: countryCode,
     countryCode,
     lat,
@@ -274,6 +290,8 @@ export async function createCityFromName(
     geo.lat,
     geo.lng,
     geo.boundingbox,
+    (geo as any).state,
+    (geo as any).stateCode,
   );
 }
 
@@ -359,11 +377,35 @@ export async function ensureCountryAndCityFromLocation(
         }
       : null;
 
+    // --- HANDLE STATE ---
+    let stateRefId: string | undefined = undefined;
+    if (meta.state || meta.stateCode) {
+      const stateIdString =
+        `${countryCode2}-${meta.stateCode || meta.state || "unknown"}`.toLowerCase();
+      const state = await prisma.state.upsert({
+        where: {
+          stateId: parseInt(stateIdString.replace(/[^0-9]/g, "")) || undefined,
+        }, // Fallback to unique check by other fields if possible
+        // MongoDB doesn't have an easy way to combine unique fields like this without a composite key
+        // So we'll try to find it first or just use a generated string if we had one.
+        // Actually, let's just find first and then create if missing for simplicity since State doesn't have a natural unique string ID yet.
+        update: {},
+        create: {
+          name: meta.state || meta.stateCode || "Unknown State",
+          code: meta.stateCode || null,
+          countryRefId: country.id,
+        },
+      });
+      stateRefId = state.id;
+    }
+
     const city = await prisma.city.upsert({
       where: { cityId },
       update: {
         name: cityName,
         countryRefId: country.id,
+        stateId: stateRefId,
+        stateName: meta.state,
         coords: coordsJson,
         boundingBox: boundingBoxJson,
         radiusKm,
@@ -374,6 +416,8 @@ export async function ensureCountryAndCityFromLocation(
         cityId,
         name: cityName,
         countryRefId: country.id,
+        stateId: stateRefId,
+        stateName: meta.state,
         coords: coordsJson,
         boundingBox: boundingBoxJson,
         radiusKm,
@@ -391,4 +435,16 @@ export async function ensureCountryAndCityFromLocation(
       }`,
     );
   }
+}
+
+export async function handleUpdateCity(id: string, data: any) {
+  return await updateCity(id, data);
+}
+
+export async function handleDeleteCity(id: string) {
+  return await deleteCity(id);
+}
+export async function handleGetAllCities() {
+  const { getAllCities } = await import("@/lib/db/cityLocation.repo");
+  return await getAllCities();
 }

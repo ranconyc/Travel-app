@@ -1,8 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   generateCountryAction,
+  getAllCountriesAction,
   GenerateCountryResult,
 } from "@/domain/country/country.actions";
+import { Country } from "@/domain/country/country.schema";
 import { ActionResponse } from "@/types/actions";
 
 export function useGenerateCountry() {
@@ -31,5 +33,19 @@ export function useGenerateCountry() {
     onError: (err) => {
       console.error(err.message);
     },
+  });
+}
+
+export function useCountries<T = Country[]>() {
+  return useQuery({
+    queryKey: ["countries"],
+    queryFn: async () => {
+      const result = await getAllCountriesAction(undefined);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data as T;
+    },
+    staleTime: 1000 * 60 * 60, // 1 hour
   });
 }

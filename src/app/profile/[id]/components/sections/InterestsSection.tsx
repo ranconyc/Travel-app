@@ -2,7 +2,7 @@
 
 import AddSection from "@/app/components/common/AddSection";
 import InterestsList from "../InterestsList";
-import Link from "next/link";
+import SectionHeader from "@/app/components/common/SectionHeader";
 import { useIsMyProfile } from "../../store/useProfileStore";
 
 export function InterestsSection({ interests }: { interests: string[] }) {
@@ -10,17 +10,16 @@ export function InterestsSection({ interests }: { interests: string[] }) {
   if (!isMyProfile && interests.length === 0) return null;
   return (
     <section>
-      <div className="w-full mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-black">Interests</h2>
-        {isMyProfile && interests.length > 0 && (
-          <Link
-            href="/profile/persona?step=3"
-            className="text-xs font-bold text-brand hover:underline"
-          >
-            Edit interests
-          </Link>
-        )}
-      </div>
+      <SectionHeader
+        title="Interests"
+        href={
+          isMyProfile && interests.length > 0
+            ? "/profile/persona?step=3"
+            : undefined
+        }
+        linkText="Edit interests"
+      />
+
       {isMyProfile && interests.length === 0 ? (
         <AddSection
           title="Tell us what you love to do when you travel"

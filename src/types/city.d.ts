@@ -29,9 +29,10 @@ export type NearestCityResult = {
  */
 export type ReverseGeocodeResult = {
   city: string | null;
+  state?: string | null;
+  stateCode?: string | null;
   countryCode: string | null;
   label: string | null;
-  boundingbox?: [number, number, number, number]; // @deprecated use boundingBox
   boundingBox?: [number, number, number, number];
 };
 

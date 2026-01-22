@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   generateCityAction,
+  getAllCitiesAction,
   GenerateCityResult,
 } from "@/domain/city/city.actions";
 import { ActionResponse } from "@/types/actions";
@@ -25,6 +26,19 @@ export function useGenerateCity() {
           });
         }
       }
+    },
+  });
+}
+
+export function useCities() {
+  return useQuery({
+    queryKey: ["cities"],
+    queryFn: async () => {
+      const res = await getAllCitiesAction(undefined);
+      if (res.success) {
+        return res.data;
+      }
+      throw new Error(res.error);
     },
   });
 }

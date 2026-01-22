@@ -7,7 +7,7 @@ import { User } from "@/domain/user/user.schema";
 import { Footer } from "./Footer";
 import StoreInitializer from "./components/StoreInitializer";
 import ProfileModal from "./components/modal/ProfileModal";
-import QRCodeModal from "./components/modal/QRCodeModal";
+import QRCodeModal from "./components/compatibility/QRCodeModal";
 
 export default async function ProfileLayout({
   children,

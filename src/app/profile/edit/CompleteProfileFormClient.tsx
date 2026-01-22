@@ -18,8 +18,8 @@ import LanguagesSectionShell from "@/app/profile/edit/sections/LanguagesSection/
 import BirthdaySectionShell from "@/app/profile/edit/sections/BirthdaySection/BirthdaySectionShell";
 import AvatarSectionShell from "@/app/profile/edit/sections/AvatarSection/AvatarSectionShell";
 
-import { useProfileDraft } from "@/app/_hooks/useProfileDraft";
-import type { User as DomainUser, User } from "@/domain/user/user.schema";
+import { useProfileDraft } from "@/domain/user/user.hooks";
+import type { User } from "@/domain/user/user.schema";
 import type { Gender } from "@/domain/user/user.schema";
 import Button from "@/app/components/common/Button";
 import SocialSection from "./sections/SocialSection";

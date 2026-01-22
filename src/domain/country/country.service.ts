@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { Prisma } from "@prisma/client";
 import world from "@/data/world.json";
+import { updateCountry, deleteCountry } from "@/lib/db/country.repo";
 
 type RestCountry = {
   name: {
@@ -281,4 +282,16 @@ export async function createCountryFromName(countryName: string) {
   }
 
   return { country: created, created: true };
+}
+
+export async function handleUpdateCountry(id: string, data: any) {
+  return await updateCountry(id, data);
+}
+
+export async function handleDeleteCountry(id: string) {
+  return await deleteCountry(id);
+}
+export async function handleGetAllCountries() {
+  const { getAllCountries } = await import("@/lib/db/country.repo");
+  return await getAllCountries();
 }
