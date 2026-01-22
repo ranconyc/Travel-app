@@ -1,11 +1,16 @@
 import { prisma } from "@/lib/db/prisma";
-import cities from "../src/data/cities.json" assert { type: "json" };
+import fs from "fs";
+import path from "path";
 
 async function main() {
   console.log("🌱 Starting database seed...");
 
   // Seed cities
   console.log("📚 Seeding cities...");
+  
+  const citiesPath = path.join(process.cwd(), "data", "cities.json");
+  const cities = JSON.parse(fs.readFileSync(citiesPath, "utf-8"));
+  
   let citiesCount = 0;
 
   for (const city of cities) {
