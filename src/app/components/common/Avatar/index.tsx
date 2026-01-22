@@ -38,10 +38,7 @@ export function Avatar({
     >
       <Image
         // if no image was provided, use fallback
-        src={
-          image ||
-          "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
-        }
+        src={image || "/public/placeholder-avatar.png"}
         alt={`${name} profile`}
         fill
         className="object-cover"
