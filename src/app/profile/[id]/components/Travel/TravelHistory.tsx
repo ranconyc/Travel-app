@@ -125,7 +125,7 @@ export default function TravelHistory({
             );
           })
         )}
-        {isMyProfile && (
+        {isMyProfile && visits.length > 0 && (
           <Link href="/profile/travelc?content=europe">
             <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
               <Plus className="text-secondary" />
