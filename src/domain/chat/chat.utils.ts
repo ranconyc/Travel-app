@@ -21,7 +21,7 @@ export function getChatDisplayName(
       };
     }>;
   },
-  currentUserId: string
+  currentUserId: string,
 ): string {
   if (chat.isGroup) {
     return chat.groupName || "Group Chat";
@@ -59,7 +59,7 @@ export function getChatDisplayImage(
       };
     }>;
   },
-  currentUserId: string
+  currentUserId: string,
 ): string | null {
   if (chat.isGroup) {
     return chat.groupImage;
@@ -68,7 +68,7 @@ export function getChatDisplayImage(
   // For 1-on-1, get the other participant's image
   const otherMember = chat.members.find((m) => m.user.id !== currentUserId);
   const avatarMedia = otherMember?.user.media?.find(
-    (m) => m.category === "AVATAR"
+    (m) => m.category === "AVATAR",
   );
   return avatarMedia?.url || otherMember?.user.avatarUrl || null;
 }
@@ -78,7 +78,7 @@ export function getChatDisplayImage(
  */
 export function getOtherParticipant<T extends { user: { id: string } }>(
   chatMembers: T[],
-  currentUserId: string
+  currentUserId: string,
 ): T | undefined {
   return chatMembers.find((m) => m.user.id !== currentUserId);
 }
@@ -87,7 +87,7 @@ export function getOtherParticipant<T extends { user: { id: string } }>(
  * Calculate unread message count
  */
 export function getUnreadCount(
-  messages: Array<{ id: string }> | undefined
+  messages: Array<{ id: string }> | undefined,
 ): number {
   return messages?.length || 0;
 }
@@ -102,7 +102,10 @@ export function formatMessageTime(date: Date | string): string {
   const messageDate = typeof date === "string" ? new Date(date) : date;
 
   if (isToday(messageDate)) {
-    return formatDistanceToNow(messageDate, { addSuffix: true });
+    return formatDistanceToNow(messageDate, { addSuffix: true }).replace(
+      "minutes",
+      "min",
+    );
   }
 
   if (isYesterday(messageDate)) {

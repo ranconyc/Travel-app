@@ -9,7 +9,7 @@ export default function ConditionalNavbar() {
   // Hide navbar on individual chat pages (/chat/[id])
   const showNavbar =
     pathname !== "/signin" &&
-    pathname !== "/chat/" &&
+    !pathname?.startsWith("/chats/") &&
     pathname !== "/profile/edit" &&
     pathname !== "/profile/reavel" &&
     pathname !== "/profile/travelc" &&
@@ -24,5 +24,5 @@ export default function ConditionalNavbar() {
     return null;
   }
 
-  return <Navbar />;
+  return <Navbar pathname={pathname} />;
 }

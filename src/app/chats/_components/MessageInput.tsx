@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useWebSocket } from "@/lib/socket/useWebSocket";
 import { useUser } from "@/app/providers/UserProvider";
 import type { MessageInputProps } from "@/types/chat";
+import { Loader2, Send } from "lucide-react";
 
 export function MessageInput({ chatId }: MessageInputProps) {
   const [content, setContent] = useState("");
@@ -66,31 +67,39 @@ export function MessageInput({ chatId }: MessageInputProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-t border-gray-200 p-4 fixed bottom-0 left-0 right-0 z-50 bg-white"
+      className="m-4 rounded-full border border-gray-200 p-2 fixed bottom-4 left-0 right-0 z-50 bg-app-bg 
+             focus-within:border-brand focus-within:shadow-lg transition-all duration-200"
     >
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-center items-center">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type a message..."
-          className="flex-1 resize-none rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 resize-none rounded-full px-4 py-2 focus:outline-none bg-transparent"
           rows={1}
           disabled={isSending}
         />
         <button
           type="submit"
           disabled={!content.trim() || isSending}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="p-4 rounded-full bg-brand text-white shadow-lg hover:bg-brand/80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
         >
-          {isSending ? "Sending..." : "Send"}
+          {isSending ? (
+            <Loader2 className="animate-spin" size={20} />
+          ) : (
+            <Send size={20} />
+          )}
         </button>
       </div>
-      <p className="text-xs text-gray-500 mt-1">
-        Press Enter to send, Shift+Enter for new line
-        {isConnected && " • 🟢 Real-time"}
-        {!isConnected && " • 🔴 Offline mode"}
-      </p>
     </form>
   );
+}
+
+{
+  /* <p className="text-xs text-gray-500 mt-1">
+  Press Enter to send, Shift+Enter for new line
+  {isConnected && " • 🟢 Real-time"}
+  {!isConnected && " • 🔴 Offline mode"}
+</p> */
 }
