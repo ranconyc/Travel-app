@@ -2,7 +2,6 @@
 
 import Modal from "@/app/components/common/Modal";
 import {
-  useIsInterestsModalOpen,
   useIsProfileModalOpen,
   useLoggedUser,
   useProfileActions,
