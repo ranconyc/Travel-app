@@ -7,6 +7,7 @@ import { User } from "@/domain/user/user.schema";
 import { Footer } from "./Footer";
 import StoreInitializer from "./components/StoreInitializer";
 import ProfileModal from "./components/modal/ProfileModal";
+import QRCodeModal from "./components/modal/QRCodeModal";
 
 export default async function ProfileLayout({
   children,
@@ -40,6 +41,7 @@ export default async function ProfileLayout({
     ? (friendshipResult.data as {
         status: string;
         requesterId: string;
+        addresseeId: string;
       } | null)
     : null;
 
@@ -54,6 +56,7 @@ export default async function ProfileLayout({
         friendship={friendship}
       />
       <ProfileModal />
+      <QRCodeModal />
       <div className="min-h-screen bg-app-bg text-app-fg pb-20">
         <ProfileHeader />
         {children}

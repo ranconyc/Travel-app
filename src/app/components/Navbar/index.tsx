@@ -13,15 +13,15 @@ import { NotificationBadge } from "@/app/components/Navbar/NotificationBadge";
 import { Avatar } from "@/app/components/common/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
 
-const iconsSize = 24;
+const iconsSize = 26;
 
 export default function Navbar({ pathname }: { pathname: string }) {
   const user = useUser();
   const unreadCount = useUnreadCount();
 
   return (
-    <nav className="fixed bottom-8 left-20 right-20">
-      <ul className="text-secondary flex items-center justify-around bg-surface px-2 py-4 rounded-full shadow-xl">
+    <nav className="fixed bottom-8 left-16 right-16">
+      <ul className="text-secondary flex items-center justify-around bg-surface px-4 py-2 rounded-full shadow-xl">
         <li className={pathname === "/" ? "text-brand" : ""}>
           <Link href="/">
             <Binoculars size={iconsSize} />
@@ -42,7 +42,7 @@ export default function Navbar({ pathname }: { pathname: string }) {
           className={
             pathname === `/profile/${user?.id}`
               ? "border-2 border-brand rounded-full"
-              : ""
+              : "border-2 border-app-bg rounded-full"
           }
         >
           <Link href={`/profile/${user?.id}`} className="p-0 flex">
@@ -55,8 +55,8 @@ export default function Navbar({ pathname }: { pathname: string }) {
           </Link>
         </li>
         {user?.role === "ADMIN" && (
-          <li className={pathname === "/admin" ? "text-brand" : ""}>
-            <Link href="/admin">
+          <li>
+            <Link href="/admin/dashboard">
               <TowerControl size={iconsSize} />
             </Link>
           </li>

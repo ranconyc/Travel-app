@@ -127,20 +127,60 @@ export function useFriendshipAction({
 }: {
   profileUserId: string;
   loggedUserId?: string | null;
-  friendship: { status: string; requesterId: string } | null;
+  friendship: {
+    status: string;
+    requesterId: string;
+    addresseeId: string;
+  } | null;
 }) {
   const sendRequest = useSendFriendRequest();
   const cancelRequest = useCancelFriendRequest();
   const acceptRequest = useAcceptFriendRequest();
+  const denyRequest = useDenyFriendRequest();
   const removeFriend = useRemoveFriend();
 
   const isLoading =
     sendRequest.isPending ||
     cancelRequest.isPending ||
     acceptRequest.isPending ||
+    denyRequest.isPending ||
     removeFriend.isPending;
 
-  const isSentByMe = friendship?.requesterId === loggedUserId;
+  const isSentByMe = !!loggedUserId && friendship?.requesterId === loggedUserId;
+  const isIncoming =
+    friendship?.status === "PENDING" &&
+    !!loggedUserId &&
+    friendship?.addresseeId === loggedUserId;
+
+  const handleAdd = () =>
+    sendRequest.mutateAsync({
+      targetUserId: profileUserId,
+      currentUserId: loggedUserId!,
+    });
+
+  const handleCancel = () =>
+    cancelRequest.mutateAsync({
+      targetUserId: profileUserId,
+      currentUserId: loggedUserId!,
+    });
+
+  const handleAccept = () =>
+    acceptRequest.mutateAsync({
+      targetUserId: profileUserId,
+      currentUserId: loggedUserId!,
+    });
+
+  const handleDeny = () =>
+    denyRequest.mutateAsync({
+      targetUserId: profileUserId,
+      currentUserId: loggedUserId!,
+    });
+
+  const handleRemove = () =>
+    removeFriend.mutateAsync({
+      targetUserId: profileUserId,
+      currentUserId: loggedUserId!,
+    });
 
   const handleFriendshipAction = async () => {
     if (!loggedUserId) return;
@@ -148,26 +188,14 @@ export function useFriendshipAction({
     try {
       if (friendship?.status === "PENDING") {
         if (isSentByMe) {
-          await cancelRequest.mutateAsync({
-            targetUserId: profileUserId,
-            currentUserId: loggedUserId,
-          });
+          await handleCancel();
         } else {
-          await acceptRequest.mutateAsync({
-            targetUserId: profileUserId,
-            currentUserId: loggedUserId,
-          });
+          await handleAccept();
         }
       } else if (friendship?.status === "ACCEPTED") {
-        await removeFriend.mutateAsync({
-          targetUserId: profileUserId,
-          currentUserId: loggedUserId,
-        });
+        await handleRemove();
       } else {
-        await sendRequest.mutateAsync({
-          targetUserId: profileUserId,
-          currentUserId: loggedUserId,
-        });
+        await handleAdd();
       }
     } catch (error) {
       console.error("Friendship action failed:", error);
@@ -176,7 +204,13 @@ export function useFriendshipAction({
 
   return {
     handleFriendshipAction,
+    handleAccept,
+    handleDeny,
+    handleCancel,
+    handleAdd,
+    handleRemove,
     isLoading,
     isSentByMe,
+    isIncoming,
   };
 }

@@ -8,11 +8,9 @@ import {
   useProfileUser,
 } from "../../store/useProfileStore";
 import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
-import { Avatar } from "@/app/components/common/Avatar";
-import { MatchResult } from "@/domain/match/match.schema";
-import MatchSummary from "./MatchSummary";
-import MatchBreakdown from "./MatchBreakdown";
-import MatchAvatar from "./MatchAvatar";
+import MatchSummary from "../compatibility/MatchSummary";
+import MatchBreakdown from "../compatibility/MatchBreakdown";
+import MatchAvatar from "../compatibility/MatchAvatar";
 
 export default function ProfileModal() {
   const { setProfileModalOpen } = useProfileActions();

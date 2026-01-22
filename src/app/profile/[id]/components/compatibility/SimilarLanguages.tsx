@@ -1,5 +1,5 @@
 import formatLanguage from "@/app/_utils/formatLanguage";
-import BreakdownItem from "./BreakdownItem";
+import BreakdownItem from "../compatibility/BreakdownItem";
 
 export default function SimilarLanguages({
   languages,

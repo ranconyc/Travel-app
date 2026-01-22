@@ -6,6 +6,7 @@ import { Users, Globe2, LanguagesIcon } from "lucide-react";
 import { StatItem } from "@/domain/common.schema";
 import Stats from "@/app/components/common/Stats";
 import { InterestsSection } from "./components/sections/InterestsSection";
+import { getFriends } from "@/lib/db/friendship.repo";
 
 export default async function ProfilePage({
   params,
@@ -17,15 +18,10 @@ export default async function ProfilePage({
 
   if (!profileUser) return null; // Handled by layout, but for TS safety
 
-  const friendRequests = await getFriendRequestsAction(id);
-  const requests = friendRequests.success ? friendRequests.data : [];
+  const friends = await getFriends(id);
 
   // Calculate stats
   const visitedCountriesCodes = profileUser.visitedCountries || [];
-
-  const ApprovedRequestsCount = requests.filter(
-    (r) => r.status === FriendStatus.ACCEPTED,
-  ).length;
 
   const stats: StatItem[] = [
     {
@@ -34,7 +30,7 @@ export default async function ProfilePage({
       icon: Globe2,
     },
     {
-      value: ApprovedRequestsCount,
+      value: friends.length,
       label: "Friendship",
       icon: Users,
     },

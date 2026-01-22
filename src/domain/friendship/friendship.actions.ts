@@ -71,6 +71,7 @@ export const getFriendshipStatusAction = createSafeAction(
     return {
       status: friendship.status,
       requesterId: friendship.requesterId,
+      addresseeId: friendship.addresseeId,
     };
   },
 );

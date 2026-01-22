@@ -8,7 +8,11 @@ interface StoreInitializerProps {
   profileUser: User;
   loggedUser: User | null;
   isMyProfile: boolean;
-  friendship: { status: string; requesterId: string } | null;
+  friendship: {
+    status: string;
+    requesterId: string;
+    addresseeId: string;
+  } | null;
 }
 
 export default function StoreInitializer({

@@ -1,4 +1,4 @@
-import BreakdownItem from "./BreakdownItem";
+import BreakdownItem from "../compatibility/BreakdownItem";
 
 export default function SimilarPlaces({ places }: { places: string[] }) {
   if (!places || places.length === 0) return null;

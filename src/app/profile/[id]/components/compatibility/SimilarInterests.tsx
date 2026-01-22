@@ -1,5 +1,5 @@
 import InterestsList from "../InterestsList";
-import BreakdownItem from "./BreakdownItem";
+import BreakdownItem from "../compatibility/BreakdownItem";
 
 export default function SimilarInterests({
   interests,

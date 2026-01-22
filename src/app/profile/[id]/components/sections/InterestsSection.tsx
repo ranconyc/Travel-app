@@ -7,6 +7,7 @@ import { useIsMyProfile } from "../../store/useProfileStore";
 
 export function InterestsSection({ interests }: { interests: string[] }) {
   const isMyProfile = useIsMyProfile();
+  if (!isMyProfile && interests.length === 0) return null;
   return (
     <section>
       <div className="w-full mb-4 flex items-center justify-between">

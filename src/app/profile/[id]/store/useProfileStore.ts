@@ -7,13 +7,19 @@ interface ProfileState {
   profileUser: User | null;
   loggedUser: User | null;
   isMyProfile: boolean;
-  friendship: { status: string; requesterId: string } | null;
+  friendship: {
+    status: string;
+    requesterId: string;
+    addresseeId: string;
+  } | null;
   initialized: boolean;
   isProfileModalOpen: boolean;
+  isQRCodeModalOpen: boolean;
   actions: {
     initialize: (data: Partial<ProfileState>) => void;
     setFriendship: (friendship: ProfileState["friendship"]) => void;
     setProfileModalOpen: (open: boolean) => void;
+    setQRCodeModalOpen: (open: boolean) => void;
   };
 }
 
@@ -24,6 +30,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
   friendship: null,
   initialized: false,
   isProfileModalOpen: false,
+  isQRCodeModalOpen: false,
   actions: {
     initialize: (data) =>
       set((state) => ({
@@ -33,6 +40,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
       })),
     setFriendship: (friendship) => set({ friendship }),
     setProfileModalOpen: (open) => set({ isProfileModalOpen: open }),
+    setQRCodeModalOpen: (open) => set({ isQRCodeModalOpen: open }),
   },
 }));
 
@@ -44,5 +52,7 @@ export const useIsMyProfile = () =>
 export const useFriendship = () => useProfileStore((state) => state.friendship);
 export const useIsProfileModalOpen = () =>
   useProfileStore((state) => state.isProfileModalOpen);
+export const useIsQRCodeModalOpen = () =>
+  useProfileStore((state) => state.isQRCodeModalOpen);
 export const useProfileActions = () =>
   useProfileStore((state) => state.actions);
