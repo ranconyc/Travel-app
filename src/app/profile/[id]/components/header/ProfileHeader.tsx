@@ -141,11 +141,13 @@ export function ProfileHeader() {
               "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
             }
             name={profileUser.name || "User"}
-            size={128}
+            size={150}
             variant="square"
             border
           />
-          <Badge>Visitor</Badge>
+          <Badge>
+            <h3 className="text-sm">Visitor</h3>
+          </Badge>
         </div>
         <div className="text-center">
           <h1 className="text-2xl font-bold">

@@ -33,7 +33,11 @@ export default function SocialMediaLink({
     }
   };
   return (
-    <Link href={url} target="_blank" className="w-5 h-5">
+    <Link
+      href={url}
+      target="_blank"
+      className="w-5 h-5 cursor-pointer bg-surface/30 p-3"
+    >
       {getIcon(platform)}
     </Link>
   );

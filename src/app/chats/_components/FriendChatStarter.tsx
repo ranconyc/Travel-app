@@ -47,7 +47,12 @@ export function FriendChatStarter({
       }`}
       aria-label={`Start chat with ${friendName}`}
     >
-      <Avatar image={friendImage || undefined} name={friendName} size={48} />
+      <Avatar
+        image={friendImage || undefined}
+        name={friendName}
+        size={48}
+        variant="square"
+      />
     </button>
   );
 }
