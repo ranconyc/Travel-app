@@ -92,7 +92,7 @@ export function MessageList({
               <div
                 className={`max-w-md px-3 p-2 rounded-lg ${
                   isSent
-                    ? "bg-black text-white rounded-br-none"
+                    ? "bg-black text-white dark:bg-surface-secondary dark:text-white rounded-br-xs"
                     : "bg-surface rounded-bl-xs"
                 }`}
               >

@@ -50,7 +50,7 @@ export function ChatSearchClient({
 
   return (
     <div className="flex flex-col flex-1">
-      <header className="p-4 pt-8 sticky top-0 bg-app-bg z-10">
+      <header className="p-4 pt-8 sticky top-0 z-50 border-b border-gray-200">
         <p className="text-primery text-lg">Your</p>
         <h1 className="text-3xl font-bold capitalize mb-2 min-h-[40px] flex items-center">
           Chats
@@ -61,7 +61,7 @@ export function ChatSearchClient({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search chats..."
-            className="w-full h-12 px-4 rounded-xl bg-surface/5 border border-surface/10 focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all duration-200"
+            className="w-full h-12 px-4 rounded-xl bg-surface/5 border border-surface focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all duration-200"
           />
         </div>
       </header>

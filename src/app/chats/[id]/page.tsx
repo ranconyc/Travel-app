@@ -23,14 +23,17 @@ async function ChatHeader({
   chatImage: string | null;
 }) {
   return (
-    <HeaderWrapper backButton className="flex items-end justify-between">
+    <HeaderWrapper
+      backButton
+      className="flex items-end justify-between sticky top-0 z-50 border-b border-gray-200"
+    >
       <div className="flex flex-col items-start">
         <p className="text-primery text-lg">Your chat with</p>
         <h1 className="text-3xl font-bold capitalize min-h-[40px] flex items-center">
           {chatName}
         </h1>
       </div>
-      <Avatar image={chatImage || undefined} size={80} variant="square" />
+      {/* <Avatar image={chatImage || undefined} size={80} variant="square" /> */}
     </HeaderWrapper>
   );
 }
