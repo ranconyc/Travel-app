@@ -1,62 +1,32 @@
 "use client";
 
-import INTERESTS from "@/data/interests.json";
-import Link from "next/link";
-import { useProfileActions } from "../../store/useProfileStore";
 import AddSection from "@/app/components/common/AddSection";
-
-type InterestItem = { id: string; label: string };
-type Category = { id: string; label: string; items: InterestItem[] };
-type InterestsData = Record<string, Category>;
-
-const interestsData = INTERESTS as unknown as InterestsData;
-
-const getInterestLabel = (interestId: string) => {
-  for (const catKey in interestsData) {
-    const category = interestsData[catKey];
-    const foundItem = category.items?.find((item) => item.id === interestId);
-    if (foundItem) {
-      return foundItem.label;
-    }
-  }
-  return interestId;
-};
-
-const InterestsList = ({ interests }: { interests: string[] }) => {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {interests.slice(0, 8).map((interest) => (
-        <div
-          key={interest}
-          className="px-4 py-2 bg-surface text-app-fg text-sm font-medium rounded-2xl border border-surface transition-colors hover:border-brand/30"
-        >
-          {getInterestLabel(interest)}
-        </div>
-      ))}
-    </div>
-  );
-};
+import InterestsList from "../InterestsList";
+import Link from "next/link";
+import { useIsMyProfile } from "../../store/useProfileStore";
 
 export function InterestsSection({ interests }: { interests: string[] }) {
-  const { setInterestsModalOpen } = useProfileActions();
-
+  const isMyProfile = useIsMyProfile();
   return (
     <section>
       <div className="w-full mb-4 flex items-center justify-between">
         <h2 className="text-xl font-black">Interests</h2>
-        {interests.length > 8 && (
-          <button
-            onClick={() => setInterestsModalOpen(true)}
+        {isMyProfile && interests.length > 0 && (
+          <Link
+            href="/profile/persona?step=3"
             className="text-xs font-bold text-brand hover:underline"
           >
-            See all
-          </button>
+            Edit interests
+          </Link>
         )}
       </div>
-      {!interests.length ? (
+      {isMyProfile && interests.length === 0 ? (
         <AddSection
           title="Tell us what you love to do when you travel"
-          link={{ href: "/profile/interests", label: "Add your interests" }}
+          link={{
+            href: "/profile/persona?step=3",
+            label: "Add your interests",
+          }}
         />
       ) : (
         <InterestsList interests={interests} />

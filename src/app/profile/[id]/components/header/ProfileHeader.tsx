@@ -34,12 +34,31 @@ const ProfileSettingsButton = () => {
   );
 };
 
+const SocialMediaLinks = () => {
+  const profileUser = useProfileUser();
+  if (!profileUser?.profile?.socials?.length) return null;
+
+  return (
+    <div className="flex items-center gap-2">
+      {profileUser?.profile?.socials.map(
+        (social: { platform: string; url: string }) => (
+          <SocialMediaLink
+            key={social?.url}
+            platform={social?.platform as "instagram" | "tiktok"}
+            url={social?.url}
+          />
+        ),
+      )}
+    </div>
+  );
+};
+
 const FriendshipButton = () => {
   const profileUser = useProfileUser();
   const loggedUser = useLoggedUser();
   const friendship = useFriendship();
   const router = useRouter();
-  const { setInterestsModalOpen } = useProfileActions();
+  const { setProfileModalOpen } = useProfileActions();
 
   const { handleFriendshipAction, isLoading, isSentByMe } = useFriendshipAction(
     {
@@ -64,9 +83,9 @@ const FriendshipButton = () => {
     if (friendship?.status === "PENDING") {
       // Show different icons based on who sent the request
       if (isSentByMe) {
-        return <UserRoundX size={20} />;
+        return <UserRoundX size={20} className="text-red-500" />;
       } else {
-        return <UserRoundCheck size={20} />;
+        return <UserRoundCheck size={20} className="text-green-500" />;
       }
     }
 
@@ -89,7 +108,7 @@ const FriendshipButton = () => {
       role="button"
       onClick={
         friendship?.status === "ACCEPTED"
-          ? () => setInterestsModalOpen(true)
+          ? () => setProfileModalOpen(true)
           : onAction
       }
       aria-disabled={isLoading}
@@ -108,34 +127,12 @@ const TopNav = () => {
   );
 };
 
-const SocialMediaLinks = () => {
-  const profileUser = useProfileUser();
-  if (!profileUser?.profile?.socials?.length) return null;
-
-  return (
-    <div className="flex items-center gap-2">
-      {profileUser.profile.socials.map(
-        (social: { platform: string; url: string }) => (
-          <SocialMediaLink
-            key={social?.url}
-            platform={social?.platform as "instagram" | "tiktok"}
-            url={social?.url}
-          />
-        ),
-      )}
-    </div>
-  );
-};
-
 export function ProfileHeader() {
   const profileUser = useProfileUser();
   if (!profileUser) return null;
   return (
     <div>
       <TopNav />
-      <div className="w-full flex items-center justify-center gap-2">
-        {profileUser?.profile?.socials && <SocialMediaLinks />}
-      </div>
       <div className="pt-4 flex flex-col gap-6 items-center">
         <div className="relative">
           <Avatar
@@ -158,6 +155,9 @@ export function ProfileHeader() {
                 }`.trim()
               : profileUser.name}
           </h1>
+          <div className="w-full flex items-center justify-center gap-2">
+            {profileUser?.profile?.socials && <SocialMediaLinks />}
+          </div>
           {profileUser.currentCity && (
             <p className="text-xs">
               {profileUser.currentCity?.name || "user location"},

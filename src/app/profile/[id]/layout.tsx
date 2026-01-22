@@ -6,7 +6,7 @@ import { User } from "@/domain/user/user.schema";
 
 import { Footer } from "./Footer";
 import StoreInitializer from "./components/StoreInitializer";
-import { ProfileModals } from "./components/ProfileModals";
+import ProfileModal from "./components/modal/ProfileModal";
 
 export default async function ProfileLayout({
   children,
@@ -53,7 +53,7 @@ export default async function ProfileLayout({
         isMyProfile={isMyProfile}
         friendship={friendship}
       />
-      <ProfileModals />
+      <ProfileModal />
       <div className="min-h-screen bg-app-bg text-app-fg pb-20">
         <ProfileHeader />
         {children}

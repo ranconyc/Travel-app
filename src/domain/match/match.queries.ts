@@ -85,6 +85,7 @@ export function calculateMatchScoreBatch(
     (currentUser?.profile?.persona as any)?.interests || [];
   const targetInterests =
     (targetUser?.profile?.persona as any)?.interests || [];
+
   const sharedInterests = currentInterests.filter((i: string) =>
     targetInterests.includes(i),
   );

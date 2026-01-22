@@ -1,0 +1,19 @@
+import formatLanguage from "@/app/_utils/formatLanguage";
+import BreakdownItem from "./BreakdownItem";
+
+export default function SimilarLanguages({
+  languages,
+}: {
+  languages: string[];
+}) {
+  return (
+    <BreakdownItem
+      title="Similar Languages"
+      value={
+        languages.length > 0
+          ? languages.map((language) => formatLanguage(language)).join(", ")
+          : "0"
+      }
+    />
+  );
+}

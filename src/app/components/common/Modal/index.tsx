@@ -8,10 +8,10 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  title?: React.ReactNode; // Allow strings or elements
+  title?: React.ReactNode;
   showCloseButton?: boolean;
-  className?: string; // For the container
-  containerClassName?: string; // For the wrapper div if needed
+  className?: string;
+  variant?: "popup" | "slide-up";
 }
 
 export default function Modal({
@@ -21,15 +21,14 @@ export default function Modal({
   title,
   showCloseButton = true,
   className = "",
+  variant = "popup",
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // 1. Use existing hook for click outside
   useClickOutside(modalRef as React.RefObject<HTMLElement>, () => {
     if (isOpen) onClose();
   });
 
-  // 2. Handle Escape key and Body Scroll Lock
   useEffect(() => {
     if (!isOpen) return;
 
@@ -48,15 +47,23 @@ export default function Modal({
 
   if (!isOpen) return null;
 
+  const isSlideUp = variant === "slide-up";
+
   return (
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 bg-blur flex items-end md:items-center justify-center z-50 animate-fade-in"
+      className={`fixed inset-0 bg-blur flex z-50 animate-fade-in ${
+        isSlideUp ? "items-end justify-center" : "items-center justify-center"
+      }`}
     >
       <div
         ref={modalRef}
-        className={`w-full md:w-auto md:min-w-[400px] h-fit max-h-[85vh] bg-app-bg m-3 mb-4 md:m-0 px-4 py-6 rounded-4xl animate-slide-up shadow-2xl flex flex-col ${className}`}
+        className={`w-full h-fit max-h-[90vh] bg-app-bg px-4 py-6 shadow-2xl flex flex-col transition-all duration-300 ${
+          isSlideUp
+            ? "animate-slide-up rounded-t-4xl md:rounded-4xl md:max-w-md md:mb-8"
+            : "animate-scale-in rounded-4xl max-w-md mx-4"
+        } ${className}`}
       >
         {/* Header Section */}
         {(title || showCloseButton) && (
