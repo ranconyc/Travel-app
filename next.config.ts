@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "flagcdn.com", pathname: "/**" },
       { protocol: "https", hostname: "mainfacts.com", pathname: "/**" },
       { protocol: "https", hostname: "i.pravatar.cc", pathname: "/**" },
+      { protocol: "https", hostname: "randomuser.me", pathname: "/**" },
 
       {
         protocol: "https",
