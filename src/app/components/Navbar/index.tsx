@@ -20,7 +20,7 @@ export default function Navbar({ pathname }: { pathname: string }) {
   const unreadCount = useUnreadCount();
 
   return (
-    <nav className="fixed bottom-4 left-20 right-20">
+    <nav className="fixed bottom-8 left-20 right-20">
       <ul className="text-secondary flex items-center justify-around bg-surface px-2 py-4 rounded-full shadow-xl">
         <li className={pathname === "/" ? "text-brand" : ""}>
           <Link href="/">
