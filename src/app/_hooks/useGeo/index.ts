@@ -96,6 +96,11 @@ export function useGeo(options: UseGeoOptions = {}) {
 
   // EFFECT 1: Watch Position (Real-time tracking)
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     if (!hasGeolocation()) {
       setError("Geolocation not supported");
       setLoading(false);
@@ -126,7 +131,7 @@ export function useGeo(options: UseGeoOptions = {}) {
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
-  }, [setCoords, setError, setLoading]);
+  }, [user, setCoords, setError, setLoading]);
 
   // EFFECT 2: Persist to DB (Debounced & Threshold check)
   useEffect(() => {

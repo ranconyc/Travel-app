@@ -9,9 +9,9 @@ export default function InfoSection({
 }) {
   return (
     <div className="text-center">
-      <h2 className="text-gray-400 text-sm uppercase tracking-wider font-medium">
+      <p className="text-gray-400 text-xs uppercase tracking-wider font-medium">
         {subtitle}
-      </h2>
+      </p>
       <h1 className="text-3xl font-bold mt-1 flex items-center justify-center gap-2">
         {title}
       </h1>

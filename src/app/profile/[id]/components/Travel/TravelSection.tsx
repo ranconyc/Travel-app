@@ -1,10 +1,10 @@
 "use client";
 
-import TravelHistory from "./TravelHistory";
-import TravelPartners from "./TravelPartners";
 import NextDestinations from "./NextDestinations";
 
 import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
+import TravelHistory from "./TravelHistory";
+import TravelPartners from "./TravelPartners";
 
 export default function TravelSection() {
   const profileUser = useProfileUser();

@@ -7,7 +7,10 @@ export default async function CountryMatesPage({
   return (
     <div>
       <h1>CountryMatesPage {slug}</h1>
-      <p>TODO: Implement country mates page</p> 
+      <p>
+        TODO: Implement country mates page find matesThat looking to visit this
+        country
+      </p>
     </div>
   );
 }

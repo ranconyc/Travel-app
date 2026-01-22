@@ -1,5 +1,8 @@
+"use client";
+
 import INTERESTS from "@/data/interests.json";
 import Link from "next/link";
+import { useProfileActions } from "../../store/useProfileStore";
 
 type InterestItem = { id: string; label: string };
 type Category = { id: string; label: string; items: InterestItem[] };
@@ -50,12 +53,17 @@ const InterestsList = ({ interests }: { interests: string[] }) => {
 };
 
 export function InterestsSection({ interests }: { interests: string[] }) {
+  const { setInterestsModalOpen } = useProfileActions();
+
   return (
     <section>
       <div className="w-full mb-4 flex items-center justify-between">
         <h2 className="text-xl font-black">Interests</h2>
         {interests.length > 8 && (
-          <button className="text-xs font-bold text-brand hover:underline">
+          <button
+            onClick={() => setInterestsModalOpen(true)}
+            className="text-xs font-bold text-brand hover:underline"
+          >
             See all
           </button>
         )}

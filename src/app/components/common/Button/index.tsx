@@ -76,7 +76,7 @@ export default function Button({
     "outline-white":
       "bg-transparent border border-white/20 hover:bg-white/10 text-white",
     // back: "bg-secondary/50 text-white rounded-full hover:bg-secondary/10", // Handled above
-    icon: "bg-gray-800/50 text-white rounded-full p-4 hover:bg-secondary/10",
+    icon: "bg-surface text-app-text rounded-full p-4 hover:bg-surface/10",
   };
 
   const combinedClasses = [

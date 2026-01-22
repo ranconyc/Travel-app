@@ -20,7 +20,7 @@ import { City } from "@/domain/city/city.schema";
 import { AiFillTikTok } from "react-icons/ai";
 import social from "@/data/social.json";
 import { AiFillRedditCircle } from "react-icons/ai";
-import HeroImage from "./_components/HeroImage";
+import HeroImage from "../../components/common/HeroImage";
 
 export default async function CityPage({
   params,

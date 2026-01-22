@@ -13,7 +13,7 @@ export default function HeroImage({
         <div className="relative w-full h-full">
           <Image src={src} alt={name} fill className="object-cover" priority />
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          {/* <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" /> */}
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center bg-surface text-secondary">

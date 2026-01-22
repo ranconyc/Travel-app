@@ -26,12 +26,12 @@ export function calculateMatchScoreBatch(
       interests: { score: 0, distinct: [], shared: [] },
       location: {
         score: 0,
-        sameCity: currentUser.currentCityId === targetUser.currentCityId,
+        sameCity: currentUser?.currentCityId === targetUser?.currentCityId,
         sameCountry:
-          (currentUser.currentCity?.countryRefId ?? "current") ===
-          (targetUser.currentCity?.countryRefId ?? "target"),
-        city: targetUser.currentCity?.name,
-        country: targetUser.currentCity?.country?.name,
+          (currentUser?.currentCity?.countryRefId ?? "current") ===
+          (targetUser?.currentCity?.countryRefId ?? "target"),
+        city: targetUser?.currentCity?.name,
+        country: targetUser?.currentCity?.country?.name,
       },
       age: { score: 0, isWithinRange: false, diffYears: 0 },
       friends: { score: 0, count: 0, mutualNames: [] },
@@ -42,7 +42,7 @@ export function calculateMatchScoreBatch(
   };
 
   // --- 1. TRAVEL STYLE (The "Friction" check) ---
-  const getStyle = (u: User) => (u.profile?.persona as any)?.travelStyle;
+  const getStyle = (u: User) => (u?.profile?.persona as any)?.travelStyle;
   const s1 = getStyle(currentUser);
   const s2 = getStyle(targetUser);
 
@@ -64,8 +64,8 @@ export function calculateMatchScoreBatch(
   }
 
   // --- 2. LANGUAGES (The "Communication" check) ---
-  const currentLangs = currentUser.profile?.languages || [];
-  const targetLangs = targetUser.profile?.languages || [];
+  const currentLangs = currentUser?.profile?.languages || [];
+  const targetLangs = targetUser?.profile?.languages || [];
   const sharedLangs = currentLangs.filter((l: string) =>
     targetLangs.includes(l),
   );
@@ -82,8 +82,9 @@ export function calculateMatchScoreBatch(
 
   // --- 3. INTERESTS (Standard additive) ---
   const currentInterests =
-    (currentUser.profile?.persona as any)?.interests || [];
-  const targetInterests = (targetUser.profile?.persona as any)?.interests || [];
+    (currentUser?.profile?.persona as any)?.interests || [];
+  const targetInterests =
+    (targetUser?.profile?.persona as any)?.interests || [];
   const sharedInterests = currentInterests.filter((i: string) =>
     targetInterests.includes(i),
   );
@@ -98,10 +99,10 @@ export function calculateMatchScoreBatch(
   }
 
   // --- 4. AGE GAP ---
-  if (currentUser.profile?.birthday && targetUser.profile?.birthday) {
+  if (currentUser?.profile?.birthday && targetUser?.profile?.birthday) {
     const diff = Math.abs(
-      getAge(currentUser.profile.birthday) -
-        getAge(targetUser.profile.birthday),
+      getAge(currentUser?.profile?.birthday) -
+        getAge(targetUser?.profile?.birthday),
     );
     result.breakdown.age.diffYears = diff;
     if (diff > 15) {

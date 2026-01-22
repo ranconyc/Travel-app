@@ -18,7 +18,10 @@ import {
   useIsMyProfile,
   useFriendship,
   useLoggedUser,
+  useProfileActions,
 } from "../../store/useProfileStore";
+import Badge from "@/app/components/common/Badge";
+import { User } from "next-auth";
 
 const ProfileSettingsButton = () => {
   const router = useRouter();
@@ -30,19 +33,13 @@ const ProfileSettingsButton = () => {
     />
   );
 };
-const Badge = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="px-2 py-1 bg-surface border border-brand font-bold text-[10px] uppercase tracking-wider text-brand rounded-full absolute -bottom-3 left-1/2 -translate-x-1/2 shadow-sm z-10">
-      {children}
-    </div>
-  );
-};
 
 const FriendshipButton = () => {
   const profileUser = useProfileUser();
   const loggedUser = useLoggedUser();
   const friendship = useFriendship();
   const router = useRouter();
+  const { setInterestsModalOpen } = useProfileActions();
 
   const { handleFriendshipAction, isLoading, isSentByMe } = useFriendshipAction(
     {
@@ -90,14 +87,28 @@ const FriendshipButton = () => {
       size="sm"
       variant="icon"
       role="button"
-      onClick={onAction}
+      onClick={
+        friendship?.status === "ACCEPTED"
+          ? () => setInterestsModalOpen(true)
+          : onAction
+      }
       aria-disabled={isLoading}
       icon={renderFriendshipIcon()}
     />
   );
 };
 
-const SocialMediaButton = () => {
+const TopNav = () => {
+  const isMyProfile = useIsMyProfile();
+  return (
+    <nav className="p-4 pt-8 flex items-center justify-between gap-2 sticky top-0 left-0 right-0 bg-app-bg z-40">
+      <Button variant="back" />
+      {isMyProfile ? <ProfileSettingsButton /> : <FriendshipButton />}
+    </nav>
+  );
+};
+
+const SocialMediaLinks = () => {
   const profileUser = useProfileUser();
   if (!profileUser?.profile?.socials?.length) return null;
 
@@ -116,16 +127,6 @@ const SocialMediaButton = () => {
   );
 };
 
-const TopNav = () => {
-  const isMyProfile = useIsMyProfile();
-  return (
-    <nav className="p-4 pt-8 flex items-center justify-between gap-2 sticky top-0 left-0 right-0 bg-app-bg z-40">
-      <Button variant="back" />
-      {isMyProfile ? <ProfileSettingsButton /> : <FriendshipButton />}
-    </nav>
-  );
-};
-
 export function ProfileHeader() {
   const profileUser = useProfileUser();
   if (!profileUser) return null;
@@ -133,7 +134,7 @@ export function ProfileHeader() {
     <div>
       <TopNav />
       <div className="w-full flex items-center justify-center gap-2">
-        {profileUser?.profile?.socials && <SocialMediaButton />}
+        {profileUser?.profile?.socials && <SocialMediaLinks />}
       </div>
       <div className="pt-4 flex flex-col gap-6 items-center">
         <div className="relative">

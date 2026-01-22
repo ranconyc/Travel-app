@@ -9,9 +9,11 @@ interface ProfileState {
   isMyProfile: boolean;
   friendship: { status: string; requesterId: string } | null;
   initialized: boolean;
+  isInterestsModalOpen: boolean;
   actions: {
     initialize: (data: Partial<ProfileState>) => void;
     setFriendship: (friendship: ProfileState["friendship"]) => void;
+    setInterestsModalOpen: (open: boolean) => void;
   };
 }
 
@@ -21,6 +23,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
   isMyProfile: false,
   friendship: null,
   initialized: false,
+  isInterestsModalOpen: false,
   actions: {
     initialize: (data) =>
       set((state) => ({
@@ -29,6 +32,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
         initialized: true,
       })),
     setFriendship: (friendship) => set({ friendship }),
+    setInterestsModalOpen: (open) => set({ isInterestsModalOpen: open }),
   },
 }));
 
@@ -38,5 +42,7 @@ export const useLoggedUser = () => useProfileStore((state) => state.loggedUser);
 export const useIsMyProfile = () =>
   useProfileStore((state) => state.isMyProfile);
 export const useFriendship = () => useProfileStore((state) => state.friendship);
+export const useIsInterestsModalOpen = () =>
+  useProfileStore((state) => state.isInterestsModalOpen);
 export const useProfileActions = () =>
   useProfileStore((state) => state.actions);

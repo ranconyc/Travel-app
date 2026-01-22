@@ -46,7 +46,7 @@ export default function BaseCard({
   const card = (
     <div
       className={
-        "bg-white rounded-2xl overflow-hidden w-[240px] h-[300px] mx-auto shadow " +
+        "bg-white rounded-2xl overflow-hidden shadow w-full relative aspect-[3.2/4] " +
         (className ?? "")
       }
     >
@@ -61,7 +61,7 @@ export default function BaseCard({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/55" />
 
         {/* Content area */}
-        <div className="absolute inset-0 p-4">{children}</div>
+        <div className="absolute inset-0">{children}</div>
       </div>
     </div>
   );

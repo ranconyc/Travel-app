@@ -25,7 +25,7 @@ const NoHistoryMessage = () => {
       <p className="text-sm text-secondary">
         Start adding your travel history
         <Link
-          href="/profile/travelb?content=europe"
+          href="/profile/travelc?content=europe"
           className="ml-2 text-brand font-bold hover:underline"
         >
           Add your first stamp
@@ -93,10 +93,6 @@ export default function TravelHistory({
     );
   }
 
-  if (visits.length === 0) {
-    return <NoHistoryMessage />;
-  }
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
@@ -104,39 +100,42 @@ export default function TravelHistory({
         <p className="subheader">{visits.length} places</p>
       </div>
       <div className="p-8 flex items-center gap-8 overflow-x-scroll no-scrollbar">
-        {visits.map((item, index) => {
-          const displayDate = item.date
-            ? new Date(item.date).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-              })
-            : `${item.type.toUpperCase()} OF ${item.countryName.toUpperCase()}`;
+        {visits.length === 0 && isMyProfile ? (
+          <NoHistoryMessage />
+        ) : (
+          visits.map((item, index) => {
+            const displayDate = item.date
+              ? new Date(item.date).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })
+              : `${item.type.toUpperCase()} OF ${item.countryName.toUpperCase()}`;
 
-          const link = item?.countryCode
-            ? `/countries/${item.countryCode}`
-            : `/cities/${item.cityId}`;
+            const link = item?.countryCode
+              ? `/countries/${item.countryCode}`
+              : `/cities/${item.cityId}`;
 
-          return (
-            <Link href={link} key={item.id} className="relative">
-              <PassportStamp
-                city={item.cityName}
-                country={item.countryName}
-                date={displayDate}
-                index={index}
-                size="sm"
-              />
-              {item.isCurrent && (
-                <div className="absolute -top-2 -right-2 bg-brand text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
-                  CURRENT
-                </div>
-              )}
-            </Link>
-          );
-        })}
-
+            return (
+              <Link href={link} key={item.id} className="relative">
+                <PassportStamp
+                  city={item.cityName}
+                  country={item.countryName}
+                  date={displayDate}
+                  index={index}
+                  size="sm"
+                />
+                {item.isCurrent && (
+                  <div className="absolute -top-2 -right-2 bg-brand text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
+                    CURRENT
+                  </div>
+                )}
+              </Link>
+            );
+          })
+        )}
         {isMyProfile && (
-          <Link href="/profile/travelb">
+          <Link href="/profile/travelc?content=europe">
             <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
               <Plus className="text-secondary" />
             </div>
