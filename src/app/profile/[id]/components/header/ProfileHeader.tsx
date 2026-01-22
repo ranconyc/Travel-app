@@ -2,7 +2,6 @@
 
 import Button from "@/app/components/common/Button";
 import {
-  Linkedin,
   ShieldUser,
   UserRoundPlus,
   Settings,
@@ -10,78 +9,50 @@ import {
   UserRoundCheck,
   Loader2,
 } from "lucide-react";
-import Link from "next/link";
-
+import { Avatar } from "@/app/components/common/Avatar";
 import { useFriendshipAction } from "@/domain/friendship/friendship.hooks";
 import { useRouter } from "next/navigation";
-import { User } from "@/domain/user/user.schema";
 import SocialMediaLink from "./socialMediaLink";
-import Image from "next/image";
+import {
+  useProfileUser,
+  useIsMyProfile,
+  useFriendship,
+  useLoggedUser,
+} from "../../store/useProfileStore";
 
 const ProfileSettingsButton = () => {
+  const router = useRouter();
   return (
     <Button
       variant="icon"
-      iconPosition="right"
-      icon={
-        <Link href="/profile/edit">
-          <Settings size={20} />
-        </Link>
-      }
+      onClick={() => router.push("/profile/edit")}
+      icon={<Settings size={20} />}
     />
   );
 };
 const Badge = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="px-2 py-1 bg-surface border border-brand font-bold  text-brand rounded-full absolute -bottom-3 left-1/2 -translate-x-1/2">
+    <div className="px-2 py-1 bg-surface border border-brand font-bold text-[10px] uppercase tracking-wider text-brand rounded-full absolute -bottom-3 left-1/2 -translate-x-1/2 shadow-sm z-10">
       {children}
     </div>
   );
 };
 
-const Avatar = ({
-  src,
-  alt,
-  width,
-  height,
-}: {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-}) => {
-  return (
-    <div className="w-32 h-32 relative">
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        className="w-full h-full object-cover rounded-3xl"
-      />
-      <Badge>Visitor</Badge>
-    </div>
-  );
-};
-
-const FriendshipButton = ({
-  profileUser,
-  loggedUser,
-  friendship,
-}: {
-  friendship: { status: string; requesterId: string } | null;
-  loggedUser?: { id: string } | null;
-  profileUser: User;
-}) => {
+const FriendshipButton = () => {
+  const profileUser = useProfileUser();
+  const loggedUser = useLoggedUser();
+  const friendship = useFriendship();
   const router = useRouter();
 
   const { handleFriendshipAction, isLoading, isSentByMe } = useFriendshipAction(
     {
-      profileUserId: profileUser.id,
+      profileUserId: profileUser?.id ?? "",
       loggedUserId: loggedUser?.id,
       friendship,
     },
   );
+
+  if (!profileUser) return null;
 
   const onAction = async () => {
     await handleFriendshipAction();
@@ -126,85 +97,58 @@ const FriendshipButton = ({
   );
 };
 
-const SocialMediaButton = ({ profileUser }: { profileUser: User }) => {
+const SocialMediaButton = () => {
+  const profileUser = useProfileUser();
+  if (!profileUser?.profile?.socials?.length) return null;
+
   return (
-    <Button
-      variant="icon"
-      iconPosition="right"
-      icon={profileUser?.profile?.socials.map(
+    <div className="flex items-center gap-2">
+      {profileUser.profile.socials.map(
         (social: { platform: string; url: string }) => (
           <SocialMediaLink
             key={social?.url}
-            platform={social?.platform}
+            platform={social?.platform as "instagram" | "tiktok"}
             url={social?.url}
           />
         ),
       )}
-    />
+    </div>
   );
 };
 
-const TopNav = ({
-  isYourProfile,
-  profileUser,
-  loggedUser,
-  friendship,
-}: {
-  isYourProfile: boolean;
-  profileUser: User;
-  loggedUser: User;
-  friendship: { status: string; requesterId: string } | null;
-}) => {
+const TopNav = () => {
+  const isMyProfile = useIsMyProfile();
   return (
     <nav className="p-4 pt-8 flex items-center justify-between gap-2 sticky top-0 left-0 right-0 bg-app-bg z-40">
       <Button variant="back" />
-      {isYourProfile ? (
-        <ProfileSettingsButton />
-      ) : (
-        <FriendshipButton
-          profileUser={profileUser}
-          loggedUser={loggedUser}
-          friendship={friendship}
-        />
-      )}
+      {isMyProfile ? <ProfileSettingsButton /> : <FriendshipButton />}
     </nav>
   );
 };
 
-export function ProfileHeader({
-  isYourProfile,
-  loggedUser,
-  profileUser,
-  friendship,
-}: {
-  friendship: { status: string; requesterId: string } | null;
-  isYourProfile: boolean;
-  loggedUser?: { id: string } | null;
-  profileUser: User;
-}) {
+export function ProfileHeader() {
+  const profileUser = useProfileUser();
+  if (!profileUser) return null;
   return (
     <div>
-      <TopNav
-        isYourProfile={isYourProfile}
-        profileUser={profileUser}
-        loggedUser={loggedUser}
-        friendship={friendship}
-      />
+      <TopNav />
       <div className="w-full flex items-center justify-center gap-2">
-        {profileUser?.profile?.socials && (
-          <SocialMediaButton profileUser={profileUser} />
-        )}
+        {profileUser?.profile?.socials && <SocialMediaButton />}
       </div>
       <div className="pt-4 flex flex-col gap-6 items-center">
-        <Avatar
-          src={
-            profileUser.avatarUrl ||
-            "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
-          }
-          alt={profileUser.name || "User"}
-          width={128}
-          height={128}
-        />
+        <div className="relative">
+          <Avatar
+            image={
+              profileUser.avatarUrl ||
+              "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+            }
+            name={profileUser.name || "User"}
+            size={128}
+            variant="square"
+            border
+          />
+          <Badge>Visitor</Badge>
+        </div>
         <div className="text-center">
           <h1 className="text-2xl font-bold">
             {profileUser.profile?.firstName

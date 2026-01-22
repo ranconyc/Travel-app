@@ -57,6 +57,6 @@ export type SocialLink = z.infer<typeof socialLinkSchema>;
 export interface StatItem {
   value: string | number;
   label: string;
-  icon?: React.ReactNode;
+  icon?: React.ElementType;
   iconSize?: number;
 }

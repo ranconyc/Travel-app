@@ -15,25 +15,41 @@ type TravelHistoryItem = {
   isCurrent: boolean;
 };
 
-interface TravelHistoryProps {
-  userId: string;
-  isOwnProfile?: boolean;
-  travelHistory?: TravelHistoryItem[];
-}
-
-import { getCityConfig } from "@/data/cityStamps";
 import PassportStamp from "@/app/components/common/PassportStamp";
 import Link from "next/link";
+import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
+
+const NoHistoryMessage = () => {
+  return (
+    <div className="bg-surface/50 p-4 rounded-xl border-2 border-dashed border-surface-secondary">
+      <p className="text-sm text-secondary">
+        Start adding your travel history
+        <Link
+          href="/profile/travelb?content=europe"
+          className="ml-2 text-brand font-bold hover:underline"
+        >
+          Add your first stamp
+        </Link>
+      </p>
+    </div>
+  );
+};
 
 export default function TravelHistory({
-  userId,
-  isOwnProfile,
   travelHistory,
-}: TravelHistoryProps) {
-  const [visits, setVisits] = useState<TravelHistoryItem[]>([]);
-  const [loading, setLoading] = useState(true);
+}: {
+  travelHistory?: TravelHistoryItem[];
+}) {
+  const profileUser = useProfileUser();
+  const isMyProfile = useIsMyProfile();
+  const userId = profileUser?.id;
+  const [visits, setVisits] = useState<TravelHistoryItem[]>(
+    travelHistory || [],
+  );
+  const [loading, setLoading] = useState(!travelHistory);
 
   useEffect(() => {
+    if (travelHistory || !userId) return;
     async function fetchHistory() {
       try {
         const res = await fetch(`/api/users/${userId}/travel-history`);
@@ -47,8 +63,6 @@ export default function TravelHistory({
             const year = visit.date
               ? new Date(visit.date).getFullYear()
               : "no-date";
-            // Create a unique key for city+year
-            // If cityId is null (e.g. older data or just country), fallback to cityName
             const cityKey = visit.cityId || visit.cityName;
             const key = `${cityKey}-${year}`;
 
@@ -69,9 +83,8 @@ export default function TravelHistory({
     }
 
     fetchHistory();
-  }, [userId]);
+  }, [userId, travelHistory]);
 
-  // improve loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -81,12 +94,7 @@ export default function TravelHistory({
   }
 
   if (visits.length === 0) {
-    return (
-      <div className="text-sm text-secondary opacity-60 py-4">
-        No stamps yet. Start exploring!
-        <Link href="/profile/travel">Add cities you visited</Link>
-      </div>
-    );
+    return <NoHistoryMessage />;
   }
 
   return (
@@ -95,9 +103,8 @@ export default function TravelHistory({
         <h2 className="header-2">Travel History</h2>
         <p className="subheader">{visits.length} places</p>
       </div>
-      <div className="p-8 flex items-center gap-8 overflow-x-scroll">
-        {[...new Set(visits)].map((item, index) => {
-          // console.log("item", item);
+      <div className="p-8 flex items-center gap-8 overflow-x-scroll no-scrollbar">
+        {visits.map((item, index) => {
           const displayDate = item.date
             ? new Date(item.date).toLocaleDateString("en-GB", {
                 day: "2-digit",
@@ -105,10 +112,6 @@ export default function TravelHistory({
                 year: "numeric",
               })
             : `${item.type.toUpperCase()} OF ${item.countryName.toUpperCase()}`;
-
-          // Get config (style + icon) for this city
-          getCityConfig(item.cityName);
-          console.log(item?.countryCode);
 
           const link = item?.countryCode
             ? `/countries/${item.countryCode}`
@@ -132,7 +135,7 @@ export default function TravelHistory({
           );
         })}
 
-        {isOwnProfile && (
+        {isMyProfile && (
           <Link href="/profile/travelb">
             <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
               <Plus className="text-secondary" />

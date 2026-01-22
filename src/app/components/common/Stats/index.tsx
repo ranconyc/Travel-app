@@ -18,17 +18,12 @@ export default function Stats({
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         const isMiddle = showDividers && index > 0 && index < stats.length - 1;
-        const isNotLast = showDividers && index < stats.length - 1;
 
         return (
           <div
             key={`${stat.label}-${index}`}
             className={`text-center flex-1 ${
-              isMiddle
-                ? "border-l border-r border-surface-secondary"
-                : isNotLast
-                  ? "border-r border-surface-secondary"
-                  : ""
+              isMiddle ? "border-l border-r border-surface-secondary" : ""
             }`}
           >
             <div className="flex flex-col items-center gap-1">

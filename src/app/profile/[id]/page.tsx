@@ -1,29 +1,19 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
-import { ProfileHeader } from "@/app/profile/[id]/_components/ProfileHeader";
+import { ProfileHeader } from "@/app/profile/[id]/components/header/ProfileHeader";
 import {
   getFriendRequestsAction,
   getFriendshipStatusAction,
 } from "@/domain/friendship/friendship.actions";
-import { getCountriesByCodes } from "@/lib/db/country.repo";
+import { FriendStatus } from "@prisma/client";
 
-import world from "@/data/world.json";
-import StatsSection from "./_components/StatsSection";
 import { getUserProfile } from "@/domain/user/user.queries";
+import { User } from "@/domain/user/user.schema";
 
-import { InterestsSection } from "./_components/sections/InterestsSection";
-import { Footer } from "./_components/sections/Footer";
-import TravelSection from "./_components/sections/TravelSection";
-import {
-  Clock,
-  Calendar,
-  Users,
-  Globe2,
-  Globe,
-  LanguagesIcon,
-} from "lucide-react";
+import { Footer } from "./Footer";
+import TravelSection from "./components/Travel/TravelSection";
+import { Users, Globe2, LanguagesIcon } from "lucide-react";
 import { StatItem } from "@/domain/common.schema";
 import Stats from "@/app/components/common/Stats";
-import { TravelPartnersSection } from "./_components/TravelPartners";
 
 const NoProfilePage = () => {
   return (
@@ -37,6 +27,9 @@ const NoProfilePage = () => {
     </div>
   );
 };
+
+import StoreInitializer from "./components/StoreInitializer";
+import { InterestsSection } from "./components/sections/InterestsSection";
 
 export default async function ProfilePage({
   params,
@@ -59,23 +52,34 @@ export default async function ProfilePage({
     const friendshipResult = await getFriendshipStatusAction({
       targetUserId: id,
     });
-    friendship = friendshipResult.success ? friendshipResult.data : null;
+    friendship = friendshipResult.success
+      ? (friendshipResult.data as {
+          status: string;
+          requesterId: string;
+        } | null)
+      : null;
   }
 
   const isMyProfile = loggedUser?.id === profileUser?.id;
 
   // Calculate stats
   const visitedCountriesCodes = profileUser.visitedCountries || [];
-  const visitedCountriesData = await getCountriesByCodes(visitedCountriesCodes);
-  const visitedCountryNames = visitedCountriesData.map((c) => c.name);
 
   const ApprovedRequestsCount = requests.filter(
-    (r) => r.status === "APPROVED",
+    (r) => r.status === FriendStatus.ACCEPTED,
   ).length;
 
   const stats: StatItem[] = [
-    { value: visitedCountriesCodes.length, label: "Countries", icon: Globe2 },
-    { value: ApprovedRequestsCount, label: "Friendship", icon: Users },
+    {
+      value: visitedCountriesCodes.length,
+      label: "Countries",
+      icon: Globe2,
+    },
+    {
+      value: ApprovedRequestsCount,
+      label: "Friendship",
+      icon: Users,
+    },
     {
       value: profileUser?.profile?.languages?.length || 0,
       label: "Languages",
@@ -83,52 +87,27 @@ export default async function ProfilePage({
     },
   ];
 
-  interface WorldCountry {
-    name: { common: string };
-    region: string;
-  }
-
-  function getContinentStats(visitedCountries: string[]) {
-    const visitedContinents = new Set<string>();
-    visitedCountries.forEach((countryName) => {
-      const country = (world as unknown as WorldCountry[]).find(
-        (c) => c.name.common === countryName,
-      );
-      if (country?.region) {
-        visitedContinents.add(country.region);
-      }
-    });
-
-    return {
-      count: visitedContinents.size,
-      continents: Array.from(visitedContinents),
-    };
-  }
-  const continentStats = getContinentStats(visitedCountryNames);
-
   const persona = profileUser?.profile?.persona as {
     interests?: string[];
   } | null;
 
   return (
-    <div className="min-h-screen bg-app-bg text-app-fg pb-20">
-      <ProfileHeader
-        isYourProfile={isMyProfile}
-        loggedUser={loggedUser}
+    <>
+      <StoreInitializer
+        profileUser={profileUser as User}
+        loggedUser={loggedUser as User | null}
+        isMyProfile={isMyProfile}
         friendship={friendship}
-        profileUser={profileUser}
       />
-      <main className="max-w-2xl mx-auto px-4 flex flex-col gap-12 mt-4">
-        <Stats stats={stats} />
-        <TravelSection
-          userId={profileUser.id}
-          visitedCountries={visitedCountriesData}
-          currentCity={profileUser.currentCity}
-          isOwnProfile={isMyProfile}
-        />
-        <InterestsSection interests={persona?.interests || []} />
-      </main>
-      <Footer profileUser={profileUser} />
-    </div>
+      <div className="min-h-screen bg-app-bg text-app-fg pb-20">
+        <ProfileHeader />
+        <main className="max-w-2xl mx-auto px-4 flex flex-col gap-12 mt-4">
+          <Stats stats={stats} />
+          <TravelSection />
+          <InterestsSection interests={persona?.interests || []} />
+        </main>
+        <Footer profileUser={profileUser as User} />
+      </div>
+    </>
   );
 }
