@@ -6,7 +6,7 @@ import {
   getChatDisplayName,
   getChatDisplayImage,
 } from "@/domain/chat/chat.utils";
-import { getSession } from "@/lib/auth/get-current-user";
+import { getCurrentUser, getSession } from "@/lib/auth/get-current-user";
 import { MessageList } from "@/app/chats/_components/MessageList";
 import { MessageInput } from "@/app/chats/_components/MessageInput";
 import { redirect } from "next/navigation";
@@ -23,23 +23,26 @@ async function ChatHeader({
   chatImage: string | null;
 }) {
   return (
-    <HeaderWrapper backButton>
-      <div className="flex items-center gap-3">
-        <Avatar image={chatImage || undefined} size={40} />
-        <h1 className="font-bold text-xl">{chatName}</h1>
+    <HeaderWrapper backButton className="flex items-end justify-between">
+      <div className="flex flex-col items-start">
+        <p className="text-primery text-lg">Your chat with</p>
+        <h1 className="text-3xl font-bold capitalize min-h-[40px] flex items-center">
+          {chatName}
+        </h1>
       </div>
+      <Avatar image={chatImage || undefined} size={80} variant="square" />
     </HeaderWrapper>
   );
 }
 
 export default async function ChatPage({ params }: Props) {
-  const { id } = await params;
-  const session = await getSession();
+  const loggedUser = await getCurrentUser();
 
-  if (!session?.user?.id) {
+  if (!loggedUser) {
     redirect("/signin");
   }
 
+  const { id } = await params;
   const result = await getChatById({ chatId: id });
 
   if (!result.success) {
@@ -59,15 +62,15 @@ export default async function ChatPage({ params }: Props) {
   }
 
   const chat = result.data;
-  const chatName = getChatDisplayName(chat, session.user.id);
-  const chatImage = getChatDisplayImage(chat, session.user.id);
+  const chatName = getChatDisplayName(chat, loggedUser.id);
+  const chatImage = getChatDisplayImage(chat, loggedUser.id);
 
   return (
     <div className="flex flex-col h-screen">
       <ChatHeader chatName={chatName} chatImage={chatImage} />
       <MessageList
         messages={chat.messages}
-        currentUserId={session.user.id}
+        currentUserId={loggedUser.id}
         chatId={id}
       />
       <MessageInput chatId={id} />

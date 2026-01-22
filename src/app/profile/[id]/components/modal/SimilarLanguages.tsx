@@ -8,7 +8,7 @@ export default function SimilarLanguages({
 }) {
   return (
     <BreakdownItem
-      title="Similar Languages"
+      title="Speak"
       value={
         languages.length > 0
           ? languages.map((language) => formatLanguage(language)).join(", ")

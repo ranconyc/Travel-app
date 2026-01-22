@@ -10,7 +10,7 @@ export default function SimilarInterests({
     <>
       {interests.length > 0 ? (
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg text-secondary">Interests</h2>
+          <h2 className="text-lg text-secondary">Interests in</h2>
           <InterestsList interests={interests} />
         </div>
       ) : (

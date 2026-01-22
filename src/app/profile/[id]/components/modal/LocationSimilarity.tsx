@@ -9,7 +9,7 @@ export default function LocationSimilarity({
 }) {
   return (
     <BreakdownItem
-      title="Location Similarity"
+      title="Live in the"
       value={
         sameCity
           ? "Same City"

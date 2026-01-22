@@ -77,7 +77,7 @@ const Header = () => {
         </p>
         <WeatherWidget />
       </div>
-      <div className="text-4xl font-bold capitalize mb-6 min-h-[40px] flex items-center">
+      <h1 className="text-4xl font-bold capitalize mb-6 min-h-[40px] flex items-center">
         {isUserAtHome ? (
           "Home"
         ) : (
@@ -86,7 +86,7 @@ const Header = () => {
             className="text-4xl font-bold"
           />
         )}
-      </div>
+      </h1>
 
       <Input placeholder="Search destination" type="text" />
     </div>
