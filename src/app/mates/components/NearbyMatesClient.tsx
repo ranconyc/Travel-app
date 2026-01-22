@@ -111,7 +111,7 @@ export default function NearbyMatesClient({
 
       {/* Grid of Mates */}
       <main className="px-6 pb-24">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2">
           {filteredMates.map((mate) => (
             <MateCard
               key={mate.id}

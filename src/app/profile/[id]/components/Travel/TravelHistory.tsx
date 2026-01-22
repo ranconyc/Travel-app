@@ -18,22 +18,7 @@ type TravelHistoryItem = {
 import PassportStamp from "@/app/components/common/PassportStamp";
 import Link from "next/link";
 import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
-
-const NoHistoryMessage = () => {
-  return (
-    <div className="bg-surface/50 p-4 rounded-xl border-2 border-dashed border-surface-secondary">
-      <p className="text-sm text-secondary">
-        Start adding your travel history
-        <Link
-          href="/profile/travelc?content=europe"
-          className="ml-2 text-brand font-bold hover:underline"
-        >
-          Add your first stamp
-        </Link>
-      </p>
-    </div>
-  );
-};
+import AddSection from "@/app/components/common/AddSection";
 
 export default function TravelHistory({
   travelHistory,
@@ -101,7 +86,13 @@ export default function TravelHistory({
       </div>
       <div className="p-8 flex items-center gap-8 overflow-x-scroll no-scrollbar">
         {visits.length === 0 && isMyProfile ? (
-          <NoHistoryMessage />
+          <AddSection
+            title="Start adding your travel history"
+            link={{
+              href: "/profile/travelc?content=europe",
+              label: "Add your first stamp",
+            }}
+          />
         ) : (
           visits.map((item, index) => {
             const displayDate = item.date

@@ -3,6 +3,7 @@
 import INTERESTS from "@/data/interests.json";
 import Link from "next/link";
 import { useProfileActions } from "../../store/useProfileStore";
+import AddSection from "@/app/components/common/AddSection";
 
 type InterestItem = { id: string; label: string };
 type Category = { id: string; label: string; items: InterestItem[] };
@@ -19,22 +20,6 @@ const getInterestLabel = (interestId: string) => {
     }
   }
   return interestId;
-};
-
-const NoInterestsSection = () => {
-  return (
-    <div className="bg-surface/50 p-4 rounded-xl border-2 border-dashed border-surface-secondary">
-      <p className="text-sm text-secondary">
-        Tell us what you love to do when you travel
-        <Link
-          href="/profile/interests"
-          className="ml-2 text-brand font-bold hover:underline"
-        >
-          Add your interests
-        </Link>
-      </p>
-    </div>
-  );
 };
 
 const InterestsList = ({ interests }: { interests: string[] }) => {
@@ -69,7 +54,10 @@ export function InterestsSection({ interests }: { interests: string[] }) {
         )}
       </div>
       {!interests.length ? (
-        <NoInterestsSection />
+        <AddSection
+          title="Tell us what you love to do when you travel"
+          link={{ href: "/profile/interests", label: "Add your interests" }}
+        />
       ) : (
         <InterestsList interests={interests} />
       )}

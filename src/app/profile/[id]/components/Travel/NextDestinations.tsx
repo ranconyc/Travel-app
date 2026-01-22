@@ -1,3 +1,4 @@
+import AddSection from "@/app/components/common/AddSection";
 import { MapPin } from "lucide-react";
 import Link from "next/link";
 
@@ -35,17 +36,13 @@ export default function NextDestinations({
           ))}
         </div>
       ) : (
-        <div className="bg-surface/50 p-4 rounded-xl border-2 border-dashed border-surface-secondary">
-          <p className="text-sm text-secondary">
-            No upcoming trips planned.
-            <Link
-              href="/profile/travelb"
-              className="ml-2 text-brand font-bold hover:underline"
-            >
-              Plan your next adventure
-            </Link>
-          </p>
-        </div>
+        <AddSection
+          title="Have upcoming trips planned?"
+          link={{
+            href: "/profile/next-destinations",
+            label: "Add your next destination",
+          }}
+        />
       )}
     </div>
   );
