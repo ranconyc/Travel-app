@@ -41,7 +41,7 @@ export default function CountryList() {
     <div>
       <SectionHeader title="Countries" href="/countries" />
       <HorizontalList noScrollbar>
-        {true ? (
+        {isLoading ? (
           <>
             {Array.from({ length: 5 }).map((_, i) => (
               <div
@@ -51,7 +51,7 @@ export default function CountryList() {
             ))}
           </>
         ) : (
-          countries?.map((country) => (
+          countries?.slice(0, 20).map((country) => (
             <Link
               key={country.cca3}
               href={`/countries/${country.cca3}`}

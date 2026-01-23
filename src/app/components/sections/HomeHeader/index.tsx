@@ -3,7 +3,7 @@
 import React from "react";
 import { useUser } from "@/app/providers/UserProvider";
 import SplitFlapText from "@/app/components/common/SplitFlapText";
-import Input from "@/app/components/form/Input";
+import HomeHeroSearch from "@/app/components/HomeHeroSearch";
 import WeatherWidget from "@/app/components/WeatherWidget";
 
 export default function HomeHeader() {
@@ -33,7 +33,9 @@ export default function HomeHeader() {
         )}
       </h1>
 
-      <Input placeholder="Search destination" type="text" />
+      <div className="mt-4">
+        <HomeHeroSearch />
+      </div>
     </div>
   );
 }

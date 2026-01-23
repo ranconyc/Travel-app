@@ -80,3 +80,22 @@ export async function deleteCountry(id: string) {
     throw new Error("Failed to delete country");
   }
 }
+
+// get countries by region (Continent)
+export async function getCountriesByRegion(region: string): Promise<Country[]> {
+  try {
+    return (await prisma.country.findMany({
+      where: {
+        region: {
+          equals: region,
+          mode: "insensitive",
+        },
+      },
+      orderBy: { name: "asc" },
+      select: countrySummarySelect,
+    })) as unknown as Country[];
+  } catch (error) {
+    console.error("getCountriesByRegion error:", error);
+    return [];
+  }
+}
