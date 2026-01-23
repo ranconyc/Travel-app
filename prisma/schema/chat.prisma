@@ -1,0 +1,57 @@
+// ============================================
+// CHAT DOMAIN
+// ============================================
+// Real-time messaging and chat rooms
+
+/**
+ * ---------------------------- CHAT -----------------------------
+ */
+
+model Chat {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  isGroup    Boolean @default(false)
+  groupName  String?
+  groupImage String?
+
+  members  ChatMember[]
+  messages Message[]    @relation("ChatMessages")
+
+  lastMessageId String?  @db.ObjectId
+  lastMessage   Message? @relation("ChatLastMessage", fields: [lastMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatMember {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  chatId String @db.ObjectId
+  userId String @db.ObjectId
+
+  lastReadAt DateTime?
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  chatId   String   @db.ObjectId
+  senderId String   @db.ObjectId
+  content  String
+  
+  readBy   String[] @db.ObjectId
+
+  chat   Chat @relation("ChatMessages", fields: [chatId], references: [id], onDelete: Cascade)
+  sender User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  chatLastMessage Chat[] @relation("ChatLastMessage")
+
+  @@index([chatId])
+  @@index([senderId])
+}

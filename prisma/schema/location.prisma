@@ -1,0 +1,263 @@
+// ============================================
+// LOCATION DOMAIN
+// ============================================
+// Geographic hierarchy: Country → State → City → Place
+
+model Country {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  cca3          String   @unique // "THA", "DEU" (Primary lookup key)
+  code          String   // "TH", "DE" (ISO 3166-1 alpha-2)
+  name          String
+  officialName  String?
+  imageHeroUrl  String?
+  isUnMember Boolean?
+  isIndependent Boolean?
+
+  population    Int?
+  areaKm2       Float?
+  flags         Json?    // { png, svg, alt }
+  borders       String[] // cca3 codes for "Nearby" features
+  idd Json?
+  tld Json?
+  translations Json?
+  altSpellings String[]
+  demonyms Json?
+  flag String? // Emoji flag
+  coatOfArms Json? // { png: string, svg: string }
+  gini Json? // { "2018": 32.1 }
+  landlocked Boolean?
+
+  // MongoDB Geospatial Standard
+  // Index this in DB: db.Country.createIndex({ "coords": "2dsphere" })
+  coords        Json?    // { type: "Point", coordinates: [lng, lat] }
+  maps          Json?    // { googleMaps, openStreetMaps }
+
+  // 1. LOGISTICS & UTILITIES
+  logistics     Json?    /* {
+      car: { side: "left", signs: ["T"] },
+      plugs: ["A", "B", "C"], // Standardized plug types
+      voltage: 220,
+      timezones: ["UTC+07:00"],
+      startOfWeek: "monday"
+  } */
+
+  // 2. FINANCE & BUDGET
+  finance       Json?    /* {
+      currency: { code: "THB", symbol: "฿", name: "Thai Baht" },
+      avgDailyCost: 45, // Numeric for filtering/sorting
+      cashCulture: { tipping: "10%", atmAvailability: "High" }
+  } */
+
+  // 3. SAFETY & EMERGENCY
+  safety        Json?    /* {
+      overallScore: 4.5,
+      soloFemaleFriendly: 5, // 1-5 rating
+      crimeLevel: "Low",
+      scams: [{ type: "Tuk-Tuk", tip: "..." }]
+  } */
+
+  emergency     Json?    // { police: "191", touristPolice: "1155" }
+
+  // 4. HEALTH & MEDICAL
+  health        Json?    /* {
+      tapWaterSafe: false,
+      vaccines: ["Hepatitis A", "Typhoid"],
+      medicalStandard: "International (Cities)"
+  } */
+
+  // 5. SEASONS LOGIC (Improved)
+  seasons       Json?    /* {
+      peakMonths: [11, 12, 1, 2], // Nov to Feb
+      shoulderMonths: [3, 4, 10],
+      note: "Avoid monsoon in September"
+  } */
+
+  // 6. LANGUAGES & PHRASES
+  // Structure: { official: string[], spoken: string[], nativeName: string, codes: string[] }
+  languages     Json?
+  commonPhrases Json?    // Array: [{ label: "Hello", category: "Basics", audioUrl: "..." }]
+
+  visaInfo Json? /* {
+  requiresVisa: boolean,
+  type: "Visa Free" | "e-Visa" | "Visa on Arrival" | "Embassy Visa",
+  durationDays: 30,
+  notes: "Israeli passport holders...",
+  processingTime: "Instant" | "3-5 days",
+  cost: { amount: 0, currency: "USD" }
+} */
+
+
+  // Geography & Relations
+  region        String?
+  subRegion     String?
+  capitalName   String?
+  capitalId     String?  @db.ObjectId
+  capitalCity   City?    @relation("CountryCapital", fields: [capitalId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
+  // Relations
+  states        State[]
+  cities        City[]
+  places        Place[]
+  media         Media[]
+
+  needsReview   Boolean  @default(false)
+  autoCreated   Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([coords], map: "coords_2dsphere")
+}
+
+/**
+ * ------------------------- STATE / PROVINCE -------------------------
+ */
+model State {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  stateId      Int?     @unique // ID from countries+states+cities.json
+  name         String
+  native       String?
+  code         String?  // "BDS", "CA"
+  type         String?  // "province", "state", etc.
+  
+  countryRefId String   @db.ObjectId
+  country      Country  @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+
+  coords       Json?    // { type: "Point", coordinates: [lng, lat] }
+  translations Json?
+
+  cities       City[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([countryRefId])
+}
+
+/**
+ * ------------------------- CITY -------------------------
+ */
+model City {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  cityId       String   @unique // "bangkok"
+  externalId   Int?     @unique // ID from countries+states+cities.json
+  name         String
+
+  countryRefId String?  @db.ObjectId
+  country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+
+  isCapital Boolean @default(false)
+
+  // Geo
+  coords      Json // GeoJSON Point
+  radiusKm    Int     @default(30)
+  timeZone    String?
+  boundingBox Json? // { sw: [lng, lat], ne: [lng, lat] } - Crucial for map zoom
+
+  // Media
+  imageHeroUrl String?
+  media        Media[]
+
+  // Meta
+  stateName     String?  // Legacy or free text
+  stateId       String?  @db.ObjectId
+  state         State?   @relation(fields: [stateId], references: [id])
+  district      String?
+  population    Int?
+  bestSeason    String?
+  idealDuration String?
+  safety        String?
+  neighborhoods String[] @default([])
+  budget        Json?
+  gettingAround Json?
+
+  places Place[]
+
+  // User Relations
+  usersHomeBase    UserProfile[] @relation("HomeBase")
+  usersCurrentCity User[]        @relation("CurrentLocation")
+  
+  // Travel History
+  cityVisits CityVisit[]
+
+  autoCreated Boolean @default(false)
+  needsReview Boolean @default(false)
+
+  capitalOf Country[] @relation("CountryCapital")
+
+  @@index([countryRefId])
+  @@index([stateId])
+}
+
+/**
+ * ------------------------- PLACE (Formerly Activity) -------------------------
+ */
+model Place {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  slug    String @unique // "chatuchak-weekend-market"
+  name    String
+  altName String?
+
+  // Relations
+  cityRefId String @db.ObjectId
+  city      City   @relation(fields: [cityRefId], references: [id], onDelete: Cascade)
+
+  countryRefId String?  @db.ObjectId
+  country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
+
+  // Classification
+  type       String // "RESTAURANT", "LANDMARK", "MUSEUM"
+  categories String[] // ["street-food", "history"]
+  mapIcon    String?  // "cutlery", "camera", "bed" - For map rendering
+
+  // Location
+  address      String?
+  coords       Json // GeoJSON { type: "Point", coordinates: [lng, lat] }
+  timeZone     String?
+  neighborhood String?
+
+  // Contact / Info (New Traveler Fields)
+  websiteUrl    String?
+  phoneNumber   String?
+  googlePlaceId String? @unique
+  
+  // Ops
+  openingHours         Json? // Structured weekly hours
+  isPermanentlyClosed  Boolean @default(false)
+  
+  bestTimeToVisit      String?
+  typicalVisitDuration String?
+
+  // Social Proof (Aggregated)
+  rating      Float? @default(0.0)
+  reviewCount Int    @default(0)
+
+  // Price
+  entryPrice Json? // { currencyCode, range: "$-$$$$", exact: 100 }
+
+  // UX & Vibe
+  amenities     String[] // "wifi", "ac", "parking"
+  vibe          String[] // "quiet", "crowded", "touristy"
+  accessibility String?
+  safetyNotes   String?
+  
+  // Media
+  imageHeroUrl String? // Quick access cover
+  media        Media[] // Full gallery
+
+  // CMS Content
+  summary    String?
+  highlights String[]
+  tags       String[]
+
+  autoCreated Boolean @default(false)
+  needsReview Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([cityRefId])
+  @@index([countryRefId])
+  @@index([type])
+  @@index([coords]) // Geo index for "places near me"
+}

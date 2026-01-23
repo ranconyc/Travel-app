@@ -1,0 +1,17 @@
+[
+  {
+    "icon": "SunMoon",
+    "label": "Budget",
+    "description": "Goes with the flow backpaker"
+  },
+  {
+    "icon": "Midrange",
+    "label": "Evening Person",
+    "description": "Energized after dark"
+  },
+  {
+    "icon": "luxury",
+    "label": "Luxury",
+    "description": "Looking to make any momot to its fullest"
+  }
+]

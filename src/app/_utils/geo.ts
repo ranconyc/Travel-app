@@ -216,3 +216,17 @@ export function radiusFromBoundingBox(bounding: string[] | number[]) {
 
   return radiusKm;
 }
+
+export default function calculateBoundingBox(
+  lat: number,
+  lng: number,
+  radiusKm: number,
+) {
+  const latDelta = radiusKm / 111;
+  const lngDelta = radiusKm / (111 * Math.cos(lat * (Math.PI / 180)));
+
+  return {
+    sw: [lng - lngDelta, lat - latDelta],
+    ne: [lng + lngDelta, lat + latDelta],
+  };
+}

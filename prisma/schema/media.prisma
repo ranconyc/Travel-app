@@ -1,0 +1,43 @@
+// ============================================
+// MEDIA DOMAIN
+// ============================================
+// Unified media storage for images and videos
+
+/**
+ * -------------------------- UNIFIED MEDIA ---------------------------
+ * Replaces UserMedia. Handles all images/videos for Users, Places, Cities, etc.
+ */
+model Media {
+  id       String        @id @default(auto()) @map("_id") @db.ObjectId
+  url      String
+  publicId String // Cloudinary/S3 ID
+  
+  type     MediaType     @default(IMAGE)
+  category MediaCategory @default(GALLERY)
+
+  metadata Json? // { width, height, blurHash, altText }
+
+  // --- OWNERSHIP ---
+  userId String? @db.ObjectId
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // --- ASSOCIATIONS (Where does this image appear?) ---
+  // A media item usually belongs to one entity, but could technically belong to multiple if shared
+  placeId String? @db.ObjectId
+  place   Place?  @relation(fields: [placeId], references: [id])
+
+  cityId String? @db.ObjectId
+  city   City?   @relation(fields: [cityId], references: [id])
+  
+  countryId String? @db.ObjectId
+  country   Country? @relation(fields: [countryId], references: [id])
+
+  reviewId String? @db.ObjectId
+  // review Review? @relation(...) // If you add reviews later
+
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([placeId])
+  @@index([cityId])
+}

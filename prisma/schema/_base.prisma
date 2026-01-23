@@ -1,0 +1,50 @@
+// ============================================
+// BASE CONFIGURATION & ENUMS
+// ============================================
+// This file contains the core Prisma configuration
+// and all enum definitions used across the schema.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  VR_360
+}
+
+enum MediaCategory {
+  AVATAR
+  COVER
+  GALLERY
+  REVIEW_PHOTO
+  OFFICIAL // For manually curated content
+}
+
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  DENIED
+  BLOCKED
+}

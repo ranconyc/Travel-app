@@ -92,7 +92,14 @@ export default async function CityPage({
       <main className="pt-24 px-4 max-w-md mx-auto min-h-screen flex flex-col gap-8">
         {/* Identity & Hero */}
         <div className="flex flex-col items-center gap-4 mt-4">
-          <HeroImage src={city?.imageHeroUrl} name={city.name} />
+          <HeroImage
+            src={
+              city?.imageHeroUrl ||
+              (city.country?.flags as { svg?: string; png?: string })?.svg ||
+              (city.country?.flags as { svg?: string; png?: string })?.png
+            }
+            name={city.name}
+          />
           <div className="text-center">
             <Link
               href={`/countries/${city.country?.cca3 || ""}`}

@@ -1,0 +1,55 @@
+// ============================================
+// SOCIAL DOMAIN
+// ============================================
+// Friendship connections and travel history
+
+/**
+ * ------------------------- FRIENDSHIP -------------------------
+ */
+model Friendship {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  requesterId String       @db.ObjectId
+  addresseeId String       @db.ObjectId
+  status      FriendStatus @default(PENDING)
+
+  blockedById String? @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  requester User @relation("FriendshipsRequested", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("FriendshipsReceived", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@index([requesterId])
+  @@index([addresseeId])
+  @@index([status])
+}
+
+/**
+ * ------------------------- CITY VISIT (Travel History) -------------------------
+ */
+model CityVisit {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  cityId String @db.ObjectId
+  city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
+
+  startDate DateTime @default(now())
+  endDate   DateTime? // null = current/active visit
+
+  // Optional: store entry/exit coordinates for detailed tracking
+  entryCoords Json? // GeoJSON Point { type: "Point", coordinates: [lng, lat] }
+  exitCoords  Json? // GeoJSON Point
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, endDate]) // Query for current location (endDate = null)
+  @@index([userId, startDate]) // Query travel history chronologically
+  @@index([cityId])
+}

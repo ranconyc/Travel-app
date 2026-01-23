@@ -18,9 +18,10 @@ import {
   LanguagesIcon,
   Users,
 } from "lucide-react";
-import { formatPopulation } from "@/app/_utils/formatNumber";
+import { formatNumberShort, formatPopulation } from "@/app/_utils/formatNumber";
 import { getDistance } from "@/app/_utils/geo";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
+import LogisticsSection from "./components/LogisticsSection";
 
 export default async function CountryPage({
   params,
@@ -28,11 +29,13 @@ export default async function CountryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const country = await getCountryWithCities(slug);
+  const country = (await getCountryWithCities(slug)) as any;
   const loggedUser = await getCurrentUser();
 
-  const isInThisCountry = loggedUser?.currentCity?.country?.id === country?.id;
+  if (!country) return;
 
+  const inThisCountry = loggedUser?.currentCity?.country?.id === country?.id;
+  console.log("country", country);
   if (!country) {
     notFound();
   }
@@ -49,9 +52,9 @@ export default async function CountryPage({
       icon: Users,
     },
     {
-      value: "$50",
-      label: "daily",
-      icon: DollarSign,
+      value: `${formatNumberShort(country?.areaKm2)}m²`,
+      label: "Area",
+      icon: Globe2,
     },
   ];
 
@@ -65,7 +68,15 @@ export default async function CountryPage({
             title={country.name}
             subtitle={country.subRegion || country.region || ""}
           />
-          <HeroImage src={country.imageHeroUrl} name={country.name} />
+          {/* Use country flag as fallback if hero image is missing */}
+          <HeroImage
+            src={
+              country.imageHeroUrl ||
+              (country.flags as { svg?: string; png?: string })?.svg ||
+              (country.flags as { svg?: string; png?: string })?.png
+            }
+            name={country.name}
+          />
           <SocialLinks query={country.name} />
         </div>
         <Stats stats={stats} />
@@ -73,19 +84,21 @@ export default async function CountryPage({
           <MediaGallery country={country as any} />
         )} */}
 
-        <div className="flex gap-4 overflow-x-scroll">
+        <div className="flex flex-col gap-4">
           <FinanceSection
-            data={
-              {
-                currency: { symbol: "$", name: "US Dollar" },
-                budget: {
-                  daily: { budget: "60-80", mid: "100-120", luxury: "200+" },
-                },
-                cashCulture: { cashPreferred: false },
-              } as any
-            }
+            data={{
+              currency: {
+                symbol: country?.finance?.currency?.symbol,
+                name: country?.finance?.currency?.name,
+              },
+              budget: {
+                daily: { budget: "60-80", mid: "100-120", luxury: "200+" },
+              },
+              cashCulture: { cashPreferred: true },
+            }}
           />
-          <SafetySection data={country.safety as any} />
+          <LogisticsSection />
+          {/* <SafetySection /> */}
           {/* <LanguageSection data={country.languages as any} /> */}
           <CultureSection />
           <HealthSection />

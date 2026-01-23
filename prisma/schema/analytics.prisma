@@ -1,0 +1,18 @@
+// ============================================
+// ANALYTICS DOMAIN
+// ============================================
+// Search tracking and analytics
+
+/**
+ * ---------------------------- SEARCH -----------------------------
+ */
+model SearchEvent {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String?
+  sessionId          String
+  searchQuery        String
+  timestamp          DateTime @default(now())
+  resultCount        Int
+  clickedResultIndex Int?
+  pagePath           String?
+}

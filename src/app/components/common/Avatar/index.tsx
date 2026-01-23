@@ -38,11 +38,11 @@ export function Avatar({
     >
       <Image
         // if no image was provided, use fallback
-        src={image || "/public/placeholder-avatar.png"}
+        src={image || "/placeholder-avatar.png"}
         alt={`${name} profile`}
         fill
         className="object-cover"
-        sizes={`${size}px`} // tell Next.js the real rendered size
+        sizes={`${size}px`}
       />
     </div>
   );

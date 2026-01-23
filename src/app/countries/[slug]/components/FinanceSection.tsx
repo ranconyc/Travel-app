@@ -4,7 +4,7 @@ import { Wallet, CreditCard, Banknote } from "lucide-react";
 
 interface MoneyData {
   currency?: {
-    code: string;
+    code?: string;
     symbol: string;
     name: string;
   };
@@ -26,7 +26,7 @@ export const FinanceSection = ({ data }: { data: MoneyData }) => {
   if (!data.currency && !data.budget) return <div>FinanceSection</div>;
 
   return (
-    <div className="min-w-fit flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
+    <div className="px-4 py-6 flex flex-col gap-6 bg-surface rounded-3xl border border-surface-secondary">
       <div className="w-40 flex items-center gap-3 mb-2">
         <div className="bg-green-500/10 p-2 rounded-full">
           <Wallet className="w-6 h-6 text-green-500" />

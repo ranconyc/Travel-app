@@ -1,0 +1,88 @@
+// ============================================
+// USER DOMAIN
+// ============================================
+// User accounts and extended profile information
+
+/**
+ * -------------------------- USER ---------------------------
+ */
+model User {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  /* ---- INFO ---- */
+  email            String?   @unique
+  role             Role      @default(USER)
+  name             String?
+  emailVerified    DateTime?
+  passwordHash     String?
+  profileCompleted Boolean   @default(false)
+
+  /* ---- LOCATION ---- */
+  currentLocation Json? // [lng, lat]
+  currentCityId   String? @db.ObjectId
+  currentCity     City?   @relation("CurrentLocation", fields: [currentCityId], references: [id])
+
+ /* ---- TRAVELS ---- */
+  visitedCountries String[] @default([])
+    
+    /* ---- TRAVEL HISTORY ---- */
+  cityVisits CityVisit[]
+
+  /* ---- AUTH ---- */
+  accounts Account[]
+  sessions Session[]
+
+  /* ---- PROFILE ---- */
+  profile      UserProfile?
+  
+  // Refactored Media Relations
+  media        Media[] // Media uploaded by this user
+  
+  // Helper for quick avatar access (optional, can also query Media model directly)
+  avatarUrl    String? 
+  
+ 
+
+  /* ---- FRIENDSHIP ---- */
+  friendshipsRequested Friendship[] @relation("FriendshipsRequested")
+  friendshipsReceived  Friendship[] @relation("FriendshipsReceived")
+
+  /* ---- CHAT ---- */
+  chats        ChatMember[]
+  sentMessages Message[]    @relation("SentMessages")
+
+  
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/**
+ * -------------------------- USER PROFILE ---------------------------
+ */
+model UserProfile {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /* ---- INFO ---- */
+  firstName   String?
+  lastName    String?
+  occupation  String?
+  birthday    DateTime?
+  description String?
+  gender      Gender?
+
+  /* ---- LANGUAGE ---- */
+  languages String[] @default([])
+
+  /* ---- HOME BASE ---- */
+  homeBaseCityId String? @db.ObjectId
+  homeBaseCity   City?   @relation("HomeBase", fields: [homeBaseCityId], references: [id])
+
+  /* ---- TRAVEL PERSONA ---- */
+  persona Json? // { dailyRhythm, travelStyle, interests }
+  socials Json? // { instagram, tiktok }
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -24,17 +24,21 @@ export default async function ProfilePage({
   const stats: StatItem[] = [
     {
       value: visitedCountriesCodes.length,
-      label: "Countries",
+      label: visitedCountriesCodes.length > 1 ? "Countries" : "Country",
       icon: Globe2,
     },
     {
       value: friends.length,
-      label: "Friendship",
+      label: friends.length > 1 ? "Friendships" : "Friendship",
       icon: Users,
     },
     {
       value: profileUser?.profile?.languages?.length || 0,
-      label: "Languages",
+      label: !profileUser?.profile?.languages
+        ? ""
+        : profileUser?.profile?.languages?.length > 1
+          ? "Languages"
+          : "Language",
       icon: LanguagesIcon,
     },
   ];

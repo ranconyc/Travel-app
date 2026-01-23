@@ -11,19 +11,21 @@ import CityList from "@/app/components/sections/HomeSections/CityList";
 export default function Home() {
   const loggedUser = useUser();
 
-  useGeo({
+  const coords = useGeo({
     persistToDb: true,
-    distanceThresholdKm: 1, // Save to DB if user moves more than 1km
+    distanceThresholdKm: 5, // Save to DB if user moves more than 1km
     initialUser: loggedUser,
     refreshOnUpdate: true,
   });
+
+  console.log("coords", coords);
 
   if (!loggedUser) return redirect("/signin");
 
   return (
     <div className="h-full border-b border-surface relative">
       <HomeHeader />
-      <main className="p-4 overflow-y-scroll">
+      <main className="p-4 pb-28 overflow-y-scroll">
         <div className="flex flex-col gap-6">
           <UserList loggedUser={loggedUser} />
           <CountryList />

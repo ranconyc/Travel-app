@@ -23,7 +23,7 @@ export default function UserList({ loggedUser }: UserListProps) {
   return (
     <div>
       <SectionHeader title="Travelers" href="/mates" />
-      <HorizontalList>
+      <HorizontalList noScrollbar gap={2}>
         {filteredUsers.map((user: User) => (
           <Link
             key={user.id}

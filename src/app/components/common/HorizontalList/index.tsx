@@ -4,16 +4,18 @@ interface HorizontalListProps {
   children: React.ReactNode;
   className?: string;
   noScrollbar?: boolean;
+  gap?: number;
 }
 
 export default function HorizontalList({
   children,
   className = "",
   noScrollbar = true,
+  gap = 4,
 }: HorizontalListProps) {
   return (
     <div
-      className={`flex gap-4 overflow-x-scroll pb-4 ${
+      className={`flex gap-${gap} overflow-x-scroll pb-4 ${
         noScrollbar ? "no-scrollbar" : ""
       } ${className}`}
     >
