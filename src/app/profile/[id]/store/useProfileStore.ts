@@ -2,10 +2,12 @@
 
 import { create } from "zustand";
 import { User } from "@/domain/user/user.schema";
+import { MatchResult } from "@/domain/match/match.schema";
 
 interface ProfileState {
   profileUser: User | null;
   loggedUser: User | null;
+  matchResult: MatchResult | null;
   isMyProfile: boolean;
   friendship: {
     status: string;
@@ -26,6 +28,7 @@ interface ProfileState {
 export const useProfileStore = create<ProfileState>((set) => ({
   profileUser: null,
   loggedUser: null,
+  matchResult: null,
   isMyProfile: false,
   friendship: null,
   initialized: false,
@@ -47,6 +50,8 @@ export const useProfileStore = create<ProfileState>((set) => ({
 export const useProfileUser = () =>
   useProfileStore((state) => state.profileUser);
 export const useLoggedUser = () => useProfileStore((state) => state.loggedUser);
+export const useMatchResult = () =>
+  useProfileStore((state) => state.matchResult);
 export const useIsMyProfile = () =>
   useProfileStore((state) => state.isMyProfile);
 export const useFriendship = () => useProfileStore((state) => state.friendship);

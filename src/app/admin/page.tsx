@@ -62,6 +62,81 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
+      {/* Forms Directory */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="p-6 border-b border-gray-100">
+          <h2 className="font-semibold text-gray-900">Forms Directory</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Quick access to all forms in the application
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+          <a
+            href="/signin"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">Sign In</div>
+            <div className="text-sm text-gray-500 mt-1">
+              Authentication form
+            </div>
+          </a>
+          <a
+            href="/profile/edit"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">Complete Profile</div>
+            <div className="text-sm text-gray-500 mt-1">
+              User profile completion
+            </div>
+          </a>
+          <a
+            href="/profile/persona"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">Persona Setup</div>
+            <div className="text-sm text-gray-500 mt-1">
+              Travel style & interests
+            </div>
+          </a>
+          <a
+            href="/profile/travel"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">Travel History</div>
+            <div className="text-sm text-gray-500 mt-1">
+              Visited countries selection
+            </div>
+          </a>
+          <a
+            href="/profile/travel-persona"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">Travel Persona</div>
+            <div className="text-sm text-gray-500 mt-1">
+              Combined persona form
+            </div>
+          </a>
+          <a
+            href="/profile/travel-preferences"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">Travel Preferences</div>
+            <div className="text-sm text-gray-500 mt-1">
+              Preferences & settings
+            </div>
+          </a>
+          <a
+            href="/admin/generator"
+            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          >
+            <div className="font-medium text-gray-900">City Generator</div>
+            <div className="text-sm text-gray-500 mt-1">
+              Admin city creation form
+            </div>
+          </a>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Top Destinations */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">

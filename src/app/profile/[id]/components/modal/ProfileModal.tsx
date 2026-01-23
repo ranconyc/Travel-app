@@ -7,10 +7,9 @@ import {
   useProfileActions,
   useProfileUser,
 } from "../../store/useProfileStore";
-import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 import MatchSummary from "../compatibility/MatchSummary";
 import MatchBreakdown from "../compatibility/MatchBreakdown";
-import MatchAvatar from "../compatibility/MatchAvatar";
+import MatchAvatars from "../compatibility/MatchAvatars";
 
 export default function ProfileModal() {
   const { setProfileModalOpen } = useProfileActions();
@@ -20,12 +19,6 @@ export default function ProfileModal() {
 
   if (!profileUser || !loggedUser) return null;
 
-  const matchResult = calculateMatchScoreBatch(
-    loggedUser,
-    profileUser,
-    "current",
-  );
-
   return (
     <Modal
       isOpen={isOpen}
@@ -34,9 +27,9 @@ export default function ProfileModal() {
       variant="popup"
     >
       <div className="py-4">
-        <MatchAvatar matchResult={matchResult} />
+        <MatchAvatars />
         <MatchSummary />
-        <MatchBreakdown matchResult={matchResult} />
+        <MatchBreakdown />
       </div>
     </Modal>
   );

@@ -1,15 +1,13 @@
-import { MatchResult } from "@/domain/match/match.schema";
 import SimilarLanguages from "./SimilarLanguages";
 import SimilarPlaces from "./SimilarPlaces";
 import AgeGap from "./AgeGap";
 import SimilarInterests from "./SimilarInterests";
 import LocationSimilarity from "./LocationSimilarity";
+import { useMatchResult } from "../../store/useProfileStore";
 
-export default function MatchBreakdown({
-  matchResult,
-}: {
-  matchResult: MatchResult;
-}) {
+export default function MatchBreakdown() {
+  const matchResult = useMatchResult();
+  if (!matchResult) return null;
   return (
     <div className="flex flex-col gap-4">
       <SimilarInterests interests={matchResult?.breakdown.interests.shared} />

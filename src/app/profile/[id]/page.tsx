@@ -1,5 +1,3 @@
-import { getFriendRequestsAction } from "@/domain/friendship/friendship.actions";
-import { FriendStatus } from "@prisma/client";
 import { getUserProfile } from "@/domain/user/user.queries";
 import TravelSection from "./components/Travel/TravelSection";
 import { Users, Globe2, LanguagesIcon } from "lucide-react";

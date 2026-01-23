@@ -97,9 +97,9 @@ async function main() {
           where: { stateId: stateData.id },
           update: {
             name: stateData.name,
-            native: stateData.native,
-            code: stateData.iso2,
-            type: stateData.type,
+            native: stateData.native || null,
+            code: stateData.iso2 || null,
+            type: stateData.type || null,
             countryRefId: country.id,
             translations: stateData.translations || null,
             coords: stateData.latitude
@@ -115,9 +115,9 @@ async function main() {
           create: {
             stateId: stateData.id,
             name: stateData.name,
-            native: stateData.native,
-            code: stateData.iso2,
-            type: stateData.type,
+            native: stateData.native || null,
+            code: stateData.iso2 || null,
+            type: stateData.type || null,
             countryRefId: country.id,
             translations: stateData.translations || null,
             coords: stateData.latitude
@@ -136,13 +136,20 @@ async function main() {
         if (stateData.cities && stateData.cities.length > 0) {
           for (const cityData of stateData.cities) {
             const citySlug = cityData.name
+              .normalize("NFKD")
+              .replace(/[\u0300-\u036f]/g, "")
               .toLowerCase()
-              .replace(/[^a-z0-9]/g, "-");
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/(^-|-$)+/g, "");
+
+            // Adding ID to ensure uniqueness for cities with the same name in the same country
+            const cityId = `${citySlug}-${country.code.toLowerCase()}-${cityData.id}`;
 
             await prisma.city.upsert({
               where: { externalId: cityData.id },
               update: {
                 name: cityData.name,
+                cityId: cityId,
                 countryRefId: country.id,
                 stateId: state.id,
                 timeZone: cityData.timezone,
@@ -156,7 +163,7 @@ async function main() {
               },
               create: {
                 externalId: cityData.id,
-                cityId: `${citySlug}-${cityData.id}`,
+                cityId: cityId,
                 name: cityData.name,
                 countryRefId: country.id,
                 stateId: state.id,

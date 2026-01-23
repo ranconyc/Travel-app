@@ -11,7 +11,7 @@ export default function SimilarLanguages({
       title="Speak"
       value={
         languages.length > 0
-          ? languages.map((language) => formatLanguage(language)).join(", ")
+          ? languages.map((language) => formatLanguage(language)).join(" ")
           : "0"
       }
     />

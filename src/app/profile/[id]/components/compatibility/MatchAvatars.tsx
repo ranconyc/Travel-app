@@ -1,15 +1,17 @@
 import { Avatar } from "@/app/components/common/Avatar";
-import { MatchResult } from "@/domain/match/match.schema";
-import { useLoggedUser, useProfileUser } from "../../store/useProfileStore";
+import {
+  useLoggedUser,
+  useProfileUser,
+  useMatchResult,
+} from "../../store/useProfileStore";
 
-export default function MatchAvatar({
-  matchResult,
-}: {
-  matchResult: MatchResult;
-}) {
+export default function MatchAvatars() {
   const profileUser = useProfileUser();
   const loggedUser = useLoggedUser();
-  if (!profileUser || !loggedUser) return null;
+  const matchResult = useMatchResult();
+
+  if (!profileUser || !loggedUser || !matchResult) return null;
+
   return (
     <div className="relative flex -space-x-4 justify-center mb-4">
       <Avatar

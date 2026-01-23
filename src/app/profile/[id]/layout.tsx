@@ -3,6 +3,7 @@ import { ProfileHeader } from "@/app/profile/[id]/components/header/ProfileHeade
 import { getFriendshipStatusAction } from "@/domain/friendship/friendship.actions";
 import { getUserProfile } from "@/domain/user/user.queries";
 import { User } from "@/domain/user/user.schema";
+import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 
 import { Footer } from "./Footer";
 import StoreInitializer from "./components/StoreInitializer";
@@ -47,11 +48,18 @@ export default async function ProfileLayout({
 
   const isMyProfile = loggedUser?.id === profileUser?.id;
 
+  // Calculate match score on the server
+  let matchResult = null;
+  if (loggedUser && !isMyProfile) {
+    matchResult = calculateMatchScoreBatch(loggedUser, profileUser);
+  }
+
   return (
     <>
       <StoreInitializer
         profileUser={profileUser as User}
         loggedUser={loggedUser as User | null}
+        matchResult={matchResult}
         isMyProfile={isMyProfile}
         friendship={friendship}
       />

@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/app/components/common/Button";
 
 import RhythmStep from "@/app/profile/persona/_components/RhythmStep";
