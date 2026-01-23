@@ -118,6 +118,17 @@ export default async function CityPage({
           </div>
         </div>
 
+        {session?.user?.currentCityId === city.id && (
+          <div className="flex items-center justify-center gap-2 -mt-2 animate-fade-in">
+            <div className="flex items-center gap-2 bg-brand/10 text-brand px-4 py-1.5 rounded-full border border-brand/20 shadow-sm backdrop-blur-md">
+              <MapPin size={14} />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                You are here
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Stats Row */}
         <div className="flex items-center justify-between px-2 py-4 bg-surface/50 rounded-2xl backdrop-blur-sm border border-surface-secondary">
           <div className="text-center flex-1">

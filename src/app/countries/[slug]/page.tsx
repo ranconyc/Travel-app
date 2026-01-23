@@ -132,6 +132,14 @@ export default async function CountryPage({
             title={country.name}
             subtitle={country.subRegion || country.region || ""}
           />
+          {inThisCountry && (
+            <div className="flex items-center gap-2 bg-brand/10 text-brand px-3 py-1 rounded-full w-fit animate-fade-in border border-brand/20">
+              <Globe2 size={14} />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                You are in {country.name}
+              </span>
+            </div>
+          )}
           {/* Use country flag as fallback if hero image is missing */}
           <HeroImage
             src={

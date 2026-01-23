@@ -380,23 +380,36 @@ export async function ensureCountryAndCityFromLocation(
     // --- HANDLE STATE ---
     let stateRefId: string | undefined = undefined;
     if (meta.state || meta.stateCode) {
-      const stateIdString =
-        `${countryCode2}-${meta.stateCode || meta.state || "unknown"}`.toLowerCase();
-      const state = await prisma.state.upsert({
+      // Try to find existing state
+      const existingState = await prisma.state.findFirst({
         where: {
-          stateId: parseInt(stateIdString.replace(/[^0-9]/g, "")) || undefined,
-        }, // Fallback to unique check by other fields if possible
-        // MongoDB doesn't have an easy way to combine unique fields like this without a composite key
-        // So we'll try to find it first or just use a generated string if we had one.
-        // Actually, let's just find first and then create if missing for simplicity since State doesn't have a natural unique string ID yet.
-        update: {},
-        create: {
-          name: meta.state || meta.stateCode || "Unknown State",
-          code: meta.stateCode || null,
           countryRefId: country.id,
+          OR: [
+            {
+              code: {
+                equals: meta.stateCode || undefined,
+                mode: "insensitive",
+              },
+            },
+            { name: { equals: meta.state || undefined, mode: "insensitive" } },
+          ],
         },
       });
-      stateRefId = state.id;
+
+      if (existingState) {
+        stateRefId = existingState.id;
+      } else {
+        // Create new State
+        const newState = await prisma.state.create({
+          data: {
+            name: meta.state || meta.stateCode || "Unknown State",
+            code: meta.stateCode || null,
+            countryRefId: country.id,
+            // stateId is optional, so we leave it out (null)
+          },
+        });
+        stateRefId = newState.id;
+      }
     }
 
     const city = await prisma.city.upsert({
