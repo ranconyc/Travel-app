@@ -12,14 +12,20 @@ export default function HeroImage({
       {src ? (
         <div className="relative w-full h-full">
           <Image src={src} alt={name} fill className="object-cover" priority />
-          {/* Gradient Overlay */}
-          {/* <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" /> */}
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-surface text-secondary">
-          <span className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-gray-400 to-gray-600">
-            {name.substring(0, 2).toUpperCase()}
-          </span>
+        <div className="w-full h-full relative">
+          <Image
+            src={`https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800&auto=format&fit=crop&sig=${name}`}
+            alt={`${name} placeholder`}
+            fill
+            className="object-cover opacity-60"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+            <span className="text-6xl font-bold text-white drop-shadow-lg">
+              {name.substring(0, 2).toUpperCase()}
+            </span>
+          </div>
         </div>
       )}
 

@@ -9,11 +9,11 @@ export default function useStep() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Ensure step is within valid range (1-3)
-  const step = Math.min(Math.max(Number(searchParams.get("step")) || 1, 1), 3);
+  // Ensure step is within valid range (1-4)
+  const step = Math.min(Math.max(Number(searchParams.get("step")) || 1, 1), 4);
 
   const handleContinue = () => {
-    if (step < 3) {
+    if (step < 4) {
       const params = new URLSearchParams(searchParams.toString());
       params.set("step", (step + 1).toString());
       router.push(`${pathname}?${params.toString()}`, { scroll: false });

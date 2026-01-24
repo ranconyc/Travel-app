@@ -200,6 +200,10 @@ export function formatDistanceWithFlightHint(
   return flight ? `${base} (${flight})` : base;
 }
 
+/**
+ * Calculate radius from bounding box.
+ * Returns null if bounding box is invalid.
+ */
 export function radiusFromBoundingBox(bounding: string[] | number[]) {
   if (!bounding || bounding.length < 4) return null;
 
@@ -217,6 +221,10 @@ export function radiusFromBoundingBox(bounding: string[] | number[]) {
   return radiusKm;
 }
 
+/**
+ * Calculate bounding box from center point and radius.
+ * Returns null if radius is invalid.
+ */
 export default function calculateBoundingBox(
   lat: number,
   lng: number,

@@ -6,7 +6,11 @@ import SplitFlapText from "@/app/components/common/SplitFlapText";
 import HomeHeroSearch from "@/app/components/HomeHeroSearch";
 import WeatherWidget from "@/app/components/WeatherWidget";
 
-export default function HomeHeader() {
+export default function HomeHeader({
+  coords,
+}: {
+  coords?: { lat: number; lng: number };
+}) {
   const user = useUser();
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
 
@@ -20,7 +24,7 @@ export default function HomeHeader() {
               ? `${user?.profile?.firstName || ""} Explore`
               : "Explore the"}
         </p>
-        <WeatherWidget />
+        <WeatherWidget lat={coords?.lat} lng={coords?.lng} />
       </div>
       <h1 className="text-4xl font-bold capitalize mb-6 min-h-[40px] flex items-center">
         {isUserAtHome ? (

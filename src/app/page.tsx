@@ -14,6 +14,8 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
+import { fetchWeather } from "@/app/components/WeatherWidget/weather.service";
+
 export default async function Home() {
   const queryClient = new QueryClient();
   const user = await getCurrentUser();
@@ -32,6 +34,14 @@ export default async function Home() {
   const coords = hasLocation
     ? { lng: location.coordinates[0], lat: location.coordinates[1] }
     : undefined;
+
+  // Prefetch weather
+  if (coords) {
+    await queryClient.prefetchQuery({
+      queryKey: ["weather", coords.lat, coords.lng],
+      queryFn: () => fetchWeather(coords.lat, coords.lng),
+    });
+  }
 
   // Prefetch countries
   await queryClient.prefetchQuery({

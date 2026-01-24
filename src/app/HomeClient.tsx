@@ -7,7 +7,6 @@ import UserList from "@/app/components/sections/HomeSections/UserList";
 import CityList from "@/app/components/sections/HomeSections/CityList";
 import { redirect } from "next/navigation";
 import { useLocation } from "@/app/providers/LocationProvider";
-import { useEffect, useState } from "react";
 
 interface HomeClientProps {
   dbLocation?: { lat: number; lng: number };
@@ -17,24 +16,18 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
   const loggedUser = useUser();
   const { location: browserLocation } = useLocation();
 
-  const [effectiveCoords, setEffectiveCoords] = useState<
-    { lat: number; lng: number } | undefined
-  >(dbLocation);
-
-  useEffect(() => {
-    if (browserLocation) {
-      setEffectiveCoords({
+  const effectiveCoords = browserLocation
+    ? {
         lat: browserLocation.latitude,
         lng: browserLocation.longitude,
-      });
-    }
-  }, [browserLocation]);
+      }
+    : dbLocation;
 
   if (!loggedUser) return redirect("/signin");
 
   return (
     <div className="h-full border-b border-surface relative">
-      <HomeHeader />
+      <HomeHeader coords={effectiveCoords} />
       <main className="p-4 pb-28 overflow-y-scroll" id="home-main">
         <div className="flex flex-col gap-6">
           <UserList loggedUser={loggedUser} />

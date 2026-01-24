@@ -56,7 +56,7 @@ export default function CountriesPage() {
           {CONTINENTS.map((continent) => (
             <Link
               key={continent.slug}
-              href={`/countries/${continent.slug}`}
+              href={`/continents/${continent.slug}`}
               className="group relative h-40 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all block"
             >
               {/* Animated Gradient Background */}

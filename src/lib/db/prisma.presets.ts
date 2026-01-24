@@ -89,6 +89,9 @@ export const countryFullInclude = {
       media: true,
     },
   },
+  states: {
+    orderBy: { name: "asc" },
+  },
   places: true,
   media: true,
 } satisfies Prisma.CountryInclude;

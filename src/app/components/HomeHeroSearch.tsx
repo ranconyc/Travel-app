@@ -87,7 +87,7 @@ export default function HomeHeroSearch() {
     } else if (item.type === "CITY") {
       router.push(`/cities/${item.slug}`);
     } else {
-      router.push(`/countries/${item.slug}`);
+      router.push(`/countries/${item.slug.toLowerCase()}`);
     }
     setIsOpen(false);
   };

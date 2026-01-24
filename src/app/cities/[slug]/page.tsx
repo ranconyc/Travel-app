@@ -46,45 +46,34 @@ export default async function CityPage({
     <div className="bg-appbg min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
-        <Button
-          variant="back"
-          className="bg-gray-800/50 backdrop-blur-md text-white hover:bg-gray-800/70"
-        />
+        <Button variant="back" />
         <div className="flex items-center gap-3">
-          <button className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800/70 transition-colors">
-            <Heart size={20} className="text-white" />
-          </button>
-          <button className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800/70 transition-colors">
-            <Shield size={20} className="text-white" />
-          </button>
-          <Link
+          <Button variant="icon" icon={<Heart size={20} />} />
+          <Button variant="icon" icon={<Shield size={20} />} />
+          <Button
+            variant="icon"
             href={`${social.filter((s) => s.name === "tiktok")[0].groupsURL}${city.name}`}
             target="_blank"
-            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
-          >
-            <AiFillTikTok size={20} className="text-white" />
-          </Link>
-          <Link
+            icon={<AiFillTikTok size={20} />}
+          />
+          <Button
+            variant="icon"
             href={`${social.filter((s) => s.name === "facebook")[0].groupsURL}${city.name}`}
             target="_blank"
-            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
-          >
-            <FacebookIcon size={20} className="text-white" />
-          </Link>
-          <Link
+            icon={<FacebookIcon size={20} />}
+          />
+          <Button
+            variant="icon"
             href={`${social.filter((s) => s.name === "reddit")[0].groupsURL}${city.name} travel`}
             target="_blank"
-            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
-          >
-            <AiFillRedditCircle size={20} className="text-white" />
-          </Link>
-          <Link
+            icon={<AiFillRedditCircle size={20} />}
+          />
+          <Button
+            variant="icon"
             href={`${social.filter((s) => s.name === "instagram")[0].groupsURL}${city.name}`}
             target="_blank"
-            className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
-          >
-            <Instagram size={20} className="text-white" />
-          </Link>
+            icon={<Instagram size={20} />}
+          />
         </div>
       </div>
 
@@ -102,7 +91,7 @@ export default async function CityPage({
           />
           <div className="text-center">
             <Link
-              href={`/countries/${city.country?.cca3 || ""}`}
+              href={`/countries/${city.country?.cca3?.toLowerCase() || ""}`}
               className="text-brand text-sm uppercase tracking-wider font-bold hover:underline mb-1 inline-block"
             >
               {countryName}

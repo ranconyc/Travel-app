@@ -52,7 +52,7 @@ export default function CountryList({
           countries?.slice(0, 20).map((country) => (
             <Link
               key={country.cca3}
-              href={`/countries/${country.cca3}`}
+              href={`/countries/${country.cca3.toLowerCase()}`}
               className="min-w-[232px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
             >
               <div className="bg-white w-full h-full relative">
@@ -64,12 +64,26 @@ export default function CountryList({
                     className="object-cover group-hover:scale-105 transition-transform"
                   />
                 ) : (
-                  <div className="w-full h-full bg-surface-secondary flex items-center justify-center text-secondary font-bold text-lg">
-                    {country.code}
+                  <div className="w-full h-full relative">
+                    <Image
+                      src={`https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800&auto=format&fit=crop&sig=${country.name}`}
+                      alt={`${country.name} placeholder`}
+                      fill
+                      className="object-cover opacity-60"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <span className="text-xl font-bold text-white drop-shadow-lg">
+                        {country.code}
+                      </span>
+                    </div>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
-                  <span className="text-white font-bold text-sm truncate w-full">
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-3">
+                  <div className="text-xs uppercase font-bold tracking-wider text-white/80">
+                    {country.region}
+                  </div>
+                  <span className="text-white font-bold text-xl truncate w-full">
                     {country.name}
                   </span>
                 </div>

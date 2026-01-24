@@ -107,7 +107,7 @@ export default function TravelHistory({
               : `${item.type.toUpperCase()} OF ${item.countryName.toUpperCase()}`;
 
             const link = item?.countryCode
-              ? `/countries/${item.countryCode}`
+              ? `/countries/${item.countryCode.toLowerCase()}`
               : `/cities/${item.cityId}`;
 
             return (

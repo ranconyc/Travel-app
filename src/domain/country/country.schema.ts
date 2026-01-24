@@ -213,6 +213,7 @@ export const CountrySchema = z.object({
 
   // --- RELATIONS (optional, for when data is populated) ---
   cities: z.array(z.any()).optional(), // City[]
+  states: z.array(z.any()).optional(), // State[]
   places: z.array(z.any()).optional(), // Place[]
   media: z.array(z.any()).optional(), // Media[]
   capitalCity: z.any().optional().nullable(), // City relation

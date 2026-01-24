@@ -6,6 +6,7 @@ import Button from "@/app/components/common/Button";
 import RhythmStep from "@/app/profile/persona/_components/RhythmStep";
 import InterestsStep from "@/app/profile/persona/_components/InterestsStep";
 import StyleStep from "@/app/profile/persona/_components/StyleStep";
+import BudgetStep from "@/app/profile/persona/_components/BudgetStep";
 import ProgressBar from "@/app/profile/persona/_components/ProgressBar";
 import useStep from "@/app/profile/persona/_hooks/useStep";
 import { PersonaFormValues } from "@/app/profile/persona/_types/form";
@@ -24,6 +25,10 @@ const steps = [
     description: "Select the option that match you the most",
   },
   {
+    header: "What's your typical travel budget?",
+    description: "Select your budget level and preferred currency",
+  },
+  {
     header: "What do you enjoy when traveling?",
     description: "Help us personalize your trip recommendations",
   },
@@ -34,7 +39,7 @@ const FormHeader = ({ step }: { step: number }) => {
     <div className="px-4 py-6 sticky top-6 left-0 right-0 bg-app-bg z-40 ">
       <div className="flex items-center justify-between">
         <Button variant="back" />
-        <ProgressBar currentStep={step} totalSteps={3} />
+        <ProgressBar currentStep={step} totalSteps={4} />
       </div>
       <h1 className="text-xl font-bold mb-3">{steps[step - 1].header}</h1>
       <p className="text-xs font-medium text-secondary">
@@ -60,6 +65,8 @@ export default function PersonaFormClient({
       interests: initialData.interests || [],
       dailyRhythm: initialData.dailyRhythm || "",
       travelStyle: initialData.travelStyle || "",
+      budget: initialData.budget || "",
+      currency: initialData.currency || "USD",
     },
   });
 
@@ -97,6 +104,8 @@ export default function PersonaFormClient({
       case 2:
         return <StyleStep />;
       case 3:
+        return <BudgetStep />;
+      case 4:
         return <InterestsStep />;
       default:
         return <RhythmStep />;
@@ -106,7 +115,8 @@ export default function PersonaFormClient({
   const isStepValid = () => {
     if (step === 1) return watch("dailyRhythm") !== "";
     if (step === 2) return watch("travelStyle") !== "";
-    if (step === 3) return watch("interests").length > 0;
+    if (step === 3) return watch("budget") !== "" && watch("currency") !== "";
+    if (step === 4) return watch("interests").length > 0;
     return isValid;
   };
 
@@ -128,7 +138,15 @@ export default function PersonaFormClient({
                   {methods.formState.errors.travelStyle.message}
                 </p>
               )}
-              {step === 3 && methods.formState.errors.interests && (
+              {step === 3 &&
+                (methods.formState.errors.budget ||
+                  methods.formState.errors.currency) && (
+                  <p className="text-red-500 text-sm">
+                    {methods.formState.errors.budget?.message ||
+                      methods.formState.errors.currency?.message}
+                  </p>
+                )}
+              {step === 4 && methods.formState.errors.interests && (
                 <p className="text-red-500 text-sm">
                   {methods.formState.errors.interests.message}
                 </p>
@@ -141,7 +159,7 @@ export default function PersonaFormClient({
           <div className="p-4 pb-20 bg-app-bg border-t border-surface overflow-y-scroll">
             {stepContent(step)}
             <div className="bg-app-bg p-4 pb-8 fixed bottom-0 left-0 right-0">
-              {step < 3 ? (
+              {step < 4 ? (
                 <Button
                   type="button"
                   disabled={!isStepValid()}

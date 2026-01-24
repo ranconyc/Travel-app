@@ -42,7 +42,7 @@ export default function Navbar({ pathname }: { pathname: string }) {
           className={
             pathname === `/profile/${user?.id}`
               ? "border-2 border-brand rounded-full"
-              : "border-2 border-app-bg rounded-full"
+              : "border-2 border-secondary rounded-full"
           }
         >
           <Link href={`/profile/${user?.id}`} className="p-0 flex">
