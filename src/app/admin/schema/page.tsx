@@ -123,7 +123,7 @@ export default async function AdminSchemaPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold font-sora tracking-tight mb-2 flex items-center gap-3">
+        <h1 className="text-h1 font-bold font-sora tracking-tight mb-2 flex items-center gap-3">
           <Database className="text-brand" />
           Database Schema
         </h1>
@@ -198,7 +198,7 @@ export default async function AdminSchemaPage() {
 
                         <div className="flex items-center gap-1.5">
                           <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getTypeColor(
+                            className={`text-micro font-bold px-2 py-0.5 rounded border ${getTypeColor(
                               field.type,
                             )}`}
                           >
@@ -208,19 +208,19 @@ export default async function AdminSchemaPage() {
                           </span>
 
                           {field.isUnique && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-amber-50 text-amber-700 border-amber-200">
+                            <span className="text-micro font-bold px-2 py-0.5 rounded border bg-amber-50 text-amber-700 border-amber-200">
                               UNIQUE
                             </span>
                           )}
 
                           {field.defaultValue && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-slate-50 text-slate-600 border-slate-200">
+                            <span className="text-micro font-bold px-2 py-0.5 rounded border bg-slate-50 text-slate-600 border-slate-200">
                               = {field.defaultValue}
                             </span>
                           )}
 
                           {field.relation && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-brand/10 text-brand border-brand/20 flex items-center gap-1">
+                            <span className="text-micro font-bold px-2 py-0.5 rounded border bg-brand/10 text-brand border-brand/20 flex items-center gap-1">
                               <LinkIcon size={10} />→ {field.type}
                             </span>
                           )}

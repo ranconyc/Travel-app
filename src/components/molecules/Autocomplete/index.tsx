@@ -247,7 +247,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             aria-invalid={!!error || undefined}
             aria-describedby={error ? `${id}-error` : undefined}
             className={[
-              "text-app-text px-4 h-11 rounded-md font-medium border-2 border-surface transition-all w-full",
+              "bg-surface text-app-text px-4 h-11 rounded-md font-medium border-2 border-surface transition-all w-full",
               "focus:outline-none focus:ring-2 focus:ring-brand/50",
               "disabled:bg-surface-secondary disabled:cursor-not-allowed",
               error ? "border-red-500 ring-1 ring-red-500" : "border-surface",
@@ -278,14 +278,14 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             role="listbox"
             className={`absolute left-0 right-0 z-20 mt-1 max-h-50 overflow-auto rounded-md border border-surface-secondary bg-surface shadow-xl ${listClassName}`}
           >
-            {loading && (
-              <div className="px-3 py-2 text-sm text-gray-500">Loading…</div>
+            {!loading && (
+              <div className="px-3 py-2 text-sm text-secondary">Loading…</div>
             )}
             {!loading && err && (
-              <div className="px-3 py-2 text-sm text-red-600">{err}</div>
+              <div className="px-3 py-2 text-sm text-red-500">{err}</div>
             )}
             {!loading && !err && merged.length === 0 && qVal && (
-              <div className="px-3 py-2 text-sm text-gray-500">
+              <div className="px-3 py-2 text-sm text-secondary">
                 {noResultsText}
               </div>
             )}
@@ -308,7 +308,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                       : `cursor-pointer px-3 py-2 transition-colors ${
                           idx === activeIndex
                             ? "bg-brand/10 text-brand font-medium"
-                            : "hover:bg-surface-secondary"
+                            : "hover:bg-surface-secondary text-app-text"
                         }`
                   }
                 >
@@ -316,7 +316,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                     {highlight ? highlightMatch(opt.label, qVal) : opt.label}
                   </div>
                   {opt.subtitle && (
-                    <div className="text-xs text-gray-500">{opt.subtitle}</div>
+                    <div className="text-xs text-secondary">{opt.subtitle}</div>
                   )}
                 </div>
               ))}

@@ -2,15 +2,15 @@
 import { memo } from "react";
 import { useProfileUser } from "../../store/useProfileStore";
 import SocialMediaLinks from "./SocialMediaLinks";
+import { personaService } from "@/domain/persona/persona.service";
 
 function UserInfo() {
   const profileUser = useProfileUser();
 
   if (!profileUser) return null;
 
-  const displayName = profileUser.profile?.firstName
-    ? `${profileUser.profile.firstName} ${profileUser.profile.lastName || ""}`.trim()
-    : profileUser.name;
+  const persona = personaService.fromUser(profileUser);
+  const { identity } = persona;
 
   const locationText = profileUser.currentCity
     ? `${profileUser.currentCity.name}, ${
@@ -18,20 +18,21 @@ function UserInfo() {
           ? "USA"
           : profileUser.currentCity.country?.name
       }`
-    : null;
+    : identity.hometown;
 
   return (
-    <div className="text-center space-y-2">
-      <h1 className="text-2xl font-bold">{displayName}</h1>
+    <div className="text-center space-y-sm">
+      <h1 className="text-h2 font-bold text-app-text">{identity.firstName}</h1>
 
-      {profileUser.profile?.socials?.length > 0 && (
-        <div className="w-full flex items-center justify-center gap-2">
-          <SocialMediaLinks />
-        </div>
-      )}
+      {Array.isArray(profileUser.profile?.socials) &&
+        (profileUser.profile?.socials as unknown[]).length > 0 && (
+          <div className="w-full flex items-center justify-center gap-xs">
+            <SocialMediaLinks />
+          </div>
+        )}
 
       {locationText && (
-        <p className="text-xs text-muted-foreground">{locationText}</p>
+        <p className="text-upheader text-secondary italic">{locationText}</p>
       )}
     </div>
   );

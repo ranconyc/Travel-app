@@ -9,6 +9,7 @@ import { Footer } from "./Footer";
 import StoreInitializer from "./components/StoreInitializer";
 import ProfileModal from "./components/modal/ProfileModal";
 import QRCodeModal from "./components/compatibility/QRCodeModal";
+import FriendRequestBanner from "./components/FriendRequestBanner";
 
 export default async function ProfileLayout({
   children,
@@ -66,6 +67,13 @@ export default async function ProfileLayout({
       <ProfileModal />
       <QRCodeModal />
       <div className="min-h-screen bg-app-bg text-app-fg pb-20">
+        {loggedUser && (
+          <FriendRequestBanner
+            friendship={friendship}
+            profileUser={profileUser as User}
+            loggedUserId={loggedUser.id}
+          />
+        )}
         <ProfileHeader />
         {children}
         <Footer profileUser={profileUser as User} />

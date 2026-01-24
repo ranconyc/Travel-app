@@ -15,7 +15,7 @@ import {
   Users,
   FacebookIcon,
 } from "lucide-react";
-import { formatPopulation } from "@/app/_utils/formatNumber";
+import { formatPopulation } from "@/domain/shared/utils/formatNumber";
 import { City } from "@/domain/city/city.schema";
 import { AiFillTikTok } from "react-icons/ai";
 import social from "@/data/social.json";
@@ -96,7 +96,7 @@ export default async function CityPage({
             >
               {countryName}
             </Link>
-            <h1 className="text-4xl font-bold font-sora flex items-center justify-center gap-2">
+            <h1 className="text-h1 font-bold font-sora flex items-center justify-center gap-2">
               {city.name}
               {city.isCapital && (
                 <span className="text-yellow-400 text-2xl" title="Capital City">
@@ -125,7 +125,7 @@ export default async function CityPage({
               <span className="text-lg font-bold font-sora">
                 {city.idealDuration || "3-4 days"}
               </span>
-              <span className="text-[10px] text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-micro text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
                 <Clock size={10} /> Duration
               </span>
             </div>
@@ -135,7 +135,7 @@ export default async function CityPage({
               <span className="text-lg font-bold font-sora">
                 {city.population ? formatPopulation(city.population) : "N/A"}
               </span>
-              <span className="text-[10px] text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-micro text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
                 <Users size={10} /> People
               </span>
             </div>
@@ -145,7 +145,7 @@ export default async function CityPage({
               <span className="text-lg font-bold font-sora capitalize truncate w-full px-1">
                 {city.bestSeason || "Year-round"}
               </span>
-              <span className="text-[10px] text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
+              <span className="text-micro text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
                 <Calendar size={10} /> Season
               </span>
             </div>
@@ -262,7 +262,7 @@ export default async function CityPage({
               <span
                 className={`font-bold text-sm px-3 py-1 rounded-full ${
                   !city.safety
-                    ? "bg-gray-100 text-gray-500"
+                    ? "bg-gray-100 text-secondary"
                     : city.safety.toLowerCase().includes("safe")
                       ? "bg-green-100 text-green-700"
                       : city.safety.toLowerCase().includes("caution")

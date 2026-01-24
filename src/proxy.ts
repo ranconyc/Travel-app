@@ -1,35 +1,48 @@
-import { withAuth } from "next-auth/middleware";
+import authConfig from "./auth.config";
+import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
 
-export default withAuth(
-  function proxy() {
-    console.log("Middleware runing");
-  },
-  {
-    callbacks: {
-      authorized: ({ req, token }) => {
-        console.log("Middleware", req.nextUrl.pathname, token);
-        // Protect Admin Routes
-        if (req.nextUrl.pathname.startsWith("/admin")) {
-          return token?.role === "ADMIN";
-        }
-        // Default: just require authentication for other protected routes
-        return !!token;
-      },
-    },
-    pages: {
-      signIn: "/login", // Redirect here if not authenticated
-    },
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+
+  const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth");
+  const isPublicRoute = ["/signin", "/manifest.webmanifest"].includes(
+    nextUrl.pathname,
+  );
+  const isOnboardingRoute = nextUrl.pathname.startsWith("/profile/persona");
+
+  if (isApiAuthRoute) return NextResponse.next();
+
+  if (isPublicRoute) {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL("/", nextUrl));
+    }
+    return NextResponse.next();
   }
-);
 
-// Define protected routes
+  if (!isLoggedIn) {
+    return NextResponse.redirect(new URL("/signin", nextUrl));
+  }
+
+  const role = (req.auth?.user as any)?.role;
+  const isProfileCompleted = (req.auth?.user as any)?.profileCompleted;
+
+  // Protect Admin Routes
+  if (nextUrl.pathname.startsWith("/admin") && role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/", nextUrl));
+  }
+
+  // Gated Onboarding Logic
+  // if (!isProfileCompleted && !isOnboardingRoute && nextUrl.pathname !== "/") {
+  //   return NextResponse.redirect(new URL("/profile/persona", nextUrl));
+  // }
+
+  return NextResponse.next();
+});
+
 export const config = {
-  matcher: [
-    "/profile/:path*",
-    "/admin/:path*",
-    "/chat/:path*",
-    "/travel/:path*",
-    "/interests/:path*",
-    "/mates/:path*",
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

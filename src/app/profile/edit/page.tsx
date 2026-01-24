@@ -16,14 +16,8 @@ export default async function CompleteProfilePage() {
     throw new Error("User not found");
   }
 
-  const user: User = {
-    ...rawUser,
-    id: rawUser.id ?? "",
-    createdAt: rawUser.createdAt ?? new Date(),
-    updatedAt: rawUser.updatedAt ?? new Date(),
-    name: rawUser.name ?? null,
-    role: rawUser.role ?? "USER",
-  };
+  // getUserById already returns properly typed user, cast directly
+  const user = rawUser as User;
   console.log("user", user);
 
   return <CompleteProfileShell user={user} />;

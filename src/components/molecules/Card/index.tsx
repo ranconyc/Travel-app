@@ -13,7 +13,7 @@ export default function Card({
   className = "",
   hover = true,
 }: CardProps) {
-  const baseStyles = "rounded-3xl overflow-hidden transition-all duration-300";
+  const baseStyles = "rounded-card overflow-hidden transition-all duration-300";
 
   const variantStyles = {
     surface: "bg-surface shadow-sm",

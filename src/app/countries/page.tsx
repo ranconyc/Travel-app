@@ -45,7 +45,7 @@ export default function CountriesPage() {
           <p className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore by
           </p>
-          <h1 className="text-4xl font-bold font-sora text-app-text mt-1 mb-6">
+          <h1 className="text-h1 font-bold font-sora text-app-text mt-1 mb-6">
             Continent
           </h1>
         </div>

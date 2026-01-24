@@ -5,6 +5,8 @@ import { getChatDisplayName } from "@/domain/chat/chat.utils";
 import { FriendChatStarter } from "./FriendChatStarter";
 import ChatItem from "./ChatItem";
 
+import Typography from "@/components/atoms/Typography";
+
 interface ChatSearchClientProps {
   initialChats: any[];
   initialFriends: any[];
@@ -50,11 +52,15 @@ export function ChatSearchClient({
 
   return (
     <div className="flex flex-col flex-1">
-      <header className="p-4 pt-8 sticky top-0 z-50 border-b border-gray-200">
-        <p className="text-primery text-lg">Your</p>
-        <h1 className="text-3xl font-bold capitalize mb-2 min-h-[40px] flex items-center">
-          Chats
-        </h1>
+      <header className="bg-surface p-lg pt-xxl sticky top-0 left-0 right-0 z-50 border-b border-stroke shadow-soft mb-xl">
+        <div className="flex flex-col justify-center mb-lg">
+          <Typography variant="h3" className="normal-case text-txt-sec">
+            Your
+          </Typography>
+          <Typography variant="h1" className="text-txt-main">
+            Chats
+          </Typography>
+        </div>
         <div className="relative">
           <input
             type="search"

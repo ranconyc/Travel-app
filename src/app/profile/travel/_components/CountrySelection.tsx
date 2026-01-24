@@ -31,7 +31,6 @@ export const CountrySelection = ({ countries }: CountrySelectionProps) => {
       {countries.map((country: string) => (
         <SelectionCard
           key={country}
-          id={country}
           label={country}
           isSelected={selectedCountries?.includes(country) || false}
           onChange={() => toggleCountry(country)}

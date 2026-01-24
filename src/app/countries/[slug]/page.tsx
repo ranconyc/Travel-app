@@ -11,16 +11,25 @@ import HeroImage from "@/components/molecules/HeroImage";
 import Stats from "@/components/molecules/Stats";
 import { StatItem } from "@/domain/common.schema";
 import { Globe2, Users } from "lucide-react";
-import { formatPopulation } from "@/app/_utils/formatNumber";
+import { formatPopulation } from "@/domain/shared/utils/formatNumber";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import LogisticsSection from "./components/LogisticsSection";
 import { Country } from "@/domain/country/country.schema";
 import {
   estimateFlightTimeHoursFromDistance,
   getDistance,
-} from "@/app/_utils/geo";
+} from "@/domain/shared/utils/geo";
 
 import StateSection from "./components/StateSection";
+import LanguageSection from "@/components/organisms/LanguageSection";
+import Block from "@/components/atoms/Block";
+
+// Business Logic: Gini Insights move to a helper or could be in the Mapper/Service
+export const getGiniInsight = (giniValue: number): string => {
+  if (giniValue < 30) return "High Social Equality";
+  if (giniValue < 45) return "Moderate Wealth Gap";
+  return "Significant Economic Contrast";
+};
 
 export default async function CountryPage({
   params,
@@ -29,105 +38,142 @@ export default async function CountryPage({
 }) {
   const { slug } = await params;
 
-  // 2. COUNTRY DETAIL VIEW LOGIC
-  const country = await getCountryWithCities(slug);
+  const country = (await getCountryWithCities(slug)) as unknown as Country;
   const loggedUser = await getCurrentUser();
 
-  // Handle case where country isn't found
   if (!country) return notFound();
 
+  // Geography & Logistics Logic
   const inThisCountry = loggedUser?.currentCity?.country?.id === country?.id;
   const userCoords = (loggedUser?.currentCity?.coords as any)?.coordinates;
   const countryCoords = (country.coords as any)?.coordinates;
-  const distance = userCoords
-    ? estimateFlightTimeHoursFromDistance(
-        getDistance(
-          userCoords[0],
-          userCoords[1],
-          countryCoords?.[0],
-          countryCoords?.[1],
-        ),
-      )
-    : "";
 
-  console.log("distance", distance);
+  const distance =
+    userCoords && countryCoords
+      ? estimateFlightTimeHoursFromDistance(
+          getDistance(
+            userCoords[1],
+            userCoords[0],
+            countryCoords[1],
+            countryCoords[0],
+          ),
+        )
+      : "";
+
   const stats: StatItem[] = [
     {
-      value: distance === 1 ? "~ " + distance + "Hr" : "~ " + distance + "Hrs",
+      value: distance ? `~ ${distance}Hrs` : "N/A",
       label: "Away",
       icon: Globe2,
     },
     {
-      value: formatPopulation(country?.population || 9000000),
+      value: formatPopulation(country.population || 0),
       label: "Population",
       icon: Users,
     },
     {
-      value: `${country?.areaKm2 ? formatPopulation(country.areaKm2) : "N/A"}m²`,
+      value: country.areaKm2
+        ? `${formatPopulation(country.areaKm2)} km²`
+        : "N/A",
       label: "Area",
       icon: Globe2,
     },
   ];
 
-  const hasStates = (country?.states?.length || 0) > 0;
+  const hasStates = (country.states?.length || 0) > 0;
+
+  // Handling Finance and Gini data from the unified domain schema
+  const finance = (country.finance as any) || {};
+  const giniValue = finance.giniIndex || null;
 
   return (
-    <div className="bg-appbg min-h-screen font-sans selection:bg-brand selection:text-white">
-      {/* Header */}
+    <div className="bg-app-bg min-h-screen selection:bg-brand selection:text-white">
       <Header />
-      <main className="pb-20 px-4 max-w-md mx-auto min-h-screen flex flex-col gap-8">
-        <div className="flex flex-col gap-4">
+      <main className="pb-xxl px-lg max-w-2xl mx-auto min-h-screen flex flex-col gap-xxl">
+        <div className="flex flex-col gap-lg mt-xl">
           <InfoSection
             title={country.name}
             subtitle={country.subRegion || country.region || ""}
           />
+
           {inThisCountry && (
-            <div className="flex items-center gap-2 bg-brand/10 text-brand px-3 py-1 rounded-full w-fit animate-fade-in border border-brand/20">
+            <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
               <Globe2 size={14} />
-              <span className="text-xs font-bold uppercase tracking-wider">
+              <span className="text-upheader font-bold uppercase tracking-wider">
                 You are in {country.name}
               </span>
             </div>
           )}
-          {/* Use country flag as fallback if hero image is missing */}
+
           <HeroImage
             src={
               country.imageHeroUrl ||
-              (country.flags as { svg?: string; png?: string })?.svg ||
-              (country.flags as { svg?: string; png?: string })?.png
+              (country.flags as any)?.svg ||
+              (country.flags as any)?.png
             }
             name={country.name}
           />
+
           <SocialLinks query={country.name} />
         </div>
+
         <Stats stats={stats} />
 
         {hasStates ? (
-          <StateSection country={country as unknown as Country} />
+          <StateSection country={country} />
         ) : (
-          <CitiesSection country={country as unknown as Country} />
+          <CitiesSection country={country} />
         )}
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-lg">
+          <div className="grid grid-cols-2 gap-md">
+            {giniValue && (
+              <Block>
+                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                  Social Equality
+                </h3>
+                <p className="text-p font-bold text-app-text">
+                  {getGiniInsight(giniValue as number)}
+                </p>
+              </Block>
+            )}
+
+            {country.capitalName && (
+              <Block>
+                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                  Capital
+                </h3>
+                <p className="text-p font-bold text-app-text">
+                  {country.capitalName}
+                </p>
+              </Block>
+            )}
+          </div>
+
           <FinanceSection
             data={{
               currency: {
-                symbol:
-                  (country?.finance as { currency?: { symbol?: string } })
-                    ?.currency?.symbol || "$",
-                name:
-                  (country?.finance as { currency?: { name?: string } })
-                    ?.currency?.name || "USD",
+                symbol: finance.currency?.symbol || "$",
+                name: finance.currency?.name || "USD",
               },
               budget: {
-                daily: { budget: "60-80", mid: "100-120", luxury: "200+" },
+                daily: {
+                  budget: finance.avgDailyCost?.budget?.toString() || "45",
+                  mid: finance.avgDailyCost?.mid?.toString() || "100",
+                  luxury: finance.avgDailyCost?.luxury?.toString() || "250",
+                },
               },
-              cashCulture: { cashPreferred: true },
+              cashCulture: {
+                cashPreferred: finance.cashCulture?.primaryPayment === "Cash",
+              },
             }}
           />
-          <LogisticsSection />
-          {/* <SafetySection /> */}
-          {/* <LanguageSection data={country.languages as any} /> */}
+
+          {country.languages && (
+            <LanguageSection {...(country.languages as any)} />
+          )}
+
+          <LogisticsSection data={country.logistics as any} />
           <CultureSection />
           <HealthSection />
         </div>

@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/db/prisma";
-import { Prisma } from "@prisma/client";
 import world from "@/data/world.json";
 import { updateCountry, deleteCountry } from "@/lib/db/country.repo";
+import { CountryMapper } from "./country.mapper";
 
-type RestCountry = {
+export type RestCountry = {
   name: {
     common: string;
     official: string;
@@ -177,79 +177,8 @@ export async function createCountryFromName(countryName: string) {
     return { country: existing, created: false };
   }
 
-  // 3) Orchestration & Mapping
-  const region = rest.region ?? null;
-  const subRegion = rest.subregion ?? null;
-  const imageHeroUrl = rest.flags?.png ?? rest.flags?.svg ?? null;
-
-  const data: Prisma.CountryCreateInput = {
-    cca3,
-    code: code2,
-    name: rest.name?.common ?? nameTrimmed,
-    officialName: rest.name?.official ?? rest.name?.common ?? null,
-    imageHeroUrl,
-    coords: rest.latlng
-      ? { type: "Point", coordinates: [rest.latlng[1], rest.latlng[0]] }
-      : (Prisma.DbNull as any),
-    region,
-    subRegion,
-    logistics: {
-      idd: rest.idd?.root ?? null,
-      car: rest.car
-        ? {
-            side: rest.car.side === "left" ? "left" : "right",
-            signs: rest.car.signs ?? [],
-          }
-        : undefined,
-      plugs: [],
-      voltage: null,
-      timezones: rest.timezones ?? [],
-      startOfWeek: rest.startOfWeek ?? "monday",
-    },
-    finance: {
-      currency: {
-        code: Object.keys(rest.currencies ?? {})[0] || "USD",
-        symbol: rest.currencies
-          ? (Object.values(rest.currencies)[0] as any)?.symbol
-          : "$",
-        name: rest.currencies
-          ? (Object.values(rest.currencies)[0] as any)?.name
-          : "US Dollar",
-      },
-      avgDailyCost: {
-        budget: 45,
-        mid: 100,
-        luxury: 250,
-        currencyCode: "USD",
-      },
-      cashCulture: {
-        tipping: "10%",
-        atmAvailability: "High",
-      },
-    },
-    safety: {
-      overallScore: 4.5,
-      soloFemaleFriendly: 4,
-      crimeLevel: "Low",
-      scams: [],
-    },
-    health: {
-      tapWaterSafe: false,
-      vaccines: [],
-      medicalStandard: "International",
-    },
-    seasons: {
-      peakMonths: [11, 12, 1, 2],
-      shoulderMonths: [3, 4, 10],
-      bestTimeDisplay: "November to February",
-    },
-    languages: rest.languages ?? null,
-    commonPhrases: [],
-
-    // Meta flags for auto-created countries
-    autoCreated: true,
-    needsReview: true,
-  };
+  // 3) Orchestration & Mapping via CountryMapper
+  const data = CountryMapper.toDb(rest, nameTrimmed);
 
   // 4) Save to DB (without capitalId first)
   const created = await prisma.country.create({ data });

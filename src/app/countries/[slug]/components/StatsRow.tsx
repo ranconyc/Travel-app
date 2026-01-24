@@ -1,6 +1,6 @@
 import { Country } from "@/domain/country/country.schema";
 import DictanceSection from "./DictanceSection";
-import { formatPopulation } from "@/app/_utils/formatNumber";
+import { formatPopulation } from "@/domain/shared/utils/formatNumber";
 
 export default function StatsRow({ country }: { country: Country }) {
   return (
@@ -11,7 +11,7 @@ export default function StatsRow({ country }: { country: Country }) {
       <div className="text-center border-l border-r border-gray-800 px-8">
         <div className="text-lg font-bold flex flex-col">
           <span>{formatPopulation(country.population)}</span>
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+          <span className="text-micro text-gray-400 font-bold uppercase tracking-widest mt-0.5">
             Travelers
           </span>
         </div>
@@ -19,7 +19,7 @@ export default function StatsRow({ country }: { country: Country }) {
       <div className="text-center">
         <div className="text-lg font-bold flex flex-col">
           <span className="capitalize">{0}</span>
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+          <span className="text-micro text-gray-400 font-bold uppercase tracking-widest mt-0.5">
             Season
           </span>
         </div>

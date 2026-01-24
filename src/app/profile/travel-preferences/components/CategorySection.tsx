@@ -67,14 +67,14 @@ function CategoryHeader({
       <div className="w-full flex items-center justify-between text-gray-900">
         <div className="flex items-center gap-4">
           <div>
-            <h1 className="text-base font-medium">{title}</h1>
+            <h1 className="text-p font-medium">{title}</h1>
 
             {selectedCount > 0 ? (
-              <p className="text-xs font-semibold text-gray-500">
+              <p className="text-xs font-semibold text-secondary">
                 {selectedCount} selected
               </p>
             ) : (
-              <p className="text-xs font-semibold text-gray-500">
+              <p className="text-xs font-semibold text-secondary">
                 Tap to select
               </p>
             )}

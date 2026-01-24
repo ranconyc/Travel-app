@@ -3,8 +3,9 @@ import TravelSection from "./components/Travel/TravelSection";
 import { Users, Globe2, LanguagesIcon } from "lucide-react";
 import { StatItem } from "@/domain/common.schema";
 import Stats from "@/components/molecules/Stats";
-import { InterestsSection } from "./components/sections/InterestsSection";
 import { getFriends } from "@/lib/db/friendship.repo";
+import { InterestsSection } from "./components/sections/InterestsSection";
+import { personaService } from "@/domain/persona/persona.service";
 
 export default async function ProfilePage({
   params,
@@ -17,6 +18,7 @@ export default async function ProfilePage({
   if (!profileUser) return null; // Handled by layout, but for TS safety
 
   const friends = await getFriends(id);
+  const persona = personaService.fromUser(profileUser);
 
   // Calculate stats
   const visitedCountriesCodes = profileUser.visitedCountries || [];
@@ -43,15 +45,11 @@ export default async function ProfilePage({
     },
   ];
 
-  const persona = profileUser?.profile?.persona as {
-    interests?: string[];
-  } | null;
-
   return (
-    <main className="max-w-2xl mx-auto px-4 flex flex-col gap-12 mt-4">
+    <main className="max-w-2xl mx-auto px-lg flex flex-col gap-xxl mt-xl">
       <Stats stats={stats} />
       <TravelSection />
-      <InterestsSection interests={persona?.interests || []} />
+      <InterestsSection interests={persona.interests} />
     </main>
   );
 }

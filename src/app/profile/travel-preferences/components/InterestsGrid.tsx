@@ -28,7 +28,7 @@ export default function InterestsGrid({
               }`}
           >
             <div className="flex items-center gap-3">
-              <span className="text-[15px] font-medium text-gray-900">
+              <span className="text-p font-medium text-gray-900">
                 {interest.label}
               </span>
             </div>

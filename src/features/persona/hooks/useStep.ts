@@ -1,30 +1,39 @@
 "use client";
 // STEP HOOK
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-export default function useStep() {
+export default function useStep(totalSteps: number = 6) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Ensure step is within valid range (1-4)
-  const step = Math.min(Math.max(Number(searchParams.get("step")) || 1, 1), 4);
+  // Ensure step is within valid range
+  const step = Math.min(
+    Math.max(Number(searchParams.get("step")) || 1, 1),
+    totalSteps,
+  );
+
+  const setStep = useCallback(
+    (newStep: number) => {
+      const validStep = Math.min(Math.max(newStep, 1), totalSteps);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("step", validStep.toString());
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [router, pathname, searchParams, totalSteps],
+  );
 
   const handleContinue = () => {
-    if (step < 4) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("step", (step + 1).toString());
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    if (step < totalSteps) {
+      setStep(step + 1);
     }
   };
 
   const handleBack = () => {
     if (step > 1) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("step", (step - 1).toString());
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      setStep(step - 1);
     } else {
       router.push("/", { scroll: false });
     }
@@ -39,5 +48,5 @@ export default function useStep() {
     }
   }, [pathname, router, searchParams]);
 
-  return { step, handleContinue, handleBack };
+  return { step, handleContinue, handleBack, setStep };
 }

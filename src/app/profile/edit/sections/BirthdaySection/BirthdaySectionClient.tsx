@@ -3,7 +3,7 @@
 import { memo, useEffect, useState } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import Input from "@/components/atoms/Input";
-import { getAge } from "@/app/_utils/age";
+import { getAge } from "@/domain/shared/utils/age";
 
 // Pre-compute today's date in YYYY-MM-DD for the <input type="date" />
 const TODAY_ISO_DATE = new Date().toISOString().split("T")[0];

@@ -120,7 +120,7 @@ export default function TravelHistory({
                   size="sm"
                 />
                 {item.isCurrent && (
-                  <div className="absolute -top-2 -right-2 bg-brand text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
+                  <div className="absolute -top-2 -right-2 bg-brand text-white text-micro font-bold px-2 py-0.5 rounded-full">
                     CURRENT
                   </div>
                 )}

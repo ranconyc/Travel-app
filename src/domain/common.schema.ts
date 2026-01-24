@@ -18,6 +18,15 @@ export const PlatformEnum = z.enum([
 ]);
 export type Platform = z.infer<typeof PlatformEnum>;
 
+/** Language representation with code and name */
+export const languageSchema = z.object({
+  code: z.string(),
+  name: z.string(),
+  nativeName: z.string().optional(),
+  flag: z.string().optional(),
+});
+export type Language = z.infer<typeof languageSchema>;
+
 // --- Common Schemas ---
 
 /** GeoJSON Point schema */
@@ -26,6 +35,13 @@ export const geoPointSchema = z.object({
   coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
 });
 export type GeoPoint = z.infer<typeof geoPointSchema>;
+
+/** Simple latitude/longitude coordinates */
+export const coordinatesSchema = z.object({
+  lat: z.number(),
+  lng: z.number(),
+});
+export type Coordinates = z.infer<typeof coordinatesSchema>;
 
 /** Social link object with strict validation */
 export const socialLinkSchema = z

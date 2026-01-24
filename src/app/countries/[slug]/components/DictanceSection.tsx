@@ -4,7 +4,7 @@ import { useGeo } from "@/domain/user/user.hooks";
 import {
   formatFlightTimeLabelFromDistance,
   getDistance,
-} from "@/app/_utils/geo";
+} from "@/domain/shared/utils/geo";
 import { useUser } from "@/app/providers/UserProvider";
 import { Country } from "@/domain/country/country.schema";
 
@@ -28,7 +28,7 @@ export default function DictanceSection({ country }: { country: Country }) {
       (country as any).cca3 ? (
         <>
           <span>You</span>
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+          <span className="text-micro text-gray-400 font-bold uppercase tracking-widest mt-0.5">
             here
           </span>
         </>
@@ -44,7 +44,7 @@ export default function DictanceSection({ country }: { country: Country }) {
               ),
             )}
           </span>
-          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+          <span className="text-micro text-gray-400 font-bold uppercase tracking-widest mt-0.5">
             Flight
           </span>
         </>

@@ -22,13 +22,13 @@ export const LandingView = ({ onClick }: { onClick: () => void }) => {
             type="button"
             variant="secondary"
             className="flex-1 flex justify-center items-center"
-            onClick={() => signIn("google", { callbackUrl: "/" })}
+            onClick={() => signIn("google")}
           >
             <AiOutlineGoogle size={20} />
           </Button>
           <Button
             type="button"
-            onClick={() => signIn("facebook", { callbackUrl: "/" })}
+            onClick={() => signIn("facebook")}
             variant="secondary"
             className="flex-1 flex justify-center items-center"
           >

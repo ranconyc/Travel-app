@@ -130,7 +130,6 @@ export default function TravelForm({
                   className="h-full"
                   type="checkbox"
                   key={country.cca2}
-                  id={country.cca2}
                   label={
                     country.name.common.length > 20
                       ? country.cca3

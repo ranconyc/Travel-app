@@ -97,7 +97,7 @@ export function MessageInput({ chatId }: MessageInputProps) {
 }
 
 {
-  /* <p className="text-xs text-gray-500 mt-1">
+  /* <p className="text-xs text-secondary mt-1">
   Press Enter to send, Shift+Enter for new line
   {isConnected && " • 🟢 Real-time"}
   {!isConnected && " • 🔴 Offline mode"}

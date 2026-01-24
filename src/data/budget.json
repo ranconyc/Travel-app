@@ -1,17 +1,32 @@
 [
   {
-    "icon": "SunMoon",
+    "id": "backpacker",
+    "icon": "Backpack",
+    "label": "Backpacker",
+    "description": "Essential travel, minimal costs ($<50/day)"
+  },
+  {
+    "id": "budget",
+    "icon": "Wallet",
     "label": "Budget",
-    "description": "Goes with the flow backpaker"
+    "description": "Smart spending, local vibes ($50-100/day)"
   },
   {
-    "icon": "Midrange",
-    "label": "Evening Person",
-    "description": "Energized after dark"
+    "id": "mid_range",
+    "icon": "Compass",
+    "label": "Mid-range",
+    "description": "Comfort and value balanced ($100-250/day)"
   },
   {
-    "icon": "luxury",
+    "id": "comfort",
+    "icon": "Hotel",
+    "label": "Comfort",
+    "description": "Worry-free, premium experience ($250-500/day)"
+  },
+  {
+    "id": "luxury",
+    "icon": "Crown",
     "label": "Luxury",
-    "description": "Looking to make any momot to its fullest"
+    "description": "Ultimate indulgence, no limits ($500+/day)"
   }
 ]

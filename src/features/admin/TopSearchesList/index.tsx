@@ -39,7 +39,7 @@ export default function TopSearchesList({
               className={`text-xs px-3 py-1.5 rounded-md transition-all ${
                 currentTimeframe === tf.value
                   ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm font-medium"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                  : "text-secondary dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               }`}
             >
               {tf.label}
@@ -49,7 +49,7 @@ export default function TopSearchesList({
       </div>
 
       {searches.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+        <div className="flex flex-col items-center justify-center p-8 text-secondary">
           <Search className="w-12 h-12 mb-2 text-gray-300" />
           <p>No search data for this period.</p>
         </div>
@@ -64,7 +64,7 @@ export default function TopSearchesList({
                   </span>
                   {item.query}
                 </span>
-                <span className="text-gray-500 text-xs font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                <span className="text-secondary text-xs font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
                   {item.count} searches
                 </span>
               </div>

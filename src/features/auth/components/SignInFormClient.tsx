@@ -86,7 +86,7 @@ export default function SignInFormClient() {
       </div>
 
       <div
-        className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-[#080C14] rounded-2xl px-4 py-6 flex flex-col gap-8 z-10 shadow-xl cursor-default"
+        className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-app-bg rounded-2xl px-4 py-6 flex flex-col gap-8 z-10 shadow-xl cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
         {view === "login" ? (

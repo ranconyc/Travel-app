@@ -1,27 +1,32 @@
 [
   {
-    "icon": "TreePalm",
-    "label": "Relaxed",
-    "description": "You're all about calm vibes no rush"
+    "id": "planner",
+    "icon": "Map",
+    "label": "The Planner",
+    "description": "Detailed itineraries & reservations"
   },
   {
+    "id": "explorer",
     "icon": "Compass",
-    "label": "Easygoing",
-    "description": "You prefer slow days, wandering around, and enjoying things as they come"
+    "label": "The Explorer",
+    "description": "Loose plans, open to discoveries"
   },
   {
-    "icon": "Activity",
-    "label": "Balanced Traveler",
-    "description": "A bit of both adventure with time to relax and enjoy the moment."
+    "id": "relaxer",
+    "icon": "Palmtree",
+    "label": "The Relaxer",
+    "description": "Slow pace, beach and spa focus"
   },
   {
-    "icon": "Binoculars",
-    "label": "Active Explorer",
-    "description": "Always on the move sightseeing, discovering hidden gems, making every day count."
+    "id": "adventurer",
+    "icon": "Mountain",
+    "label": "The Adventurer",
+    "description": "Off-path, adrenaline & nature"
   },
   {
-    "icon": "CableCar",
-    "label": "Adventurous",
-    "description": "You love pushing limits hiking, exploring, saying yes to everything."
+    "id": "cultural",
+    "icon": "Landmark",
+    "label": "The Cultural",
+    "description": "Museums, history & local customs"
   }
 ]

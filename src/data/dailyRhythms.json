@@ -1,25 +1,30 @@
 [
   {
+    "id": "early_bird",
     "icon": "Sunrise",
     "label": "Early Riser",
     "description": "Up with the sun"
   },
   {
+    "id": "morning_person",
     "icon": "Sun",
     "label": "Morning Person",
     "description": "Gets going early"
   },
   {
+    "id": "balanced",
     "icon": "SunMoon",
     "label": "Flexible",
     "description": "Goes with the flow"
   },
   {
+    "id": "evening_person",
     "icon": "Sunset",
     "label": "Evening Person",
     "description": "Energized after dark"
   },
   {
+    "id": "night_owl",
     "icon": "Moon",
     "label": "Night Owl",
     "description": "Thrives at night"

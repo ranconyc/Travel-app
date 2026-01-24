@@ -6,9 +6,13 @@ import SocialMediaLink from "./socialMediaLink";
 
 function SocialMediaLinks() {
   const profileUser = useProfileUser();
-  const socials = profileUser?.profile?.socials;
+  // Cast socials to array since it's stored as Json in Prisma
+  const socials = (profileUser?.profile?.socials || []) as Array<{
+    platform: string;
+    url: string;
+  }>;
 
-  if (!socials?.length) return null;
+  if (!socials.length) return null;
 
   return (
     <div

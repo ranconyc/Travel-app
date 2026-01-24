@@ -1,4 +1,4 @@
-import formatLanguage from "@/app/_utils/formatLanguage";
+import formatLanguage from "@/domain/shared/utils/formatLanguage";
 import BreakdownItem from "../compatibility/BreakdownItem";
 
 export default function SimilarLanguages({

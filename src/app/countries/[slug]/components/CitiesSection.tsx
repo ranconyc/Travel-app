@@ -53,11 +53,11 @@ export default function CitiesSection({ country }: { country: Country }) {
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
                   <div className="flex flex-col gap-0.5 transform transition-transform duration-500 group-hover:-translate-y-1">
-                    <span className="font-bold text-white text-base leading-tight">
+                    <span className="font-bold text-white text-p leading-tight">
                       {city.name}
                     </span>
                     {city.isCapital && (
-                      <span className="text-[10px] uppercase tracking-widest text-brand font-bold">
+                      <span className="text-micro uppercase tracking-widest text-brand font-bold">
                         Capital
                       </span>
                     )}

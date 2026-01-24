@@ -1,96 +1,146 @@
 @import "tailwindcss";
 
 @theme {
-  --color-app-bg: var(--background);
-  --color-app-text: var(--foreground);
-  --color-brand: var(--brand);
-  --color-surface: var(--surface);
-  --color-surface-secondary: var(--surface-secondary);
-  --color-surface-hover: var(--surface-hover);
-  --color-secondary: var(--secondary);
-  --color-primary: var(--primary);
-  --color-border: var(--border);
-  --color-blur: var(--blur);
+  /* Brand Colors */
+  --color-brand: #0099ff; /* Electric Blue */
+  --color-brand-alt: #3f53ff; /* Purple Highlight */
+  --color-brand-success: #00c88c;
+  --color-brand-warm: #ffae00;
+  --color-brand-accent: #ff7fb3; /* Pink */
+
+  /* Semantic Content Colors (Text) */
+  --color-txt-main: var(--foreground);
+  --color-txt-sec: var(--secondary);
+  --color-txt-muted: #94a3b8;
+
+  /* Surface & Backgrounds */
+  --color-bg-main: var(--background);
+  --color-bg-card: var(--surface);
+  --color-bg-sub: var(--surface-secondary);
+  --color-bg-hover: var(--surface-hover);
+
+  /* Structural Tokens */
+  --color-stroke: var(--border);
+  --radius-card: 16px;
+  --radius-pill: 12px;
+
+  /* Bolder Spacing Scale */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-xll: 64px;
+
+  /* Typography Scale - Standardized per UX Audit */
+  --text-h1: var(--h1-size);
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 700;
+
+  --text-h2: var(--h2-size);
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 700;
+
+  --text-h3: var(--h3-size);
+  --text-h3--line-height: 1.4;
+  --text-h3--font-weight: 600;
+
+  --text-h4: var(--h4-size);
+  --text-h4--line-height: 1.4;
+  --text-h4--font-weight: 600;
+
+  --text-p: var(--p-size);
+  --text-p--line-height: 1.5;
+  --text-p--font-weight: 400;
+
+  --text-sm: var(--sm-size);
+  --text-sm--line-height: 1.5;
+  --text-sm--font-weight: 400;
+
+  --text-tiny: var(--upheader);
+  --text-tiny--line-height: 1.4;
+  --text-tiny--font-weight: 500;
+
+  --text-micro: var(--micro-size);
+  --text-micro--line-height: 1;
+  --text-micro--font-weight: 700;
+  --text-micro--letter-spacing: 0.05em;
 
   --font-sora: var(--font-sora);
   --font-inter: var(--font-inter);
+
+  /* Legacy Compatibility Aliases */
+  --color-app-bg: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-secondary: var(--secondary);
+  --color-primary: var(--foreground);
 }
 
-/* Light Mode */
+/* Base Variable Definitions */
 :root {
-  --background: #f8fafc;
+  /* Light Mode - Optimized for Clarity & Pop */
+  --background: #f1f5f9; /* Slate 100 - Visible contrast for cards */
   --foreground: #0f172a;
-  --primary: #0f172a;
   --secondary: #64748b;
-  --brand: #0099ff; /* Defaulting to Blue accent as brand */
-  --surface: #ffffff;
-  --surface-secondary: #f1f5f9;
-  --surface-hover: #e2e8f0;
+  --surface: #ffffff; /* Pure White Cards */
+  --surface-secondary: #e2e8f0;
+  --surface-hover: #f1f5f9;
   --border: #e2e8f0;
   --blur: rgba(161, 165, 173, 0.5);
 
-  --color-purple: #3f53ff;
-  --color-blue: #0099ff;
-  --color-green: #00c88c;
-  --color-yellow: #ffae00;
-  --color-red: #ff1644;
-  --color-pink: #ff7fb3;
-
-  --text-primary: var(--foreground);
-  --text-secondary: var(--secondary);
-  --text-muted: #94a3b8;
-
-  /* Spacing Scale from Specs */
-  --space-xs: 4px;
-  --space-sm: 6px;
-  --space-md: 8px;
-  --space-lg: 12px;
-  --space-xl: 16px;
-  --space-xxl: 32px;
-  --space-xll: 48px;
-
-  /* Typography Scale from Specs */
   --h1-size: 36px;
-  --h2-size: 24px;
+  --h2-size: 28px;
   --h3-size: 20px;
   --h4-size: 18px;
   --p-size: 16px;
+  --sm-size: 14px;
   --upheader: 12px;
+  --micro-size: 10px;
+
+  --font-sora: "Sora", sans-serif;
 }
 
-/* Dark Mode */
 .dark {
-  --background: #0b111d;
-  --foreground: #f8fafc;
-  --primary: #ffffff;
+  /* Dark Mode - Optimized for Depth */
+  --background: #08111d;
+  --foreground: #f1f5f9;
   --secondary: #94a3b8;
-  --brand: #3f53ff; /* Purple brand feel in dark mode */
   --surface: #161f30;
-  --surface-secondary: #1e293b;
-  --surface-hover: #2d3748;
+  --surface-secondary: #0f172a;
+  --surface-hover: #1e293b;
   --border: #1e293b;
-  --blur: rgba(15, 23, 42, 0.5);
+  --blur: rgba(0, 0, 0, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b111d;
-    --foreground: #f8fafc;
-    --primary: #ffffff;
+    --background: #08111d;
+    --foreground: #f1f5f9;
     --secondary: #94a3b8;
-    --brand: #3f53ff;
     --surface: #161f30;
-    --surface-secondary: #1e293b;
-    --surface-hover: #2d3748;
+    --surface-secondary: #0f172a;
+    --surface-hover: #1e293b;
     --border: #1e293b;
-    --blur: rgba(15, 23, 42, 0.5);
+    --blur: rgba(0, 0, 0, 0.5);
   }
 }
 
+/* Global Styles */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fix for dark mode image artifacts - ensures no unintentional blend filters */
+.dark img {
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }
 
 h1,
@@ -99,83 +149,32 @@ h3,
 h4,
 h5 {
   font-family: "Sora", sans-serif;
-  font-weight: 700;
   margin: 0;
 }
 
 p {
   line-height: 150%;
-  font-family: var(--font-inter);
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
+/* Custom Utilities */
+@utility card-glass {
+  background-color: color-mix(in srgb, var(--surface), transparent 40%);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
 }
 
-html,
-body {
-  height: 100%;
+@utility shadow-soft {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.col-span-2 {
-  grid-column: span 2 / span 2;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.3s ease-out;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.2s ease-out;
-}
-
-/* PASSPORT STAMPS */
-.stamp-container {
-  /* filter: contrast(120%) brightness(90%); */
-  /* mix-blend-mode: multiply; This makes the stamp "soak" into the background color */
+@utility shadow-lg {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
 @utility header-1 {
-  @apply text-xl font-bold capitalize text-app-text;
-}
-
-@utility header-2 {
-  @apply text-xs font-bold text-secondary uppercase;
+  @apply text-h1;
 }
 
 @utility subheader {
-  @apply text-xs text-secondary capitalize;
+  @apply text-tiny text-txt-sec capitalize;
 }

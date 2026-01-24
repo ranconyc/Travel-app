@@ -6,7 +6,7 @@ import {
   formatDistanceLabel,
   formatFlightTimeLabelFromDistance,
   getDistance,
-} from "@/app/_utils/geo";
+} from "@/domain/shared/utils/geo";
 import BaseCard from "@/components/molecules/BaseCard";
 import DistanceBadge from "@/components/atoms/DistanceBadge";
 import useStorageState from "@/hooks/ui/useStorageState";

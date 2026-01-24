@@ -7,9 +7,9 @@ export default function Block({
 }) {
   return (
     <div
-      className={`bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-md flex flex-col gap-2 ${
+      className={`bg-bg-card text-txt-main p-md rounded-pill flex flex-col gap-sm ${
         className === "w-fit" ? "w-fit" : "w-full"
-      }`}
+      } ${className}`}
     >
       {children}
     </div>

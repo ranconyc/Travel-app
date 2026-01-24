@@ -41,10 +41,10 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
   if (!loggedUser) return redirect("/signin");
 
   return (
-    <div className="h-full border-b border-surface relative">
+    <div className="flex flex-col h-screen overflow-hidden bg-bg-main">
       <HomeHeader />
-      <main className="p-4 pb-28 overflow-y-scroll" id="home-main">
-        <div className="flex flex-col gap-6">
+      <main className="flex-1 overflow-y-auto px-lg pb-32" id="home-main">
+        <div className="flex flex-col gap-xl">
           <UserList />
           <CountryList />
           <CityList />

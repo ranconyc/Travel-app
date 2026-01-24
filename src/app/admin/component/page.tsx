@@ -84,7 +84,7 @@ export default async function AdminComponentsPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold font-sora tracking-tight mb-2">
+        <h1 className="text-h1 font-bold font-sora tracking-tight mb-2">
           Component Inventory
         </h1>
         <p className="text-secondary max-w-2xl leading-relaxed">

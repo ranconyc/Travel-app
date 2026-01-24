@@ -83,7 +83,7 @@ export default function AdminLayout({
   const getLinkClasses = (key: string | undefined) => {
     return isActive(key)
       ? "flex items-center gap-3 px-4 py-3 text-gray-700 bg-blue-50 rounded-lg font-medium"
-      : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
+      : "flex items-center gap-3 px-4 py-3 text-secondary hover:bg-gray-50 rounded-lg hover:text-gray-900 transition-colors";
   };
 
   return (
@@ -112,7 +112,7 @@ export default function AdminLayout({
         <div className="p-4 border-t border-gray-100">
           <Link
             href="/"
-            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-red-600 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 text-secondary hover:text-red-600 transition-colors"
           >
             <LogOut size={20} />
             Exit Admin
@@ -156,7 +156,7 @@ export default function AdminLayout({
                 <span className="font-bold text-lg">Menu</span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-gray-500 hover:bg-gray-100 rounded-full"
+                  className="p-2 text-secondary hover:bg-gray-100 rounded-full"
                 >
                   <X size={20} />
                 </button>
@@ -176,7 +176,7 @@ export default function AdminLayout({
                 <div className="pt-4 mt-4 border-t border-gray-100">
                   <Link
                     href="/"
-                    className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-red-600 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 text-secondary hover:text-red-600 transition-colors"
                   >
                     <LogOut size={20} />
                     Exit Admin

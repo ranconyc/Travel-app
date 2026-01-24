@@ -26,6 +26,7 @@ export const Default: Story = {
   args: {
     name: "Ran Cohen",
     size: 60,
+    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200"
   },
 };
 
@@ -34,6 +35,7 @@ export const Square: Story = {
     name: "Ran Cohen",
     size: 60,
     variant: "square",
+    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200"
   },
 };
 

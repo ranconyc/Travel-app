@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-500">Welcome back, Admin.</p>
+        <p className="text-secondary">Welcome back, Admin.</p>
       </div>
 
       {/* Stats Grid */}
@@ -66,7 +66,7 @@ export default async function AdminDashboardPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-100">
           <h2 className="font-semibold text-gray-900">Forms Directory</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-secondary mt-1">
             Quick access to all forms in the application
           </p>
         </div>
@@ -76,7 +76,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Sign In</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               Authentication form
             </div>
           </a>
@@ -85,7 +85,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Complete Profile</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               User profile completion
             </div>
           </a>
@@ -94,7 +94,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Persona Setup</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               Travel style & interests
             </div>
           </a>
@@ -103,7 +103,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Travel History</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               Visited countries selection
             </div>
           </a>
@@ -112,7 +112,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Travel Persona</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               Combined persona form
             </div>
           </a>
@@ -121,7 +121,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Travel Preferences</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               Preferences & settings
             </div>
           </a>
@@ -130,7 +130,7 @@ export default async function AdminDashboardPage() {
             className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">City Generator</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-secondary mt-1">
               Admin city creation form
             </div>
           </a>
@@ -155,17 +155,17 @@ export default async function AdminDashboardPage() {
                   </div>
                   <div>
                     <div className="font-medium text-gray-900">{city.name}</div>
-                    <div className="text-sm text-gray-500">{city.country}</div>
+                    <div className="text-sm text-secondary">{city.country}</div>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-gray-900">{city.visitors}</div>
-                  <div className="text-xs text-gray-500">Visitors</div>
+                  <div className="text-xs text-secondary">Visitors</div>
                 </div>
               </div>
             ))}
             {topCities.length === 0 && (
-              <div className="p-6 text-center text-gray-500">
+              <div className="p-6 text-center text-secondary">
                 No data available
               </div>
             )}
@@ -184,7 +184,7 @@ export default async function AdminDashboardPage() {
                   <div className="font-medium text-gray-900 truncate">
                     {user.name}
                   </div>
-                  <div className="text-sm text-gray-500 truncate">
+                  <div className="text-sm text-secondary truncate">
                     {user.email}
                   </div>
                 </div>

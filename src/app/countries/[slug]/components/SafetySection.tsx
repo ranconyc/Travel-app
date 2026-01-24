@@ -73,7 +73,7 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
                     {scam.type.split("-").join(" ")}
                   </span>
                   <span
-                    className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
+                    className={`text-micro uppercase font-bold px-2 py-0.5 rounded-full ${
                       scam.severity === "high"
                         ? "bg-red-500/10 text-red-500"
                         : scam.severity === "medium"

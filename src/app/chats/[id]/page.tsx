@@ -55,7 +55,7 @@ export default async function ChatPage({ params }: Props) {
           <h1 className="font-bold text-xl">Chat Not Found</h1>
         </HeaderWrapper>
         <main className="p-4">
-          <p className="text-center text-gray-500">
+          <p className="text-center text-secondary">
             {result.error ||
               "This chat doesn't exist or you don't have access to it."}
           </p>

@@ -100,14 +100,14 @@ export default function DestinationsListClient({
                       {item.name.charAt(0)}
                     </div>
                   )}
-                  <span className="font-bold text-app-text group-hover:text-brand transition-colors text-base md:text-sm">
+                  <span className="font-bold text-app-text group-hover:text-brand transition-colors text-p md:text-sm">
                     {item.name}
                   </span>
                 </div>
 
                 {/* ID / Code */}
                 <div className="flex md:block items-center justify-between text-xs md:text-sm font-mono text-secondary">
-                  <span className="md:hidden font-bold uppercase tracking-wider text-[10px] text-tertiary">
+                  <span className="md:hidden font-bold uppercase tracking-wider text-micro text-tertiary">
                     ID / Code
                   </span>
                   <span>
@@ -121,16 +121,16 @@ export default function DestinationsListClient({
 
                 {/* Status */}
                 <div className="flex md:block items-center justify-between">
-                  <span className="md:hidden font-bold uppercase tracking-wider text-[10px] text-tertiary">
+                  <span className="md:hidden font-bold uppercase tracking-wider text-micro text-tertiary">
                     Status
                   </span>
                   <div>
                     {item.needsReview ? (
-                      <span className="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold bg-yellow-100 text-yellow-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded text-micro font-bold bg-yellow-100 text-yellow-800">
                         NEEDS REVIEW
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded text-micro font-bold bg-green-100 text-green-800">
                         ACTIVE
                       </span>
                     )}

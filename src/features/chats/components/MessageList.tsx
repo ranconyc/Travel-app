@@ -49,7 +49,7 @@ export function MessageList({
 
   if (messages.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center text-gray-500">
+      <div className="flex-1 flex items-center justify-center text-secondary">
         <p>No messages yet. Start the conversation!</p>
       </div>
     );
@@ -105,7 +105,7 @@ export function MessageList({
                   {message.content}
                 </p>
                 {messages.length - 1 === index && (
-                  <span className="text-xs text-gray-500 mt-1 text-right w-full block">
+                  <span className="text-xs text-secondary mt-1 text-right w-full block">
                     {formatMessageTime(message.createdAt)}
                   </span>
                 )}

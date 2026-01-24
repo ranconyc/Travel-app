@@ -35,7 +35,7 @@ const UsefulPhrases = ({ usefulPhrases }: UsefulPhrasesProps) => {
       <div className="grid gap-2">
         {usefulPhrases.map((p) => (
           <div className={flexBetween} key={p.en}>
-            <p className="text-gray-500 text-sm">{p.en}</p>
+            <p className="text-secondary text-sm">{p.en}</p>
             <p className="text-gray-900 text-sm">{p.local}</p>
           </div>
         ))}
@@ -58,8 +58,8 @@ const EnglishProficiency = ({
 );
 
 type LanguageProps = {
-  usefulPhrases: UsefulPhrasesProps["usefulPhrases"];
-  englishProficiencyNote: EnglishProficiencyProps["englishProficiencyNote"];
+  usefulPhrases?: UsefulPhrasesProps["usefulPhrases"];
+  englishProficiencyNote?: EnglishProficiencyProps["englishProficiencyNote"];
   languageNative?: SpokenLanguagesProps["languageNative"];
   languagesEnglish?: SpokenLanguagesProps["languagesEnglish"];
 };
@@ -79,8 +79,10 @@ export default function LanguageSection({
           languageNative={languageNative}
         />
       )}
-      <UsefulPhrases usefulPhrases={usefulPhrases} />
-      <EnglishProficiency englishProficiencyNote={englishProficiencyNote} />
+      {usefulPhrases && <UsefulPhrases usefulPhrases={usefulPhrases} />}
+      {englishProficiencyNote && (
+        <EnglishProficiency englishProficiencyNote={englishProficiencyNote} />
+      )}
     </Block>
   );
 }

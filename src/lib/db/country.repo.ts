@@ -35,6 +35,15 @@ export async function getCountryWithCities(cca3: string) {
   }
 }
 
+/**
+ * Finds a country by its unique cca3 code.
+ */
+export async function findCountryByCode(cca3: string) {
+  return prisma.country.findUnique({
+    where: { cca3: cca3.toUpperCase() },
+  });
+}
+
 // find the border countries by cca3
 export async function findBorderCountries(bordersCCA3: string[]) {
   if (!bordersCCA3?.length) return [];

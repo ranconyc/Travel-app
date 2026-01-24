@@ -1,13 +1,16 @@
-import { prisma } from "@/lib/db/prisma";
 import type { HomeBaseLocationMeta } from "@/domain/user/completeProfile.schema";
-import { DetectedCity, ReverseGeocodeResult } from "@/types/city";
+import { DetectedCity, ReverseGeocodeResult } from "@/domain/city/city.schema";
 import {
   findCityByBBox,
   findNearestCity,
   makeCityId,
   updateCity,
   deleteCity,
+  findState,
+  createState,
+  upsertCity,
 } from "@/lib/db/cityLocation.repo";
+import { findCountryByCode } from "@/lib/db/country.repo";
 
 // reverse geocode a given point to a city
 export async function reverseGeocodeLocationIQ(
@@ -332,9 +335,7 @@ export async function ensureCountryAndCityFromLocation(
     const countryId = countryCode2.toLowerCase();
 
     // Check if country exists
-    let country = await prisma.country.findUnique({
-      where: { cca3: countryId.toUpperCase() },
-    });
+    let country = await findCountryByCode(countryId);
 
     // If country does not exist, try to generate it fully first
     if (!country) {
@@ -387,62 +388,35 @@ export async function ensureCountryAndCityFromLocation(
     let stateRefId: string | undefined = undefined;
     if (meta.state || meta.stateCode) {
       // Try to find existing state
-      const existingState = await prisma.state.findFirst({
-        where: {
-          countryRefId: country.id,
-          OR: [
-            {
-              code: {
-                equals: meta.stateCode || undefined,
-                mode: "insensitive",
-              },
-            },
-            { name: { equals: meta.state || undefined, mode: "insensitive" } },
-          ],
-        },
-      });
+      const existingState = await findState(
+        country.id,
+        meta.state || undefined,
+        meta.stateCode || undefined,
+      );
 
       if (existingState) {
         stateRefId = existingState.id;
       } else {
         // Create new State
-        const newState = await prisma.state.create({
-          data: {
-            name: meta.state || meta.stateCode || "Unknown State",
-            code: meta.stateCode || null,
-            countryRefId: country.id,
-            // stateId is optional, so we leave it out (null)
-          },
+        const newState = await createState({
+          name: meta.state || meta.stateCode || "Unknown State",
+          code: meta.stateCode || null,
+          countryRefId: country.id,
         });
         stateRefId = newState.id;
       }
     }
 
-    const city = await prisma.city.upsert({
-      where: { cityId },
-      update: {
-        name: cityName,
-        countryRefId: country.id,
-        stateId: stateRefId,
-        stateName: meta.state,
-        coords: coordsJson,
-        boundingBox: boundingBoxJson,
-        radiusKm,
-        autoCreated: true,
-        needsReview: true,
-      },
-      create: {
-        cityId,
-        name: cityName,
-        countryRefId: country.id,
-        stateId: stateRefId,
-        stateName: meta.state,
-        coords: coordsJson,
-        boundingBox: boundingBoxJson,
-        radiusKm,
-        autoCreated: true,
-        needsReview: true,
-      },
+    const city = await upsertCity(cityId, {
+      name: cityName,
+      countryRefId: country.id,
+      stateId: stateRefId,
+      stateName: meta.state,
+      coords: coordsJson,
+      boundingBox: boundingBoxJson,
+      radiusKm,
+      autoCreated: true,
+      needsReview: true,
     });
 
     return { country, city };

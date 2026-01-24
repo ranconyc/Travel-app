@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/db/prisma";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 import { findNearestCityFromCoords } from "@/domain/city/city.service";
-import { DetectedCity } from "@/types/city";
+import { DetectedCity } from "@/domain/city/city.schema";
+import * as userRepository from "@/lib/db/user.repo";
+import { getAge } from "@/domain/shared/utils/age";
 
 /**
  * Completes the user profile with the provided data.
- * @param userId - The ID of the user to update.
- * @param data - The profile data to update.
  */
 export async function completeProfile(
   userId: string,
@@ -25,51 +25,44 @@ export async function completeProfile(
       : (data.gender as "MALE" | "FEMALE" | "NON_BINARY");
 
   try {
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        profileCompleted: true,
-        name: `${data.firstName} ${data.lastName}`.trim(),
-        profile: {
-          upsert: {
-            create: {
-              firstName: data.firstName,
-              lastName: data.lastName || null,
-              birthday: birthdayDate,
-              gender: genderEnum,
-              occupation: data.occupation || null,
-              socials: data.socialLinks || null,
-              languages: data.languages,
-            },
-            update: {
-              firstName: data.firstName,
-              lastName: data.lastName || null,
-              birthday: birthdayDate,
-              gender: genderEnum,
-              occupation: data.occupation || null,
-              socials: data.socialLinks || null,
-              languages: data.languages,
-            },
+    await userRepository.updateFullProfile(userId, {
+      profileCompleted: true,
+      name: `${data.firstName} ${data.lastName}`.trim(),
+      profile: {
+        upsert: {
+          create: {
+            firstName: data.firstName,
+            lastName: data.lastName || null,
+            birthday: birthdayDate,
+            gender: genderEnum,
+            occupation: data.occupation || null,
+            socials: data.socialLinks || null,
+            languages: data.languages,
+          },
+          update: {
+            firstName: data.firstName,
+            lastName: data.lastName || null,
+            birthday: birthdayDate,
+            gender: genderEnum,
+            occupation: data.occupation || null,
+            socials: data.socialLinks || null,
+            languages: data.languages,
           },
         },
       },
     });
 
     if (data.avatarUrl) {
-      await prisma.user.update({
-        where: { id: userId },
-        data: { avatarUrl: data.avatarUrl },
-      });
+      await userRepository.updateUserAvatar(userId, data.avatarUrl);
     }
   } catch (error) {
     console.error("completeProfile error:", error);
     throw new Error("Failed to update profile");
   }
 }
+
 /**
  * Updates the user profile persona with the provided data.
- * @param userId - The ID of the user to update.
- * @param newPersonaData - The persona data to update.
  */
 export async function updateUserProfilePersona(
   userId: string,
@@ -87,28 +80,12 @@ export async function updateUserProfilePersona(
 
     const existingPersona =
       (userProfile?.persona as Record<string, unknown>) || {};
-    const mergedPersona = JSON.parse(
-      JSON.stringify({
-        ...existingPersona,
-        ...newPersonaData,
-      }),
-    );
+    const mergedPersona = {
+      ...existingPersona,
+      ...newPersonaData,
+    };
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        profile: {
-          upsert: {
-            create: {
-              persona: mergedPersona,
-            },
-            update: {
-              persona: mergedPersona,
-            },
-          },
-        },
-      },
-    });
+    await userRepository.updateUserPersona(userId, mergedPersona);
   } catch (error) {
     console.error("updateUserProfilePersona error:", error);
     throw new Error("Failed to update user persona");
@@ -116,9 +93,7 @@ export async function updateUserProfilePersona(
 }
 
 /**
- * Saves the user's interests to their profile.
- * @param userId - The ID of the user to update.
- * @param data - The interests data to save.
+ * Saves the user's interests and persona data.
  */
 export async function saveUserInterests(
   userId: string,
@@ -126,97 +101,91 @@ export async function saveUserInterests(
     interests: string[];
     dailyRhythm: string;
     travelStyle: string;
+    budget?: string;
+    currency?: string;
+    firstName?: string;
+    hometown?: string;
+    avatarUrl?: string;
+    insights?: string[];
   },
 ): Promise<void> {
-  return updateUserProfilePersona(userId, data);
+  const hasBasicInfo = data.firstName || data.avatarUrl;
+
+  if (hasBasicInfo) {
+    const updateData: any = {};
+    if (data.firstName) updateData.name = data.firstName;
+    if (data.avatarUrl) updateData.avatarUrl = data.avatarUrl;
+
+    await userRepository.updateFullProfile(userId, {
+      ...updateData,
+      ...(data.firstName
+        ? {
+            profile: {
+              upsert: {
+                create: { firstName: data.firstName },
+                update: { firstName: data.firstName },
+              },
+            },
+          }
+        : {}),
+    });
+  }
+
+  return updateUserProfilePersona(userId, {
+    interests: data.interests,
+    dailyRhythm: data.dailyRhythm,
+    travelStyle: data.travelStyle,
+    budget: data.budget,
+    currency: data.currency,
+    hometown: data.hometown,
+    insights: data.insights,
+  });
 }
 
 /**
  * Handles the update of the user's location.
- * @param userId - The ID of the user to update.
- * @param coords - The coordinates of the user's location.
  */
 export async function handleUpdateUserLocation(
   userId: string,
   coords: { lat: number; lng: number },
 ): Promise<{ detected: DetectedCity }> {
   const { lat, lng } = coords;
-  console.log("[handleUpdateUserLocation] Start", userId, coords);
 
-  // 1. Resolve city from coordinates (DB or API)
   const detected = await findNearestCityFromCoords(lat, lng, {
     createIfMissing: true,
-    searchRadiusKm: 120, // Consistent with location.actions.ts logic
+    searchRadiusKm: 120,
   });
 
   if (!detected || !detected.id) {
     throw new Error("Could not identify city");
   }
 
-  // 2. Handle city visit tracking (imported from repo)
   const { getActiveVisit, createCityVisit, closeCityVisit } =
     await import("@/lib/db/cityVisit.repo");
   const activeVisit = await getActiveVisit(userId);
 
   if (!activeVisit) {
-    // First visit or no active visit - create new one
     await createCityVisit(userId, detected.id, { lat, lng });
   } else if (activeVisit.cityId !== detected.id) {
-    // Changed cities - close current visit and create new one
     await closeCityVisit(activeVisit.id, { lat, lng });
     await createCityVisit(userId, detected.id, { lat, lng });
   }
 
-  // 3. Update user's current location and city
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      currentLocation: {
-        type: "Point",
-        coordinates: [lng, lat],
-      },
-      currentCityId: detected.id,
+  await userRepository.updateUserLocation(
+    userId,
+    {
+      type: "Point",
+      coordinates: [lng, lat],
     },
-  });
+    detected.id,
+  );
 
-  console.log("[handleUpdateUserLocation] Success", detected.cityName);
-  return { detected };
-}
-
-/**
- * Calculates the age from a birthday string.
- * @param birthday - The birthday string.
- * @returns The age as a number, or null if the birthday is invalid.
- */
-function safeAge(birthday: string): number | null {
-  const d = new Date(birthday);
-  if (Number.isNaN(d.getTime())) return null;
-  const today = new Date();
-  let age = today.getFullYear() - d.getFullYear();
-  const m = today.getMonth() - d.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < d.getDate())) age--;
-  return age >= 0 && age < 120 ? age : null;
-}
-
-/**
- * Formats the user's languages for display.
- * @param langs - The languages to format.
- * @returns The formatted languages string, or null if the user has no languages.
- */
-function formatLanguages(
-  langs?: { code: string; name: string }[],
-): string | null {
-  if (!langs || langs.length === 0) return null;
-  const names = langs.map((l) => l.name).slice(0, 3);
-  if (names.length === 1) return names[0];
-  if (names.length === 2) return `${names[0]} and ${names[1]}`;
-  return `${names[0]}, ${names[1]} and ${names[2]}`;
+  return { detected: detected as any }; // Cast for schema compatibility
 }
 
 /**
  * Generates a bio for the user based on their profile data.
- * @param data - The profile data to generate the bio from.
- * @returns The generated bio.
+ * Consolidates display-string formatting into a clean business rule.
  */
 export async function handleGenerateBio(data: {
   firstName: string;
@@ -226,9 +195,16 @@ export async function handleGenerateBio(data: {
   languages?: { code: string; name: string }[];
 }) {
   const { firstName, occupation, hometown, birthday, languages } = data;
-  const ageMaybe = safeAge(birthday);
-  const ageText = ageMaybe ? `${ageMaybe}-year-old` : "";
-  const langsText = formatLanguages(languages);
+  const age = getAge(birthday);
+  const ageText = age ? `${age}-year-old` : "";
+
+  const langs = languages?.map((l) => l.name).slice(0, 3) || [];
+  let langsText = "";
+  if (langs.length === 1) langsText = langs[0];
+  else if (langs.length === 2) langsText = `${langs[0]} and ${langs[1]}`;
+  else if (langs.length >= 3)
+    langsText = `${langs[0]}, ${langs[1]} and ${langs[2]}`;
+
   const langsClause = langsText ? ` I speak ${langsText}.` : "";
   const base = `I'm ${firstName}, a ${
     ageText ? `${ageText} ` : ""

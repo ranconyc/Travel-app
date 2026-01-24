@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
-import { NearestCityResult } from "@/types/city";
+import { NearestCityResult } from "@/domain/city/city.schema";
 import { Prisma } from "@prisma/client";
 
 function slugify(input: string): string {
@@ -181,4 +181,48 @@ export async function deleteCity(id: string) {
     console.error("deleteCity error:", error);
     throw new Error("Failed to delete city");
   }
+}
+
+/**
+ * Finds a state using name or code within a country.
+ */
+export async function findState(
+  countryRefId: string,
+  name?: string,
+  code?: string,
+) {
+  return prisma.state.findFirst({
+    where: {
+      countryRefId,
+      OR: [
+        { code: { equals: code || undefined, mode: "insensitive" } },
+        { name: { equals: name || undefined, mode: "insensitive" } },
+      ],
+    },
+  });
+}
+
+/**
+ * Creates a new state record.
+ */
+export async function createState(data: {
+  name: string;
+  code: string | null;
+  countryRefId: string;
+}) {
+  return prisma.state.create({ data });
+}
+
+/**
+ * Upserts a city record based on its unique cityId.
+ */
+export async function upsertCity(
+  cityId: string,
+  data: Prisma.CityUpsertArgs["update"],
+) {
+  return prisma.city.upsert({
+    where: { cityId },
+    update: data,
+    create: { ...data, cityId } as Prisma.CityUpsertArgs["create"],
+  });
 }

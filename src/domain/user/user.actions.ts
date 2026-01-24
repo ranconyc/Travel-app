@@ -27,6 +27,10 @@ import {
   updateVisitedCountries,
 } from "@/lib/db/user.repo";
 
+import { mapUiToDb } from "@/features/persona/logic/persona.mapper";
+import { InsightsEngine } from "@/features/persona/logic/insights.engine";
+import { PersonaFormValues } from "@/features/persona/types/form";
+
 /* -------------------------------------------------------------------------- */
 /*                                USER ACTIONS                                */
 /* -------------------------------------------------------------------------- */
@@ -56,7 +60,28 @@ export const deleteAccountAction = createSafeAction(
 export const saveInterests = createSafeAction(
   saveInterestsSchema,
   async (data, userId) => {
-    await saveUserInterests(userId, data);
+    // 1. Map UI Values to DB Model
+    // We cast to PersonaFormValues because the schema is nearly identical,
+    // assuming safeInterestsSchema has all fields required by mapper.
+    const dbModel = mapUiToDb(data as unknown as PersonaFormValues);
+
+    // 2. Generate Insights
+    const insights = InsightsEngine.generate(dbModel);
+    const insightCodes = insights.map((i) => i.code);
+
+    // 3. Save to DB
+    await saveUserInterests(userId, {
+      firstName: data.firstName,
+      hometown: data.hometown,
+      avatarUrl: data.avatarUrl,
+      interests: dbModel.interests,
+      dailyRhythm: dbModel.dailyRhythm as string,
+      travelStyle: dbModel.travelStyle as string,
+      budget: dbModel.budget as string,
+      currency: dbModel.currency,
+      insights: insightCodes,
+    });
+
     return { userId };
   },
 );

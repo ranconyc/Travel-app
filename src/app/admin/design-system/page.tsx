@@ -79,7 +79,7 @@ const ButtonItem = ({
     <div className="flex-1 flex items-center justify-center min-h-[60px] w-full">
       {children}
     </div>
-    <span className="text-[10px] uppercase tracking-wider font-bold text-secondary mt-2 opacity-70">
+    <span className="text-micro uppercase tracking-wider font-bold text-secondary mt-2 opacity-70">
       {label}
     </span>
   </div>
@@ -106,7 +106,7 @@ export default function DesignSystemPage() {
 
   const handleToggle = (id: string) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
@@ -207,20 +207,18 @@ export default function DesignSystemPage() {
             </h3>
             <div className="grid gap-3">
               <SelectionCard
-                id="1"
                 label="Adventure"
                 description="Hiking, trekking and more"
                 isSelected={selected.includes("1")}
-                onChange={handleToggle}
-                icon={Sun}
+                onChange={() => handleToggle("1")}
+                icon={<Sun size={20} />}
               />
               <SelectionCard
-                id="2"
                 label="Relaxation"
                 description="Spas, beaches and chill"
                 isSelected={selected.includes("2")}
-                onChange={handleToggle}
-                icon={Moon}
+                onChange={() => handleToggle("2")}
+                icon={<Moon size={20} />}
               />
             </div>
 

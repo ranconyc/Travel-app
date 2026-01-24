@@ -219,14 +219,14 @@ export const CityStamp: React.FC<CityStampProps> = ({
         } flex flex-col items-center justify-center text-center gap-0.5 px-2 z-10`}
       >
         {icon && <div className="mb-0.5 opacity-80">{icon}</div>}
-        <div className="text-[10px] font-black uppercase leading-tight tracking-wide">
+        <div className="text-micro font-black uppercase leading-tight tracking-wide">
           {cityName}
         </div>
-        <div className="text-[7px] font-semibold uppercase opacity-70 leading-tight tracking-wider">
+        <div className="text-p font-semibold uppercase opacity-70 leading-tight tracking-wider">
           {countryName}
         </div>
         {date && (
-          <div className="text-[6px] font-medium opacity-60 mt-0.5">{date}</div>
+          <div className="text-p font-medium opacity-60 mt-0.5">{date}</div>
         )}
       </div>
     );

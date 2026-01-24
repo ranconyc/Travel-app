@@ -14,7 +14,7 @@ export default function TransportSection({ city }: { city: any }) {
               key={o.name}
             >
               <div className="grid gap-2">
-                <h1 className="text-base font-medium">{o.name}</h1>
+                <h1 className="text-p font-medium">{o.name}</h1>
                 <p className="text-xs">{o.note}</p>
               </div>
               {o.badge && <div className="text-xs">{o.badge.text}</div>}

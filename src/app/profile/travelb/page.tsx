@@ -133,7 +133,6 @@ export default function TravelFormB() {
                         <SelectionCard
                           type="checkbox"
                           key={country.cca2}
-                          id={country.cca2}
                           label={`${country.flag} ${country.name.common}`}
                           isSelected={selectedCountries.includes(country.cca2)}
                           onChange={() => toggleCountry(country)}

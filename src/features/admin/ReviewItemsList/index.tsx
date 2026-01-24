@@ -2,7 +2,7 @@ import Link from "next/link";
 import Block from "@/components/atoms/Block";
 import Title from "@/components/atoms/Title";
 import { CheckCircle, AlertCircle } from "lucide-react";
-import { formatDate } from "@/app/_utils/date";
+import { formatDate } from "@/domain/shared/utils/date";
 
 interface ReviewItem {
   id: string;
@@ -28,7 +28,7 @@ export default function ReviewItemsList({
     return (
       <Block>
         <Title>{title}</Title>
-        <div className="flex flex-col items-center justify-center p-8 text-gray-500">
+        <div className="flex flex-col items-center justify-center p-8 text-secondary">
           <CheckCircle className="w-12 h-12 mb-2 text-green-500" />
           <p>All caught up! No items to review.</p>
         </div>
@@ -56,7 +56,7 @@ export default function ReviewItemsList({
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white">
                   {item.name}
                 </h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-secondary dark:text-gray-400">
                   {item.subtitle} {item.autoCreated && "• Auto-created"}
                   {item.createdAt && ` • ${formatDate(item.createdAt)}`}
                 </p>

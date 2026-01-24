@@ -8,7 +8,7 @@ type TimeZoneProps = {
 };
 
 const subtitle = "text-sm font-medium capitalize mb-1";
-const paragraph = "text-base";
+const paragraph = "text-p";
 const flexBetween = "flex items-center justify-between";
 
 export default function TimeZoneSection({ timeZone }: TimeZoneProps) {

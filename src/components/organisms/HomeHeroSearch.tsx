@@ -99,9 +99,9 @@ export default function HomeHeroSearch() {
   const showExternalOption = query.length >= 2 && !triggerExternal;
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-lg mx-auto">
-      <div className="relative group">
-        <div className="absolute z-10 inset-y-0 left-4 flex items-center pointer-events-none">
+    <div ref={containerRef} className="relative w-full flex flex-col">
+      <div className="relative group w-full">
+        <div className="absolute inset-y-0 left-md flex items-center pointer-events-none z-10">
           <Search className="w-5 h-5 text-secondary group-focus-within:text-brand transition-colors" />
         </div>
         <input
@@ -110,17 +110,17 @@ export default function HomeHeroSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search destination..."
-          className="w-full h-14 pl-12 pr-4 bg-surface/80 backdrop-blur-md border border-border rounded-full text-app-text placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand shadow-lg transition-all"
+          className="w-full h-14 pl-11 pr-xl bg-surface border border-border rounded-xl text-p text-app-text placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand shadow-sm transition-all"
         />
         {isLoading && (
-          <div className="absolute inset-y-0 right-4 flex items-center">
+          <div className="absolute inset-y-0 right-xl flex items-center">
             <Loader2 className="w-5 h-5 text-brand animate-spin" />
           </div>
         )}
       </div>
 
       {isOpen && (results.length > 0 || showExternalOption) && (
-        <div className="absolute top-16 left-0 right-0 bg-surface/90 backdrop-blur-xl border border-border rounded-3xl shadow-2xl overflow-hidden z-50 max-h-[60vh] overflow-y-auto">
+        <div className="absolute top-16 left-0 right-0 bg-surface/90 backdrop-blur-xl border border-border rounded-3xl shadow-xl overflow-hidden z-50 max-h-[60vh] overflow-y-auto">
           {results.length > 0 && (
             <div className="py-2">
               <span className="px-4 py-2 text-xs font-bold text-secondary uppercase tracking-wider block">

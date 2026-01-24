@@ -28,8 +28,8 @@ function OtherCountBadge({
 function AvatarMatchBadge({ percentage = 56 }: { percentage?: number }) {
   return (
     <div className="text-white pr-1 ">
-      <h1 className="text-[12px] font-bold leading-[1.1]">{percentage}%</h1>
-      <h2 className="text-[9px] font-bold uppercase leading-none">match</h2>
+      <h1 className="text-tiny font-bold leading-[1.1]">{percentage}%</h1>
+      <h2 className="text-p font-bold uppercase leading-none">match</h2>
     </div>
   );
 }

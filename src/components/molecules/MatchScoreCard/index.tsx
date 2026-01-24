@@ -213,7 +213,7 @@ export const MatchScoreCard = ({
                 {breakdown.friends.mutualNames.slice(0, 3).map((name, i) => (
                   <div
                     key={i}
-                    className="w-6 h-6 rounded-full bg-surface-secondary border border-surface flex items-center justify-center text-[8px] font-bold"
+                    className="w-6 h-6 rounded-full bg-surface-secondary border border-surface flex items-center justify-center text-micro font-bold"
                     title={name}
                   >
                     {name.charAt(0)}

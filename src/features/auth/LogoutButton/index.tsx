@@ -1,10 +1,8 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { signOut } from "@/auth";
 import Button from "@/components/atoms/Button";
 
 export default function LogoutButton() {
-  return (
-    <Button onClick={() => signOut({ callbackUrl: "/signin" })}>Logout</Button>
-  );
+  return <Button onClick={() => signOut()}>Logout</Button>;
 }

@@ -158,13 +158,13 @@ export default async function AdminDeveloperPage() {
     <div className="space-y-10 max-w-7xl animate-in fade-in duration-700">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-100 pb-8">
         <div>
-          <h1 className="text-4xl font-extrabold font-sora tracking-tight text-gray-900 flex items-center gap-3">
+          <h1 className="text-h1 font-extrabold font-sora tracking-tight text-gray-900 flex items-center gap-3">
             <div className="bg-blue-600 p-2 rounded-xl text-white shadow-lg shadow-blue-200">
               <Code size={28} />
             </div>
             Developer Hub
           </h1>
-          <p className="mt-4 text-lg text-gray-500 max-w-2xl leading-relaxed">
+          <p className="mt-4 text-lg text-secondary max-w-2xl leading-relaxed">
             A comprehensive inventory of the application&apos;s core logic,
             listing all server-side actions and client-side hooks.
           </p>
@@ -205,7 +205,7 @@ export default async function AdminDeveloperPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-gray-50/50 text-gray-400 uppercase text-[10px] tracking-widest font-black border-b border-gray-100">
+                  <tr className="bg-gray-50/50 text-gray-400 uppercase text-micro tracking-widest font-black border-b border-gray-100">
                     <th className="px-8 py-5">Module & Location</th>
                     <th className="px-8 py-5">Exported Functions</th>
                   </tr>
@@ -218,10 +218,10 @@ export default async function AdminDeveloperPage() {
                     >
                       <td className="px-8 py-6">
                         <div className="flex flex-col gap-1">
-                          <span className="font-bold text-gray-900 text-base group-hover:text-blue-600 transition-colors">
+                          <span className="font-bold text-gray-900 text-p group-hover:text-blue-600 transition-colors">
                             {item.name.replace(".actions.ts", "")}
                           </span>
-                          <span className="text-xs text-gray-400 font-mono flex items-center gap-1 group-hover:text-gray-500">
+                          <span className="text-xs text-gray-400 font-mono flex items-center gap-1 group-hover:text-secondary">
                             <ChevronRight size={10} /> {item.filePath}
                           </span>
                         </div>
@@ -232,11 +232,11 @@ export default async function AdminDeveloperPage() {
                             const count = item.usages?.[exp] || 0;
                             return (
                               <div key={exp} className="flex flex-col gap-1">
-                                <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-[11px] font-bold font-mono border border-blue-100/50 shadow-sm group-hover:bg-white group-hover:shadow transition-all ring-1 ring-transparent hover:ring-blue-300">
+                                <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-p font-bold font-mono border border-blue-100/50 shadow-sm group-hover:bg-white group-hover:shadow transition-all ring-1 ring-transparent hover:ring-blue-300">
                                   {exp}()
                                 </span>
                                 <span
-                                  className={`text-[9px] px-1.5 font-bold self-start rounded ${
+                                  className={`text-p px-1.5 font-bold self-start rounded ${
                                     count > 0
                                       ? "text-emerald-600"
                                       : "text-amber-500"
@@ -287,7 +287,7 @@ export default async function AdminDeveloperPage() {
                         {item.name}
                       </span>
                       <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        className={`text-micro font-bold px-2 py-0.5 rounded-full ${
                           count > 0
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
                             : "bg-amber-50 text-amber-700 border border-amber-100"
@@ -296,7 +296,7 @@ export default async function AdminDeveloperPage() {
                         {count} usages
                       </span>
                     </div>
-                    <div className="text-[10px] text-gray-400 font-mono break-all opacity-80 group-hover:opacity-100 flex items-center gap-1">
+                    <div className="text-micro text-gray-400 font-mono break-all opacity-80 group-hover:opacity-100 flex items-center gap-1">
                       <ChevronRight size={8} /> {item.filePath}
                     </div>
                   </div>

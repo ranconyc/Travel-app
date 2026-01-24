@@ -56,7 +56,6 @@ export default function InterestsModal({
           {category.items.map((item) => (
             <SelectionCard
               key={item.id}
-              id={item.id}
               label={item.label}
               isSelected={selectedInterests.includes(item.id)}
               onChange={() => onOptionToggle(item.id)}

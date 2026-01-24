@@ -262,7 +262,7 @@ export default function DestinationEditorClient({
           </Link>
           <div>
             <div className="flex flex-col items-start gap-1">
-              <span className="uppercase text-[10px] font-bold text-secondary tracking-wider bg-surface-secondary px-2 py-0.5 rounded">
+              <span className="uppercase text-micro font-bold text-secondary tracking-wider bg-surface-secondary px-2 py-0.5 rounded">
                 {type}
               </span>
               <h1 className="text-2xl font-bold leading-tight">{data.name}</h1>
@@ -649,7 +649,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.officialName ? "text-gray-500" : ""}
+                          className={!data.officialName ? "text-secondary" : ""}
                         >
                           officialName
                         </span>
@@ -661,7 +661,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.imageHeroUrl ? "text-gray-500" : ""}
+                          className={!data.imageHeroUrl ? "text-secondary" : ""}
                         >
                           imageHeroUrl
                         </span>
@@ -689,7 +689,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.region ? "text-gray-500" : ""}>
+                        <span className={!data.region ? "text-secondary" : ""}>
                           region
                         </span>
                       </div>
@@ -700,7 +700,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.subRegion ? "text-gray-500" : ""}
+                          className={!data.subRegion ? "text-secondary" : ""}
                         >
                           subRegion
                         </span>
@@ -712,7 +712,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.capitalName ? "text-gray-500" : ""}
+                          className={!data.capitalName ? "text-secondary" : ""}
                         >
                           capitalName
                         </span>
@@ -724,7 +724,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.population ? "text-gray-500" : ""}
+                          className={!data.population ? "text-secondary" : ""}
                         >
                           population
                         </span>
@@ -735,7 +735,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.areaKm2 ? "text-gray-500" : ""}>
+                        <span className={!data.areaKm2 ? "text-secondary" : ""}>
                           areaKm2
                         </span>
                       </div>
@@ -747,7 +747,7 @@ export default function DestinationEditorClient({
                         )}
                         <span
                           className={
-                            !data.borders?.length ? "text-gray-500" : ""
+                            !data.borders?.length ? "text-secondary" : ""
                           }
                         >
                           borders
@@ -769,7 +769,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.logistics ? "text-gray-500" : ""}
+                          className={!data.logistics ? "text-secondary" : ""}
                         >
                           logistics (full object)
                         </span>
@@ -787,7 +787,7 @@ export default function DestinationEditorClient({
                             )}
                             <span
                               className={
-                                !data.logistics.car ? "text-gray-500" : ""
+                                !data.logistics.car ? "text-secondary" : ""
                               }
                             >
                               ↳ car
@@ -804,7 +804,7 @@ export default function DestinationEditorClient({
                             )}
                             <span
                               className={
-                                !data.logistics.idd ? "text-gray-500" : ""
+                                !data.logistics.idd ? "text-secondary" : ""
                               }
                             >
                               ↳ idd
@@ -822,7 +822,7 @@ export default function DestinationEditorClient({
                             <span
                               className={
                                 !data.logistics.timezones?.length
-                                  ? "text-gray-500"
+                                  ? "text-secondary"
                                   : ""
                               }
                             >
@@ -846,7 +846,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.finance ? "text-gray-500" : ""}>
+                        <span className={!data.finance ? "text-secondary" : ""}>
                           finance (full object)
                         </span>
                       </div>
@@ -863,7 +863,7 @@ export default function DestinationEditorClient({
                             )}
                             <span
                               className={
-                                !data.finance.currency ? "text-gray-500" : ""
+                                !data.finance.currency ? "text-secondary" : ""
                               }
                             >
                               ↳ currency
@@ -881,7 +881,7 @@ export default function DestinationEditorClient({
                             <span
                               className={
                                 !data.finance.avgDailyCost
-                                  ? "text-gray-500"
+                                  ? "text-secondary"
                                   : ""
                               }
                             >
@@ -899,7 +899,7 @@ export default function DestinationEditorClient({
                             )}
                             <span
                               className={
-                                !data.finance.cashCulture ? "text-gray-500" : ""
+                                !data.finance.cashCulture ? "text-secondary" : ""
                               }
                             >
                               ↳ cashCulture
@@ -922,7 +922,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.safety ? "text-gray-500" : ""}>
+                        <span className={!data.safety ? "text-secondary" : ""}>
                           safety
                         </span>
                       </div>
@@ -932,7 +932,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.health ? "text-gray-500" : ""}>
+                        <span className={!data.health ? "text-secondary" : ""}>
                           health
                         </span>
                       </div>
@@ -942,7 +942,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.visaInfo ? "text-gray-500" : ""}>
+                        <span className={!data.visaInfo ? "text-secondary" : ""}>
                           visaInfo
                         </span>
                       </div>
@@ -962,7 +962,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.languages ? "text-gray-500" : ""}
+                          className={!data.languages ? "text-secondary" : ""}
                         >
                           languages
                         </span>
@@ -975,7 +975,7 @@ export default function DestinationEditorClient({
                         )}
                         <span
                           className={
-                            !data.commonPhrases?.length ? "text-gray-500" : ""
+                            !data.commonPhrases?.length ? "text-secondary" : ""
                           }
                         >
                           commonPhrases
@@ -987,7 +987,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.culture ? "text-gray-500" : ""}>
+                        <span className={!data.culture ? "text-secondary" : ""}>
                           culture
                         </span>
                       </div>
@@ -1006,7 +1006,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.seasons ? "text-gray-500" : ""}>
+                        <span className={!data.seasons ? "text-secondary" : ""}>
                           seasons
                         </span>
                       </div>
@@ -1025,7 +1025,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.flags ? "text-gray-500" : ""}>
+                        <span className={!data.flags ? "text-secondary" : ""}>
                           flags
                         </span>
                       </div>
@@ -1035,7 +1035,7 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.maps ? "text-gray-500" : ""}>
+                        <span className={!data.maps ? "text-secondary" : ""}>
                           maps
                         </span>
                       </div>
@@ -1046,7 +1046,7 @@ export default function DestinationEditorClient({
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
                         <span
-                          className={!data.tld?.length ? "text-gray-500" : ""}
+                          className={!data.tld?.length ? "text-secondary" : ""}
                         >
                           tld
                         </span>
@@ -1060,7 +1060,7 @@ export default function DestinationEditorClient({
                         <span
                           className={
                             typeof data.independent === "undefined"
-                              ? "text-gray-500"
+                              ? "text-secondary"
                               : ""
                           }
                         >
@@ -1076,7 +1076,7 @@ export default function DestinationEditorClient({
                         <span
                           className={
                             typeof data.unMember === "undefined"
-                              ? "text-gray-500"
+                              ? "text-secondary"
                               : ""
                           }
                         >

@@ -54,10 +54,10 @@ export default function MateCard({
           <div className="w-full flex items-center justify-end">
             <div className="text-white border border-surface/30 px-2 py-2 w-fit bg-surface/40 backdrop-blur-sm  rounded-full">
               <div className="flex flex-col items-center justify-center gap-0.5">
-                <h1 className="text-[12px] font-bold leading-[1.1]">
+                <h1 className="text-tiny font-bold leading-[1.1]">
                   {match?.score}%
                 </h1>
-                <h2 className="text-[8px] font-bold uppercase leading-none">
+                <h2 className="text-micro font-bold uppercase leading-none">
                   match
                 </h2>
               </div>

@@ -23,13 +23,12 @@ export default function SelectionStep({
         <SelectionCard
           key={item.label}
           type="radio"
-          icon={item.icon}
-          id={item.label}
+          icon={<item.icon size={20} />}
           label={item.label}
           description={item.description}
           isSelected={selectedValue === item.label}
-          onChange={(val) => {
-            setValue(fieldName, val);
+          onChange={() => {
+            setValue(fieldName, item.label);
           }}
         />
       ))}

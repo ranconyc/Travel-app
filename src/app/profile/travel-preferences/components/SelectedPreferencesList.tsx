@@ -27,7 +27,7 @@ export default function SelectedPreferencesList({
             <span className="ml-2 text-xs opacity-70">
               {item.categoryTitle}
             </span>
-            <span aria-hidden className="ml-3 text-base leading-none">
+            <span aria-hidden className="ml-3 text-p leading-none">
               ×
             </span>
           </button>

@@ -2,65 +2,57 @@
 
 import React from "react";
 
-export const SelectionCard = ({
-  id,
-  label,
-  description,
-  icon: Icon,
-  isSelected,
-  onChange,
-  type = "checkbox",
-  className,
-  ...props
-}: {
-  type?: "checkbox" | "radio";
-  id: string;
+interface SelectionCardProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   description?: string;
-  icon?: React.ComponentType<{ size: number }> | string;
+  icon?: React.ReactNode;
   isSelected: boolean;
-  onChange?: (id: string) => void;
+  type?: "checkbox" | "radio";
   className?: string;
-}) => (
+}
+
+export const SelectionCard = ({
+  label,
+  description,
+  icon,
+  isSelected,
+  type = "checkbox",
+  className = "",
+  ...props
+}: SelectionCardProps) => (
   <label
-    className={`flex items-center gap-3 rounded-xl p-3 cursor-pointer border-2 transition-all ${
+    className={`flex items-center gap-md rounded-card p-md cursor-pointer border-2 transition-all ${
       isSelected
         ? "border-brand bg-brand/5 shadow-sm"
-        : "border-2 border-surface hover:border-brand/30"
+        : "border-2 border-bg-card hover:border-brand/30"
     } ${className}`}
   >
-    <input
-      type={type}
-      className="sr-only"
-      checked={isSelected}
-      onChange={() => onChange?.(id)}
-      {...props}
-    />
-    {Icon ? (
+    <input type={type} className="sr-only" checked={isSelected} {...props} />
+
+    {icon && (
       <div
-        className={`p-2 rounded-md transition-colors ${
-          isSelected && typeof Icon === "string"
-            ? "bg-brand/50"
-            : isSelected
-              ? "bg-brand"
-              : "bg-surface"
+        className={`p-sm rounded-pill transition-colors flex outline-none ${
+          isSelected
+            ? "bg-brand text-white"
+            : "bg-bg-card text-txt-sec border border-stroke"
         }`}
       >
-        {typeof Icon === "string" ? (
-          <div className="w-4 h-4 flex items-center justify-center">{Icon}</div>
-        ) : (
-          <Icon size={40} />
-        )}
+        {icon}
       </div>
-    ) : (
+    )}
+
+    {!icon && (
       <div
-        className={`p-2 rounded-full transition-colors  ${isSelected ? "bg-brand " : "bg-surface"}`}
+        className={`p-sm rounded-full transition-colors flex-shrink-0 ${
+          isSelected ? "bg-brand" : "bg-bg-card border border-stroke"
+        }`}
       />
     )}
+
     <div className="text-left">
-      <h4 className="text-app-text leading-tight">{label}</h4>
+      <h4 className="text-txt-main font-bold leading-tight">{label}</h4>
       {description && (
-        <p className="text-xs text-secondary mt-0.5">{description}</p>
+        <p className="text-p text-txt-sec mt-xs">{description}</p>
       )}
     </div>
   </label>

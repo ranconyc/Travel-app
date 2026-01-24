@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { isBrowser } from "@/app/_utils/env";
+import { isBrowser } from "@/domain/shared/utils/env";
 
 export default function useStorageState<T>(key: string, initial: T) {
   const [value, setValue] = useState<T>(() => {

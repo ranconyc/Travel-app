@@ -14,33 +14,32 @@ export default function HomeHeader() {
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
 
   return (
-    <div className="bg-app-bg p-4 pt-10 sticky top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between">
-        <Typography variant="upheader" className="text-xl normal-case">
+    <div className="bg-bg-main px-md pt-lg pb-lg sticky top-0 left-0 right-0 z-50 border-b border-stroke shadow-soft">
+      <div className="flex items-center justify-end">
+        <WeatherWidget lat={coords?.lat} lng={coords?.lng} />
+      </div>
+
+      <div className="flex flex-col justify-center mb-lg">
+        <Typography variant="h3" className="normal-case text-txt-sec">
           {isUserAtHome
-            ? "there is no place like"
+            ? "There is no place like"
             : user?.currentCity
               ? `${user?.profile?.firstName || ""} Explore`
               : "Explore the"}
         </Typography>
-        <WeatherWidget lat={coords?.lat} lng={coords?.lng} />
-      </div>
-      <div className="mb-6 min-h-[40px] flex items-center">
         {isUserAtHome ? (
-          <Typography variant="h1" className="capitalize">
+          <Typography variant="h1" className="text-txt-main">
             Home
           </Typography>
         ) : (
           <SplitFlapText
             text={user?.currentCity?.name ?? "World"}
-            className="text-[36px] font-bold font-sora text-app-text"
+            className="text-h1 font-bold font-sora text-txt-main"
           />
         )}
       </div>
 
-      <div className="mt-4">
-        <HomeHeroSearch />
-      </div>
+      <HomeHeroSearch />
     </div>
   );
 }

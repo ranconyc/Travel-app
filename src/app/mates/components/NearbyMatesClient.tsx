@@ -4,7 +4,8 @@ import MateCard from "@/components/molecules/MateCard";
 import { Mars, VenusAndMars, Venus } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Gender, User } from "@/domain/user/user.schema";
-import { getAge } from "@/app/_utils/age";
+import { getAge } from "@/domain/shared/utils/age";
+import Typography from "@/components/atoms/Typography";
 
 const GenderToggle = ({
   gender,
@@ -80,11 +81,12 @@ export default function NearbyMatesClient({
       const isGenderMatch =
         filters.gender === "NON_BINARY" ||
         filters.gender === mate.profile?.gender;
+      // Cast persona to Record since it's stored as Json in Prisma
+      const persona = (mate.profile?.persona || {}) as Record<string, unknown>;
+      const interests = (persona.interests || []) as string[];
       const isInterestMatch =
         filters.interests.length === 0 ||
-        filters.interests.some((interest) =>
-          mate.profile?.persona?.interests.includes(interest),
-        );
+        filters.interests.some((interest) => interests.includes(interest));
       return isAgeInRange && isGenderMatch && isInterestMatch;
     });
   }, [mates, filters]);
@@ -92,13 +94,15 @@ export default function NearbyMatesClient({
   return (
     <div className="min-h-screen">
       {/* Header with Title and Filters */}
-      <div className="px-6 pt-6 pb-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-secondary text-lg mt-1">
+      <header className="bg-surface p-lg pt-xxl sticky top-0 left-0 right-0 z-50 border-b border-stroke shadow-soft mb-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col justify-center mb-lg">
+            <Typography variant="h3" className="normal-case text-txt-sec">
               {loggedUser.currentCity?.name || "Worldwide"}
-            </p>
-            <h1 className="text-app-text text-4xl font-bold">Mates</h1>
+            </Typography>
+            <Typography variant="h1" className="text-txt-main">
+              Mates
+            </Typography>
           </div>
           <div className="flex items-center gap-3">
             <GenderToggle
@@ -107,7 +111,7 @@ export default function NearbyMatesClient({
             />
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Grid of Mates */}
       <main className="px-6 pb-24">

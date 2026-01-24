@@ -25,9 +25,9 @@ export default function CategoryCard({
         }`}
     >
       <span className="text-xl">{emoji}</span>
-      <span className="text-base font-medium">{title}</span>
+      <span className="text-p font-medium">{title}</span>
       {selectedCount > 0 && (
-        <span className="ml-auto text-xs text-gray-500">
+        <span className="ml-auto text-xs text-secondary">
           {selectedCount} selected
         </span>
       )}

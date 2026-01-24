@@ -66,7 +66,7 @@ export default function BorderedCountriesList({
       {error && <div className="text-red-600 text-sm">{error}</div>}
 
       {!loading && borderCountries.length === 0 && (
-        <div className="text-gray-500 text-sm">
+        <div className="text-secondary text-sm">
           No bordered countries found.
         </div>
       )}
@@ -79,7 +79,7 @@ export default function BorderedCountriesList({
               className="rounded-lg border px-3 py-2 bg-white shadow-sm"
             >
               <div className="font-medium">{c.name}</div>
-              <div className="text-xs text-gray-500">{c.code}</div>
+              <div className="text-xs text-secondary">{c.code}</div>
             </li>
           ))}
         </ul>

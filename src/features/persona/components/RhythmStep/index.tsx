@@ -1,8 +1,10 @@
 import * as Icons from "lucide-react";
-import SelectionStep from "@/features/persona/components/SelectionStep";
+import { useFormContext } from "react-hook-form";
+import { GenericSelector } from "@/components/organisms/forms";
 import dailyRhythmsData from "@/data/dailyRhythms.json";
 
 interface RhythmData {
+  id: string;
   icon: string;
   label: string;
   description: string;
@@ -13,7 +15,16 @@ const dailyRhythms = (dailyRhythmsData as RhythmData[]).map((item) => ({
   icon: (Icons as any)[item.icon] || Icons.Sun,
 }));
 
-// RHYTHM STEP
+/**
+ * RhythmStep - Form context wrapper for GenericSelector
+ */
 export default function RhythmStep() {
-  return <SelectionStep fieldName="dailyRhythm" options={dailyRhythms} />;
+  const { watch, setValue } = useFormContext();
+  return (
+    <GenericSelector
+      value={watch("dailyRhythm")}
+      onChange={(val) => setValue("dailyRhythm", val)}
+      options={dailyRhythms}
+    />
+  );
 }

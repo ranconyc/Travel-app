@@ -13,11 +13,13 @@ import {
 import { useEffect, useRef } from "react";
 import type { UseFormReturn, FieldValues } from "react-hook-form";
 import { useUser } from "@/app/providers/UserProvider";
-import { hasGeolocation } from "@/app/_utils/env";
-import { getDistance } from "@/app/_utils/geo";
+import { hasGeolocation } from "@/domain/shared/utils/env";
+import { getDistance } from "@/domain/shared/utils/geo";
 import { useRouter } from "next/navigation";
 import { useLocationStore } from "@/store/locationStore";
+import { useAppStore } from "@/store/appStore";
 import { User } from "@/domain/user/user.schema";
+import { PersonaFormValues } from "@/features/persona/types/form";
 import {
   SaveInterestsFormValues,
   SaveTravelFormValues,
@@ -28,7 +30,7 @@ import {
 
 import { CompleteProfileFormValues as CompleteProfileFormValuesType } from "@/domain/user/completeProfile.schema";
 import { ActionResponse } from "@/types/actions";
-import { DetectedCity } from "@/types/city";
+import { DetectedCity } from "@/domain/city/city.schema";
 
 export function useUpdateProfile() {
   const queryClient = useQueryClient();
@@ -178,72 +180,41 @@ export function useUsers() {
   });
 }
 
-const STORAGE_KEY_PREFIX = "profile.v1.user-";
-
+/**
+ * Syncs form state with global appStore onboarding draft.
+ * Handles initialization from store and real-time updates.
+ */
 export function useProfileDraft<TFormValues extends FieldValues>(
   methods: UseFormReturn<TFormValues>,
   userId: string,
 ) {
   const { reset, watch } = methods;
+  const onboardingDraft = useAppStore((state) => state.onboardingDraft);
+  const updateDraft = useAppStore((state) => state.updateDraft);
+  const clearStoreDraft = useAppStore((state) => state.clearDraft);
+  const isDraftDirty = useAppStore((state) => state.isDraftDirty);
 
+  // Initialize from store on mount if store has data
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY_PREFIX + userId);
-      if (!raw) return;
-
-      const parsed = JSON.parse(raw);
-
-      if (parsed.homeBase && typeof parsed.homeBase !== "string") {
-        parsed.homeBase = String(parsed.homeBase);
-      }
-
-      const draft = parsed as TFormValues;
-
-      const hasData = Object.values(draft).some(
-        (value) =>
-          value !== null &&
-          value !== undefined &&
-          value !== "" &&
-          (!Array.isArray(value) || value.length > 0),
-      );
-
-      if (hasData) {
-        reset(draft);
-      }
-    } catch (e) {
-      console.error("Failed to load profile draft", e);
+    if (onboardingDraft && !isDraftDirty) {
+      reset(onboardingDraft as unknown as TFormValues);
     }
-  }, [reset, userId]);
+  }, [reset, onboardingDraft, isDraftDirty]);
 
+  // Sync TO store on every change
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const subscription = watch((value) => {
-      try {
-        window.localStorage.setItem(
-          STORAGE_KEY_PREFIX + userId,
-          JSON.stringify(value),
-        );
-      } catch (e) {
-        console.error("Failed to save profile draft", e);
-      }
+      // Cast to any because the hook is generic but store expects PersonaFormValues
+      updateDraft(value as unknown as Partial<PersonaFormValues>);
     });
-
     return () => subscription.unsubscribe();
-  }, [watch, userId]);
+  }, [watch, updateDraft]);
 
   const clearDraft = () => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.removeItem(STORAGE_KEY_PREFIX + userId);
-    } catch (e) {
-      console.error("Failed to clear profile draft", e);
-    }
+    clearStoreDraft();
   };
 
-  return { clearDraft };
+  return { clearDraft, isDraftDirty };
 }
 
 export type UseGeoOptions = {

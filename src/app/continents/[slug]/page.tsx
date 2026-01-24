@@ -32,7 +32,7 @@ export default async function ContinentPage({
           <p className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore Region
           </p>
-          <h1 className="text-4xl font-bold font-sora text-app-text mt-1 mb-6">
+          <h1 className="text-h1 font-bold font-sora text-app-text mt-1 mb-6">
             {continentName}
           </h1>
         </div>

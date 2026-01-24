@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/auth";
 import { getUserById } from "@/lib/db/user.repo";
 import { cache } from "react";
 
@@ -7,7 +6,7 @@ import { cache } from "react";
  * Get the current session without fetching user from DB.
  */
 export const getSession = cache(async () => {
-  return await getServerSession(authOptions);
+  return await auth();
 });
 
 /**

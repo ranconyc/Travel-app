@@ -40,6 +40,7 @@ export const metadata: Metadata = {
 
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { UserProvider } from "@/app/providers/UserProvider";
+import { PersonaProvider } from "@/providers/PersonaProvider";
 import React from "react";
 import { Toaster } from "sonner";
 
@@ -58,14 +59,16 @@ export default async function RootLayout({
       >
         <ReactQueryProvider>
           <UserProvider user={user}>
-            <SessionProviderWrapper>
-              <LocationProvider>
-                <AutoLocationUpdater />
-                <SocketProvider>{children}</SocketProvider>
-              </LocationProvider>
-            </SessionProviderWrapper>
-            <ConditionalNavbar />
-            <Toaster position="top-center" richColors />
+            <PersonaProvider user={user}>
+              <SessionProviderWrapper>
+                <LocationProvider>
+                  <AutoLocationUpdater />
+                  <SocketProvider>{children}</SocketProvider>
+                </LocationProvider>
+              </SessionProviderWrapper>
+              <ConditionalNavbar />
+              <Toaster position="top-center" richColors />
+            </PersonaProvider>
           </UserProvider>
         </ReactQueryProvider>
       </body>

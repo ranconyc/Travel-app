@@ -14,7 +14,8 @@ type ButtonVariant =
   | "teal"
   | "dark"
   | "outline-white"
-  | "icon";
+  | "icon"
+  | "brand";
 
 type ButtonSize = "sm" | "md" | "lg";
 
@@ -51,9 +52,10 @@ export default function Button({
     return (
       <button
         type="button"
-        className={`fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center bg-gray-800/50 backdrop-blur-md text-white rounded-full transition-all active:scale-95 disabled:opacity-50 hover:bg-gray-800/70 shadow-sm ${className}`}
+        className={`top-xl left-xl z-50 w-11 h-11 flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 hover:bg-surface-hover ${className}`}
         onClick={href ? () => router.push(href) : () => router.back()}
         disabled={props.disabled}
+        aria-label="Go back"
       >
         <ChevronLeft size={24} />
       </button>
@@ -64,21 +66,23 @@ export default function Button({
     "inline-flex items-center justify-center gap-2 font-medium transition-all active:scale-[0.97] cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none";
 
   const sizeStyles = {
-    sm: "px-3 h-9 text-base",
-    md: "px-4 h-11 text-base",
-    lg: "px-6 h-14 text-base",
+    sm: "px-lg h-9 text-upheader",
+    md: "px-xl h-11 text-p",
+    lg: "px-xxl h-14 text-h4 font-bold",
   };
 
   const variantStyles = {
-    primary: `${color ? `bg-color-${color}` : "bg-brand"} text-white hover:opacity-90 shadow-sm border-2 ${color ? `border-color-${color}` : "border-brand"} rounded-md`,
-    secondary: "bg-surface text-app-text hover:bg-brand/10 rounded-md",
-    outline: `border-2 ${color ? `border-color-${color} text-color-${color}` : "border-brand text-brand"} hover:bg-brand/10 bg-transparent rounded-md`,
-    ghost: "text-secondary hover:bg-surface hover:text-app-text",
-    teal: "bg-[#1A5F70] hover:bg-[#237082] text-white border border-[#2A7F90]",
-    dark: "bg-gray-800 hover:bg-gray-700 text-white",
+    primary: `${color ? `bg-${color}` : "bg-brand"} text-white hover:opacity-90 shadow-soft border-2 ${color ? `border-${color}` : "border-brand"} rounded-pill`,
+    secondary: "bg-bg-sub text-txt-main hover:bg-bg-hover rounded-pill",
+    outline: `border-2 ${color ? `border-${color} text-${color}` : "border-brand text-brand"} hover:bg-brand/5 bg-transparent rounded-pill`,
+    ghost: "text-txt-sec hover:bg-bg-sub hover:text-txt-main rounded-pill",
+    teal: "bg-brand-success hover:opacity-90 text-white border-2 border-brand-success rounded-pill",
+    dark: "bg-txt-main text-bg-main hover:opacity-90 rounded-pill",
     "outline-white":
-      "bg-transparent border border-white/20 hover:bg-white/10 text-white",
-    icon: "w-10 h-10 rounded-full bg-gray-800/30 dark:bg-gray-800/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-gray-800/70 border border-white/10 shadow-sm p-0 transition-colors",
+      "bg-transparent border border-white/30 hover:bg-white/10 text-white rounded-pill",
+    icon: "w-11 h-11 rounded-full bg-bg-sub/50 backdrop-blur-md text-txt-main flex items-center justify-center hover:bg-bg-sub border border-stroke shadow-soft p-0 transition-colors",
+    brand:
+      "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
   };
 
   const combinedClasses = [

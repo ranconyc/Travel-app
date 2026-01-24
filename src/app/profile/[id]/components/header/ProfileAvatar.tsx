@@ -2,7 +2,7 @@ import { Avatar } from "@/components/molecules/Avatar";
 import { useProfileUser } from "../../store/useProfileStore";
 
 const Badge = ({ title }: { title: string }) => (
-  <div className="px-3 py-1 bg-brand font-bold text-[10px] tracking-widest text-white border uppercase border-brand  rounded-full absolute -bottom-1 left-1/2 -translate-x-1/2 shadow-sm z-10">
+  <div className="px-3 py-1 bg-brand font-bold text-micro tracking-widest text-white border uppercase border-brand  rounded-full absolute -bottom-1 left-1/2 -translate-x-1/2 shadow-sm z-10">
     <h2 className="text-xs">{title}</h2>
   </div>
 );

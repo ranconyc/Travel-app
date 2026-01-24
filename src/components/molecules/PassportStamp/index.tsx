@@ -177,7 +177,7 @@ export default function PassportStamp({
         return {
           padding: "p-1",
           innerPadding: "p-2",
-          text: "text-[8px]",
+          text: "text-micro",
           cityText: "text-sm",
         };
       case "lg":
@@ -199,7 +199,7 @@ export default function PassportStamp({
         return {
           padding: "p-1",
           innerPadding: "p-4",
-          text: "text-[10px]",
+          text: "text-micro",
           cityText: "text-xl",
         };
     }

@@ -66,7 +66,7 @@ export default function CountryList() {
             )}
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
-              <Typography variant="upheader" className="text-white/80 mb-0.5">
+              <Typography variant="tiny" className="text-white/80 mb-0.5">
                 {country.region}
               </Typography>
               <Typography variant="h3" className="text-white truncate">

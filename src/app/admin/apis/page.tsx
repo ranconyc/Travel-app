@@ -204,7 +204,7 @@ export default async function AdminApisPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold font-sora tracking-tight mb-2">
+        <h1 className="text-h1 font-bold font-sora tracking-tight mb-2">
           API Inventory
         </h1>
         <p className="text-secondary max-w-2xl leading-relaxed">
@@ -230,7 +230,7 @@ export default async function AdminApisPage() {
               >
                 <td className="px-6 py-4">
                   <div className="flex flex-col">
-                    <span className="font-mono font-medium text-base text-app-text">
+                    <span className="font-mono font-medium text-p text-app-text">
                       {api.route}
                     </span>
                     <span className="text-xs text-secondary font-mono opacity-60 group-hover:opacity-100 transition-opacity">
@@ -243,7 +243,7 @@ export default async function AdminApisPage() {
                     {api.methods.map((m) => (
                       <span
                         key={m}
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold border ${getMethodColor(
+                        className={`px-2 py-0.5 rounded text-micro font-bold border ${getMethodColor(
                           m,
                         )}`}
                       >
@@ -320,7 +320,7 @@ export default async function AdminApisPage() {
                 >
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="font-bold text-base text-app-text">
+                      <span className="font-bold text-p text-app-text">
                         {api.name}
                       </span>
                       <span className="text-xs text-secondary opacity-80">

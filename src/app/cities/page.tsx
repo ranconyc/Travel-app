@@ -25,7 +25,7 @@ export default function CitiesPage() {
           <p className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore the
           </p>
-          <h1 className="text-4xl font-bold font-sora text-app-text mt-1 mb-6">
+          <h1 className="text-h1 font-bold font-sora text-app-text mt-1 mb-6">
             Cities
           </h1>
           <div className="relative">
@@ -76,7 +76,7 @@ export default function CitiesPage() {
                       {city.name}
                     </h2>
                     <div className="flex items-center gap-1 mt-1">
-                      <span className="text-white/70 text-[10px] uppercase tracking-wider font-medium">
+                      <span className="text-white/70 text-micro uppercase tracking-wider font-medium">
                         {city.country?.name ||
                           city.country?.code ||
                           city.countryRefId}

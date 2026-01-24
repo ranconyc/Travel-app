@@ -16,11 +16,11 @@ const Score = ({
     className={`flex ${varient === "circle" ? "w-14 h-14 flex-col -space-y-1" : "flex-row-reverse gap-1 px-4 py-2"}  items-center justify-center`}
   >
     <div
-      className={`${varient === "circle" ? "text-[10px]" : "text-base"} font-bold uppercase`}
+      className={`${varient === "circle" ? "text-micro" : "text-p"} font-bold uppercase`}
     >
       match
     </div>
-    <div className="text-base font-bold font-sora">{score || 0}%</div>
+    <div className="text-p font-bold font-sora">{score || 0}%</div>
   </div>
 );
 

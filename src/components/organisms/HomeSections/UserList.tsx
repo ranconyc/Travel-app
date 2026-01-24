@@ -2,8 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useUsers } from "@/domain/user/user.hooks";
-import { User } from "@/domain/user/user.schema";
+import { useTravelPartners } from "@/domain/friendship/friendship.hooks";
 import { Avatar } from "@/components/molecules/Avatar";
 import Typography from "@/components/atoms/Typography";
 
@@ -13,18 +12,20 @@ import SectionList from "@/components/molecules/SectionList";
 
 export default function UserList() {
   const { user: loggedUser } = useAppStore();
-  const { data: users, isLoading } = useUsers();
+  const { data: response, isLoading } = useTravelPartners(loggedUser?.id || "");
 
-  if (!loggedUser || (!users && !isLoading)) return null;
+  if (!loggedUser || (!response && !isLoading)) return null;
 
-  const filteredUsers =
-    users?.filter((user: User) => loggedUser.id !== user.id) || [];
+  const friends =
+    response && response.success && Array.isArray(response.data)
+      ? response.data
+      : [];
 
   return (
     <SectionList
-      title="Travelers"
+      title="Travel Partners"
       href="/mates"
-      data={filteredUsers}
+      data={friends}
       isLoading={isLoading}
       gap={2}
       skeleton={
@@ -34,25 +35,25 @@ export default function UserList() {
         </div>
       }
       skeletonCount={6}
-      emptyText="No travelers found."
-      renderItem={(user) => (
+      emptyText="No travel partners yet."
+      renderItem={(friend: any) => (
         <Link
-          key={user.id}
-          href={`/profile/${user.id}`}
+          key={friend.id}
+          href={`/profile/${friend.id}`}
           className="min-w-[80px] block"
         >
           <div className="flex flex-col items-center gap-2 group">
             <Avatar
-              image={user?.avatarUrl || ""}
-              name={user?.name || ""}
+              image={friend?.avatarUrl || friend?.profilePicture || ""}
+              name={friend?.name || `${friend?.firstName} ${friend?.lastName}`}
               size={60}
               className="group-hover:ring-2 ring-brand ring-offset-2 transition-all"
             />
             <Typography
-              variant="upheader"
-              className="text-[10px] normal-case text-center"
+              variant="tiny"
+              className="text-micro normal-case text-center"
             >
-              {user?.name?.split(" ")[0]}
+              {friend?.name?.split(" ")[0] || friend?.firstName}
             </Typography>
           </div>
         </Link>

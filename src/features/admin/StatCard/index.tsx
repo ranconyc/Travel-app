@@ -18,7 +18,7 @@ export default function StatCard({
     <Block>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          <p className="text-sm font-medium text-secondary dark:text-gray-400">
             {label}
           </p>
           <p className="text-2xl font-bold dark:text-white">{value}</p>

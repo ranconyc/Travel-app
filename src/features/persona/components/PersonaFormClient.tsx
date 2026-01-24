@@ -1,28 +1,37 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/atoms/Button";
 
+import BasicInfoStep from "@/features/persona/components/BasicInfoStep";
 import RhythmStep from "@/features/persona/components/RhythmStep";
-import InterestsStep from "@/features/persona/components/InterestsStep";
 import StyleStep from "@/features/persona/components/StyleStep";
 import BudgetStep from "@/features/persona/components/BudgetStep";
-import ProgressBar from "@/features/persona/components/ProgressBar";
+import InterestsStep from "@/features/persona/components/InterestsStep";
+import SummaryStep from "@/features/persona/components/SummaryStep"; // New
+
+import { FormHeader, ProgressIndicator } from "@/components/molecules/forms";
 import useStep from "@/features/persona/hooks/useStep";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { PersonaFormValues, formSchema } from "@/features/persona/types/form";
 import { saveInterests } from "@/domain/user/user.actions";
 import { User } from "@/domain/user/user.schema";
 import { DevTool } from "@hookform/devtools";
-import { useEffect } from "react";
+import { useProfileDraft } from "@/domain/user/user.hooks";
+import { personaService } from "@/domain/persona/persona.service";
 
 const steps = [
   {
+    header: "Let's get to know you",
+    description: "Tell us a bit about yourself",
+  },
+  {
     header: "What's your natural travel rhythm?",
-    description: "Select the option that match you the most",
+    description: "Select the option that matches you the most",
   },
   {
     header: "Which travel style feels most like you?",
-    description: "Select the option that match you the most",
+    description: "Select the option that matches you the most",
   },
   {
     header: "What's your typical travel budget?",
@@ -32,22 +41,11 @@ const steps = [
     header: "What do you enjoy when traveling?",
     description: "Help us personalize your trip recommendations",
   },
+  {
+    header: "Review your profile",
+    description: "Make sure everything looks good",
+  },
 ];
-
-const FormHeader = ({ step }: { step: number }) => {
-  return (
-    <div className="px-4 py-6 sticky top-6 left-0 right-0 bg-app-bg z-40 ">
-      <div className="flex items-center justify-between">
-        <Button variant="back" />
-        <ProgressBar currentStep={step} totalSteps={4} />
-      </div>
-      <h1 className="text-xl font-bold mb-3">{steps[step - 1].header}</h1>
-      <p className="text-xs font-medium text-secondary">
-        {steps[step - 1].description}
-      </p>
-    </div>
-  );
-};
 
 export default function PersonaFormClient({
   initialUser,
@@ -55,131 +53,148 @@ export default function PersonaFormClient({
   initialUser: User | null;
 }) {
   const router = useRouter();
+  const { step, handleContinue, handleBack, setStep } = useStep(6);
+
   // Pre-populate from user persona if exists
-  const initialData = initialUser?.profile?.persona || {};
+  // Type assertion needed since persona is stored as Json in Prisma
+  const initialData = (initialUser?.profile?.persona || {}) as any;
+  const initialProfile = (initialUser?.profile || {}) as any;
 
   const methods = useForm<PersonaFormValues>({
-    // resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema),
     mode: "onChange",
-    defaultValues: {
-      interests: initialData.interests || [],
-      dailyRhythm: initialData.dailyRhythm || "",
-      travelStyle: initialData.travelStyle || "",
-      budget: initialData.budget || "",
-      currency: initialData.currency || "USD",
-    },
+    defaultValues: personaService.getInitialValues(initialUser),
   });
+
+  // Global State Sync & Conflict Resolution
+  const { clearDraft } = useProfileDraft(methods as any, initialUser?.id || "");
 
   const {
     control,
-    watch,
     handleSubmit,
-    formState: { isValid, isSubmitting },
+    setValue,
+    trigger,
+    formState: { isSubmitting },
   } = methods;
-
-  const errors = methods.formState;
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
-  const { step, handleContinue, handleBack } = useStep();
 
   const onSubmit = async (data: PersonaFormValues) => {
     try {
       const result = await saveInterests(data);
-      if (result.success) {
-        router.push(`/profile/${result.data.userId}`);
+      if ((result as any)?.data?.userId) {
+        // Refresh server components and navigate
+        clearDraft(); // Success! Clear the draft.
+        router.refresh();
+        router.push(`/profile/${(result as any).data.userId}`);
       } else {
-        console.error("Failed to save interests:", result.error);
+        console.error("Failed to save interests:", (result as any)?.error);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
     }
   };
 
-  const stepContent = (step: number) => {
-    switch (step) {
-      case 1:
-        return <RhythmStep />;
-      case 2:
-        return <StyleStep />;
-      case 3:
-        return <BudgetStep />;
-      case 4:
-        return <InterestsStep />;
-      default:
-        return <RhythmStep />;
+  const handleSkipAnalysis = () => {
+    const defaultedValues = personaService.applySkipDefaults(
+      methods.getValues(),
+    );
+    Object.entries(defaultedValues).forEach(([key, val]) => {
+      setValue(key as keyof PersonaFormValues, val);
+    });
+    handleContinue();
+  };
+
+  const onNext = async () => {
+    // Trigger validation for current step fields only
+    let fieldsToValidate: (keyof PersonaFormValues)[] = [];
+    if (step === 1) fieldsToValidate = ["firstName", "hometown"];
+    if (step === 2) fieldsToValidate = ["dailyRhythm"];
+    if (step === 3) fieldsToValidate = ["travelStyle"];
+    if (step === 4) fieldsToValidate = ["budget", "currency"];
+    if (step === 5) fieldsToValidate = ["interests"];
+
+    const isStepValid = await trigger(fieldsToValidate);
+    if (isStepValid) {
+      handleContinue();
     }
   };
 
-  const isStepValid = () => {
-    if (step === 1) return watch("dailyRhythm") !== "";
-    if (step === 2) return watch("travelStyle") !== "";
-    if (step === 3) return watch("budget") !== "" && watch("currency") !== "";
-    if (step === 4) return watch("interests").length > 0;
-    return isValid;
+  const stepContent = (stepIndex: number) => {
+    switch (stepIndex) {
+      case 1:
+        return <BasicInfoStep />;
+      case 2:
+        return <RhythmStep />;
+      case 3:
+        return <StyleStep />;
+      case 4:
+        return <BudgetStep />;
+      case 5:
+        return <InterestsStep />;
+      case 6:
+        return <SummaryStep onJumpToStep={setStep} />;
+      default:
+        return <BasicInfoStep />;
+    }
   };
+
+  const isLastStep = step === 6;
 
   return (
     <FormProvider {...methods}>
-      <div className="min-h-screen">
-        <FormHeader step={step} />
-        {/* Show error for current step if exists */}
-        {step > 1 && methods.formState.errors && (
-          <div className="mb-4">
-            <div className="mb-2 text-center h-5">
-              {step === 1 && methods.formState.errors.dailyRhythm && (
-                <p className="text-red-500 text-sm">
-                  {methods.formState.errors.dailyRhythm.message}
-                </p>
-              )}
-              {step === 2 && methods.formState.errors.travelStyle && (
-                <p className="text-red-500 text-sm">
-                  {methods.formState.errors.travelStyle.message}
-                </p>
-              )}
-              {step === 3 &&
-                (methods.formState.errors.budget ||
-                  methods.formState.errors.currency) && (
-                  <p className="text-red-500 text-sm">
-                    {methods.formState.errors.budget?.message ||
-                      methods.formState.errors.currency?.message}
-                  </p>
-                )}
-              {step === 4 && methods.formState.errors.interests && (
-                <p className="text-red-500 text-sm">
-                  {methods.formState.errors.interests.message}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
+      <div className="flex flex-col h-screen bg-app-bg">
+        <div className="flex-none pt-4 px-4">
+          {/* Back Button logic could be added here if needed, utilizing handleBack */}
+          {step > 1 && (
+            <Button
+              variant="ghost"
+              className="mb-2 pl-0 hover:bg-transparent"
+              onClick={handleBack}
+            >
+              Back
+            </Button>
+          )}
+        </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="p-4 pb-20 bg-app-bg border-t border-surface overflow-y-scroll">
-            {stepContent(step)}
-            <div className="bg-app-bg p-4 pb-8 fixed bottom-0 left-0 right-0">
-              {step < 4 ? (
-                <Button
-                  type="button"
-                  disabled={!isStepValid()}
-                  onClick={handleContinue}
-                  className="w-full"
-                >
-                  Continue
-                </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  disabled={!isValid || isSubmitting}
-                  className="w-full"
-                >
-                  {isSubmitting ? "Saving..." : "Submit"}
-                </Button>
-              )}
-            </div>
-          </div>
-        </form>
+        <FormHeader
+          title={steps[step - 1].header}
+          description={steps[step - 1].description}
+          rightElement={
+            <ProgressIndicator currentStep={step} totalSteps={6} showLabel />
+          }
+        />
+
+        <div className="flex-1 overflow-y-auto px-4 pb-32">
+          {stepContent(step)}
+        </div>
+
+        <div className="flex-none p-4 bg-app-bg border-t border-surface fixed bottom-0 w-full max-w-md left-1/2 -translate-x-1/2 z-10">
+          {step === 5 && (
+            <Button
+              type="button"
+              variant="ghost"
+              className="w-full mb-2"
+              onClick={handleSkipAnalysis}
+            >
+              Skip for now
+            </Button>
+          )}
+
+          {isLastStep ? (
+            <Button
+              type="button" // Changed to button to handle submit in onClick to prevent default form submission issues if any
+              onClick={handleSubmit(onSubmit)}
+              disabled={isSubmitting}
+              className="w-full"
+              loading={isSubmitting}
+            >
+              Confirm & Save Profile
+            </Button>
+          ) : (
+            <Button type="button" onClick={onNext} className="w-full">
+              Continue
+            </Button>
+          )}
+        </div>
         <DevTool control={control} />
       </div>
     </FormProvider>

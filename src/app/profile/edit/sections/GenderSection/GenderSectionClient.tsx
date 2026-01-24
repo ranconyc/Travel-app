@@ -36,11 +36,10 @@ function GenderSectionClient() {
         {OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.value}
-            id={opt.value}
             label={opt.label}
             type="radio"
             isSelected={field.value === opt.value}
-            onChange={(val) => field.onChange(val)}
+            onChange={() => field.onChange(opt.value)}
           />
         ))}
       </div>

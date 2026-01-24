@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import type { Prisma } from "@prisma/client";
-import type { Coordinates, NearbyUserResult } from "@/types/user";
+import { type Coordinates } from "@/domain/common.schema";
+import { type NearbyUserResult } from "@/domain/user/user.schema";
 
 import { userFullInclude } from "./prisma.presets";
 
@@ -221,4 +222,59 @@ export async function getUsersForMatching(userIds: string[]) {
     console.error("getUsersForMatching error:", error);
     return [];
   }
+}
+
+/**
+ * Updates core user and profile data in a single transaction.
+ */
+export async function updateFullProfile(userId: string, data: any) {
+  return prisma.user.update({
+    where: { id: userId },
+    data,
+  });
+}
+
+/**
+ * Specifically updates the avatar URL for a user.
+ */
+export async function updateUserAvatar(userId: string, avatarUrl: string) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: { avatarUrl },
+  });
+}
+
+/**
+ * Merges and updates the user persona.
+ */
+export async function updateUserPersona(userId: string, persona: any) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      profileCompleted: true,
+      profile: {
+        upsert: {
+          create: { persona },
+          update: { persona },
+        },
+      },
+    },
+  });
+}
+
+/**
+ * Updates user geolocation and city reference.
+ */
+export async function updateUserLocation(
+  userId: string,
+  location: { type: string; coordinates: [number, number] },
+  cityId: string,
+) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      currentLocation: location,
+      currentCityId: cityId,
+    },
+  });
 }

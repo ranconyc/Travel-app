@@ -106,7 +106,7 @@ export default function AvatarUpload({
         <p className="text-xs">
           {src ? "Change profile picture" : "Upload profile picture"}
         </p>
-        <p className="text-xs text-gray-500">JPG, PNG or GIF (max. 5MB)</p>
+        <p className="text-xs text-secondary">JPG, PNG or GIF (max. 5MB)</p>
       </div>
     </div>
   );

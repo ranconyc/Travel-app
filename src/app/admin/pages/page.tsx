@@ -80,7 +80,7 @@ export default async function AdminPagesInventory() {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold font-sora tracking-tight mb-2">
+        <h1 className="text-h1 font-bold font-sora tracking-tight mb-2">
           Page Inventory
         </h1>
         <p className="text-secondary max-w-2xl leading-relaxed">
@@ -105,7 +105,7 @@ export default async function AdminPagesInventory() {
                 className="hover:bg-brand/5 transition-colors group"
               >
                 <td className="px-6 py-4">
-                  <span className="font-mono font-medium text-base text-app-text">
+                  <span className="font-mono font-medium text-p text-app-text">
                     {p.route}
                   </span>
                 </td>
