@@ -27,7 +27,7 @@ export default function UserList() {
       href="/mates"
       data={friends}
       isLoading={isLoading}
-      gap="sm"
+      gap="xxs"
       skeleton={
         <div className="min-w-[80px] flex flex-col items-center gap-sm">
           <div className="w-[60px] h-[60px] rounded-full animate-pulse bg-surface-secondary" />
