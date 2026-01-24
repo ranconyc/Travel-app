@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import SelectionCard from "@/app/components/form/SelectionCard";
+import SelectionCard from "@/components/atoms/SelectionCard";
 import { TravelFormValues } from "../_types/form";
 
 interface CountrySelectionProps {

@@ -1,6 +1,6 @@
-import AddSection from "@/app/components/common/AddSection";
+import AddSection from "@/components/molecules/AddSection";
 import { MapPin } from "lucide-react";
-import SectionHeader from "@/app/components/common/SectionHeader";
+import SectionHeader from "@/components/molecules/SectionHeader";
 
 interface NextDestination {
   id: string;

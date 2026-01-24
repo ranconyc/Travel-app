@@ -18,17 +18,16 @@
 
 /* Light Mode */
 :root {
-  --background: rgb(244, 245, 247);
-  --foreground: rgb(15, 23, 42);
-  --primary: rgb(15, 23, 42);
-  --secondary: rgb(94, 100, 112);
-  --brand: rgb(1, 167, 120);
-  --surface: rgb(255, 255, 255);
-  --surface-secondary: rgb(184, 185, 187);
-  --surface-hover: rgb(248, 250, 252);
-  --border: rgb(226, 232, 240);
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #0f172a;
+  --secondary: #64748b;
+  --brand: #0099ff; /* Defaulting to Blue accent as brand */
+  --surface: #ffffff;
+  --surface-secondary: #f1f5f9;
+  --surface-hover: #e2e8f0;
+  --border: #e2e8f0;
   --blur: rgba(161, 165, 173, 0.5);
-  --font-intro: var(--font-inter); /* Fallback */
 
   --color-purple: #3f53ff;
   --color-blue: #0099ff;
@@ -39,51 +38,52 @@
 
   --text-primary: var(--foreground);
   --text-secondary: var(--secondary);
-  --text-muted: rgb(148, 163, 184);
+  --text-muted: #94a3b8;
 
+  /* Spacing Scale from Specs */
   --space-xs: 4px;
   --space-sm: 6px;
   --space-md: 8px;
   --space-lg: 12px;
   --space-xl: 16px;
-  --space-2xl: 32px;
+  --space-xxl: 32px;
+  --space-xll: 48px;
 
-  /* Typography Scale from Figma */
+  /* Typography Scale from Specs */
   --h1-size: 36px;
-  --h2-size: 30px;
-  --h3-size: 24px;
-  --h4-size: 20px;
-  --h5-size: 18px;
-  --h6-size: 16px;
+  --h2-size: 24px;
+  --h3-size: 20px;
+  --h4-size: 18px;
+  --p-size: 16px;
   --upheader: 12px;
 }
 
 /* Dark Mode */
 .dark {
-  --background: rgb(8, 12, 20);
-  --foreground: rgb(241, 245, 249);
-  --primary: rgb(248, 250, 252);
-  --secondary: rgb(148, 163, 184);
-  --brand: rgb(56, 189, 248);
-  --surface: rgb(15, 23, 42);
-  --surface-secondary: rgb(30, 41, 59);
-  --surface-hover: rgb(51, 65, 85);
-  --border: rgb(51, 65, 85);
-  --blur: rgba(100, 116, 139, 0.5);
+  --background: #0b111d;
+  --foreground: #f8fafc;
+  --primary: #ffffff;
+  --secondary: #94a3b8;
+  --brand: #3f53ff; /* Purple brand feel in dark mode */
+  --surface: #161f30;
+  --surface-secondary: #1e293b;
+  --surface-hover: #2d3748;
+  --border: #1e293b;
+  --blur: rgba(15, 23, 42, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: rgb(8, 12, 20);
-    --foreground: rgb(241, 245, 249);
-    --primary: rgb(248, 250, 252);
-    --secondary: rgb(148, 163, 184);
-    --brand: rgb(56, 189, 248);
-    --surface: rgb(15, 23, 42);
-    --surface-secondary: rgb(30, 41, 59);
-    --surface-hover: rgb(51, 65, 85);
-    --border: rgb(51, 65, 85);
-    --blur: rgba(100, 116, 139, 0.5);
+    --background: #0b111d;
+    --foreground: #f8fafc;
+    --primary: #ffffff;
+    --secondary: #94a3b8;
+    --brand: #3f53ff;
+    --surface: #161f30;
+    --surface-secondary: #1e293b;
+    --surface-hover: #2d3748;
+    --border: #1e293b;
+    --blur: rgba(15, 23, 42, 0.5);
   }
 }
 

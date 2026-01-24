@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
-import PersonaFormClient from "@/app/profile/persona/PersonaFormClient";
+import PersonaFormClient from "@/features/persona/components/PersonaFormClient";
 import { redirect } from "next/navigation";
 import { User } from "@/domain/user/user.schema";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import Link from "next/link";
 import {
   ArrowLeft,

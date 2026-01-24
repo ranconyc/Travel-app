@@ -2,7 +2,7 @@
 
 import { useGeo } from "@/domain/user/user.hooks";
 import { useUser } from "@/app/providers/UserProvider";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 
 export default function GeoDebugPage() {
   const loggedUser = useUser();

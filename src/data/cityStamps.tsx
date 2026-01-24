@@ -1,4 +1,4 @@
-import { StampStyle } from "@/app/components/CityStamp";
+import { StampStyle } from "@/components/molecules/CityStamp";
 import {
   Plane,
   Building2,

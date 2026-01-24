@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getStructuredWorld } from "@/lib/utils/world.utils";
-import { SelectedItem } from "@/app/components/common/SelectedItem";
-import Button from "@/app/components/common/Button";
-import { CategoryRow } from "@/app/profile/persona/_components/InterestsStep";
-import Modal from "./_components/Modal";
+import { SelectedItem } from "@/components/molecules/SelectedItem";
+import Button from "@/components/atoms/Button";
+import { CategoryRow } from "@/features/persona/components/InterestsStep";
+import Modal from "@/components/molecules/Modal";
 import { travelFormSchema, TravelFormValues } from "./_types/form";
 import { TravelFormHeader } from "./_components/TravelFormHeader";
 import { CountrySelection } from "./_components/CountrySelection";
@@ -221,7 +221,7 @@ export default function TravelFormClient({
                 />
               ))}
             {isModalOpen && (
-              <Modal onClose={() => setIsModalOpen(false)}>
+              <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <h1 id="modal-title" className="text-xl font-bold mb-2">
                   {selectedSubContinent}
                 </h1>

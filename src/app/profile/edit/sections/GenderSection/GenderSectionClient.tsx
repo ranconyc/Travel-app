@@ -3,9 +3,9 @@
 
 import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import SelectionCard from "@/app/components/form/SelectionCard";
+import SelectionCard from "@/components/atoms/SelectionCard";
 import { Mars, Venus, NonBinary, LucideIcon } from "lucide-react";
-import ErrorMessage from "@/app/components/form/ErrorMessage";
+import ErrorMessage from "@/components/atoms/ErrorMessage";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
 
 // match Prisma enum Gender { MALE, FEMALE, NON_BINARY }

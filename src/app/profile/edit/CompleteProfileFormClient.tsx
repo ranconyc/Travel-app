@@ -21,7 +21,7 @@ import AvatarSectionShell from "@/app/profile/edit/sections/AvatarSection/Avatar
 import { useProfileDraft } from "@/domain/user/user.hooks";
 import type { User } from "@/domain/user/user.schema";
 import type { Gender } from "@/domain/user/user.schema";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import SocialSection from "./sections/SocialSection";
 
 // sections

@@ -1,4 +1,4 @@
-import { Avatar } from "@/app/components/common/Avatar";
+import { Avatar } from "@/components/molecules/Avatar";
 import {
   useLoggedUser,
   useProfileUser,

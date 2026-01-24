@@ -3,7 +3,7 @@
 import { memo } from "react";
 
 import { useIsMyProfile } from "../../store/useProfileStore";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import ProfileSettingsButton from "./ProfileSettingsButton";
 import FriendshipButton from "./FriendshipButton";
 import QRCodeButton from "./QRCodeButton";

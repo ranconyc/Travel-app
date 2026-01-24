@@ -3,8 +3,8 @@
 import { useState, useMemo } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import Button from "@/app/components/common/Button";
-import Logo from "@/app/components/common/Logo";
+import Button from "@/components/atoms/Button";
+import Logo from "@/components/atoms/Logo";
 import { saveTravelPersona } from "@/domain/user/user.actions";
 import { User } from "@/domain/user/user.schema";
 

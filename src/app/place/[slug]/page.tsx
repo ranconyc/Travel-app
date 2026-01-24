@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import { Place } from "@/domain/place/place.schema";
 
 interface ExtendedPlace extends Place {
@@ -9,9 +9,9 @@ interface ExtendedPlace extends Place {
 import { getSession } from "@/lib/auth/get-current-user";
 import { getPlaceBySlug } from "@/lib/db/place.repo";
 import Link from "next/link";
-import HeaderWrapper from "@/app/components/common/Header";
+import HeaderWrapper from "@/components/molecules/Header";
 import { CalendarPlus, Users } from "lucide-react";
-import Title from "@/app/components/Title";
+import Title from "@/components/atoms/Title";
 
 const Header = ({ activity }: { activity: ExtendedPlace }) => {
   return (

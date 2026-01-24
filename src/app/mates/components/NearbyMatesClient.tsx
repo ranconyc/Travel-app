@@ -1,6 +1,6 @@
 "use client";
 
-import MateCard from "@/app/components/common/cards/MateCard";
+import MateCard from "@/components/molecules/MateCard";
 import { Mars, VenusAndMars, Venus } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Gender, User } from "@/domain/user/user.schema";

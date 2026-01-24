@@ -6,7 +6,7 @@ import {
 } from "@/domain/admin/admin.actions";
 import { StatsCard } from "@/app/admin/_components/StatsCard";
 import { Users, MapPin, Globe, Activity } from "lucide-react";
-import { Avatar } from "@/app/components/common/Avatar";
+import { Avatar } from "@/components/molecules/Avatar";
 
 export default async function AdminDashboardPage() {
   const [statsRes, topCitiesRes, latestUsersRes] = await Promise.all([

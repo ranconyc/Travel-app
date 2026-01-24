@@ -1,4 +1,4 @@
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import { useFriendshipAction } from "@/domain/friendship/friendship.hooks";
 import {
   Loader2,

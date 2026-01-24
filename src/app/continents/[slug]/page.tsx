@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import HeaderWrapper from "@/app/components/common/Header";
-import HeroImage from "@/app/components/common/HeroImage";
+import HeaderWrapper from "@/components/molecules/Header";
+import HeroImage from "@/components/molecules/HeroImage";
 import Link from "next/link";
 import { getCountriesByRegion } from "@/lib/db/country.repo";
 

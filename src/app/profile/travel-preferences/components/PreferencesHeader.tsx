@@ -1,4 +1,4 @@
-import Logo from "@/app/components/common/Logo";
+import Logo from "@/components/atoms/Logo";
 
 type PreferencesHeaderProps = {
   selectedCount: number;

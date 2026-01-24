@@ -1,7 +1,7 @@
-import AddSection from "@/app/components/common/AddSection";
-import { Avatar } from "@/app/components/common/Avatar";
+import AddSection from "@/components/molecules/AddSection";
+import { Avatar } from "@/components/molecules/Avatar";
 import { User } from "@/domain/user/user.schema";
-import SectionHeader from "@/app/components/common/SectionHeader";
+import SectionHeader from "@/components/molecules/SectionHeader";
 
 export default function TravelPartners({ partner }: { partner: User | null }) {
   return (

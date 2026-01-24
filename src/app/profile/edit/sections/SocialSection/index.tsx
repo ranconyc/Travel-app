@@ -1,4 +1,4 @@
-import Input from "@/app/components/form/Input";
+import Input from "@/components/atoms/Input";
 import socialMetadata from "@/data/social.json";
 import { Plus, Trash2 } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";

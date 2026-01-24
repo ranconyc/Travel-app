@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "@/app/components/common/Modal";
+import Modal from "@/components/molecules/Modal";
 import {
   useIsProfileModalOpen,
   useLoggedUser,

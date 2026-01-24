@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import Button from "@/app/components/common/Button";
-import Logo from "@/app/components/common/Logo";
-import { Avatar } from "@/app/components/common/Avatar";
-import DistanceBadge from "@/app/components/common/DistanceBadge";
-import Input from "@/app/components/form/Input";
+import Button from "@/components/atoms/Button";
+import Logo from "@/components/atoms/Logo";
+import { Avatar } from "@/components/molecules/Avatar";
+import DistanceBadge from "@/components/atoms/DistanceBadge";
+import Input from "@/components/atoms/Input";
 
 /**
  * A registry of components that have safe-to-render previews.

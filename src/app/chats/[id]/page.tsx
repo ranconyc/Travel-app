@@ -1,5 +1,5 @@
-import { Avatar } from "@/app/components/common/Avatar";
-import HeaderWrapper from "@/app/components/common/Header";
+import { Avatar } from "@/components/molecules/Avatar";
+import HeaderWrapper from "@/components/molecules/Header";
 import React from "react";
 import { getChatById } from "@/domain/chat/chat.actions";
 import {
@@ -7,8 +7,8 @@ import {
   getChatDisplayImage,
 } from "@/domain/chat/chat.utils";
 import { getCurrentUser, getSession } from "@/lib/auth/get-current-user";
-import { MessageList } from "@/app/chats/_components/MessageList";
-import { MessageInput } from "@/app/chats/_components/MessageInput";
+import { MessageList } from "@/features/chats/components/MessageList";
+import { MessageInput } from "@/features/chats/components/MessageInput";
 import { redirect } from "next/navigation";
 
 type Props = {

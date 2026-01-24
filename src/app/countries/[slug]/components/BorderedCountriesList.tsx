@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Block from "@/app/components/common/Block";
-import Title from "@/app/components/Title";
+import Block from "@/components/atoms/Block";
+import Title from "@/components/atoms/Title";
 import { findBorderCountries } from "@/lib/db/country.repo";
 
 type Country = {

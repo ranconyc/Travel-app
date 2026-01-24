@@ -1,7 +1,7 @@
 "use client";
 
 import { QRCodeSVG } from "qrcode.react";
-import Modal from "@/app/components/common/Modal";
+import Modal from "@/components/molecules/Modal";
 import {
   useIsQRCodeModalOpen,
   useProfileActions,

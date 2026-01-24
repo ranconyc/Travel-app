@@ -1,6 +1,6 @@
 "use client";
 
-import "@/app/components/CityStamp/styles.css";
+import "@/components/molecules/CityStamp/styles.css";
 import { useEffect, useState } from "react";
 import { Loader2, Plus } from "lucide-react";
 
@@ -15,12 +15,12 @@ type TravelHistoryItem = {
   isCurrent: boolean;
 };
 
-import SectionHeader from "@/app/components/common/SectionHeader";
-import HorizontalList from "@/app/components/common/HorizontalList";
-import PassportStamp from "@/app/components/common/PassportStamp";
+import SectionHeader from "@/components/molecules/SectionHeader";
+import HorizontalList from "@/components/molecules/HorizontalList";
+import PassportStamp from "@/components/molecules/PassportStamp";
 import Link from "next/link";
 import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
-import AddSection from "@/app/components/common/AddSection";
+import AddSection from "@/components/molecules/AddSection";
 
 export default function TravelHistory({
   travelHistory,

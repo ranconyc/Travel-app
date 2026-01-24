@@ -1,5 +1,5 @@
 import { Shield, Heart } from "lucide-react";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 
 export default function Header() {
   return (

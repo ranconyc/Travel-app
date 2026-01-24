@@ -6,9 +6,9 @@ import {
   getTopSearches,
   Timeframe,
 } from "@/lib/db/admin.repo";
-import StatCard from "@/app/components/admin/StatCard";
-import ReviewItemsList from "@/app/components/admin/ReviewItemsList";
-import TopSearchesList from "@/app/components/admin/TopSearchesList";
+import StatCard from "@/features/admin/StatCard";
+import ReviewItemsList from "@/features/admin/ReviewItemsList";
+import TopSearchesList from "@/features/admin/TopSearchesList";
 import { Users, Globe, Building2 } from "lucide-react";
 
 interface AdminDashboardProps {

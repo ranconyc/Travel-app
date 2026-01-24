@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { useGenerateCountry } from "@/domain/country/country.hooks";
 import { useGenerateCity } from "@/domain/city/city.hooks";
-import Button from "@/app/components/common/Button";
-import Input from "@/app/components/form/Input";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { ActionResponse } from "@/types/actions";

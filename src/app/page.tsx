@@ -14,7 +14,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-import { fetchWeather } from "@/app/components/WeatherWidget/weather.service";
+import { fetchWeather } from "@/components/molecules/WeatherWidget/weather.service";
 
 export default async function Home() {
   const queryClient = new QueryClient();

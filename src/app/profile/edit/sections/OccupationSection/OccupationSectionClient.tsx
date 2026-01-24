@@ -2,8 +2,8 @@
 
 import { memo } from "react";
 import { useFormContext, useController } from "react-hook-form";
-import { Autocomplete } from "@/app/components/form/Autocomplete";
-import { useLazyLoad } from "@/app/components/common/hooks/useLazyLoad";
+import { Autocomplete } from "@/components/molecules/Autocomplete";
+import { useLazyLoad } from "@/hooks/ui/useLazyLoad";
 
 type FormValues = {
   occupation: string;

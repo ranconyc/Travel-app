@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import Input from "@/app/components/form/Input";
+import Input from "@/components/atoms/Input";
 
 function LastNameSectionClient() {
   const { control } = useFormContext();

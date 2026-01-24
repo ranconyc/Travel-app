@@ -2,7 +2,7 @@ import { getUserById } from "@/lib/db/user.repo";
 import TravelSection from "./components/Travel/TravelSection";
 import { Users, Globe2, LanguagesIcon } from "lucide-react";
 import { StatItem } from "@/domain/common.schema";
-import Stats from "@/app/components/common/Stats";
+import Stats from "@/components/molecules/Stats";
 import { InterestsSection } from "./components/sections/InterestsSection";
 import { getFriends } from "@/lib/db/friendship.repo";
 

@@ -1,4 +1,4 @@
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import MatchAvatars from "./MatchAvatars";
 import { UserRoundCheck, UserRoundX } from "lucide-react";
 

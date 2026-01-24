@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import {
   Mail,
   Send,
@@ -16,9 +16,9 @@ import {
   CheckSquare,
 } from "lucide-react";
 
-import Input from "@/app/components/form/Input";
-import SelectionCard from "@/app/components/form/SelectionCard";
-import SelectedItem from "@/app/components/common/SelectedItem";
+import Input from "@/components/atoms/Input";
+import SelectionCard from "@/components/atoms/SelectionCard";
+import SelectedItem from "@/components/molecules/SelectedItem";
 
 const Section = ({
   title,

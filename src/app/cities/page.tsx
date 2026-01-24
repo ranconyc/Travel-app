@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import HeaderWrapper from "@/app/components/common/Header";
-import Input from "@/app/components/form/Input";
+import HeaderWrapper from "@/components/molecules/Header";
+import Input from "@/components/atoms/Input";
 import { useCities } from "@/domain/city/city.hooks";
 import Link from "next/link";
 import { Loader2, Search, MapPin } from "lucide-react";

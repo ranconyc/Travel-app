@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       },
       { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
       { protocol: "https", hostname: "plus.unsplash.com", pathname: "/**" },
+      { protocol: "https", hostname: "source.unsplash.com", pathname: "/**" },
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
       { protocol: "https", hostname: "encrypted-tbn0.gstatic.com" },

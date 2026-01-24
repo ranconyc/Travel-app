@@ -6,7 +6,7 @@ import SessionProviderWrapper from "@/app/providers/SessionProviderWrapper";
 import ConditionalNavbar from "@/app/ConditionalNavbar";
 import { SocketProvider } from "@/lib/socket/socket-context";
 import { LocationProvider } from "@/app/providers/LocationProvider";
-import AutoLocationUpdater from "@/app/components/AutoLocationUpdater";
+import AutoLocationUpdater from "@/components/molecules/AutoLocationUpdater";
 
 const inter = Inter({
   subsets: ["latin"],

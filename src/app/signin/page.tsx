@@ -1,4 +1,4 @@
-import SignInFormClient from "@/app/signin/SignInFormClient";
+import SignInFormClient from "@/features/auth/components/SignInFormClient";
 import { Suspense } from "react";
 
 export default async function SignInPage() {

@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import { Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { memo, useCallback } from "react";

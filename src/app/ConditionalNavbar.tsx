@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/components/molecules/Navbar";
 
 export default function ConditionalNavbar() {
   const pathname = usePathname();

@@ -1,4 +1,4 @@
-import PassportStamp from "@/app/components/common/PassportStamp";
+import PassportStamp from "@/components/molecules/PassportStamp";
 
 export default function StampDemoPage() {
   const DEMO_CITIES = [

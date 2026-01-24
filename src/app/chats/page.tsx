@@ -2,7 +2,7 @@ import { getTravelPartnersAction } from "@/domain/friendship/friendship.actions"
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 import { getUserChats } from "@/domain/chat/chat.actions";
-import { ChatSearchClient } from "./_components/ChatSearchClient";
+import { ChatSearchClient } from "@/features/chats/components/ChatSearchClient";
 
 export default async function ChatPage() {
   const loggedUser = await getCurrentUser();

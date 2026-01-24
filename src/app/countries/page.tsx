@@ -1,6 +1,6 @@
 "use client";
 
-import HeaderWrapper from "@/app/components/common/Header";
+import HeaderWrapper from "@/components/molecules/Header";
 import Link from "next/link";
 import { Globe } from "lucide-react";
 

@@ -1,7 +1,7 @@
 "use client";
 import type { User } from "@/domain/user/user.schema";
 import CompleteProfileFormClient from "@/app/profile/edit/CompleteProfileFormClient";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 type Props = {
   user: User;
 };

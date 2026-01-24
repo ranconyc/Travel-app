@@ -1,8 +1,8 @@
 "use client";
 
-import AddSection from "@/app/components/common/AddSection";
+import AddSection from "@/components/molecules/AddSection";
 import InterestsList from "../InterestsList";
-import SectionHeader from "@/app/components/common/SectionHeader";
+import SectionHeader from "@/components/molecules/SectionHeader";
 import { useIsMyProfile } from "../../store/useProfileStore";
 
 export function InterestsSection({ interests }: { interests: string[] }) {

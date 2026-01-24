@@ -1,13 +1,13 @@
 "use client";
 
-import Button from "@/app/components/common/Button";
-import SelectionCard from "@/app/components/form/SelectionCard";
+import Button from "@/components/atoms/Button";
+import SelectionCard from "@/components/atoms/SelectionCard";
 import { useUser } from "@/app/providers/UserProvider";
 import { getStructuredWorld, Country } from "@/lib/utils/world.utils";
 import { useForm } from "react-hook-form";
 
 import { useRouter } from "next/navigation";
-import SelectedItem from "@/app/components/common/SelectedItem";
+import SelectedItem from "@/components/molecules/SelectedItem";
 
 const {
   structure: structuredWorld,

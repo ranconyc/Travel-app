@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { getCitiesWithCountry } from "@/lib/db/cityLocation.repo";
 import Link from "next/link";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 import {
   Heart,
   Shield,
@@ -20,7 +20,7 @@ import { City } from "@/domain/city/city.schema";
 import { AiFillTikTok } from "react-icons/ai";
 import social from "@/data/social.json";
 import { AiFillRedditCircle } from "react-icons/ai";
-import HeroImage from "../../components/common/HeroImage";
+import HeroImage from "@/components/molecules/HeroImage";
 
 export default async function CityPage({
   params,

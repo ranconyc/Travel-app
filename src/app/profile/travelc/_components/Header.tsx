@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/app/components/common/Button";
+import Button from "@/components/atoms/Button";
 
 export default function Header({ selectedRegion }: { selectedRegion: string }) {
   return (
