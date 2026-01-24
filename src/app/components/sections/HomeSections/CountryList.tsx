@@ -8,16 +8,14 @@ import { Country } from "@/domain/country/country.schema";
 import SectionHeader from "@/app/components/common/SectionHeader";
 import HorizontalList from "@/app/components/common/HorizontalList";
 
-export default function CountryList() {
-  const { data: countries, isLoading } = useCountries<Country[]>();
-
-  // TODO:
-  // SSR get the countries near me with the location saved on the server user.currentLocation
-  // and use react query to get countries near me on the client.
-  // the list should be sorted by distance from the user.
-  // the list should be paginated.
-  // the list should be infinite scroll.
-  // the list should be cached for 24 hours.
+export default function CountryList({
+  coords,
+}: {
+  coords?: { lat: number; lng: number };
+}) {
+  const { data: countries, isLoading } = useCountries<Country[]>({
+    coords,
+  });
 
   const hasImage = (country: Country) => {
     return (
@@ -46,7 +44,7 @@ export default function CountryList() {
             {Array.from({ length: 5 }).map((_, i) => (
               <div
                 key={i}
-                className="min-w-[140px] min-h-[105px] aspect-[4/3] animate-pulse h-24 bg-surface-secondary rounded-lg w-full"
+                className="min-w-[232px] min-h-[174px] aspect-[4/3] animate-pulse h-24 bg-surface-secondary rounded-xl w-full"
               ></div>
             ))}
           </>
@@ -55,7 +53,7 @@ export default function CountryList() {
             <Link
               key={country.cca3}
               href={`/countries/${country.cca3}`}
-              className="min-w-[140px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
+              className="min-w-[232px] group relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-md transition-all"
             >
               <div className="bg-white w-full h-full relative">
                 {hasImage(country) ? (

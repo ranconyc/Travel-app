@@ -3,26 +3,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search, MapPin, Loader2, Globe, ArrowRight } from "lucide-react";
-import { useDebounce } from "@/app/_utils/useDebounce"; // Assuming this exists or I implement it
+import { useSearch, useExternalSearch } from "@/domain/search/search.hooks";
 import {
-  searchDestinations,
-  trackSearch,
-  searchExternalDestinations,
-  saveExternalDestination,
-  SearchResult,
-} from "@/app/actions/search.actions";
+  trackSearchEvent,
+  saveExternalDestinationAction,
+} from "@/domain/search/search.actions";
+import { SearchResult } from "@/domain/search/search.schema";
 
 export default function HomeHeroSearch() {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [showExternalOption, setShowExternalOption] = useState(false);
-  const [isExternalLoading, setIsExternalLoading] = useState(false);
+  const [triggerExternal, setTriggerExternal] = useState(false);
+  const [isExternalLoadingManual, setIsExternalLoadingManual] = useState(false);
 
-  const debouncedQuery = useDebounce(query, 300);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const { data: internalResults, isLoading: isInternalLoading } =
+    useSearch(query);
+  const { data: externalResults, isFetching: isExternalFetching } =
+    useExternalSearch(query, {
+      enabled: triggerExternal,
+    });
+
+  // Combine results
+  const results = [...(internalResults || []), ...(externalResults || [])];
+  const isLoading = isInternalLoading;
+  const isExternalLoading = isExternalFetching || isExternalLoadingManual;
 
   // Close when clicking outside
   useEffect(() => {
@@ -38,48 +45,44 @@ export default function HomeHeroSearch() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Search effect
+  // Show dropdown when results arrive
   useEffect(() => {
-    const fetchResults = async () => {
-      if (debouncedQuery.length < 2) {
-        setResults([]);
-        setIsOpen(false);
-        return;
-      }
-
-      setIsLoading(true);
-      setShowExternalOption(false);
-      try {
-        const data = await searchDestinations(debouncedQuery);
-        setResults(data);
-        setIsOpen(true);
-        // Show external option if few results or user might want more
-        setShowExternalOption(true);
-      } catch (error) {
-        console.error("Search error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchResults();
-  }, [debouncedQuery]);
+    if (internalResults && internalResults.length > 0) {
+      setIsOpen(true);
+    }
+  }, [internalResults]);
 
   const handleSelect = async (item: SearchResult, index: number) => {
-    await trackSearch(query, results.length, index, window.location.pathname);
+    // Generate a simple session for tracking if not available
+    const sessionId = `session-${Date.now()}`;
+
+    await trackSearchEvent({
+      searchQuery: query,
+      resultCount: results.length,
+      clickedResultIndex: index,
+      pagePath: window.location.pathname,
+      sessionId,
+      clickedEntityType:
+        item.type === "CITY"
+          ? "city"
+          : item.type === "COUNTRY"
+            ? "country"
+            : undefined,
+    });
 
     if (item.type === "EXTERNAL") {
-      setIsExternalLoading(true);
+      setIsExternalLoadingManual(true);
       try {
-        const cityId = await saveExternalDestination(item.externalData);
-        if (cityId) {
-          router.push(`/cities/${cityId}`);
+        const res = await saveExternalDestinationAction({
+          externalItem: item.externalData,
+        });
+        if (res.success && res.data) {
+          router.push(`/cities/${res.data}`);
         } else {
-          // Fallback/Error UI?
           alert("Could not load this destination details.");
         }
       } finally {
-        setIsExternalLoading(false);
+        setIsExternalLoadingManual(false);
       }
     } else if (item.type === "CITY") {
       router.push(`/cities/${item.slug}`);
@@ -89,17 +92,11 @@ export default function HomeHeroSearch() {
     setIsOpen(false);
   };
 
-  const handleExternalSearch = async () => {
-    setIsExternalLoading(true);
-    try {
-      const externalResults = await searchExternalDestinations(query);
-      // deduplicate?
-      setResults((prev) => [...prev, ...externalResults]);
-    } finally {
-      setIsExternalLoading(false);
-      setShowExternalOption(false); // Hide button after searching
-    }
+  const handleExternalSearch = () => {
+    setTriggerExternal(true);
   };
+
+  const showExternalOption = query.length >= 2 && !triggerExternal;
 
   return (
     <div ref={containerRef} className="relative w-full max-w-lg mx-auto">

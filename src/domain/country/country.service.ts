@@ -291,7 +291,7 @@ export async function handleUpdateCountry(id: string, data: any) {
 export async function handleDeleteCountry(id: string) {
   return await deleteCountry(id);
 }
-export async function handleGetAllCountries() {
+export async function handleGetAllCountries(limit?: number, offset?: number) {
   const { getAllCountries } = await import("@/lib/db/country.repo");
-  return await getAllCountries();
+  return await getAllCountries(limit, offset);
 }

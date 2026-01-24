@@ -64,17 +64,17 @@ function AvatarSectionClient() {
     uploadingRef.current = true;
 
     try {
-      const previewUrl = URL.createObjectURL(file);
-      field.onChange(previewUrl);
+      const avatarUrl = URL.createObjectURL(file);
+      field.onChange(avatarUrl);
       setImages((prev) =>
-        [previewUrl, ...prev.filter((img) => img !== previewUrl)].slice(0, 6),
+        [avatarUrl, ...prev.filter((img) => img !== avatarUrl)].slice(0, 6),
       );
 
       const result = await uploadToCloudinary(file);
       field.onChange(result.secure_url);
       publicIdField.onChange(result.public_id);
       setImages((prev) =>
-        [result.secure_url, ...prev.filter((img) => img !== previewUrl)].slice(
+        [result.secure_url, ...prev.filter((img) => img !== avatarUrl)].slice(
           0,
           6,
         ),

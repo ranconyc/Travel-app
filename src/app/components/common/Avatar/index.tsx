@@ -38,7 +38,10 @@ export function Avatar({
     >
       <Image
         // if no image was provided, use fallback
-        src={image || "/placeholder-avatar.png"}
+        src={
+          image ||
+          "https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1577909/"
+        }
         alt={`${name} profile`}
         fill
         className="object-cover"

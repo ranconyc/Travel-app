@@ -85,6 +85,9 @@ export const chatInclude = {
 export const countryFullInclude = {
   cities: {
     orderBy: { name: "asc" },
+    include: {
+      media: true,
+    },
   },
   places: true,
   media: true,

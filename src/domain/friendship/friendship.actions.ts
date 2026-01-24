@@ -53,7 +53,7 @@ export const removeFriendAction = createSafeAction(
 );
 
 export const getFriendRequestsAction = createSafeAction(
-  z.any(),
+  z.object({}).optional(),
   async (_, userId) => {
     return await handleGetIncomingFriendRequests(userId);
   },
@@ -71,7 +71,7 @@ export const getFriendshipStatusAction = createSafeAction(
 /* -------------------------------------------------------------------------- */
 
 export const getTravelPartnersAction = createSafeAction(
-  z.any(),
+  z.object({}).optional(),
   async (_, userId) => {
     return await handleGetTravelPartners(userId);
   },

@@ -11,19 +11,24 @@ import {
   handleDeleteCity,
   handleGetAllCities,
 } from "@/domain/city/city.service";
-import { HomeBaseLocationMeta } from "@/domain/user/completeProfile.schema";
+import { homeBaseLocationMetaSchema } from "@/domain/user/completeProfile.schema";
 import { CityUpdateSchema } from "@/domain/city/city.schema";
 
-export const getAllCitiesAction = createPublicAction(z.any(), async () => {
-  const cities = await handleGetAllCities();
-  // Map to ensure relation arrays exist as per City schema
-  return (cities || []).map((c) => ({
-    ...c,
-    places: [],
-    usersHomeBase: [],
-    usersCurrentCity: [],
-  }));
-});
+export const getAllCitiesAction = createPublicAction(
+  z
+    .object({ limit: z.number().optional(), offset: z.number().optional() })
+    .optional(),
+  async (params) => {
+    const cities = await handleGetAllCities(params?.limit, params?.offset);
+    // Map to ensure relation arrays exist as per City schema
+    return (cities || []).map((c) => ({
+      ...c,
+      places: [],
+      usersHomeBase: [],
+      usersCurrentCity: [],
+    }));
+  },
+);
 
 export const findOrCreateCityAction = createPublicAction(
   z.object({
@@ -37,9 +42,8 @@ export const findOrCreateCityAction = createPublicAction(
 );
 
 export const ensureCountryAndCityFromLocationAction = createPublicAction(
-  z.any(), // Assuming HomeBaseLocationMeta is validated elsewhere or just pass it through
-  async (meta: HomeBaseLocationMeta) => {
-    if (!meta) throw new Error("Metadata is required");
+  homeBaseLocationMetaSchema,
+  async (meta) => {
     return await ensureCountryAndCityFromLocation(meta);
   },
 );
@@ -98,5 +102,24 @@ export const deleteCityAction = createAdminAction(
   z.object({ id: z.string() }),
   async ({ id }) => {
     await handleDeleteCity(id);
+  },
+);
+
+export const getNearbyCitiesAction = createPublicAction(
+  z.object({
+    lat: z.number(),
+    lng: z.number(),
+    km: z.number().optional(),
+    limit: z.number().optional(),
+  }),
+  async ({ lat, lng, km, limit }) => {
+    const { findNearbyCities } = await import("@/lib/db/cityLocation.repo");
+    const cities = await findNearbyCities(lng, lat, km, limit);
+    return (cities || []).map((c) => ({
+      ...c,
+      places: [],
+      usersHomeBase: [],
+      usersCurrentCity: [],
+    }));
   },
 );

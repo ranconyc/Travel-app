@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   generateCountryAction,
   getAllCountriesAction,
+  getNearbyCountriesAction,
   GenerateCountryResult,
 } from "@/domain/country/country.actions";
 import { Country } from "@/domain/country/country.schema";
@@ -36,16 +37,27 @@ export function useGenerateCountry() {
   });
 }
 
-export function useCountries<T = Country[]>() {
+export function useCountries<T = Country[]>(options?: {
+  initialData?: T;
+  coords?: { lat: number; lng: number };
+}) {
   return useQuery({
-    queryKey: ["countries"],
+    queryKey: ["countries", options?.coords],
     queryFn: async () => {
-      const result = await getAllCountriesAction(undefined);
+      const result = options?.coords
+        ? await getNearbyCountriesAction({
+            lat: options.coords.lat,
+            lng: options.coords.lng,
+            limit: 20,
+          })
+        : await getAllCountriesAction({ limit: 20 });
+
       if (!result.success) {
         throw new Error(result.error);
       }
       return result.data as T;
     },
+    initialData: options?.initialData,
     staleTime: 1000 * 60 * 60, // 1 hour
   });
 }

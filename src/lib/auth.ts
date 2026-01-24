@@ -67,15 +67,17 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.uid = user.id;
         token.role = user.role;
+        token.currentCityId = user.currentCityId;
       }
 
       // 2. Backfill if missing (e.g. existing session)
       if (!token.role && token.uid) {
         const u = await prisma.user.findUnique({
           where: { id: token.uid as string },
-          select: { role: true },
+          select: { role: true, currentCityId: true },
         });
         token.role = u?.role ?? "USER";
+        token.currentCityId = u?.currentCityId ?? undefined;
       }
 
       return token;
@@ -84,6 +86,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.uid as string;
         session.user.role = token.role as string;
+        session.user.currentCityId = token.currentCityId as string;
       }
       return session;
     },

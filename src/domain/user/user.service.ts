@@ -3,6 +3,11 @@ import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema"
 import { findNearestCityFromCoords } from "@/domain/city/city.service";
 import { DetectedCity } from "@/types/city";
 
+/**
+ * Completes the user profile with the provided data.
+ * @param userId - The ID of the user to update.
+ * @param data - The profile data to update.
+ */
 export async function completeProfile(
   userId: string,
   data: CompleteProfileFormValues,
@@ -50,10 +55,10 @@ export async function completeProfile(
       },
     });
 
-    if (data.image) {
+    if (data.avatarUrl) {
       await prisma.user.update({
         where: { id: userId },
-        data: { avatarUrl: data.image },
+        data: { avatarUrl: data.avatarUrl },
       });
     }
   } catch (error) {
@@ -61,7 +66,11 @@ export async function completeProfile(
     throw new Error("Failed to update profile");
   }
 }
-
+/**
+ * Updates the user profile persona with the provided data.
+ * @param userId - The ID of the user to update.
+ * @param newPersonaData - The persona data to update.
+ */
 export async function updateUserProfilePersona(
   userId: string,
   newPersonaData: Record<string, unknown>,
@@ -106,6 +115,11 @@ export async function updateUserProfilePersona(
   }
 }
 
+/**
+ * Saves the user's interests to their profile.
+ * @param userId - The ID of the user to update.
+ * @param data - The interests data to save.
+ */
 export async function saveUserInterests(
   userId: string,
   data: {
@@ -117,36 +131,63 @@ export async function saveUserInterests(
   return updateUserProfilePersona(userId, data);
 }
 
+/**
+ * Handles the update of the user's location.
+ * @param userId - The ID of the user to update.
+ * @param coords - The coordinates of the user's location.
+ */
 export async function handleUpdateUserLocation(
   userId: string,
   coords: { lat: number; lng: number },
 ): Promise<{ detected: DetectedCity }> {
-  const detected = await findNearestCityFromCoords(coords.lat, coords.lng, {
+  const { lat, lng } = coords;
+  console.log("[handleUpdateUserLocation] Start", userId, coords);
+
+  // 1. Resolve city from coordinates (DB or API)
+  const detected = await findNearestCityFromCoords(lat, lng, {
     createIfMissing: true,
+    searchRadiusKm: 120, // Consistent with location.actions.ts logic
   });
 
+  if (!detected || !detected.id) {
+    throw new Error("Could not identify city");
+  }
+
+  // 2. Handle city visit tracking (imported from repo)
+  const { getActiveVisit, createCityVisit, closeCityVisit } =
+    await import("@/lib/db/cityVisit.repo");
+  const activeVisit = await getActiveVisit(userId);
+
+  if (!activeVisit) {
+    // First visit or no active visit - create new one
+    await createCityVisit(userId, detected.id, { lat, lng });
+  } else if (activeVisit.cityId !== detected.id) {
+    // Changed cities - close current visit and create new one
+    await closeCityVisit(activeVisit.id, { lat, lng });
+    await createCityVisit(userId, detected.id, { lat, lng });
+  }
+
+  // 3. Update user's current location and city
   await prisma.user.update({
     where: { id: userId },
     data: {
       currentLocation: {
         type: "Point",
-        coordinates: [coords.lng, coords.lat],
+        coordinates: [lng, lat],
       },
-      currentCityId: detected.id ?? undefined,
+      currentCityId: detected.id,
     },
   });
 
+  console.log("[handleUpdateUserLocation] Success", detected.cityName);
   return { detected };
 }
 
-export async function handleUpdateUserRole(
-  userId: string,
-  role: "USER" | "ADMIN",
-): Promise<void> {
-  const { updateUserRole } = await import("@/lib/db/user.repo");
-  await updateUserRole(userId, role);
-}
-
+/**
+ * Calculates the age from a birthday string.
+ * @param birthday - The birthday string.
+ * @returns The age as a number, or null if the birthday is invalid.
+ */
 function safeAge(birthday: string): number | null {
   const d = new Date(birthday);
   if (Number.isNaN(d.getTime())) return null;
@@ -157,6 +198,11 @@ function safeAge(birthday: string): number | null {
   return age >= 0 && age < 120 ? age : null;
 }
 
+/**
+ * Formats the user's languages for display.
+ * @param langs - The languages to format.
+ * @returns The formatted languages string, or null if the user has no languages.
+ */
 function formatLanguages(
   langs?: { code: string; name: string }[],
 ): string | null {
@@ -167,6 +213,11 @@ function formatLanguages(
   return `${names[0]}, ${names[1]} and ${names[2]}`;
 }
 
+/**
+ * Generates a bio for the user based on their profile data.
+ * @param data - The profile data to generate the bio from.
+ * @returns The generated bio.
+ */
 export async function handleGenerateBio(data: {
   firstName: string;
   occupation: string;
@@ -202,22 +253,4 @@ export async function handleGenerateBio(data: {
       },
     ],
   };
-}
-
-export async function handleDeleteUserAccount(userId: string) {
-  const { deleteUserAccount } = await import("@/lib/db/user.repo");
-  return await deleteUserAccount(userId);
-}
-
-export async function handleUpdateVisitedCountries(
-  userId: string,
-  countries: string[],
-) {
-  const { updateVisitedCountries } = await import("@/lib/db/user.repo");
-  return await updateVisitedCountries(userId, countries);
-}
-
-export async function handleGetAllUsers() {
-  const { getAllUsers } = await import("@/lib/db/user.repo");
-  return await getAllUsers();
 }

@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { ProfileHeader } from "@/app/profile/[id]/components/header/ProfileHeader";
 import { getFriendshipStatusAction } from "@/domain/friendship/friendship.actions";
-import { getUserProfile } from "@/domain/user/user.queries";
+import { getUserById } from "@/lib/db/user.repo";
 import { User } from "@/domain/user/user.schema";
 import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 
@@ -18,7 +18,7 @@ export default async function ProfileLayout({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const profileUser = await getUserProfile(id);
+  const profileUser = await getUserById(id);
 
   if (!profileUser) {
     return (

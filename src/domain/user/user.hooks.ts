@@ -281,12 +281,14 @@ export function useGeo(options: UseGeoOptions = {}) {
   const isSavingRef = useRef(false);
   const lastSavedCoordsRef = useRef<{ lat: number; lng: number } | null>(null);
 
+  // save last saved coords to ref
   useEffect(() => {
     if (lastSavedCoords && !lastSavedCoordsRef.current) {
       lastSavedCoordsRef.current = lastSavedCoords;
     }
   }, [lastSavedCoords]);
 
+  // set coords from initial user
   useEffect(() => {
     if (!coords && initialUser?.currentLocation) {
       try {
@@ -329,6 +331,7 @@ export function useGeo(options: UseGeoOptions = {}) {
     }
   }, [initialUser, coords, setCoords, setLastSavedCoords, setLoading]);
 
+  // get coords from browser
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -367,18 +370,31 @@ export function useGeo(options: UseGeoOptions = {}) {
     };
   }, [user, setCoords, setError, setLoading]);
 
+  // save coords to db
   useEffect(() => {
     if (!persistToDb || !coords || !user?.id) return;
 
     const attemptSave = async () => {
       const now = Date.now();
 
+      console.log("[useGeo] attemptSave check", {
+        coords,
+        persistToDb,
+        hasUser: !!user?.id,
+      });
+
       if (now - lastSaveTimeRef.current < debounceMs) {
+        console.log(
+          "[useGeo] Debounced",
+          (debounceMs - (now - lastSaveTimeRef.current)) / 1000,
+          "s remaining",
+        );
         return;
       }
 
       let shouldSave = false;
       const lastSaved = lastSavedCoordsRef.current;
+      console.log("lastSavedCoordsRef.current gor here ", lastSaved);
 
       if (!lastSaved) {
         shouldSave = true;
@@ -399,7 +415,9 @@ export function useGeo(options: UseGeoOptions = {}) {
       if (shouldSave && !isSavingRef.current) {
         isSavingRef.current = true;
         try {
-          await updateUserLocationAction(coords);
+          console.log("[useGeo] Calling updateUserLocationAction...", coords);
+          const result = await updateUserLocationAction(coords);
+          console.log("[useGeo] Action result:", result);
 
           lastSavedCoordsRef.current = coords;
           lastSaveTimeRef.current = now;

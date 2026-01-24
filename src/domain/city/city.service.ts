@@ -139,7 +139,13 @@ export async function findNearestCityFromCoords(
     };
   }
 
+  console.log(
+    "[findNearestCityFromCoords] Resolving via LocationIQ...",
+    lat,
+    lng,
+  );
   const external = await reverseGeocodeLocationIQ(lat, lng);
+  console.log("[findNearestCityFromCoords] LocationIQ result:", external);
 
   if (createIfMissing && external.city && external.countryCode) {
     try {
@@ -457,7 +463,7 @@ export async function handleUpdateCity(id: string, data: any) {
 export async function handleDeleteCity(id: string) {
   return await deleteCity(id);
 }
-export async function handleGetAllCities() {
+export async function handleGetAllCities(limit?: number, offset?: number) {
   const { getAllCities } = await import("@/lib/db/cityLocation.repo");
-  return await getAllCities();
+  return await getAllCities(limit, offset);
 }

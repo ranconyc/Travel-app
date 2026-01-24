@@ -12,35 +12,24 @@ model User {
   email            String?   @unique
   role             Role      @default(USER)
   name             String?
-  emailVerified    DateTime?
   passwordHash     String?
+  avatarUrl        String?   
+  emailVerified    DateTime?
   profileCompleted Boolean   @default(false)
+  // Refactored Media Relations
+  media        Media[] // Media uploaded by this user
+
+  /* ---- PROFILE ---- */
+  profile      UserProfile?
 
   /* ---- LOCATION ---- */
   currentLocation Json? // [lng, lat]
   currentCityId   String? @db.ObjectId
   currentCity     City?   @relation("CurrentLocation", fields: [currentCityId], references: [id])
 
- /* ---- TRAVELS ---- */
+ /* ---- TRAVEL ---- */
   visitedCountries String[] @default([])
-    
-    /* ---- TRAVEL HISTORY ---- */
   cityVisits CityVisit[]
-
-  /* ---- AUTH ---- */
-  accounts Account[]
-  sessions Session[]
-
-  /* ---- PROFILE ---- */
-  profile      UserProfile?
-  
-  // Refactored Media Relations
-  media        Media[] // Media uploaded by this user
-  
-  // Helper for quick avatar access (optional, can also query Media model directly)
-  avatarUrl    String? 
-  
- 
 
   /* ---- FRIENDSHIP ---- */
   friendshipsRequested Friendship[] @relation("FriendshipsRequested")
@@ -50,8 +39,10 @@ model User {
   chats        ChatMember[]
   sentMessages Message[]    @relation("SentMessages")
 
+  /* ---- AUTH ---- */
+  accounts Account[]
+  sessions Session[]
   
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

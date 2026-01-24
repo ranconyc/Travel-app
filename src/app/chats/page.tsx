@@ -12,8 +12,8 @@ export default async function ChatPage() {
   }
 
   const [friendsResponse, chatsResponse] = await Promise.all([
-    getTravelPartnersAction(loggedUser.id),
-    getUserChats(loggedUser.id),
+    getTravelPartnersAction({}),
+    getUserChats({}),
   ]);
 
   const initialFriends = friendsResponse.success ? friendsResponse.data : [];

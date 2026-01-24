@@ -75,7 +75,7 @@ export type HomeBaseLocationMeta = z.infer<typeof homeBaseLocationMetaSchema>;
  * This should match the fields used in CompleteProfileForm + updateProfile.
  */
 export const completeProfileSchema = z.object({
-  image: z.string().url().nullable().optional(),
+  avatarUrl: z.string().url().nullable().optional(),
   imagePublicId: z.string().nullable().optional(),
 
   firstName: z

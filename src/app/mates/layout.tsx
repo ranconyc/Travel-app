@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/auth/get-current-user";
-import { getUserProfile } from "@/domain/user/user.queries";
+import { getUserById } from "@/lib/db/user.repo";
 import { redirect } from "next/navigation";
 
 export default async function MatesLayout({
@@ -12,7 +12,7 @@ export default async function MatesLayout({
     redirect("/signin");
   }
 
-  const loggedUser = await getUserProfile(session.user.id);
+  const loggedUser = await getUserById(session.user.id);
   if (!loggedUser) {
     redirect("/signin");
   }

@@ -1,12 +1,12 @@
 import { getSession } from "@/lib/auth/get-current-user";
-import { getAllUsersQuery, getUserProfile } from "@/domain/user/user.queries";
+import { getAllUsers, getUserById } from "@/lib/db/user.repo";
 import { redirect } from "next/navigation";
 import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 import NearbyMatesClient from "./components/NearbyMatesClient";
 
 export default async function NearbyMatesPage() {
   const session = await getSession();
-  const loggedUser = await getUserProfile(session?.user?.id || "");
+  const loggedUser = await getUserById(session?.user?.id || "");
 
   if (!loggedUser) {
     redirect("/signin");
@@ -15,7 +15,7 @@ export default async function NearbyMatesPage() {
   const userLocation = loggedUser.currentLocation;
 
   console.log("NearbyMates", userLocation);
-  const mates = await getAllUsersQuery();
+  const mates = await getAllUsers();
   const matesWithMatch = await Promise.all(
     mates.map(async (mate) => {
       const match = await calculateMatchScoreBatch(loggedUser, mate, "current");

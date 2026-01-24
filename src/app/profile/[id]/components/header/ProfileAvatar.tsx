@@ -12,7 +12,9 @@ export default function ProfileAvatar() {
 
   if (!profileUser) return null;
 
-  const avatarUrl = profileUser.avatarUrl || "/public/placeholder-avatar.jpg";
+  const avatarUrl =
+    profileUser.avatarUrl ||
+    "https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1577909/";
   const isMyCity =
     profileUser.currentCityId === profileUser.profile?.homeBaseCityId;
 

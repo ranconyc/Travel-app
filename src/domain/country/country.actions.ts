@@ -29,9 +29,14 @@ export const generateCountryAction = createAdminAction(
   },
 );
 
-export const getAllCountriesAction = createPublicAction(z.any(), async () => {
-  return await handleGetAllCountries();
-});
+export const getAllCountriesAction = createPublicAction(
+  z
+    .object({ limit: z.number().optional(), offset: z.number().optional() })
+    .optional(),
+  async (params) => {
+    return await handleGetAllCountries(params?.limit, params?.offset);
+  },
+);
 
 export const updateCountryAction = createAdminAction(
   z.object({
@@ -47,5 +52,17 @@ export const deleteCountryAction = createAdminAction(
   z.object({ id: z.string() }),
   async ({ id }) => {
     await handleDeleteCountry(id);
+  },
+);
+
+export const getNearbyCountriesAction = createPublicAction(
+  z.object({
+    lng: z.number(),
+    lat: z.number(),
+    limit: z.number().optional(),
+  }),
+  async ({ lng, lat, limit }) => {
+    const { findNearbyCountries } = await import("@/lib/db/country.repo");
+    return await findNearbyCountries(lng, lat, limit);
   },
 );

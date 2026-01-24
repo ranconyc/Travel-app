@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import Header from "./components/Header";
 import HeaderWrapper from "@/app/components/common/Header";
-import MediaGallery from "./components/MediaGallery";
-import { SafetySection } from "./components/SafetySection";
 import { FinanceSection } from "./components/FinanceSection";
 import CultureSection from "./components/CultureSection";
 import HealthSection from "./components/HealthSection";
@@ -12,21 +10,16 @@ import {
 } from "@/lib/db/country.repo";
 import SocialLinks from "./components/SocialLinks";
 import InfoSection from "./components/InfoSection";
+import CitiesSection from "./components/CitiesSection";
 import HeroImage from "@/app/components/common/HeroImage";
 import Stats from "@/app/components/common/Stats";
 import { StatItem } from "@/domain/common.schema";
-import {
-  DollarSign,
-  FlashlightIcon,
-  Globe2,
-  LanguagesIcon,
-  Users,
-} from "lucide-react";
+import { Globe2, Users } from "lucide-react";
 import { formatPopulation } from "@/app/_utils/formatNumber";
-import { getDistance } from "@/app/_utils/geo";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import LogisticsSection from "./components/LogisticsSection";
-import Link from "next/link"; // Added for Continent View
+import Link from "next/link";
+import { Country } from "@/domain/country/country.schema";
 
 // Known continents for quick check
 const CONTINENTS = ["africa", "americas", "asia", "europe", "oceania"];
@@ -116,7 +109,7 @@ export default async function CountryPage({
       icon: Users,
     },
     {
-      value: `${country?.areaKm2 ? formatPopulation(country.areaKm2) : "N/A"} km²`,
+      value: `${country?.areaKm2 ? formatPopulation(country.areaKm2) : "N/A"}m²`,
       label: "Area",
       icon: Globe2,
     },
@@ -152,6 +145,7 @@ export default async function CountryPage({
           <SocialLinks query={country.name} />
         </div>
         <Stats stats={stats} />
+        <CitiesSection country={country as unknown as Country} />
         {/* {country?.media && (
           <MediaGallery country={country as any} />
         )} */}

@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/domain/user/user.queries";
+import { getUserById } from "@/lib/db/user.repo";
 import TravelSection from "./components/Travel/TravelSection";
 import { Users, Globe2, LanguagesIcon } from "lucide-react";
 import { StatItem } from "@/domain/common.schema";
@@ -12,7 +12,7 @@ export default async function ProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const profileUser = await getUserProfile(id);
+  const profileUser = await getUserById(id);
 
   if (!profileUser) return null; // Handled by layout, but for TS safety
 

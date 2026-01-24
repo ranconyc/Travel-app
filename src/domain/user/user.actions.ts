@@ -18,12 +18,14 @@ import {
   saveUserInterests,
   updateUserProfilePersona,
   handleUpdateUserLocation,
-  handleUpdateUserRole,
   handleGenerateBio,
-  handleDeleteUserAccount,
-  handleGetAllUsers,
-  handleUpdateVisitedCountries,
 } from "@/domain/user/user.service";
+import {
+  deleteUserAccount,
+  getAllUsers,
+  updateUserRole,
+  updateVisitedCountries,
+} from "@/lib/db/user.repo";
 
 /* -------------------------------------------------------------------------- */
 /*                                USER ACTIONS                                */
@@ -41,7 +43,7 @@ export const updateProfile = createSafeAction(
 export const deleteAccountAction = createSafeAction(
   z.any(),
   async (_, userId) => {
-    await handleDeleteUserAccount(userId);
+    await deleteUserAccount(userId);
   },
 );
 
@@ -76,7 +78,7 @@ export const generateBio = createPublicAction(BioInputSchema, async (data) => {
 export const saveVisitedCountries = createSafeAction(
   saveTravelSchema,
   async (data, userId) => {
-    await handleUpdateVisitedCountries(userId, data.countries);
+    await updateVisitedCountries(userId, data.countries);
     return { userId };
   },
 );
@@ -90,7 +92,7 @@ export const saveTravelPersona = createSafeAction(
 );
 
 export const getAllUsersAction = createAdminAction(z.any(), async () => {
-  return await handleGetAllUsers();
+  return await getAllUsers();
 });
 
 export const updateUserRoleAction = createAdminAction(
@@ -99,7 +101,7 @@ export const updateUserRoleAction = createAdminAction(
     role: z.enum(["USER", "ADMIN"]),
   }),
   async (data) => {
-    await handleUpdateUserRole(data.userId, data.role);
+    await updateUserRole(data.userId, data.role);
   },
 );
 
@@ -109,6 +111,9 @@ export const updateUserLocationAction = createSafeAction(
     lng: z.number(),
   }),
   async (coords, userId) => {
-    return await handleUpdateUserLocation(userId, coords);
+    const { revalidatePath } = await import("next/cache");
+    const result = await handleUpdateUserLocation(userId, coords);
+    revalidatePath(`/profile/${userId}`);
+    return result;
   },
 );

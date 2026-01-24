@@ -1,8 +1,8 @@
-import { getAllUsersQuery } from "@/domain/user/user.queries";
+import { getAllUsers } from "@/lib/db/user.repo";
 import UsersTable from "@/app/admin/users/UsersTable";
 
 export default async function AdminUsersPage() {
-  const users = await getAllUsersQuery();
+  const users = await getAllUsers();
 
   return (
     <div className="p-8 max-w-7xl mx-auto">

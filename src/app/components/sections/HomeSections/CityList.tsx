@@ -6,8 +6,12 @@ import { useCities } from "@/domain/city/city.hooks";
 import SectionHeader from "@/app/components/common/SectionHeader";
 import HorizontalList from "@/app/components/common/HorizontalList";
 
-export default function CityList() {
-  const { data: cities, isLoading } = useCities();
+export default function CityList({
+  coords,
+}: {
+  coords?: { lat: number; lng: number };
+}) {
+  const { data: cities, isLoading } = useCities({ coords });
 
   if (isLoading)
     return (

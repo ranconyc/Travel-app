@@ -14,9 +14,12 @@ import {
 /**
  * Get all chats for the current user with last message and unread count
  */
-export const getUserChats = createSafeAction(z.any(), async (_, userId) => {
-  return await handleGetUserChats(userId);
-});
+export const getUserChats = createSafeAction(
+  z.object({}).optional(),
+  async (_, userId) => {
+    return await handleGetUserChats(userId);
+  },
+);
 
 /**
  * Get a specific chat by ID with all messages
@@ -65,6 +68,9 @@ export const createOrGetChat = createSafeAction(
 /**
  * Get all accepted friends for the current user
  */
-export const getUserFriends = createSafeAction(z.any(), async (_, userId) => {
-  return await handleGetUserFriends(userId);
-});
+export const getUserFriends = createSafeAction(
+  z.object({}).optional(),
+  async (_, userId) => {
+    return await handleGetUserFriends(userId);
+  },
+);

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useUser } from "@/app/providers/UserProvider";
 import { useLocation } from "@/app/providers/LocationProvider";
-import { updateUserLocationAction } from "@/domain/user/location.actions";
+import { updateUserLocationAction } from "@/domain/user/user.actions";
 
 const LOCATION_STORAGE_KEY = "last_location";
 const MIN_DISTANCE_KM = 5; // Only update if moved more than 5km
@@ -38,11 +38,14 @@ export default function AutoLocationUpdater() {
     if (user && location && !hasUpdatedRef.current) {
       const updateLocation = async () => {
         try {
-          // Get last location from localStorage
-          const lastLocationStr = localStorage.getItem(LOCATION_STORAGE_KEY);
-          let shouldUpdate = true;
+          // 1. Check if user already has location in DB
+          const hasLocationInDb = !!user.currentLocation;
 
-          if (lastLocationStr) {
+          // 2. Get last location from localStorage
+          const lastLocationStr = localStorage.getItem(LOCATION_STORAGE_KEY);
+          let shouldUpdate = !hasLocationInDb; // Force update if not in DB
+
+          if (hasLocationInDb && lastLocationStr) {
             try {
               const lastLocation = JSON.parse(lastLocationStr);
               const distance = calculateDistance(
@@ -53,22 +56,26 @@ export default function AutoLocationUpdater() {
               );
 
               // Only update if moved significantly
-              if (distance < MIN_DISTANCE_KM) {
-                console.log(
-                  `📍 Location unchanged (${distance.toFixed(2)}km), skipping update`,
-                );
-                shouldUpdate = false;
-              } else {
+              if (distance >= MIN_DISTANCE_KM) {
                 console.log(
                   `📍 Location changed by ${distance.toFixed(2)}km, updating...`,
+                );
+                shouldUpdate = true;
+              } else {
+                console.log(
+                  `📍 Location unchanged (${distance.toFixed(2)}km), skipping update`,
                 );
               }
             } catch (e) {
               console.error("Failed to parse last location:", e);
+              shouldUpdate = true;
             }
           }
 
           if (shouldUpdate) {
+            console.log(
+              `📍 Auto-updating location... (In DB: ${hasLocationInDb})`,
+            );
             await updateUserLocationAction({
               lat: location.latitude,
               lng: location.longitude,

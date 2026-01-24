@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import { NearestCityResult } from "@/types/city";
+import { Prisma } from "@prisma/client";
 
 function slugify(input: string): string {
   return input
@@ -27,12 +28,14 @@ export async function getCityById(cityId: string) {
   }
 }
 
-// get all the CITIES in the DB in ascending order by name
-export async function getAllCities() {
+// get all the CITIES in the DB with pagination
+export async function getAllCities(limit?: number, offset?: number) {
   try {
     return await prisma.city.findMany({
       orderBy: { name: "asc" },
       include: { country: true },
+      take: limit,
+      skip: offset,
     });
   } catch (err) {
     console.error("getAllCities error:", err);
@@ -157,7 +160,7 @@ export async function isCityExists(cityId: string) {
   return !!city;
 }
 
-export async function updateCity(id: string, data: any) {
+export async function updateCity(id: string, data: Prisma.CityUpdateInput) {
   try {
     return await prisma.city.update({
       where: { id },

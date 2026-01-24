@@ -187,6 +187,7 @@ model City {
 
   @@index([countryRefId])
   @@index([stateId])
+  @@index([coords], map: "coords_2dsphere")
 }
 
 /**
@@ -259,5 +260,5 @@ model Place {
   @@index([cityRefId])
   @@index([countryRefId])
   @@index([type])
-  @@index([coords]) // Geo index for "places near me"
+  @@index([coords], map: "coords_2dsphere") // Geo index for "places near me"
 }

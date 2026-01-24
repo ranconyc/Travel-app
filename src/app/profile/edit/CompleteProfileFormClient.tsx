@@ -28,13 +28,13 @@ import SocialSection from "./sections/SocialSection";
 
 function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
   return {
-    image: user?.avatarUrl ?? null,
     firstName: user?.profile?.firstName ?? "",
     lastName: user?.profile?.lastName ?? "",
     birthday: user?.profile?.birthday
       ? new Date(user.profile.birthday).toISOString().slice(0, 10)
       : "",
     gender: (user?.profile?.gender as Gender | "") ?? "",
+    avatarUrl: user?.avatarUrl ?? null,
     // homeBase: user?.profile?.homeBaseCity?.name
     //   ? `${user.profile.homeBaseCity.name}${
     //       user.profile.homeBaseCity.country?.name

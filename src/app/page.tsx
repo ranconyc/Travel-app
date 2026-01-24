@@ -1,37 +1,65 @@
-"use client";
+import {
+  getAllCountriesAction,
+  getNearbyCountriesAction,
+} from "@/domain/country/country.actions";
+import {
+  getNearbyCitiesAction,
+  getAllCitiesAction,
+} from "@/domain/city/city.actions";
+import HomeClient from "./HomeClient";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-import { redirect } from "next/navigation";
-import { useUser } from "@/app/providers/UserProvider";
-import { useGeo } from "@/domain/user/user.hooks";
-import HomeHeader from "@/app/components/sections/HomeHeader";
-import CountryList from "@/app/components/sections/HomeSections/CountryList";
-import UserList from "@/app/components/sections/HomeSections/UserList";
-import CityList from "@/app/components/sections/HomeSections/CityList";
+export default async function Home() {
+  const queryClient = new QueryClient();
+  const user = await getCurrentUser();
+  console.log("user", user);
+  const location = user?.currentLocation as {
+    type: string;
+    coordinates: [number, number];
+  } | null;
+  console.log("location", location);
 
-export default function Home() {
-  const loggedUser = useUser();
+  const hasLocation =
+    location?.coordinates &&
+    location.coordinates[0] !== 0 &&
+    location.coordinates[1] !== 0;
 
-  const coords = useGeo({
-    persistToDb: true,
-    distanceThresholdKm: 5, // Save to DB if user moves more than 1km
-    initialUser: loggedUser,
-    refreshOnUpdate: true,
+  const coords = hasLocation
+    ? { lng: location.coordinates[0], lat: location.coordinates[1] }
+    : undefined;
+
+  // Prefetch countries
+  await queryClient.prefetchQuery({
+    queryKey: ["countries", coords],
+    queryFn: async () => {
+      const result = coords
+        ? await getNearbyCountriesAction({ ...coords, limit: 20 })
+        : await getAllCountriesAction({ limit: 20 });
+      return result.success ? result.data : [];
+    },
   });
 
-  console.log("coords", coords);
-
-  if (!loggedUser) return redirect("/signin");
+  // Prefetch cities
+  await queryClient.prefetchQuery({
+    queryKey: ["cities", coords],
+    queryFn: async () => {
+      const result = coords
+        ? await getNearbyCitiesAction({ ...coords, km: 500, limit: 20 })
+        : await getAllCitiesAction({ limit: 20 });
+      return result.success ? result.data : [];
+    },
+  });
 
   return (
-    <div className="h-full border-b border-surface relative">
-      <HomeHeader />
-      <main className="p-4 pb-28 overflow-y-scroll">
-        <div className="flex flex-col gap-6">
-          <UserList loggedUser={loggedUser} />
-          <CountryList />
-          <CityList />
-        </div>
-      </main>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <HomeClient
+        dbLocation={coords ? { lat: coords.lat, lng: coords.lng } : undefined}
+      />
+    </HydrationBoundary>
   );
 }

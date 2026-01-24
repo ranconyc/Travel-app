@@ -2,9 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   generateCityAction,
   getAllCitiesAction,
+  getNearbyCitiesAction,
   GenerateCityResult,
 } from "@/domain/city/city.actions";
 import { ActionResponse } from "@/types/actions";
+import { City } from "@/domain/city/city.schema";
 
 export function useGenerateCity() {
   const queryClient = useQueryClient();
@@ -30,15 +32,31 @@ export function useGenerateCity() {
   });
 }
 
-export function useCities() {
+export function useCities(options?: {
+  initialData?: City[];
+  coords?: { lat: number; lng: number };
+}) {
   return useQuery({
-    queryKey: ["cities"],
+    queryKey: ["cities", options?.coords],
     queryFn: async () => {
-      const res = await getAllCitiesAction(undefined);
+      if (options?.coords) {
+        const res = await getNearbyCitiesAction({
+          lat: options.coords.lat,
+          lng: options.coords.lng,
+          km: 500,
+          limit: 20,
+        });
+        if (res.success) {
+          return res.data as unknown as City[];
+        }
+      }
+
+      const res = await getAllCitiesAction({ limit: 20 });
       if (res.success) {
-        return res.data;
+        return res.data as unknown as City[];
       }
       throw new Error(res.error);
     },
+    initialData: options?.initialData,
   });
 }

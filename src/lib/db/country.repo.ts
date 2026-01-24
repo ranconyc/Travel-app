@@ -1,12 +1,18 @@
 import { Country } from "@/domain/country/country.schema";
 import { prisma } from "@/lib/db/prisma";
 import { countryFullInclude, countrySummarySelect } from "./prisma.presets";
+import { Prisma } from "@prisma/client";
 
-// get all countries
-export async function getAllCountries(): Promise<Country[]> {
+// get all countries with pagination
+export async function getAllCountries(
+  limit?: number,
+  offset?: number,
+): Promise<Country[]> {
   try {
     return (await prisma.country.findMany({
       orderBy: { name: "asc" },
+      take: limit,
+      skip: offset,
     })) as unknown as Country[];
   } catch (error) {
     console.error("getAllCountries error:", error);
@@ -58,7 +64,10 @@ export async function getCountriesByCodes(codes: string[]) {
   }
 }
 
-export async function updateCountry(id: string, data: any) {
+export async function updateCountry(
+  id: string,
+  data: Prisma.CountryUpdateInput,
+) {
   try {
     return await prisma.country.update({
       where: { id },
@@ -96,6 +105,38 @@ export async function getCountriesByRegion(region: string): Promise<Country[]> {
     })) as unknown as Country[];
   } catch (error) {
     console.error("getCountriesByRegion error:", error);
+    return [];
+  }
+}
+
+export async function findNearbyCountries(
+  lng: number,
+  lat: number,
+  limit = 20,
+): Promise<Country[]> {
+  try {
+    console.log("findNearbyCountries", lng, lat);
+    const res = await prisma.country.aggregateRaw({
+      pipeline: [
+        {
+          $geoNear: {
+            near: { type: "Point", coordinates: [lng, lat] },
+            distanceField: "distance",
+            spherical: true,
+            key: "coords",
+          },
+        },
+        { $limit: limit },
+      ],
+    });
+    console.log("findNearbyCountries res", res);
+
+    return (res as unknown as any[]).map((row) => ({
+      ...row,
+      id: row._id?.["$oid"] || row._id,
+    })) as unknown as Country[];
+  } catch (error) {
+    console.error("findNearbyCountries error:", error);
     return [];
   }
 }
