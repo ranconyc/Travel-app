@@ -11,7 +11,7 @@ export default function SelectedPreferencesList({
   if (!items.length) return null;
 
   return (
-    <section className="px-4 pt-4">
+    <section className="px-4 pt-md">
       <h2 className="mb-2 text-xs font-medium text-gray-700 uppercase tracking-wide">
         Selected
       </h2>

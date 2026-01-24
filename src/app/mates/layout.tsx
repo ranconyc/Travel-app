@@ -17,5 +17,5 @@ export default async function MatesLayout({
     redirect("/signin");
   }
 
-  return <div className="min-h-screen bg-app-bg">{children}</div>;
+  return <div className="min-h-screen bg-main">{children}</div>;
 }

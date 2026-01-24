@@ -12,7 +12,7 @@ export default function InterestsGrid({
   onToggleInterest,
 }: InterestsGridProps) {
   return (
-    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div className="mt-md grid grid-cols-1 gap-3 sm:grid-cols-2">
       {interests.map((interest) => {
         const selected = selectedIds.includes(interest.id);
 

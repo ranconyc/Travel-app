@@ -28,7 +28,7 @@ function GenderSectionClient() {
 
   return (
     <fieldset className="mb-6">
-      <legend className="block mb-3 text-sm font-semibold capitalize text-app-text">
+      <legend className="block mb-3 text-sm font-semibold capitalize text-txt-main">
         How do you identify?
       </legend>
 

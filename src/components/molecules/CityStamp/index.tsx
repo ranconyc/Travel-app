@@ -97,11 +97,11 @@ const stampVariants: Record<StampStyle, string> = {
 
   // New Geometric
   "triangle-red":
-    "triangle-shape text-red-600 w-24 h-24 flex items-end justify-center pb-4 rotate-3 relative",
+    "triangle-shape text-red-600 w-24 h-24 flex items-end justify-center pb-md rotate-3 relative",
   "triangle-blue":
-    "triangle-shape text-blue-600 w-24 h-24 flex items-end justify-center pb-4 -rotate-2 relative",
+    "triangle-shape text-blue-600 w-24 h-24 flex items-end justify-center pb-md -rotate-2 relative",
   "triangle-green":
-    "triangle-shape text-green-600 w-24 h-24 flex items-end justify-center pb-4 rotate-1 relative",
+    "triangle-shape text-green-600 w-24 h-24 flex items-end justify-center pb-md rotate-1 relative",
   "pentagon-orange":
     "pentagon-shape text-orange-500 w-24 h-24 flex items-center justify-center pt-2 relative",
   "pentagon-purple":
@@ -133,7 +133,7 @@ const stampVariants: Record<StampStyle, string> = {
   "star-blue":
     "star-5-shape text-blue-600 w-24 h-24 flex items-center justify-center pt-2 -rotate-3 relative",
   "banner-green":
-    "banner-shape text-green-700 w-28 h-20 flex items-start justify-center pt-4 relative",
+    "banner-shape text-green-700 w-28 h-20 flex items-start justify-center pt-md relative",
   "cloud-sky":
     "cloud-shape text-sky-500 w-28 h-20 flex items-center justify-center relative",
 
@@ -189,7 +189,7 @@ const stampVariants: Record<StampStyle, string> = {
   "space-planet-indigo":
     "rounded-full border-[4px] border-indigo-600 w-24 h-24 flex items-center justify-center relative text-indigo-600",
   "space-rocket-red":
-    "triangle-shape text-red-600 w-24 h-24 flex items-end justify-center pb-4 relative",
+    "triangle-shape text-red-600 w-24 h-24 flex items-end justify-center pb-md relative",
   "ocean-wave-blue":
     "wavy-circle text-blue-500 rounded-full border-[3px] border-blue-500 w-24 h-24 flex items-center justify-center relative",
   "ocean-shell-teal":

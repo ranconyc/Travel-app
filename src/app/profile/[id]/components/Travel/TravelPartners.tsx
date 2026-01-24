@@ -5,7 +5,7 @@ import SectionHeader from "@/components/molecules/SectionHeader";
 
 export default function TravelPartners({ partner }: { partner: User | null }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-md">
       <SectionHeader title="Travel Partners" />
 
       {!partner ? (
@@ -14,7 +14,7 @@ export default function TravelPartners({ partner }: { partner: User | null }) {
           link={{ href: "/profile/partner", label: "Link your partner" }}
         />
       ) : (
-        <div className="bg-surface/50 p-4 rounded-xl border border-surface flex items-center gap-4">
+        <div className="bg-surface/50 p-md rounded-xl border border-surface flex items-center gap-md">
           <Avatar
             image={partner.avatarUrl || ""}
             name={partner.name || ""}

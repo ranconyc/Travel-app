@@ -9,67 +9,49 @@ interface ExtendedPlace extends Place {
 import { getSession } from "@/lib/auth/get-current-user";
 import { getPlaceBySlug } from "@/lib/db/place.repo";
 import Link from "next/link";
-import HeaderWrapper from "@/components/molecules/Header";
 import { CalendarPlus, Users } from "lucide-react";
 import Title from "@/components/atoms/Title";
+import PageHeader from "@/components/molecules/PageHeader";
+import Typography from "@/components/atoms/Typography";
 
 const Header = ({ activity }: { activity: ExtendedPlace }) => {
   return (
-    <HeaderWrapper backButton rightComponent={<CalendarPlus size={22} />}>
-      <div className="flex flex-col items-center gap-1">
-        <h2 className="text-sm">
-          {activity?.city.name}, {activity?.city.country.name}
-        </h2>
-        <h1
-          className={`${
-            activity?.name.length > 40 ? "text-lg" : "text-2xl"
-          } font-bold text-center`}
-        >
-          {activity?.name}
-        </h1>
-      </div>
-
-      <div className="overflow-hidden rounded-xl my-4">
-        {activity?.imageHeroUrl ? (
-          <Image
-            src={activity.imageHeroUrl}
-            alt="activity image"
-            width={500}
-            height={500}
-          />
-        ) : (
-          <div className="w-[500px] h-[500px] bg-gray-200 flex items-center justify-center">
-            No Image
+    <PageHeader
+      backButton
+      rightContent={<CalendarPlus size={22} />}
+      subtitle={`${activity?.city.name}, ${activity?.city.country.name}`}
+      title={activity?.name}
+      bottomContent={
+        <div className="flex flex-col gap-md">
+          <div className="overflow-hidden rounded-card">
+            {activity?.imageHeroUrl ? (
+              <Image
+                src={activity.imageHeroUrl}
+                alt="activity image"
+                width={500}
+                height={500}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-[500px] bg-gray-200 flex items-center justify-center">
+                No Image
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className="flex gap-2 flex-wrap w-full">
-        {activity?.highlights?.map((a) => (
-          <div
-            key={a}
-            className="bg-gray-800 px-4 py-2 rounded-xl capitalize text-xs"
-          >
-            {a}{" "}
+          <div className="flex gap-sm flex-wrap w-full">
+            {activity?.highlights?.map((a) => (
+              <div
+                key={a}
+                className="bg-surface-secondary px-md py-sm rounded-pill capitalize text-xs font-medium text-txt-sec"
+              >
+                {a}{" "}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-
-      {/* <div className="grid grid-cols-3 gap-2">
-        <div className="bg-gray-900 p-4 rounded-xl">
-          <h1 className="text-xs uppercase">Best Season</h1>
-          <p>{activity.bestSeason || "NO DATA"}</p>
         </div>
-        <div className="bg-gray-900 p-4 rounded-xl">
-          <h1 className="text-xs uppercase">safety</h1>{" "}
-          <p className="max-w-40">{activity?.safety || "NO DATA"}</p>
-        </div>
-        <div className="bg-gray-900 p-4 rounded-xl">
-          <h1 className="text-xs uppercase">ideal duration</h1>
-          <p> {activity?.idealDuration || "NO DATA"}</p>
-        </div>
-      </div> */}
-    </HeaderWrapper>
+      }
+    />
   );
 };
 
@@ -107,23 +89,35 @@ export default async function ActivityPage({
   return (
     <div>
       <Header activity={activity} />
-      <main className="p-4 bg-gray-100">
-        <div className="bg-white p-4 grid gap-4 rounded-xl mb-4">
+      <main className="p-lg bg-bg-main min-h-screen">
+        <div className="bg-surface p-md grid gap-md rounded-card border border-stroke shadow-soft mb-lg">
           <div className="flex items-start justify-between">
             <Title icon={<Users />}>Looking for partners</Title>
-            <p className="text-xs">Jan 12 - 15, 2024</p>
+            <Typography variant="tiny" className="text-txt-muted">
+              Jan 12 - 15, 2024
+            </Typography>
           </div>
           <div>
             <TravelerCard session={session} />
           </div>
-          <Button>Join to find mates</Button>
+          <Button variant="brand" fullWidth>
+            Join to find mates
+          </Button>
         </div>
-        <h1>{activity?.address} </h1>
-        <p>{activity?.bestTimeToVisit}</p>
+        <Typography variant="h3" className="mb-sm">
+          {activity?.address}
+        </Typography>
+        <Typography variant="p" className="mb-lg">
+          {activity?.bestTimeToVisit}
+        </Typography>
         <div>
-          <h1>Amenities</h1>
+          <Typography variant="h3" className="mb-md">
+            Amenities
+          </Typography>
           {activity?.amenities.map((a) => (
-            <div key={a}>{a} </div>
+            <div key={a} className="mb-xs text-txt-sec">
+              {a}{" "}
+            </div>
           ))}
         </div>
       </main>

@@ -198,7 +198,7 @@ export default function PassportStamp({
       default:
         return {
           padding: "p-1",
-          innerPadding: "p-4",
+          innerPadding: "p-md",
           text: "text-micro",
           cityText: "text-xl",
         };

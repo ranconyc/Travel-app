@@ -8,7 +8,7 @@ export default function PreferencesHeader({
   selectedCount,
 }: PreferencesHeaderProps) {
   return (
-    <header className="bg-black text-white px-4 pt-4 pb-6">
+    <header className="bg-black text-white px-4 pt-md pb-6">
       <Logo />
 
       <div className="mt-6">

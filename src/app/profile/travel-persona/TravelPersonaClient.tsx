@@ -61,12 +61,12 @@ function SelectableCardList({
             )}
 
             <div className="flex flex-1 flex-col">
-              <span className="text-p font-bold text-app-text">
+              <span className="text-p font-bold text-txt-main">
                 {opt.title}
               </span>
               {opt.subtitle && (
                 <span
-                  className={`text-upheader ${selected ? "text-app-text/90" : "text-secondary"}`}
+                  className={`text-upheader ${selected ? "text-txt-main/90" : "text-secondary"}`}
                 >
                   {opt.subtitle}
                 </span>
@@ -164,7 +164,7 @@ export default function TravelPersonaClient({
 
   return (
     <FormProvider {...methods}>
-      <div className="min-h-screen flex flex-col bg-app-bg">
+      <div className="min-h-screen flex flex-col bg-main">
         <header className="bg-brand text-white px-lg pt-xl pb-xxl">
           <Logo />
           <div className="mt-xl">

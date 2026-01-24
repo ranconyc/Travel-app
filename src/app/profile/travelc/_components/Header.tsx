@@ -3,7 +3,7 @@ import Button from "@/components/atoms/Button";
 
 export default function Header({ selectedRegion }: { selectedRegion: string }) {
   return (
-    <header className="sticky top-0 left-0 right-0 bg-app-bg border-b border-gray-200 p-4 mb-4">
+    <header className="sticky top-0 left-0 right-0 bg-main border-b border-gray-200 p-md mb-md">
       <div className="flex items-center justify-between">
         <Button
           variant="back"

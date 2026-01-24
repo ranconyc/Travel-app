@@ -31,7 +31,7 @@ export default function ChatItem({
     <li className="list-none border-b border-surface/5 last:border-0 w-full">
       <Link
         href={`/chats/${chat.id}`}
-        className="flex items-center gap-4 p-4 hover:bg-surface/10 transition-colors duration-200"
+        className="flex items-center gap-md p-md hover:bg-surface/10 transition-colors duration-200"
       >
         <Avatar
           image={displayImage || undefined}

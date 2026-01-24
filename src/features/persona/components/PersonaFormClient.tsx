@@ -141,8 +141,8 @@ export default function PersonaFormClient({
 
   return (
     <FormProvider {...methods}>
-      <div className="flex flex-col h-screen bg-app-bg">
-        <div className="flex-none pt-4 px-4">
+      <div className="flex flex-col h-screen bg-main">
+        <div className="flex-none pt-md px-4">
           {/* Back Button logic could be added here if needed, utilizing handleBack */}
           {step > 1 && (
             <Button
@@ -167,7 +167,7 @@ export default function PersonaFormClient({
           {stepContent(step)}
         </div>
 
-        <div className="flex-none p-4 bg-app-bg border-t border-surface fixed bottom-0 w-full max-w-md left-1/2 -translate-x-1/2 z-10">
+        <div className="flex-none p-md bg-main border-t border-surface fixed bottom-0 w-full max-w-md left-1/2 -translate-x-1/2 z-10">
           {step === 5 && (
             <Button
               type="button"

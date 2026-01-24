@@ -90,7 +90,7 @@ export default function TravelForm({
   return (
     <form
       onSubmit={handleSubmit((data) => console.log(data))}
-      className="p-4 pb-20"
+      className="p-md pb-20"
     >
       {review ? (
         <div>
@@ -144,7 +144,7 @@ export default function TravelForm({
           </div>
         </div>
       )}
-      <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-app-bg border-t border-gray-200">
+      <div className="fixed bottom-0 left-0 right-0 p-md pb-8 bg-main border-t border-gray-200">
         <Button
           type={review ? "submit" : "button"}
           className="w-full"

@@ -69,7 +69,7 @@ export default function TravelFormB() {
 
   return (
     <div className="">
-      <header className="sticky top-0 left-0 right-0 bg-app-bg border-b border-gray-200 p-4 mb-4">
+      <header className="sticky top-0 left-0 right-0 bg-main border-b border-gray-200 p-md mb-md">
         <div className="flex items-center justify-between">
           <Button variant="back" />
           {/* <ProgressBar currentStep={1} totalSteps={5} /> */}
@@ -100,7 +100,7 @@ export default function TravelFormB() {
 
       <form
         onSubmit={handleSubmit((data) => console.log(data))}
-        className="p-4 pb-20"
+        className="p-md pb-20"
       >
         {continentOrder.map((region) => (
           <div key={region} className="mb-8">
@@ -144,7 +144,7 @@ export default function TravelFormB() {
             </div>
           </div>
         ))}
-        <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-app-bg border-t border-gray-200">
+        <div className="fixed bottom-0 left-0 right-0 p-md pb-8 bg-main border-t border-gray-200">
           <Button type="submit" className="w-full">
             Submit
           </Button>

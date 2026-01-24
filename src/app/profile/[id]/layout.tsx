@@ -23,7 +23,7 @@ export default async function ProfileLayout({
 
   if (!profileUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-md">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-2">User not found</h1>
           <p className="text-secondary">
@@ -66,7 +66,7 @@ export default async function ProfileLayout({
       />
       <ProfileModal />
       <QRCodeModal />
-      <div className="min-h-screen bg-app-bg text-app-fg pb-20">
+      <div className="min-h-screen bg-main text-app-fg pb-20">
         {loggedUser && (
           <FriendRequestBanner
             friendship={friendship}

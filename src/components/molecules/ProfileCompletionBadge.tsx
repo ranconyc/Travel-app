@@ -50,9 +50,9 @@ export function ProfileCompletionBadge({
   return (
     <div
       onClick={onClick}
-      className="p-4 rounded-xl bg-brand/5 border border-brand/20 cursor-pointer hover:bg-brand/10 transition-colors"
+      className="p-md rounded-xl bg-brand/5 border border-brand/20 cursor-pointer hover:bg-brand/10 transition-colors"
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-md">
         <div className="w-16 h-16">
           <CircularProgressbar
             value={completionPercentage}

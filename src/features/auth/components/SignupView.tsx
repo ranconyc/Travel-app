@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import { AuthHeader } from "@/features/auth/components/AuthHeader";
+import Typography from "@/components/atoms/Typography";
 import { signupSchema, SignupValues } from "@/features/auth/types/signup";
 import { signupAction } from "@/domain/auth/auth.actions";
 
@@ -59,19 +60,19 @@ export const SignupView = ({ onSwitch }: SignupViewProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-xl">
       <AuthHeader
         title="Join the Community"
         subtitle="Create your free account to start planning your next journey."
       />
 
       {error && (
-        <div className="p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs text-center">
+        <div className="p-md bg-status-error/10 border border-status-error/20 rounded-md text-status-error text-xs text-center">
           {error}
         </div>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-md">
         <Input
           label="Name"
           type="text"
@@ -101,21 +102,23 @@ export const SignupView = ({ onSwitch }: SignupViewProps) => {
           error={errors.confirmPassword?.message}
         />
 
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-sm mt-sm">
           <Button type="submit" loading={loading} fullWidth>
             Create Account
           </Button>
         </div>
-        <p className="flex items-center justify-center gap-2 text-xs">
-          Already a member?
+        <div className="flex items-center justify-center gap-xs">
+          <Typography variant="sm" className="text-txt-sec">
+            Already a member?
+          </Typography>
           <button
             onClick={onSwitch}
             type="button"
-            className="p-0 bg-transparent text-brand font-bold "
+            className="p-0 bg-transparent text-brand font-bold text-sm hover:underline"
           >
             Log In
           </button>
-        </p>
+        </div>
       </div>
     </form>
   );

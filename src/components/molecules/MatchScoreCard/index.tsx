@@ -76,10 +76,10 @@ export const MatchScoreCard = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
         {/* Speak / Languages */}
         <div
-          className={`bg-surface/50 rounded-xl p-4 border border-surface-secondary ${breakdown.languages.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
+          className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.languages.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-bold uppercase text-secondary">
@@ -109,7 +109,7 @@ export const MatchScoreCard = ({
 
         {/* Visited */}
         <div
-          className={`bg-surface/50 rounded-xl p-4 border border-surface-secondary ${breakdown.places.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
+          className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.places.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-bold uppercase text-secondary">
@@ -134,7 +134,7 @@ export const MatchScoreCard = ({
 
         {/* Interests */}
         <div
-          className={`bg-surface/50 rounded-xl p-4 border border-surface-secondary ${breakdown.interests.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
+          className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.interests.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-bold uppercase text-secondary">
@@ -171,7 +171,7 @@ export const MatchScoreCard = ({
 
         {/* Location */}
         <div
-          className={`bg-surface/50 rounded-xl p-4 border border-surface-secondary ${breakdown.location.sameCountry ? "opacity-100" : "opacity-50"}`}
+          className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.location.sameCountry ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-bold uppercase text-secondary">
@@ -196,7 +196,7 @@ export const MatchScoreCard = ({
 
         {/* Friends */}
         <div
-          className={`bg-surface/50 rounded-xl p-4 border border-surface-secondary ${breakdown.friends.count > 0 ? "opacity-100" : "opacity-50"}`}
+          className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.friends.count > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-bold uppercase text-secondary">
@@ -230,7 +230,7 @@ export const MatchScoreCard = ({
 
         {/* Age */}
         <div
-          className={`bg-surface/50 rounded-xl p-4 border border-surface-secondary ${breakdown.age.isWithinRange ? "opacity-100" : "opacity-50"}`}
+          className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.age.isWithinRange ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-bold uppercase text-secondary">

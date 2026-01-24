@@ -70,10 +70,10 @@ export default async function AdminDashboardPage() {
             Quick access to all forms in the application
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md p-6">
           <a
             href="/signin"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Sign In</div>
             <div className="text-sm text-secondary mt-1">
@@ -82,7 +82,7 @@ export default async function AdminDashboardPage() {
           </a>
           <a
             href="/profile/edit"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Complete Profile</div>
             <div className="text-sm text-secondary mt-1">
@@ -91,7 +91,7 @@ export default async function AdminDashboardPage() {
           </a>
           <a
             href="/profile/persona"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Persona Setup</div>
             <div className="text-sm text-secondary mt-1">
@@ -100,7 +100,7 @@ export default async function AdminDashboardPage() {
           </a>
           <a
             href="/profile/travel"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Travel History</div>
             <div className="text-sm text-secondary mt-1">
@@ -109,7 +109,7 @@ export default async function AdminDashboardPage() {
           </a>
           <a
             href="/profile/travel-persona"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Travel Persona</div>
             <div className="text-sm text-secondary mt-1">
@@ -118,7 +118,7 @@ export default async function AdminDashboardPage() {
           </a>
           <a
             href="/profile/travel-preferences"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">Travel Preferences</div>
             <div className="text-sm text-secondary mt-1">
@@ -127,7 +127,7 @@ export default async function AdminDashboardPage() {
           </a>
           <a
             href="/admin/generator"
-            className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >
             <div className="font-medium text-gray-900">City Generator</div>
             <div className="text-sm text-secondary mt-1">
@@ -147,7 +147,7 @@ export default async function AdminDashboardPage() {
             {topCities.map((city) => (
               <div
                 key={city.cityId}
-                className="p-4 flex items-center justify-between"
+                className="p-md flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
                   <div className="bg-blue-50 p-2 rounded-lg text-blue-600 font-bold">
@@ -178,7 +178,7 @@ export default async function AdminDashboardPage() {
           </div>
           <div className="divide-y divide-gray-100">
             {latestUsers.map((user) => (
-              <div key={user.id} className="p-4 flex items-center gap-3">
+              <div key={user.id} className="p-md flex items-center gap-3">
                 <Avatar image={user.avatarUrl || undefined} size={40} />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-gray-900 truncate">

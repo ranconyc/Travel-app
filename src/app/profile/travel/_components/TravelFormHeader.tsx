@@ -11,8 +11,8 @@ export const TravelFormHeader = ({
   isModalOpen,
 }: TravelFormHeaderProps) => {
   return (
-    <div className="fixed top-0 left-0 right-0 bg-app-bg/80 backdrop-blur-md z-40 px-4 py-6">
-      <div className="flex items-center gap-4 max-w-2xl mx-auto">
+    <div className="fixed top-0 left-0 right-0 bg-main/80 backdrop-blur-md z-40 px-4 py-6">
+      <div className="flex items-center gap-md max-w-2xl mx-auto">
         <button
           onClick={handleBack}
           disabled={isModalOpen}

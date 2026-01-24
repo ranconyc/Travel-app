@@ -32,7 +32,7 @@ export const SurfaceSecondary: Story = {
     variant: "surface-secondary",
     className: "p-6 w-80",
     children: (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-md">
         <Typography variant="h4">System Info</Typography>
         <Typography variant="p">
           This card uses the surface-secondary background variation common in

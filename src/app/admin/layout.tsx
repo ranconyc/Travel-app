@@ -109,7 +109,7 @@ export default function AdminLayout({
           ))}
         </nav>
 
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-md border-t border-gray-100">
           <Link
             href="/"
             className="flex items-center gap-3 px-4 py-3 text-secondary hover:text-red-600 transition-colors"
@@ -152,7 +152,7 @@ export default function AdminLayout({
 
             {/* Drawer */}
             <aside className="absolute right-0 top-0 bottom-0 w-64 bg-white shadow-xl flex flex-col">
-              <div className="p-4 flex items-center justify-between border-b border-gray-100">
+              <div className="p-md flex items-center justify-between border-b border-gray-100">
                 <span className="font-bold text-lg">Menu</span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -173,7 +173,7 @@ export default function AdminLayout({
                     {link.label}
                   </Link>
                 ))}
-                <div className="pt-4 mt-4 border-t border-gray-100">
+                <div className="pt-md mt-md border-t border-gray-100">
                   <Link
                     href="/"
                     className="flex items-center gap-3 px-4 py-3 text-secondary hover:text-red-600 transition-colors"
@@ -187,7 +187,7 @@ export default function AdminLayout({
           </div>
         )}
 
-        <div className="flex-1 overflow-auto p-4 md:p-8">{children}</div>
+        <div className="flex-1 overflow-auto p-md md:p-8">{children}</div>
       </main>
     </div>
   );

@@ -4,6 +4,7 @@ import Input from "@/components/atoms/Input";
 import { AuthHeader } from "@/features/auth/components/AuthHeader";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { SignInValues } from "@/features/auth/types/form";
+import Typography from "@/components/atoms/Typography";
 
 interface LoginViewProps {
   onSwitch: () => void;
@@ -21,12 +22,12 @@ export const LoginView = ({
   loading,
 }: LoginViewProps) => {
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-10">
+    <form onSubmit={onSubmit} className="flex flex-col gap-xl">
       <AuthHeader
         title="Welcome Back, Traveler"
         subtitle="Enter your details to pick up where you left off."
       />
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-md">
         <Input
           label="Email"
           type="email"
@@ -40,22 +41,24 @@ export const LoginView = ({
           error={errors.password?.message}
         />
 
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-sm mt-sm">
           <Button type="submit" disabled={loading}>
             {loading ? "Logging In..." : "Log In"}
           </Button>
         </div>
 
-        <p className="flex items-center justify-center gap-2 text-xs">
-          New here?
+        <div className="flex items-center justify-center gap-xs">
+          <Typography variant="sm" className="text-txt-sec">
+            New here?
+          </Typography>
           <button
             onClick={onSwitch}
             type="button"
-            className="p-0 bg-transparent text-brand font-bold "
+            className="p-0 bg-transparent text-brand font-bold text-sm hover:underline"
           >
             Create an account
           </button>
-        </p>
+        </div>
       </div>
     </form>
   );

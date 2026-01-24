@@ -13,7 +13,7 @@ function TopNav() {
 
   return (
     <nav
-      className="p-4 pt-8 flex items-center justify-between gap-2 sticky top-0 left-0 right-0 bg-app-bg z-40"
+      className="p-md pt-8 flex items-center justify-between gap-2 sticky top-0 left-0 right-0 bg-main z-40"
       aria-label="Profile navigation"
     >
       <Button variant="back" aria-label="Go back" />

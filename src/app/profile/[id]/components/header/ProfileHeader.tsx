@@ -13,7 +13,7 @@ export function ProfileHeader() {
   return (
     <header>
       <TopNav />
-      <div className="p-4 flex flex-col gap-6 items-center">
+      <div className="p-md flex flex-col gap-6 items-center">
         <FriendRequestBlock />
         <ProfileAvatar />
         <UserInfo />

@@ -67,7 +67,7 @@ export function MessageInput({ chatId }: MessageInputProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="m-4 rounded-full border border-gray-200 p-2 fixed bottom-4 left-0 right-0 z-50 bg-app-bg 
+      className="m-4 rounded-full border border-gray-200 p-2 fixed bottom-4 left-0 right-0 z-50 bg-main 
              focus-within:border-brand focus-within:shadow-lg transition-all duration-200"
     >
       <div className="flex gap-2 justify-center items-center">
@@ -83,7 +83,7 @@ export function MessageInput({ chatId }: MessageInputProps) {
         <button
           type="submit"
           disabled={!content.trim() || isSending}
-          className="p-4 rounded-full bg-brand text-white shadow-lg hover:bg-brand/80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="p-md rounded-full bg-brand text-white shadow-lg hover:bg-brand/80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
         >
           {isSending ? (
             <Loader2 className="animate-spin" size={20} />

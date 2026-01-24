@@ -36,7 +36,7 @@ async function getExports(filePath: string): Promise<string[]> {
     // Regex to find exported functions or constants
     // Matches: export async function name(, export function name(, export const name =
     const matches = content.matchAll(
-      /export\s+(?:async\s+)?(?:function|const)\s+([a-zA-Z0-9_]+)/g
+      /export\s+(?:async\s+)?(?:function|const)\s+([a-zA-Z0-9_]+)/g,
     );
     for (const match of matches) {
       if (match[1]) exports.push(match[1]);
@@ -50,7 +50,7 @@ async function getExports(filePath: string): Promise<string[]> {
 
 async function getUsageCounts(
   names: string[],
-  excludePath: string
+  excludePath: string,
 ): Promise<Record<string, number>> {
   const counts: Record<string, number> = {};
   names.forEach((n) => (counts[n] = 0));
@@ -107,7 +107,7 @@ export default async function AdminDeveloperPage() {
       const exports = await getExports(f);
       allActionNames.push(...exports);
       return { f, exports };
-    })
+    }),
   );
 
   const allHookNames: string[] = [];
@@ -119,14 +119,14 @@ export default async function AdminDeveloperPage() {
         path.basename(f).replace(".ts", "");
       allHookNames.push(name);
       return { f, exports, name };
-    })
+    }),
   );
 
   // Perform scans (separate or combined)
   // For better performance, we'll scan for everything in one go
   const usageCounts = await getUsageCounts(
     [...allActionNames, ...allHookNames],
-    ""
+    "",
   );
 
   const actions: ItemInfo[] = actionsData.map(({ f, exports }) => {
@@ -138,7 +138,7 @@ export default async function AdminDeveloperPage() {
       exports,
       usages: exports.reduce(
         (acc, exp) => ({ ...acc, [exp]: usageCounts[exp] || 0 }),
-        {}
+        {},
       ),
     };
   });
@@ -156,7 +156,7 @@ export default async function AdminDeveloperPage() {
 
   return (
     <div className="space-y-10 max-w-7xl animate-in fade-in duration-700">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-100 pb-8">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-md border-b border-gray-100 pb-8">
         <div>
           <h1 className="text-h1 font-extrabold font-sora tracking-tight text-gray-900 flex items-center gap-3">
             <div className="bg-blue-600 p-2 rounded-xl text-white shadow-lg shadow-blue-200">
@@ -164,13 +164,13 @@ export default async function AdminDeveloperPage() {
             </div>
             Developer Hub
           </h1>
-          <p className="mt-4 text-lg text-secondary max-w-2xl leading-relaxed">
+          <p className="mt-md text-lg text-secondary max-w-2xl leading-relaxed">
             A comprehensive inventory of the application&apos;s core logic,
             listing all server-side actions and client-side hooks.
           </p>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-md">
           <div className="bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center min-w-[120px]">
             <span className="text-3xl font-bold text-blue-600">
               {actions.length}

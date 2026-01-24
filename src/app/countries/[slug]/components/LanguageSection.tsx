@@ -30,12 +30,12 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
 
       {/* Main Language Info */}
       {data?.languages && (
-        <div className="bg-app-bg p-4 rounded-2xl border border-surface-secondary">
+        <div className="bg-main p-md rounded-2xl border border-surface-secondary">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs text-secondary uppercase font-bold tracking-wider">
               Official
             </span>
-            <span className="font-bold text-app-text">
+            <span className="font-bold text-txt-main">
               {data.languages.official?.[0]}
             </span>
           </div>
@@ -59,11 +59,11 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
             {data?.commonPhrases.slice(0, 5).map((phrase, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-3 bg-app-bg/50 rounded-xl group cursor-pointer hover:bg-app-bg transition-colors"
+                className="flex items-center justify-between p-3 bg-main/50 rounded-xl group cursor-pointer hover:bg-main transition-colors"
                 title="Click to pronounce (coming soon)"
               >
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold text-app-text">
+                  <span className="text-sm font-bold text-txt-main">
                     {phrase.label}
                   </span>
                   <span className="text-xs text-secondary">

@@ -39,20 +39,20 @@ const CONTINENTS = [
 
 export default function CountriesPage() {
   return (
-    <div className="min-h-screen bg-app-bg pb-20">
+    <div className="min-h-screen bg-main pb-20">
       <HeaderWrapper backButton className="sticky top-0 z-50">
-        <div className="mt-4">
+        <div className="mt-md">
           <p className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore by
           </p>
-          <h1 className="text-h1 font-bold font-sora text-app-text mt-1 mb-6">
+          <h1 className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6">
             Continent
           </h1>
         </div>
       </HeaderWrapper>
 
-      <main className="p-4 mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <main className="p-md mt-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
           {CONTINENTS.map((continent) => (
             <Link
               key={continent.slug}

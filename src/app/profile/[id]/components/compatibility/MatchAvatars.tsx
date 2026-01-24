@@ -34,7 +34,7 @@ export default function MatchAvatars({ size = 112 }: { size?: number }) {
   if (!profileUser || !loggedUser || !matchResult) return null;
 
   return (
-    <div className="relative flex -space-x-4 justify-center mb-4">
+    <div className="relative flex -space-x-4 justify-center mb-md">
       <Avatar
         image={profileUser.avatarUrl ?? undefined}
         name={profileUser.name ?? ""}

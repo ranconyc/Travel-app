@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function MediaGallery({ country }: { country: any }) {
   return (
-    <div className="flex gap-4 h-96">
+    <div className="flex gap-md h-96">
       <div className="relative rounded-2xl overflow-hidden bg-surface flex-1">
         {country.media && country.media.length > 0 && country.media[0]?.url ? (
           <Image

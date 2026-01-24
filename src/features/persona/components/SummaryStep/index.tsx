@@ -29,7 +29,7 @@ function SummarySection({
   const displayValue = Array.isArray(value) ? value.join(", ") : value;
 
   return (
-    <div className="bg-surface rounded-xl p-4 border border-surface-secondary">
+    <div className="bg-surface rounded-xl p-md border border-surface-secondary">
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">
           {title}
@@ -43,7 +43,7 @@ function SummarySection({
           <Edit2 size={14} />
         </Button>
       </div>
-      <p className="text-lg font-medium text-app-text">{displayValue}</p>
+      <p className="text-lg font-medium text-txt-main">{displayValue}</p>
       {isPrivate && (
         <div className="flex items-center gap-1 mt-2 text-xs text-secondary/70">
           <Lock size={12} />

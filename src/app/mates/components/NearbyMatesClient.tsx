@@ -6,6 +6,7 @@ import { useState, useMemo } from "react";
 import { Gender, User } from "@/domain/user/user.schema";
 import { getAge } from "@/domain/shared/utils/age";
 import Typography from "@/components/atoms/Typography";
+import PageHeader from "@/components/molecules/PageHeader";
 
 const GenderToggle = ({
   gender,
@@ -93,29 +94,22 @@ export default function NearbyMatesClient({
 
   return (
     <div className="min-h-screen">
-      {/* Header with Title and Filters */}
-      <header className="bg-surface p-lg pt-xxl sticky top-0 left-0 right-0 z-50 border-b border-stroke shadow-soft mb-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col justify-center mb-lg">
-            <Typography variant="h3" className="normal-case text-txt-sec">
-              {loggedUser.currentCity?.name || "Worldwide"}
-            </Typography>
-            <Typography variant="h1" className="text-txt-main">
-              Mates
-            </Typography>
-          </div>
+      <PageHeader
+        subtitle={loggedUser.currentCity?.name || "Worldwide"}
+        title="Mates"
+        rightContent={
           <div className="flex items-center gap-3">
             <GenderToggle
               gender={filters.gender}
               setGender={(gender) => setFilters({ ...filters, gender })}
             />
           </div>
-        </div>
-      </header>
+        }
+      />
 
       {/* Grid of Mates */}
-      <main className="px-6 pb-24">
-        <div className="grid grid-cols-2 gap-2">
+      <main className="px-md pb-xl">
+        <div className="grid grid-cols-2 gap-sm">
           {filteredMates.map((mate) => (
             <MateCard
               key={mate.id}

@@ -36,14 +36,14 @@ export const FinanceSection = ({ data }: { data: MoneyData }) => {
 
       {/* Currency */}
       {data.currency && (
-        <div className="flex justify-between items-center bg-app-bg p-4 rounded-2xl border border-surface-secondary">
+        <div className="flex justify-between items-center bg-main p-md rounded-2xl border border-surface-secondary">
           <div>
             <p className="text-xs text-secondary uppercase font-bold tracking-wider mb-1">
               Currency
             </p>
             <h3 className="font-bold text-lg">{data.currency.name}</h3>
           </div>
-          <div className="w-12 h-12 rounded-full bg-surface shadow-sm border border-surface-secondary flex items-center justify-center font-sora font-bold text-xl text-app-text">
+          <div className="w-12 h-12 rounded-full bg-surface shadow-sm border border-surface-secondary flex items-center justify-center font-sora font-bold text-xl text-txt-main">
             {data.currency.symbol}
           </div>
         </div>
@@ -51,7 +51,7 @@ export const FinanceSection = ({ data }: { data: MoneyData }) => {
 
       {/* Daily Budget */}
       {data.budget?.daily && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-md">
           <h3 className="text-xs text-secondary uppercase font-bold tracking-wider">
             Daily Budget (Per Person)
           </h3>
@@ -78,7 +78,7 @@ export const FinanceSection = ({ data }: { data: MoneyData }) => {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex items-center justify-between p-3 bg-app-bg/50 rounded-xl"
+                className="flex items-center justify-between p-3 bg-main/50 rounded-xl"
               >
                 <div className="flex items-center gap-2">
                   <item.icon className={`w-4 h-4 ${item.color}`} />
@@ -96,7 +96,7 @@ export const FinanceSection = ({ data }: { data: MoneyData }) => {
 
       {/* Cash Culture */}
       {data.cashCulture && (
-        <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl">
+        <div className="bg-yellow-500/10 border border-yellow-500/20 p-md rounded-xl">
           <p className="text-xs font-bold text-yellow-600 mb-1 uppercase tracking-wide">
             Good to know
           </p>

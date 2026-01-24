@@ -21,7 +21,7 @@ export default function StateSection({ country }: { country: Country }) {
             </div>
 
             {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex items-end p-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex items-end p-md">
               <div className="flex flex-col gap-0.5 transform transition-all duration-500 group-hover:-translate-y-1">
                 <Typography variant="h4" className="text-white truncate">
                   {state.name}

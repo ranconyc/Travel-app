@@ -81,7 +81,7 @@ export default function TravelHistory({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-md">
       <SectionHeader
         title="Travel History"
         linkText={`${visits.length} places`}

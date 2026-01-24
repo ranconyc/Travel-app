@@ -9,7 +9,7 @@ export default function MatchBreakdown() {
   const matchResult = useMatchResult();
   if (!matchResult) return null;
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-md">
       <SimilarInterests interests={matchResult?.breakdown.interests.shared} />
       <SimilarLanguages languages={matchResult?.breakdown.languages.shared} />
       <SimilarPlaces places={matchResult?.breakdown.places.shared} />

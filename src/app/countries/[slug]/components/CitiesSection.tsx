@@ -11,7 +11,7 @@ export default function CitiesSection({ country }: { country: Country }) {
     <section className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <h3 className="text-2xl font-bold font-sora text-app-text tracking-tight">
+          <h3 className="text-2xl font-bold font-sora text-txt-main tracking-tight">
             Popular Cities
           </h3>
           <p className="text-sm text-secondary">
@@ -26,7 +26,7 @@ export default function CitiesSection({ country }: { country: Country }) {
       </div>
 
       {cities.length > 0 ? (
-        <div className="flex gap-4 overflow-x-auto pb-6 -mx-4 px-4 no-scrollbar snap-x snap-mandatory">
+        <div className="flex gap-md overflow-x-auto pb-6 -mx-4 px-4 no-scrollbar snap-x snap-mandatory">
           {cities.map((city: City) => {
             const imageUrl = city.media?.[0]?.url || city.imageHeroUrl;
 
@@ -51,7 +51,7 @@ export default function CitiesSection({ country }: { country: Country }) {
                 )}
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-4">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-md">
                   <div className="flex flex-col gap-0.5 transform transition-transform duration-500 group-hover:-translate-y-1">
                     <span className="font-bold text-white text-p leading-tight">
                       {city.name}
@@ -72,7 +72,7 @@ export default function CitiesSection({ country }: { country: Country }) {
         </div>
       ) : (
         <div className="p-10 text-center bg-surface/30 rounded-3xl border-2 border-dashed border-surface-secondary/50 backdrop-blur-sm">
-          <div className="bg-surface-secondary/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="bg-surface-secondary/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-md">
             <MapPin className="w-8 h-8 text-secondary/40" />
           </div>
           <h4 className="text-secondary font-medium mb-1">

@@ -26,7 +26,7 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
       </div>
 
       {/* Main Score & Level */}
-      <div className="flex justify-between items-center bg-app-bg p-4 rounded-2xl">
+      <div className="flex justify-between items-center bg-main p-md rounded-2xl">
         <div>
           <p className="text-xs text-secondary uppercase font-bold tracking-wider mb-1">
             Safety Score
@@ -50,7 +50,7 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
           <p className="text-xs text-secondary uppercase font-bold tracking-wider mb-1">
             Crime Level
           </p>
-          <span className="text-app-text font-bold capitalize">
+          <span className="text-txt-main font-bold capitalize">
             {data.crimeLevel || "Unknown"}
           </span>
         </div>
@@ -58,7 +58,7 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
 
       {/* Scams List */}
       {data.scamsCommon && data.scamsCommon.length > 0 && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-md">
           <h3 className="text-sm text-secondary uppercase font-bold tracking-wider">
             Common Scams
           </h3>
@@ -66,10 +66,10 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
             {data.scamsCommon.map((scam, idx) => (
               <div
                 key={idx}
-                className="p-3 bg-app-bg/50 rounded-xl border border-surface-secondary/50"
+                className="p-3 bg-main/50 rounded-xl border border-surface-secondary/50"
               >
                 <div className="flex justify-between items-start mb-1">
-                  <span className="font-bold text-app-text capitalize">
+                  <span className="font-bold text-txt-main capitalize">
                     {scam.type.split("-").join(" ")}
                   </span>
                   <span

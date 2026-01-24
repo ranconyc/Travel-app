@@ -87,13 +87,13 @@ export function CountrySelector({
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full pl-10 pr-10 py-3 rounded-xl border-2 border-surface bg-app-bg text-app-text placeholder:text-secondary focus:border-brand focus:outline-none transition-colors"
+            className="w-full pl-10 pr-10 py-3 rounded-xl border-2 border-surface bg-main text-txt-main placeholder:text-secondary focus:border-brand focus:outline-none transition-colors"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-app-text transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-txt-main transition-colors"
             >
               <X size={20} />
             </button>
@@ -102,7 +102,7 @@ export function CountrySelector({
 
         {/* Autocomplete Dropdown */}
         {isFocused && filteredCountries.length > 0 && (
-          <div className="absolute z-10 w-full mt-2 bg-app-bg border-2 border-surface rounded-xl shadow-lg max-h-60 overflow-y-auto">
+          <div className="absolute z-10 w-full mt-2 bg-main border-2 border-surface rounded-xl shadow-lg max-h-60 overflow-y-auto">
             {filteredCountries.map((country) => (
               <button
                 key={country}

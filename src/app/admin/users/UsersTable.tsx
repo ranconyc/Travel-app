@@ -56,7 +56,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
           placeholder="Search users..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 rounded-lg border border-surface-secondary bg-surface focus:outline-none focus:border-brand transition-colors"
+          className="w-full pl-10 pr-md py-2 rounded-lg border border-surface-secondary bg-surface focus:outline-none focus:border-brand transition-colors"
         />
       </div>
 
@@ -85,7 +85,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                         size={40}
                       />
                       <div>
-                        <div className="font-medium text-app-text">
+                        <div className="font-medium text-txt-main">
                           {user.name || "Unnamed User"}
                         </div>
                         <div className="text-xs text-secondary">

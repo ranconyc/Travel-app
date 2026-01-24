@@ -22,7 +22,7 @@ export function FormHeader({
   rightElement,
 }: FormHeaderProps) {
   return (
-    <div className="px-lg py-xxl sticky top-0 left-0 right-0 bg-app-bg z-40">
+    <div className="px-lg py-xxl sticky top-0 left-0 right-0 bg-main z-40">
       <div className="flex items-center justify-between mb-xl">
         {showBackButton && <Button variant="back" onClick={onBack} />}
         {rightElement}

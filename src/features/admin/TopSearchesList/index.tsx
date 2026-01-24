@@ -27,7 +27,7 @@ export default function TopSearchesList({
 
   return (
     <Block>
-      <div className="flex flex-col gap-4 mb-4">
+      <div className="flex flex-col gap-md mb-md">
         <Title icon={<TrendingUp size={20} />}>Top Searches</Title>
 
         {/* Filter Tabs */}

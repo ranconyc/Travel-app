@@ -139,7 +139,7 @@ export default function GeneratorPage() {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <header className="mb-10">
-        <h1 className="text-3xl font-bold font-sora text-app-text mb-2">
+        <h1 className="text-3xl font-bold font-sora text-txt-main mb-2">
           Data Generator
         </h1>
         <p className="text-secondary">
@@ -152,7 +152,7 @@ export default function GeneratorPage() {
         {/* Input Section */}
         <section className="lg:col-span-2 space-y-6">
           <div className="bg-surface border border-surface-secondary rounded-xl p-6 shadow-sm">
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-md mb-6">
               <button
                 type="button"
                 onClick={() => setGeneratorType("country")}
@@ -177,10 +177,10 @@ export default function GeneratorPage() {
               </button>
             </div>
 
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-lg font-semibold mb-md">
               Generate New {generatorType === "country" ? "Country" : "City"}
             </h2>
-            <form onSubmit={handleGenerate} className="flex flex-col gap-4">
+            <form onSubmit={handleGenerate} className="flex flex-col gap-md">
               <Input
                 label={
                   generatorType === "country" ? "Country Name" : "City Name"
@@ -237,7 +237,7 @@ export default function GeneratorPage() {
 
         {/* History Section */}
         <section className="bg-surface border border-surface-secondary rounded-xl p-6 shadow-sm h-fit">
-          <h2 className="text-lg font-semibold mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold mb-md flex items-center justify-between">
             <span>Recent Activity</span>
             <span className="text-xs bg-surface-secondary px-2 py-1 rounded-full text-secondary">
               Session
@@ -254,10 +254,10 @@ export default function GeneratorPage() {
                 {history.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col p-3 rounded-lg bg-app-bg border border-surface-secondary animate-in fade-in slide-in-from-top-2 duration-300"
+                    className="flex flex-col p-3 rounded-lg bg-main border border-surface-secondary animate-in fade-in slide-in-from-top-2 duration-300"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-app-text">
+                      <span className="font-medium text-txt-main">
                         {item.name}
                       </span>
                       {item.status === "success" ? (

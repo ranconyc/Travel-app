@@ -33,7 +33,7 @@ export default function QRCodeModal() {
       variant="popup"
     >
       <div className="py-8 flex flex-col items-center gap-6">
-        <div className="bg-white p-4 rounded-xl shadow-lg">
+        <div className="bg-white p-md rounded-xl shadow-lg">
           {profileUrl && (
             <QRCodeSVG
               value={profileUrl}

@@ -59,7 +59,7 @@ export default function Modal({
     >
       <div
         ref={modalRef}
-        className={`w-full h-fit max-h-[90vh] bg-app-bg px-4 py-6 shadow-2xl flex flex-col transition-all duration-300 ${
+        className={`w-full h-fit max-h-[90vh] bg-main px-4 py-6 shadow-2xl flex flex-col transition-all duration-300 ${
           isSlideUp
             ? "animate-slide-up rounded-t-4xl md:rounded-4xl md:max-w-md md:mb-8"
             : "animate-scale-in rounded-4xl max-w-md mx-4"
@@ -68,7 +68,7 @@ export default function Modal({
         {/* Header Section */}
         {(title || showCloseButton) && (
           <div
-            className={`flex items-start justify-between mb-4 ${!title ? "justify-end" : ""}`}
+            className={`flex items-start justify-between mb-md ${!title ? "justify-end" : ""}`}
           >
             {title && <div className="text-xl font-bold">{title}</div>}
 

@@ -42,12 +42,12 @@ export default function ComponentViewer({ common, pageSpecific }: Props) {
           placeholder="Search components..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-lg border border-surface-secondary bg-surface focus:outline-none focus:border-brand transition-colors"
+          className="w-full pl-10 pr-md py-3 rounded-lg border border-surface-secondary bg-surface focus:outline-none focus:border-brand transition-colors"
         />
       </div>
 
       <section>
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-md mb-6">
           <h2 className="text-xl font-bold text-brand">Common Components</h2>
           <span className="bg-brand/10 text-brand px-2 py-1 rounded text-sm font-mono">
             src/app/components
@@ -65,7 +65,7 @@ export default function ComponentViewer({ common, pageSpecific }: Props) {
                 key={c.path}
                 className="group bg-surface border border-surface-secondary rounded-xl overflow-hidden hover:border-brand/30 transition-all shadow-sm"
               >
-                <div className="h-32 bg-app-bg/50 border-b border-surface-secondary flex items-center justify-center p-4">
+                <div className="h-32 bg-main/50 border-b border-surface-secondary flex items-center justify-center p-md">
                   {preview ? (
                     <div className="pointer-events-none">{preview}</div>
                   ) : (
@@ -74,7 +74,7 @@ export default function ComponentViewer({ common, pageSpecific }: Props) {
                     </div>
                   )}
                 </div>
-                <div className="p-4">
+                <div className="p-md">
                   <h3 className="font-semibold text-lg mb-1 group-hover:text-brand transition-colors">
                     {c.name}
                   </h3>
@@ -89,7 +89,7 @@ export default function ComponentViewer({ common, pageSpecific }: Props) {
       </section>
 
       <section>
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-md mb-md">
           <h2 className="text-xl font-bold text-accent">
             Page-Specific Components
           </h2>

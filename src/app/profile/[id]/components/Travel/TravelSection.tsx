@@ -27,7 +27,7 @@ export default function TravelSection() {
   }
 
   return (
-    <section className="mb-4 flex flex-col gap-4">
+    <section className="mb-md flex flex-col gap-md">
       <h2 className="header-1">Travel</h2>
       <TravelHistory />
       <TravelPartners partner={travelPartners?.[0] || null} />

@@ -87,8 +87,8 @@ function AvatarSectionClient() {
   };
 
   return (
-    <div className="w-full mb-8 pt-4">
-      <div className="relative flex gap-4 overflow-x-auto pb-4 px-4 no-scrollbar snap-x items-center min-h-[160px]">
+    <div className="w-full mb-8 pt-md">
+      <div className="relative flex gap-md overflow-x-auto pb-md px-4 no-scrollbar snap-x items-center min-h-[160px]">
         {images.map((img, idx) => {
           const isSelected = field.value === img;
           return (

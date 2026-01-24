@@ -37,7 +37,7 @@ export default function DestinationsListClient({
   return (
     <div className="flex flex-col gap-6">
       {/* Search & Tabs */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-md items-center justify-between">
         <div className="bg-surface rounded-full p-1 flex items-center border border-border">
           {(["countries", "cities", "places"] as const).map((tab) => (
             <button
@@ -61,7 +61,7 @@ export default function DestinationsListClient({
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-lg bg-surface border border-border text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+            className="w-full pl-10 pr-md py-2 rounded-lg bg-surface border border-border text-sm focus:outline-none focus:ring-2 focus:ring-brand"
           />
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function DestinationsListClient({
             <Link
               key={item.id}
               href={`/admin/destinations/${item.id}`}
-              className="group block bg-surface border border-border rounded-xl hover:border-brand hover:shadow-sm transition-all p-4 md:px-4 md:py-3"
+              className="group block bg-surface border border-border rounded-xl hover:border-brand hover:shadow-sm transition-all p-md md:px-4 md:py-3"
             >
               <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr,1fr] gap-3 md:gap-0 items-start md:items-center">
                 {/* Name */}
@@ -100,7 +100,7 @@ export default function DestinationsListClient({
                       {item.name.charAt(0)}
                     </div>
                   )}
-                  <span className="font-bold text-app-text group-hover:text-brand transition-colors text-p md:text-sm">
+                  <span className="font-bold text-txt-main group-hover:text-brand transition-colors text-p md:text-sm">
                     {item.name}
                   </span>
                 </div>

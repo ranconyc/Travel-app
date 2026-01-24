@@ -102,7 +102,7 @@ export default function AvatarUpload({
           }}
         />
       </div>
-      <div className="text-center pt-4">
+      <div className="text-center pt-md">
         <p className="text-xs">
           {src ? "Change profile picture" : "Upload profile picture"}
         </p>

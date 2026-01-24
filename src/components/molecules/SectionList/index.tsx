@@ -14,7 +14,7 @@ interface SectionListProps<T> {
   skeletonCount?: number;
   emptyText?: string;
   noScrollbar?: boolean;
-  gap?: number;
+  gap?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
 }
 
@@ -66,7 +66,7 @@ export default function SectionList<T>({
                 </motion.div>
               ))
             ) : (
-              <div className="text-sm text-secondary italic p-4">
+              <div className="text-sm text-secondary italic p-md">
                 {emptyText}
               </div>
             )}

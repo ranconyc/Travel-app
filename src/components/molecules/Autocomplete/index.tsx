@@ -206,7 +206,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
         {label && (
           <label
             htmlFor={id}
-            className="text-sm font-semibold capitalize text-app-text"
+            className="text-sm font-semibold capitalize text-txt-main"
           >
             {label}
           </label>
@@ -247,7 +247,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             aria-invalid={!!error || undefined}
             aria-describedby={error ? `${id}-error` : undefined}
             className={[
-              "bg-surface text-app-text px-4 h-11 rounded-md font-medium border-2 border-surface transition-all w-full",
+              "bg-surface text-txt-main px-4 h-11 rounded-md font-medium border-2 border-surface transition-all w-full",
               "focus:outline-none focus:ring-2 focus:ring-brand/50",
               "disabled:bg-surface-secondary disabled:cursor-not-allowed",
               error ? "border-red-500 ring-1 ring-red-500" : "border-surface",
@@ -308,7 +308,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
                       : `cursor-pointer px-3 py-2 transition-colors ${
                           idx === activeIndex
                             ? "bg-brand/10 text-brand font-medium"
-                            : "hover:bg-surface-secondary text-app-text"
+                            : "hover:bg-surface-secondary text-txt-main"
                         }`
                   }
                 >

@@ -1,5 +1,4 @@
-import { Avatar } from "@/components/molecules/Avatar";
-import HeaderWrapper from "@/components/molecules/Header";
+import PageHeader from "@/components/molecules/PageHeader";
 import React from "react";
 import { getChatById } from "@/domain/chat/chat.actions";
 import {
@@ -15,29 +14,6 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-async function ChatHeader({
-  chatName,
-  chatImage,
-}: {
-  chatName: string;
-  chatImage: string | null;
-}) {
-  return (
-    <HeaderWrapper
-      backButton
-      className="flex items-end justify-between sticky top-0 z-50 border-b border-gray-200"
-    >
-      <div className="flex flex-col items-start">
-        <p className="text-primery text-lg">Your chat with</p>
-        <h1 className="text-3xl font-bold capitalize min-h-[40px] flex items-center">
-          {chatName}
-        </h1>
-      </div>
-      {/* <Avatar image={chatImage || undefined} size={80} variant="square" /> */}
-    </HeaderWrapper>
-  );
-}
-
 export default async function ChatPage({ params }: Props) {
   const loggedUser = await getCurrentUser();
 
@@ -51,10 +27,8 @@ export default async function ChatPage({ params }: Props) {
   if (!result.success) {
     return (
       <div>
-        <HeaderWrapper backButton>
-          <h1 className="font-bold text-xl">Chat Not Found</h1>
-        </HeaderWrapper>
-        <main className="p-4">
+        <PageHeader backButton title="Chat Not Found" />
+        <main className="p-md">
           <p className="text-center text-secondary">
             {result.error ||
               "This chat doesn't exist or you don't have access to it."}
@@ -70,7 +44,12 @@ export default async function ChatPage({ params }: Props) {
 
   return (
     <div className="flex flex-col h-screen">
-      <ChatHeader chatName={chatName} chatImage={chatImage} />
+      <PageHeader
+        backButton
+        subtitle="Your chat with"
+        title={chatName}
+        // rightContent={<Avatar image={chatImage || undefined} size={40} />} // Optional: if we want to show avatar
+      />
       <MessageList
         messages={chat.messages}
         currentUserId={loggedUser.id}

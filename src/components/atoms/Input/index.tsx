@@ -32,7 +32,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {label && (
         <label
           htmlFor={inputId}
-          className="text-sm font-semibold capitalize text-app-text"
+          className="text-sm font-semibold capitalize text-txt-main"
         >
           {label}
         </label>
@@ -45,7 +45,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         aria-invalid={Boolean(error) || undefined}
         aria-describedby={describedBy}
         className={[
-          "text-app-text px-4 h-11 rounded-md font-medium border-2 border-surface transition-all",
+          "text-txt-main px-4 h-11 rounded-md font-medium border-2 border-surface transition-all",
           "focus:outline-none focus:ring-2 focus:ring-brand/50",
           "disabled:bg-surface-secondary disabled:cursor-not-allowed",
           error ? "border-red-500 ring-1 ring-red-500" : "border-surface",

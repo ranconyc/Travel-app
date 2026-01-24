@@ -70,13 +70,13 @@ export default function TravelFormClient({
 
   return (
     <FormProvider {...methods}>
-      <div className="min-h-screen bg-app-bg p-4 pb-24">
+      <div className="min-h-screen bg-main p-md pb-24">
         <TravelFormHeader
           handleBack={() => router.back()}
           isModalOpen={false}
         />
 
-        <div className="mb-4 pt-20">
+        <div className="mb-md pt-20">
           <h1 className="text-xl font-bold mb-3">Where have you traveled?</h1>
           <p className="mb-8 font-medium text-secondary">
             Search and select all the countries you've visited
@@ -92,7 +92,7 @@ export default function TravelFormClient({
             />
           </div>
 
-          <div className="fixed bottom-0 left-0 right-0 p-4 pb-12 bg-app-bg border-t border-surface">
+          <div className="fixed bottom-0 left-0 right-0 p-md pb-12 bg-main border-t border-surface">
             <Button type="submit" disabled={isSubmitting} className="w-full">
               {isSubmitting
                 ? "Saving..."

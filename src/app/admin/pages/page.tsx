@@ -26,7 +26,7 @@ async function getPages(dir: string, baseDir: string): Promise<string[]> {
     dirents.map((dirent) => {
       const res = path.resolve(dir, dirent.name);
       return dirent.isDirectory() ? getPages(res, baseDir) : res;
-    })
+    }),
   );
   return Array.prototype.concat(...files);
 }
@@ -105,7 +105,7 @@ export default async function AdminPagesInventory() {
                 className="hover:bg-brand/5 transition-colors group"
               >
                 <td className="px-6 py-4">
-                  <span className="font-mono font-medium text-p text-app-text">
+                  <span className="font-mono font-medium text-p text-txt-main">
                     {p.route}
                   </span>
                 </td>

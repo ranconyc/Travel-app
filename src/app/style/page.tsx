@@ -15,7 +15,7 @@ const ErrorCard = ({ mode }: { mode: string }) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 p-4 rounded my-4 ${
+      className={`flex flex-col gap-2 p-md rounded my-4 ${
         mode === "dark" ? darkMode : lightMode
       }`}
     >
@@ -30,7 +30,7 @@ const SuccessCard = ({ mode }: { mode: string }) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 p-4 rounded my-4 ${
+      className={`flex flex-col gap-2 p-md rounded my-4 ${
         mode === "dark" ? darkMode : lightMode
       }`}
     >
@@ -46,7 +46,7 @@ const WarningCard = ({ mode }: { mode: string }) => {
 
   return (
     <div
-      className={`flex flex-col gap-2 p-4 rounded my-4 ${
+      className={`flex flex-col gap-2 p-md rounded my-4 ${
         mode === "dark" ? darkMode : lightMode
       }`}
     >
@@ -85,8 +85,8 @@ const Button = ({
         type === "disabled"
           ? disabledMode
           : type === "secondary"
-          ? secondaryMode
-          : primaryMode
+            ? secondaryMode
+            : primaryMode
       }`}
     >
       {children}
@@ -95,11 +95,11 @@ const Button = ({
 };
 
 const DarkMode = () => (
-  <div className="h-full w-1/2 text-white bg-slate-900 p-4">
+  <div className="h-full w-1/2 text-white bg-slate-900 p-md">
     <h1 className={`text-2xl font-bold capitalize ${darkModeHeader}`}>
       dark mode
     </h1>
-    <div className="flex flex-col gap-2 p-4 bg-slate-600 border border-slate-400 rounded my-4 ">
+    <div className="flex flex-col gap-2 p-md bg-slate-600 border border-slate-400 rounded my-4 ">
       <h1 className="text-2xl font-bold capitalize">{data[0].header}</h1>
       <p className={pStyle}>{data[0].description}</p>
     </div>
@@ -121,11 +121,11 @@ const DarkMode = () => (
 );
 
 const LightMode = () => (
-  <div className="h-full w-1/2 text-stone-700 bg-stone-200 p-4">
+  <div className="h-full w-1/2 text-stone-700 bg-stone-200 p-md">
     <h1 className={`text-2xl font-bold capitalize ${lightModeHeader}`}>
       light mode
     </h1>
-    <div className="flex flex-col gap-2 p-4 bg-stone-50 border border-stone-300 rounded shadow-sm my-4 ">
+    <div className="flex flex-col gap-2 p-md bg-stone-50 border border-stone-300 rounded shadow-sm my-4 ">
       <h1 className="text-2xl font-bold capitalize">{data[0].header}</h1>
       <p className={pStyle}>{data[0].description}</p>
     </div>

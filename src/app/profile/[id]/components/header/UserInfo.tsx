@@ -22,7 +22,7 @@ function UserInfo() {
 
   return (
     <div className="text-center space-y-sm">
-      <h1 className="text-h2 font-bold text-app-text">{identity.firstName}</h1>
+      <h1 className="text-h2 font-bold text-txt-main">{identity.firstName}</h1>
 
       {Array.isArray(profileUser.profile?.socials) &&
         (profileUser.profile?.socials as unknown[]).length > 0 && (

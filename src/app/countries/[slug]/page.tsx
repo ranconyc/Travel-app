@@ -87,7 +87,7 @@ export default async function CountryPage({
   const giniValue = finance.giniIndex || null;
 
   return (
-    <div className="bg-app-bg min-h-screen selection:bg-brand selection:text-white">
+    <div className="bg-main min-h-screen selection:bg-brand selection:text-white">
       <Header />
       <main className="pb-xxl px-lg max-w-2xl mx-auto min-h-screen flex flex-col gap-xxl">
         <div className="flex flex-col gap-lg mt-xl">
@@ -132,7 +132,7 @@ export default async function CountryPage({
                 <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
                   Social Equality
                 </h3>
-                <p className="text-p font-bold text-app-text">
+                <p className="text-p font-bold text-txt-main">
                   {getGiniInsight(giniValue as number)}
                 </p>
               </Block>
@@ -143,7 +143,7 @@ export default async function CountryPage({
                 <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
                   Capital
                 </h3>
-                <p className="text-p font-bold text-app-text">
+                <p className="text-p font-bold text-txt-main">
                   {country.capitalName}
                 </p>
               </Block>

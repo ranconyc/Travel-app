@@ -21,7 +21,7 @@ export default function CategorySection({
   onToggleInterest,
 }: CategorySectionProps) {
   return (
-    <section className="rounded-3xl bg-white p-4 shadow-sm">
+    <section className="rounded-3xl bg-white p-md shadow-sm">
       <CategoryHeader
         title={category.title}
         isActive={isActive}
@@ -65,7 +65,7 @@ function CategoryHeader({
         }`}
     >
       <div className="w-full flex items-center justify-between text-gray-900">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-md">
           <div>
             <h1 className="text-p font-medium">{title}</h1>
 

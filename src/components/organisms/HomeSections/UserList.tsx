@@ -27,9 +27,9 @@ export default function UserList() {
       href="/mates"
       data={friends}
       isLoading={isLoading}
-      gap={2}
+      gap="sm"
       skeleton={
-        <div className="min-w-[80px] flex flex-col items-center gap-2">
+        <div className="min-w-[80px] flex flex-col items-center gap-sm">
           <div className="w-[60px] h-[60px] rounded-full animate-pulse bg-surface-secondary" />
           <div className="w-10 h-3 animate-pulse bg-surface-secondary rounded-md" />
         </div>
@@ -42,7 +42,7 @@ export default function UserList() {
           href={`/profile/${friend.id}`}
           className="min-w-[80px] block"
         >
-          <div className="flex flex-col items-center gap-2 group">
+          <div className="flex flex-col items-center gap-xs group">
             <Avatar
               image={friend?.avatarUrl || friend?.profilePicture || ""}
               name={friend?.name || `${friend?.firstName} ${friend?.lastName}`}
@@ -51,7 +51,7 @@ export default function UserList() {
             />
             <Typography
               variant="tiny"
-              className="text-micro normal-case text-center"
+              className="text-micro normal-case text-center text-txt-sec truncate max-w-full"
             >
               {friend?.name?.split(" ")[0] || friend?.firstName}
             </Typography>

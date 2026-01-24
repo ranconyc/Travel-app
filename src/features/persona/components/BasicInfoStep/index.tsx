@@ -94,7 +94,7 @@ export default function BasicInfoStep() {
   return (
     <div className="flex flex-col gap-6 w-full max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Avatar Section */}
-      <div className="flex flex-col items-center gap-4 mb-2">
+      <div className="flex flex-col items-center gap-md mb-2">
         <div
           className="relative group cursor-pointer"
           onClick={() => !isUploading && fileInputRef.current?.click()}

@@ -230,7 +230,7 @@ export default async function AdminApisPage() {
               >
                 <td className="px-6 py-4">
                   <div className="flex flex-col">
-                    <span className="font-mono font-medium text-p text-app-text">
+                    <span className="font-mono font-medium text-p text-txt-main">
                       {api.route}
                     </span>
                     <span className="text-xs text-secondary font-mono opacity-60 group-hover:opacity-100 transition-opacity">
@@ -298,7 +298,7 @@ export default async function AdminApisPage() {
       </div>
 
       <div className="mt-12">
-        <h2 className="text-2xl font-bold font-sora tracking-tight mb-4 flex items-center gap-2">
+        <h2 className="text-2xl font-bold font-sora tracking-tight mb-md flex items-center gap-2">
           <Cloud className="text-brand" />
           3rd Party Integrations
         </h2>
@@ -320,7 +320,7 @@ export default async function AdminApisPage() {
                 >
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="font-bold text-p text-app-text">
+                      <span className="font-bold text-p text-txt-main">
                         {api.name}
                       </span>
                       <span className="text-xs text-secondary opacity-80">
@@ -329,7 +329,7 @@ export default async function AdminApisPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-surface-secondary text-app-text border border-surface-secondary">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-surface-secondary text-txt-main border border-surface-secondary">
                       {getCategoryIcon(api.category)}
                       {api.category}
                     </span>

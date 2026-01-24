@@ -141,7 +141,7 @@ export default function CompleteProfileFormClient({ user }: Props) {
             </div>
           </div>
         </div>
-        <div className="bg-app-bg p-4 pb-8 fixed bottom-0 left-0 right-0">
+        <div className="bg-main p-md pb-8 fixed bottom-0 left-0 right-0">
           <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Saving..." : "Update Profile"}
           </Button>

@@ -43,7 +43,7 @@ export default async function AdminDashboardPage({
   ]);
 
   return (
-    <div className="p-4 pb-20 max-w-7xl mx-auto space-y-6">
+    <div className="p-md pb-20 max-w-7xl mx-auto space-y-6">
       <header className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Admin Dashboard
@@ -54,7 +54,7 @@ export default async function AdminDashboardPage({
       </header>
 
       {/* Statistics Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
         <StatCard
           label="Total Users"
           value={stats.totalUsers}
@@ -82,7 +82,7 @@ export default async function AdminDashboardPage({
             Content Review
           </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-md">
             <ReviewItemsList
               title="Countries Needing Review"
               items={reviewItems.countries.map((c: any) => ({

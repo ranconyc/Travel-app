@@ -19,13 +19,13 @@ export default function CitiesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-app-bg pb-20">
+    <div className="min-h-screen bg-main pb-20">
       <HeaderWrapper backButton className="sticky top-0 z-50">
-        <div className="mt-4">
+        <div className="mt-md">
           <p className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore the
           </p>
-          <h1 className="text-h1 font-bold font-sora text-app-text mt-1 mb-6">
+          <h1 className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6">
             Cities
           </h1>
           <div className="relative">
@@ -40,16 +40,16 @@ export default function CitiesPage() {
         </div>
       </HeaderWrapper>
 
-      <main className="p-4 mt-4">
+      <main className="p-md mt-md">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <div className="flex flex-col items-center justify-center py-20 gap-md">
             <Loader2 className="w-8 h-8 animate-spin text-brand" />
             <p className="text-secondary animate-pulse">
               Loading amazing cities...
             </p>
           </div>
         ) : isSuccess && filteredCities && filteredCities.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-md">
             {filteredCities.map((city: any) => (
               <Link
                 key={city.id}
@@ -89,10 +89,10 @@ export default function CitiesPage() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="bg-surface p-6 rounded-full mb-4 shadow-sm border border-surface-secondary">
+            <div className="bg-surface p-6 rounded-full mb-md shadow-sm border border-surface-secondary">
               <Search className="w-10 h-10 text-secondary opacity-20" />
             </div>
-            <h3 className="text-lg font-bold text-app-text">No cities found</h3>
+            <h3 className="text-lg font-bold text-txt-main">No cities found</h3>
             <p className="text-secondary max-w-[240px] mt-2">
               {search
                 ? `We couldn't find any results for "${search}". Try a different city?`

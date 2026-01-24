@@ -131,7 +131,7 @@ export default async function AdminSchemaPage() {
           Complete overview of all Prisma models, fields, types, and
           relationships.
         </p>
-        <div className="mt-4 flex gap-4">
+        <div className="mt-md flex gap-md">
           <div className="bg-surface px-4 py-2 rounded-lg border border-surface-secondary">
             <span className="text-2xl font-bold text-brand">
               {models.length}
@@ -179,12 +179,12 @@ export default async function AdminSchemaPage() {
               </div>
 
               {/* Fields */}
-              <div className="p-4">
+              <div className="p-md">
                 <div className="space-y-2">
                   {model.fields.map((field) => (
                     <div
                       key={field.name}
-                      className="flex items-center justify-between p-3 bg-app-bg rounded-lg hover:bg-surface-secondary/50 transition-colors group"
+                      className="flex items-center justify-between p-3 bg-main rounded-lg hover:bg-surface-secondary/50 transition-colors group"
                     >
                       <div className="flex items-center gap-3 flex-1">
                         <div className="flex items-center gap-2">
@@ -232,7 +232,7 @@ export default async function AdminSchemaPage() {
 
                 {/* Indexes */}
                 {model.indexes.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-surface-secondary">
+                  <div className="mt-md pt-md border-t border-surface-secondary">
                     <h4 className="text-xs font-bold text-secondary uppercase mb-2">
                       Indexes
                     </h4>

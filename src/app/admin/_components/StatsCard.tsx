@@ -17,7 +17,7 @@ export function StatsCard({
 }: StatsCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-md">
         <h3 className="text-secondary text-sm font-medium">{title}</h3>
         {icon && <div className="text-gray-400">{icon}</div>}
       </div>

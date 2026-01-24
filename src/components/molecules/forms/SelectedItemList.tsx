@@ -25,7 +25,7 @@ export function SelectedItemList<T = string>({
 
   return (
     <div className="mb-8">
-      {title && <h1 className="text-xl font-bold mb-4">{title}</h1>}
+      {title && <h1 className="text-xl font-bold mb-md">{title}</h1>}
       {items.length === 0 ? (
         emptyText && <p className="text-sm text-secondary">{emptyText}</p>
       ) : (

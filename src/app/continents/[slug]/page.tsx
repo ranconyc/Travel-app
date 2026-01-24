@@ -26,21 +26,21 @@ export default async function ContinentPage({
   const continentName = lowerSlug.charAt(0).toUpperCase() + lowerSlug.slice(1);
 
   return (
-    <div className="bg-app-bg min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
+    <div className="bg-main min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
       <HeaderWrapper backButton className="sticky top-0 z-50">
-        <div className="mt-4">
+        <div className="mt-md">
           <p className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore Region
           </p>
-          <h1 className="text-h1 font-bold font-sora text-app-text mt-1 mb-6">
+          <h1 className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6">
             {continentName}
           </h1>
         </div>
       </HeaderWrapper>
 
-      <main className="p-4">
+      <main className="p-md">
         {countries.length > 0 ? (
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-md">
             {countries.map((country: Country) => (
               <Link
                 key={country.id}

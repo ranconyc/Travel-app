@@ -61,7 +61,7 @@ export default function FriendRequestBanner({
   };
 
   return (
-    <div className="fixed top-20 left-4 right-4 z-40 md:relative md:top-0 md:mb-6 animate-in slide-in-from-top-4 fade-in duration-500">
+    <div className="fixed top-20 left-4 right-4 z-40 md:relative md:top-0 md:mb-6 animate-in slide-in-from-top-md fade-in duration-500">
       <div className="bg-white dark:bg-surface rounded-[32px] p-6 shadow-xl border border-surface-secondary flex flex-col items-center gap-6 max-w-sm mx-auto">
         <h3 className="text-xl font-bold font-sora text-center">
           <span className="text-brand">
@@ -70,7 +70,7 @@ export default function FriendRequestBanner({
           wants to be your friend
         </h3>
 
-        <div className="flex gap-4 w-full">
+        <div className="flex gap-md w-full">
           <Button
             variant="outline"
             className="flex-1 rounded-2xl h-12 border-2 hover:bg-red-50 hover:border-red-200 hover:text-red-500 text-base"

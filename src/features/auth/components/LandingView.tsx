@@ -6,18 +6,18 @@ import { AuthHeader } from "@/features/auth/components/AuthHeader";
 
 export const LandingView = ({ onClick }: { onClick: () => void }) => {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-xl">
       <AuthHeader
         title="Unlock Your World"
         subtitle="Connect with travelers, plan trips, and explore hidden gems nearby."
       />
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-md">
         <Button type="button" onClick={onClick}>
           Login with email
         </Button>
 
-        <div className="flex gap-2">
+        <div className="flex gap-sm">
           <Button
             type="button"
             variant="secondary"

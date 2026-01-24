@@ -118,9 +118,9 @@ export default function AvatarCropModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-md">
       <div className="bg-surface rounded-2xl w-full max-w-sm flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="p-4 flex justify-between items-center bg-surface-secondary/20">
+        <div className="p-md flex justify-between items-center bg-surface-secondary/20">
           <h3 className="font-bold text-lg">Crop Photo</h3>
           <button
             onClick={onCancel}
@@ -143,7 +143,7 @@ export default function AvatarCropModal({
           />
         </div>
 
-        <div className="p-4 flex flex-col gap-4">
+        <div className="p-md flex flex-col gap-md">
           <div className="flex items-center gap-2">
             <ZoomOut size={16} className="text-secondary" />
             <input

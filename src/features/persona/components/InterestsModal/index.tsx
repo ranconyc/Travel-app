@@ -63,7 +63,7 @@ export default function InterestsModal({
           ))}
         </div>
 
-        <div className="mt-4">
+        <div className="mt-md">
           <Button onClick={onClose}>Done</Button>
         </div>
       </div>

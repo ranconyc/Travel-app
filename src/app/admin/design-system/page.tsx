@@ -30,7 +30,7 @@ const Section = ({
   children: React.ReactNode;
 }) => (
   <section className="flex flex-col gap-6">
-    <h2 className="text-2xl font-bold font-sora flex items-center gap-3 border-b border-surface-secondary pb-4 text-app-text">
+    <h2 className="text-2xl font-bold font-sora flex items-center gap-3 border-b border-surface-secondary pb-md text-txt-main">
       {icon && <span className="text-brand">{icon}</span>}
       {title}
     </h2>
@@ -54,7 +54,7 @@ const ColorCard = ({
       className="h-24 w-full"
       style={{ backgroundColor: `var(${variable})` }}
     />
-    <div className="p-4">
+    <div className="p-md">
       <h3 className="font-bold text-lg mb-1">{name}</h3>
       <code className="text-xs bg-surface-secondary/50 px-2 py-1 rounded text-secondary font-mono block w-fit">
         {variable}
@@ -74,7 +74,7 @@ const ButtonItem = ({
   className?: string;
 }) => (
   <div
-    className={`flex flex-col gap-2 p-4 bg-surface rounded-xl border border-surface-secondary items-center justify-center text-center hover:border-brand/30 transition-colors ${className}`}
+    className={`flex flex-col gap-2 p-md bg-surface rounded-xl border border-surface-secondary items-center justify-center text-center hover:border-brand/30 transition-colors ${className}`}
   >
     <div className="flex-1 flex items-center justify-center min-h-[60px] w-full">
       {children}
@@ -115,9 +115,9 @@ export default function DesignSystemPage() {
   };
 
   return (
-    <div className="min-h-screen bg-app-bg p-8 text-app-text flex flex-col gap-16 max-w-7xl mx-auto pb-24">
+    <div className="min-h-screen bg-main p-8 text-txt-main flex flex-col gap-16 max-w-7xl mx-auto pb-24">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-md">
           <h1 className="text-5xl font-bold font-sora tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-brand to-teal-500 w-fit">
             Design System
           </h1>
@@ -149,7 +149,7 @@ export default function DesignSystemPage() {
 
       {/* ---------------- COLORS ---------------- */}
       <section className="flex flex-col gap-6">
-        <h2 className="text-2xl font-bold font-sora flex items-center gap-3 border-b border-surface-secondary pb-4 text-app-text">
+        <h2 className="text-2xl font-bold font-sora flex items-center gap-3 border-b border-surface-secondary pb-md text-txt-main">
           <span className="text-brand">
             <Palette />
           </span>
@@ -167,7 +167,7 @@ export default function DesignSystemPage() {
 
       {/* ---------------- FORM ELEMENTS ---------------- */}
       <section className="flex flex-col gap-8">
-        <h2 className="text-2xl font-bold font-sora flex items-center gap-3 border-b border-surface-secondary pb-4 text-app-text">
+        <h2 className="text-2xl font-bold font-sora flex items-center gap-3 border-b border-surface-secondary pb-md text-txt-main">
           <span className="text-brand">
             <CheckSquare />
           </span>
@@ -180,7 +180,7 @@ export default function DesignSystemPage() {
             <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">
               Text Inputs
             </h3>
-            <div className="grid gap-4">
+            <div className="grid gap-md">
               <Input label="Name" placeholder="Enter traveler name..." />
               <Input
                 label="Email"
@@ -222,7 +222,7 @@ export default function DesignSystemPage() {
               />
             </div>
 
-            <div className="pt-4 space-y-3">
+            <div className="pt-md space-y-3">
               <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">
                 Tags / Pills
               </h3>
@@ -257,7 +257,7 @@ export default function DesignSystemPage() {
           <span className="text-brand">
             <MousePointer />
           </span>
-          <h2 className="text-2xl font-bold font-sora text-app-text">
+          <h2 className="text-2xl font-bold font-sora text-txt-main">
             Interactive Components
           </h2>
         </div>
@@ -283,7 +283,7 @@ export default function DesignSystemPage() {
             <Button variant="dark">Dark Variant</Button>
           </ButtonItem>
           <ButtonItem label='variant="outline-white" (on dark)'>
-            <div className="bg-gray-900 p-4 rounded-lg w-full flex justify-center">
+            <div className="bg-gray-900 p-md rounded-lg w-full flex justify-center">
               <Button variant="outline-white">White Outline</Button>
             </div>
           </ButtonItem>

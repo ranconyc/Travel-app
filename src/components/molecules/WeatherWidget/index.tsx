@@ -36,7 +36,7 @@ export default function WeatherWidget({
       title={weatherInfo.label}
     >
       <Icon className="w-4 h-4 text-brand" />
-      <span className="text-sm font-bold text-app-text">
+      <span className="text-sm font-bold text-txt-main">
         {Math.round(data.temperature)}°C
       </span>
     </div>

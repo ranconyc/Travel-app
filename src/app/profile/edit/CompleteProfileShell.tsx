@@ -9,10 +9,10 @@ type Props = {
 export default function CompleteProfileShell({ user }: Props) {
   return (
     <div className="">
-      <header className="sticky top-0 z-10 w-full p-4 pt-8 bg-app-bg flex justify-between border-b border-app-border">
+      <header className="sticky top-0 z-10 w-full p-md pt-8 bg-main flex justify-between border-b border-app-border">
         <Button variant="back" href={`/profile/${user.id}`} />
       </header>
-      <main className="p-4 pt-8">
+      <main className="p-md pt-8">
         <CompleteProfileFormClient user={user} />
       </main>
     </div>

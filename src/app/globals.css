@@ -25,8 +25,9 @@
   --radius-pill: 12px;
 
   /* Bolder Spacing Scale */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;

@@ -48,7 +48,7 @@ export default function TravelPreferencesPage() {
 
           <form
             onSubmit={handleFormSubmit}
-            className="relative flex flex-col gap-4 px-4 pb-28 pt-4"
+            className="relative flex flex-col gap-md px-4 pb-28 pt-md"
           >
             {CATEGORY_KEYS.map((key) => {
               const categoryData = INTERESTS_DATA[key];

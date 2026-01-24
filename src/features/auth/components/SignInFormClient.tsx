@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import Typography from "@/components/atoms/Typography";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, SignInValues } from "@/features/auth/types/form";
@@ -60,19 +61,21 @@ export default function SignInFormClient() {
 
   return (
     <div
-      className="bg-app-bg h-full w-full p-4 pt-16 flex flex-col items-center overflow-hidden text-app-text cursor-pointer"
+      className="bg-bg-main h-full w-full p-lg pt-xxl flex flex-col items-center overflow-hidden text-txt-main cursor-pointer"
       onClick={() => setView("landing")}
     >
-      <h1 className="text-2xl font-bold">TravelMate</h1>
+      <Typography variant="h2" className="text-brand font-bold mb-lg">
+        TravelMate
+      </Typography>
 
       {registered && (
-        <div className="mt-4 p-2 bg-brand/10 border border-brand/20 rounded text-brand text-xs text-center z-20">
+        <div className="mt-md p-md bg-brand/10 border border-brand/20 rounded-md text-brand text-xs text-center z-20">
           Registration successful! Please sign in.
         </div>
       )}
 
       {error && (
-        <div className="mt-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs text-center z-20">
+        <div className="mt-md p-md bg-status-error/10 border border-status-error/20 rounded-md text-status-error text-xs text-center z-20">
           {error}
         </div>
       )}
@@ -86,7 +89,7 @@ export default function SignInFormClient() {
       </div>
 
       <div
-        className="absolute left-2 right-2 bottom-8 bg-app-bg dark:bg-app-bg rounded-2xl px-4 py-6 flex flex-col gap-8 z-10 shadow-xl cursor-default"
+        className="absolute left-md right-md bottom-16 bg-surface dark:bg-surface rounded-card px-lg py-xl flex flex-col gap-xl z-10 shadow-soft cursor-default border border-stroke"
         onClick={(e) => e.stopPropagation()}
       >
         {view === "login" ? (

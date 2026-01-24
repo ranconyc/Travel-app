@@ -45,7 +45,7 @@ export default async function CityPage({
   return (
     <div className="bg-appbg min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
+      <div className="fixed top-0 left-0 right-0 z-50 p-md flex items-center justify-between">
         <Button variant="back" />
         <div className="flex items-center gap-3">
           <Button variant="icon" icon={<Heart size={20} />} />
@@ -80,7 +80,7 @@ export default async function CityPage({
       {/* Main Content Container */}
       <main className="pt-24 px-4 max-w-md mx-auto min-h-screen flex flex-col gap-8">
         {/* Identity & Hero */}
-        <div className="flex flex-col items-center gap-4 mt-4">
+        <div className="flex flex-col items-center gap-md mt-md">
           <HeroImage
             src={
               city?.imageHeroUrl ||
@@ -205,10 +205,10 @@ export default async function CityPage({
           <span className="text-brand pb-2 border-b-2 border-brand cursor-pointer">
             TOP PLACES
           </span>
-          <span className="text-secondary pb-2 cursor-pointer hover:text-app-text transition-colors whitespace-nowrap">
+          <span className="text-secondary pb-2 cursor-pointer hover:text-txt-main transition-colors whitespace-nowrap">
             INFO
           </span>
-          <span className="text-secondary pb-2 cursor-pointer hover:text-app-text transition-colors whitespace-nowrap">
+          <span className="text-secondary pb-2 cursor-pointer hover:text-txt-main transition-colors whitespace-nowrap">
             NEIGHBORHOODS
           </span>
         </div>
@@ -253,7 +253,7 @@ export default async function CityPage({
           )}
 
           {/* Info List */}
-          <div className="flex flex-col gap-4 bg-surface/30 p-4 rounded-3xl">
+          <div className="flex flex-col gap-md bg-surface/30 p-md rounded-3xl">
             {/* Safety */}
             <div className="flex items-center justify-between py-2 border-b border-surface-secondary last:border-0">
               <span className="text-secondary font-bold text-sm uppercase tracking-wide">
@@ -279,7 +279,7 @@ export default async function CityPage({
               <span className="text-secondary font-bold text-sm uppercase tracking-wide">
                 Daily Budget
               </span>
-              <span className="text-app-text font-bold text-sm">
+              <span className="text-txt-main font-bold text-sm">
                 {city.budget
                   ? `${city.budget.currency || "$"} ${city.budget.perDayMin}-${city.budget.perDayMax}`
                   : "N/A"}
@@ -291,7 +291,7 @@ export default async function CityPage({
               <span className="text-secondary font-bold text-sm uppercase tracking-wide">
                 Timezone
               </span>
-              <span className="text-app-text font-bold text-sm">
+              <span className="text-txt-main font-bold text-sm">
                 {city.timeZone || "N/A"}
               </span>
             </div>

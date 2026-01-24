@@ -110,7 +110,7 @@ export default function HomeHeroSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search destination..."
-          className="w-full h-14 pl-11 pr-xl bg-surface border border-border rounded-xl text-p text-app-text placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand shadow-sm transition-all"
+          className="w-full h-14 pl-11 pr-xl bg-surface border border-border rounded-xl text-p text-txt-main placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand shadow-sm transition-all"
         />
         {isLoading && (
           <div className="absolute inset-y-0 right-xl flex items-center">
@@ -130,7 +130,7 @@ export default function HomeHeroSearch() {
                 <button
                   key={item.id}
                   onClick={() => handleSelect(item, index)}
-                  className="w-full px-4 py-3 flex items-center gap-4 hover:bg-surface-hover transition-colors text-left group"
+                  className="w-full px-4 py-3 flex items-center gap-md hover:bg-surface-hover transition-colors text-left group"
                 >
                   <div className="w-10 h-10 rounded-full bg-surface-secondary flex items-center justify-center flex-shrink-0 text-xl overflow-hidden border border-border">
                     {item.flag ? (
@@ -142,7 +142,7 @@ export default function HomeHeroSearch() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-app-text truncate group-hover:text-brand transition-colors">
+                    <p className="font-bold text-txt-main truncate group-hover:text-brand transition-colors">
                       {item.name}
                     </p>
                     <p className="text-sm text-secondary truncate">
@@ -174,7 +174,7 @@ export default function HomeHeroSearch() {
           )}
 
           {isExternalLoading && (
-            <div className="p-4 flex items-center justify-center gap-2 text-secondary text-sm">
+            <div className="p-md flex items-center justify-center gap-2 text-secondary text-sm">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Searching the globe...</span>
             </div>

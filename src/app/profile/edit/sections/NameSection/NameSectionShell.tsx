@@ -3,7 +3,7 @@ import LastNameSectionClient from "@/app/profile/edit/sections/NameSection/LastN
 
 export default function NameSectionShell() {
   return (
-    <div className="flex flex-col sm:flex-row gap-4">
+    <div className="flex flex-col sm:flex-row gap-md">
       <div className="flex-1">
         <FirstNameSectionClient />
       </div>

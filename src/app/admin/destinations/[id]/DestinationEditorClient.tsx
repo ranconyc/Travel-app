@@ -253,7 +253,7 @@ export default function DestinationEditorClient({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-md">
           <Link
             href="/admin/destinations"
             className="hidden md:block p-2 hover:bg-surface-hover rounded-full transition-colors"
@@ -295,8 +295,8 @@ export default function DestinationEditorClient({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
-            <h2 className="text-lg font-bold mb-4">Basic Information</h2>
-            <div className="grid grid-cols-1 gap-4">
+            <h2 className="text-lg font-bold mb-md">Basic Information</h2>
+            <div className="grid grid-cols-1 gap-md">
               <div className="col-span-2">
                 <label className="block text-xs font-medium text-secondary mb-1">
                   Name
@@ -342,7 +342,7 @@ export default function DestinationEditorClient({
                       const file = e.dataTransfer.files?.[0];
                       if (file) await handleImageUpload(file);
                     }}
-                    className="relative border-2 border-dashed border-surface-secondary hover:border-brand rounded-lg p-4 cursor-pointer transition-colors group"
+                    className="relative border-2 border-dashed border-surface-secondary hover:border-brand rounded-lg p-md cursor-pointer transition-colors group"
                   >
                     {data.imageHeroUrl ? (
                       <div className="relative">
@@ -458,7 +458,7 @@ export default function DestinationEditorClient({
           {/* Array Fields Section */}
           {ARRAY_FIELDS[type]?.length > 0 && (
             <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
-              <h2 className="text-lg font-bold mb-4">List Fields</h2>
+              <h2 className="text-lg font-bold mb-md">List Fields</h2>
               <div className="space-y-6">
                 {ARRAY_FIELDS[type].map((field) => {
                   const currentArray = Array.isArray(data[field])
@@ -516,7 +516,9 @@ export default function DestinationEditorClient({
           {/* JSON Fields Section */}
           {JSON_FIELDS[type]?.length > 0 && (
             <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
-              <h2 className="text-lg font-bold mb-4">Structured Data (JSON)</h2>
+              <h2 className="text-lg font-bold mb-md">
+                Structured Data (JSON)
+              </h2>
               <div className="space-y-4">
                 {JSON_FIELDS[type].map((field) => (
                   <div key={field}>
@@ -550,7 +552,7 @@ export default function DestinationEditorClient({
           {/* Raw Data Editor */}
           <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
             <h2 className="text-lg font-bold mb-2">Raw Data Inspector</h2>
-            <p className="text-xs text-secondary mb-4">
+            <p className="text-xs text-secondary mb-md">
               Edit other fields JSON structure directly.
             </p>
             <textarea
@@ -563,7 +565,7 @@ export default function DestinationEditorClient({
                   // ignore parse errors while typing
                 }
               }}
-              className="w-full bg-surface-secondary p-4 rounded-lg text-xs font-mono min-h-[300px] border border-transparent focus:border-brand outline-none"
+              className="w-full bg-surface-secondary p-md rounded-lg text-xs font-mono min-h-[300px] border border-transparent focus:border-brand outline-none"
             />
           </div>
         </div>
@@ -571,7 +573,7 @@ export default function DestinationEditorClient({
         {/* Sidebar */}
         <div className="space-y-6">
           <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
-            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+            <h3 className="font-bold text-lg mb-md flex items-center gap-2">
               Data Health
               {missingFields.length === 0 && (
                 <CheckCircle className="text-green-500" size={18} />
@@ -776,7 +778,7 @@ export default function DestinationEditorClient({
                       </div>
                       {data.logistics && (
                         <>
-                          <div className="flex items-center gap-2 pl-4">
+                          <div className="flex items-center gap-2 pl-md">
                             {data.logistics.car ? (
                               <CheckCircle
                                 size={12}
@@ -793,7 +795,7 @@ export default function DestinationEditorClient({
                               ↳ car
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 pl-4">
+                          <div className="flex items-center gap-2 pl-md">
                             {data.logistics.idd ? (
                               <CheckCircle
                                 size={12}
@@ -810,7 +812,7 @@ export default function DestinationEditorClient({
                               ↳ idd
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 pl-4">
+                          <div className="flex items-center gap-2 pl-md">
                             {data.logistics.timezones?.length ? (
                               <CheckCircle
                                 size={12}
@@ -852,7 +854,7 @@ export default function DestinationEditorClient({
                       </div>
                       {data.finance && (
                         <>
-                          <div className="flex items-center gap-2 pl-4">
+                          <div className="flex items-center gap-2 pl-md">
                             {data.finance.currency ? (
                               <CheckCircle
                                 size={12}
@@ -869,7 +871,7 @@ export default function DestinationEditorClient({
                               ↳ currency
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 pl-4">
+                          <div className="flex items-center gap-2 pl-md">
                             {data.finance.avgDailyCost ? (
                               <CheckCircle
                                 size={12}
@@ -888,7 +890,7 @@ export default function DestinationEditorClient({
                               ↳ avgDailyCost
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 pl-4">
+                          <div className="flex items-center gap-2 pl-md">
                             {data.finance.cashCulture ? (
                               <CheckCircle
                                 size={12}
@@ -899,7 +901,9 @@ export default function DestinationEditorClient({
                             )}
                             <span
                               className={
-                                !data.finance.cashCulture ? "text-secondary" : ""
+                                !data.finance.cashCulture
+                                  ? "text-secondary"
+                                  : ""
                               }
                             >
                               ↳ cashCulture
@@ -942,7 +946,9 @@ export default function DestinationEditorClient({
                         ) : (
                           <span className="w-3 h-3 rounded-full bg-gray-500" />
                         )}
-                        <span className={!data.visaInfo ? "text-secondary" : ""}>
+                        <span
+                          className={!data.visaInfo ? "text-secondary" : ""}
+                        >
                           visaInfo
                         </span>
                       </div>
@@ -1113,7 +1119,7 @@ export default function DestinationEditorClient({
 
           {type === "country" || type === "city" ? (
             <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
-              <h3 className="font-bold text-lg mb-4">Meta Status</h3>
+              <h3 className="font-bold text-lg mb-md">Meta Status</h3>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-secondary">Needs Review</span>
                 <input

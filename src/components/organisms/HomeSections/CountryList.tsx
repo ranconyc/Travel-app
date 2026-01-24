@@ -38,7 +38,7 @@ export default function CountryList() {
           href={`/countries/${country.cca3.toLowerCase()}`}
           className="min-w-[232px] block"
         >
-          <Card className="aspect-[4/3] relative group border-0">
+          <Card className="aspect-4/3 relative group border-0">
             {getCountryImage(country) ? (
               <Image
                 src={getCountryImage(country)!}
@@ -65,7 +65,7 @@ export default function CountryList() {
               </div>
             )}
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-md">
               <Typography variant="tiny" className="text-white/80 mb-0.5">
                 {country.region}
               </Typography>

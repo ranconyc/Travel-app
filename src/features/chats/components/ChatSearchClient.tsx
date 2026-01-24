@@ -5,7 +5,7 @@ import { getChatDisplayName } from "@/domain/chat/chat.utils";
 import { FriendChatStarter } from "./FriendChatStarter";
 import ChatItem from "./ChatItem";
 
-import Typography from "@/components/atoms/Typography";
+import PageHeader from "@/components/molecules/PageHeader";
 
 interface ChatSearchClientProps {
   initialChats: any[];
@@ -52,30 +52,26 @@ export function ChatSearchClient({
 
   return (
     <div className="flex flex-col flex-1">
-      <header className="bg-surface p-lg pt-xxl sticky top-0 left-0 right-0 z-50 border-b border-stroke shadow-soft mb-xl">
-        <div className="flex flex-col justify-center mb-lg">
-          <Typography variant="h3" className="normal-case text-txt-sec">
-            Your
-          </Typography>
-          <Typography variant="h1" className="text-txt-main">
-            Chats
-          </Typography>
-        </div>
-        <div className="relative">
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search chats..."
-            className="w-full h-12 px-4 rounded-xl bg-surface/5 border border-surface focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all duration-200"
-          />
-        </div>
-      </header>
+      <PageHeader
+        subtitle="Your"
+        title="Chats"
+        bottomContent={
+          <div className="relative">
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search chats..."
+              className="w-full h-12 px-4 rounded-xl bg-surface/5 border border-surface focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all duration-200"
+            />
+          </div>
+        }
+      />
 
       <main className="flex flex-col flex-1 pb-20">
         {filteredChats.length > 0 ? (
           <div className="flex-1">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-4 mt-4">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-sm px-md mt-md">
               Recent Chats
             </h2>
             <ul className="flex flex-col w-full">
@@ -109,11 +105,11 @@ export function ChatSearchClient({
         )}
 
         {filteredFriends.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4 px-4">
+          <div className="mt-lg">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-md px-md">
               {searchQuery.trim() ? "Search Mates" : "Discover Mates"}
             </h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 px-4 scrollbar-hide">
+            <div className="flex gap-md overflow-x-auto pb-md px-md scrollbar-hide">
               {filteredFriends.map((friend) => (
                 <FriendChatStarter
                   key={friend.id}
