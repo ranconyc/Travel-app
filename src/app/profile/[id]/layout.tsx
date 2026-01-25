@@ -19,7 +19,7 @@ export default async function ProfileLayout({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const profileUser = await getUserById(id);
+  const profileUser = await getUserById(id, { strategy: "full" });
 
   if (!profileUser) {
     return (

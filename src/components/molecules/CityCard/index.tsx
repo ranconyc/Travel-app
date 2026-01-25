@@ -39,7 +39,8 @@ type CityCardProps = {
 
 export default function CityCard({ city, userLocation, index }: CityCardProps) {
   // Get location from store if not provided via props
-  const { coords } = useLocationStore();
+  const { getFinalLocation } = useLocationStore();
+  const coords = getFinalLocation();
   const effectiveLocation = userLocation ?? coords;
 
   const [distanceLabel, setDistanceLabel] = useState<string | null>(null);
@@ -70,7 +71,12 @@ export default function CityCard({ city, userLocation, index }: CityCardProps) {
     }
 
     // Check cache first (using useStorageState)
-    if (cachedEntry && Date.now() - cachedEntry.timestamp < 3600000) {
+    // Use client-side only check to avoid hydration mismatch
+    if (
+      typeof window !== "undefined" &&
+      cachedEntry &&
+      Date.now() - cachedEntry.timestamp < 3600000
+    ) {
       setDistanceLabel(cachedEntry.distanceLabel);
       setIsLoadingDistance(false);
       return;
@@ -98,10 +104,13 @@ export default function CityCard({ city, userLocation, index }: CityCardProps) {
             : null;
 
         // Cache the result using useStorageState
-        setCachedEntry({
-          distanceLabel: label,
-          timestamp: Date.now(),
-        });
+        // Only cache on client-side to avoid hydration issues
+        if (typeof window !== "undefined") {
+          setCachedEntry({
+            distanceLabel: label,
+            timestamp: Date.now(),
+          });
+        }
 
         setDistanceLabel(label);
       } catch (error) {

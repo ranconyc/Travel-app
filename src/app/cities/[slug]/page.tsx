@@ -21,6 +21,7 @@ import { AiFillTikTok } from "react-icons/ai";
 import social from "@/data/social.json";
 import { AiFillRedditCircle } from "react-icons/ai";
 import HeroImage from "@/components/molecules/HeroImage";
+import MediaLinks from "@/components/atoms/MediaLinks";
 
 export default async function CityPage({
   params,
@@ -41,6 +42,17 @@ export default async function CityPage({
 
   // Helper to safely get country name
   const countryName = city.country?.name || "Unknown Country";
+
+  // Transform city socials to MediaLinks format (if available)
+  const citySocials = city.socials as any;
+  const socialLinks: Record<string, string> = {};
+  if (citySocials && typeof citySocials === "object") {
+    Object.entries(citySocials).forEach(([platform, url]) => {
+      if (url && typeof url === "string") {
+        socialLinks[platform.toLowerCase()] = url;
+      }
+    });
+  }
 
   return (
     <div className="bg-bg-main min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
@@ -104,6 +116,11 @@ export default async function CityPage({
                 </span>
               )}
             </h1>
+
+            {/* City Social Media Links */}
+            {Object.keys(socialLinks).length > 0 && (
+              <MediaLinks links={socialLinks} className="justify-center mt-2" />
+            )}
           </div>
         </div>
 

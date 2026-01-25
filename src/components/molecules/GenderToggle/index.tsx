@@ -27,7 +27,7 @@ const GenderToggle = memo(({ gender, setGender }: GenderToggleProps) => {
             aria-label={label}
             aria-pressed={isSelected}
             className={`
-              w-10 h-10 rounded-full flex items-center justify-center
+              w-8 h-8 rounded-full flex items-center justify-center
               transition-all duration-300 ease-out transform
               ${
                 isSelected

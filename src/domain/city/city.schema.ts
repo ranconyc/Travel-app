@@ -6,6 +6,7 @@ export const CitySchema = z.object({
   name: z.string().min(2),
   countryRefId: z.string().optional().nullable(),
   isCapital: z.boolean().default(false),
+  tags: z.array(z.string()).default([]),
   coords: z.object({
     type: z.literal("Point"),
     coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]

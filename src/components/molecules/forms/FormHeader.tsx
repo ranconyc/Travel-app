@@ -20,23 +20,25 @@ export function FormHeader({
   description,
   onBack,
   showBackButton = true,
-  rightElement,
 }: FormHeaderProps) {
   return (
-    <div className="px-lg py-xxl sticky top-0 left-0 right-0 bg-main z-40">
-      <div className="flex items-center justify-between mb-xl">
-        {showBackButton && <Button variant="back" onClick={onBack} />}
-        {rightElement}
-      </div>
-      <Typography variant="h3" color="main" className="mb-md">
-        {title}
-      </Typography>
-      {description && (
-        <Typography variant="p" color="sec" className="font-medium">
-          {description}
+    <>
+      <div className="px sticky top-0 left-0 right-0 bg-main z-40">
+        <div className="pt-md px-md h-12 flex items-center">
+          {showBackButton && (
+            <Button variant="back" onClick={onBack} className="-ml-2" />
+          )}
+        </div>
+        <Typography variant="h3" color="main" className="mb-md">
+          {title}
         </Typography>
-      )}
-    </div>
+        {description && (
+          <Typography variant="p" color="sec" className="font-medium">
+            {description}
+          </Typography>
+        )}
+      </div>
+    </>
   );
 }
 

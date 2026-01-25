@@ -281,8 +281,9 @@ export function useGeo(options: UseGeoOptions = {}) {
   const router = useRouter();
   const user = useUser();
   const {
-    coords,
-    setCoords,
+    getFinalLocation,
+    setBrowserLocation,
+    setDbLocation,
     lastSavedCoords,
     setLastSavedCoords,
     loading,
@@ -290,6 +291,9 @@ export function useGeo(options: UseGeoOptions = {}) {
     error,
     setError,
   } = useLocationStore();
+  
+  // Get computed final location
+  const coords = getFinalLocation();
 
   const lastSaveTimeRef = useRef<number>(0);
   const isSavingRef = useRef(false);
@@ -311,7 +315,8 @@ export function useGeo(options: UseGeoOptions = {}) {
 
     const initialCoords = parseGeoPoint(initialUser.currentLocation);
     if (initialCoords) {
-      setCoords(initialCoords);
+      // Initialize from DB location (user's saved location)
+      setDbLocation(initialCoords);
       setLastSavedCoords(initialCoords);
       setLoading(false);
       initializedRef.current = true;
@@ -357,7 +362,7 @@ export function useGeo(options: UseGeoOptions = {}) {
       watchId = navigator.geolocation.watchPosition(
         (pos) => {
           if (timeoutId) clearTimeout(timeoutId);
-          setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setBrowserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
           setLoading(false);
         },
         (err) => {
@@ -377,7 +382,7 @@ export function useGeo(options: UseGeoOptions = {}) {
       if (timeoutId) clearTimeout(timeoutId);
       if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     };
-  }, [user?.id, setCoords, setError, setLoading]);
+  }, [user?.id, setBrowserLocation, setError, setLoading]);
 
   // 3. Persistence Sync: Smart DB synchronization
   useEffect(() => {

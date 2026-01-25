@@ -4,7 +4,7 @@ import "@/components/molecules/CityStamp/styles.css";
 import { useEffect, useState } from "react";
 import { Loader2, Plus } from "lucide-react";
 
-type TravelHistoryItem = {
+export type TravelHistoryItem = {
   id: string;
   type: "city" | "country";
   cityId: string | null;

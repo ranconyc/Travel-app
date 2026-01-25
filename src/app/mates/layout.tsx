@@ -1,5 +1,4 @@
-import { getSession } from "@/lib/auth/get-current-user";
-import { getUserById } from "@/lib/db/user.repo";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 
 export default async function MatesLayout({
@@ -7,12 +6,7 @@ export default async function MatesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
-  if (!session?.user) {
-    redirect("/signin");
-  }
-
-  const loggedUser = await getUserById(session.user.id);
+  const loggedUser = await getCurrentUser();
   if (!loggedUser) {
     redirect("/signin");
   }

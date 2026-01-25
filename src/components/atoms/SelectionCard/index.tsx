@@ -21,7 +21,7 @@ export const SelectionCard = ({
   ...props
 }: SelectionCardProps) => (
   <label
-    className={`flex items-center gap-md rounded-card p-md cursor-pointer border-2 transition-all ${
+    className={`flex items-center gap-md rounded-card p-sm cursor-pointer border-2 shadow-secondary transition-all ${
       isSelected
         ? "border-brand bg-brand/5 shadow-sm"
         : "border-2 border-bg-card hover:border-brand/30"

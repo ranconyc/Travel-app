@@ -3,33 +3,21 @@ import { persist } from "zustand/middleware";
 import { User } from "@/domain/user/user.schema";
 import { PersonaFormValues } from "@/domain/persona/persona.schema";
 
-type Coords = { lat: number; lng: number };
-
 interface AppState {
   // Authentication State
   user: User | null;
-
-  // Geolocation State
-  coords: Coords | null;
-  browserCoords: Coords | null;
-  dbCoords: Coords | null;
-  isLocationLoading: boolean;
-  locationError: string | null;
 
   // Onboarding/Persona State
   onboardingDraft: Partial<PersonaFormValues> | null;
   isDraftDirty: boolean;
   draftUpdatedAt: number | null;
+  
   // Messaging State
   unreadCount: number;
 
   // Actions
   setUser: (user: User | null) => void;
   setUnreadCount: (count: number) => void;
-  setBrowserCoords: (coords: Coords | null) => void;
-  setDbCoords: (coords: Coords | null) => void;
-  setLocationLoading: (loading: boolean) => void;
-  setLocationError: (error: string | null) => void;
 
   // Draft Actions
   updateDraft: (update: Partial<PersonaFormValues>) => void;
@@ -41,11 +29,6 @@ interface AppState {
 
 const initialState = {
   user: null,
-  coords: null,
-  browserCoords: null,
-  dbCoords: null,
-  isLocationLoading: false,
-  locationError: null,
   onboardingDraft: null,
   isDraftDirty: false,
   draftUpdatedAt: null,
@@ -60,23 +43,6 @@ export const useAppStore = create<AppState>()(
       setUser: (user) => set({ user }),
 
       setUnreadCount: (unreadCount) => set({ unreadCount }),
-
-      setBrowserCoords: (browserCoords) => {
-        set({
-          browserCoords,
-          coords: browserCoords || get().dbCoords,
-        });
-      },
-
-      setDbCoords: (dbCoords) => {
-        set({
-          dbCoords,
-          coords: get().browserCoords || dbCoords,
-        });
-      },
-
-      setLocationLoading: (isLocationLoading) => set({ isLocationLoading }),
-      setLocationError: (locationError) => set({ locationError }),
 
       updateDraft: (update) => {
         const current = get().onboardingDraft || {};
@@ -120,10 +86,7 @@ export const useAppStore = create<AppState>()(
     {
       name: "travel-app-storage",
       partialize: (state) => ({
-        // Persist coordinates and draft state
-        browserCoords: state.browserCoords,
-        dbCoords: state.dbCoords,
-        coords: state.coords,
+        // Only persist draft state (location moved to locationStore)
         onboardingDraft: state.onboardingDraft,
         isDraftDirty: state.isDraftDirty,
         draftUpdatedAt: state.draftUpdatedAt,

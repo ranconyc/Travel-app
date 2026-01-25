@@ -38,41 +38,6 @@ export default function BasicInfoStep() {
     }
   };
 
-  const uploadToCloudinary = async (blob: Blob) => {
-    try {
-      const sigRes = await fetch("/api/profile/upload", { method: "POST" });
-      if (!sigRes.ok) throw new Error("Failed to get upload signature");
-
-      const {
-        cloudName,
-        apiKey,
-        timestamp,
-        folder,
-        signature,
-        transformation,
-      } = await sigRes.json();
-
-      const formData = new FormData();
-      formData.append("file", blob);
-      formData.append("api_key", apiKey);
-      formData.append("timestamp", String(timestamp));
-      formData.append("folder", folder);
-      formData.append("signature", signature);
-      if (transformation) formData.append("transformation", transformation);
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-        { method: "POST", body: formData },
-      );
-
-      if (!res.ok) throw new Error(`Upload failed`);
-      return res.json();
-    } catch (error) {
-      console.error("Upload error:", error);
-      throw error;
-    }
-  };
-
   const handleCropComplete = async (blob: Blob) => {
     setCropModalOpen(false);
     setIsUploading(true);
@@ -81,11 +46,14 @@ export default function BasicInfoStep() {
     setValue("avatarUrl", previewUrl);
 
     try {
-      await uploadToCloudinary(blob);
-      // setValue is already called with previewUrl, result will be updated via watcher or separate logic if needed
-      // but here we just need to ensure we don't have unused 'err'
+      const { uploadToCloudinary } = await import("@/lib/media/cloudinary.service");
+      const result = await uploadToCloudinary(blob);
+      
+      // Update with the secure URL from Cloudinary
+      setValue("avatarUrl", result.secure_url);
       toast.success("Profile photo updated");
-    } catch {
+    } catch (error) {
+      console.error("Upload error:", error);
       toast.error("Failed to upload photo");
       setValue("avatarUrl", "");
     } finally {

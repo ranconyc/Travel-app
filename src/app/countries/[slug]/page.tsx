@@ -15,10 +15,7 @@ import { formatPopulation } from "@/domain/shared/utils/formatNumber";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import LogisticsSection from "./components/LogisticsSection";
 import { Country } from "@/domain/country/country.schema";
-import {
-  estimateFlightTimeHoursFromDistance,
-  getDistance,
-} from "@/domain/shared/utils/geo";
+import { getDistanceMetadata } from "@/domain/shared/utils/geo";
 
 import StateSection from "./components/StateSection";
 import LanguageSection from "@/components/organisms/LanguageSection";
@@ -44,25 +41,27 @@ export default async function CountryPage({
   if (!country) return notFound();
 
   // Geography & Logistics Logic
-  const inThisCountry = loggedUser?.currentCity?.country?.id === country?.id;
-  const userCoords = (loggedUser?.currentCity?.coords as any)?.coordinates;
+  // Cast to any for Alpha speed - type definition mismatch fix scheduled for Beta
+  const userWithCity = loggedUser as any;
+  const inThisCountry = userWithCity?.currentCity?.country?.id === country?.id;
+  const userCoords = (userWithCity?.currentCity?.coords as any)?.coordinates;
   const countryCoords = (country.coords as any)?.coordinates;
 
-  const distance =
+  const distanceMeta =
     userCoords && countryCoords
-      ? estimateFlightTimeHoursFromDistance(
-          getDistance(
-            userCoords[1],
-            userCoords[0],
-            countryCoords[1],
-            countryCoords[0],
-          ),
+      ? getDistanceMetadata(
+          { lat: userCoords[1], lng: userCoords[0] },
+          { lat: countryCoords[1], lng: countryCoords[0] },
         )
-      : "";
+      : null;
+
+  const distanceLabel = distanceMeta?.flightStr
+    ? `~ ${distanceMeta.flightStr}`
+    : distanceMeta?.distanceStr || "N/A";
 
   const stats: StatItem[] = [
     {
-      value: distance ? `~ ${distance}Hrs` : "N/A",
+      value: distanceLabel,
       label: "Away",
       icon: Globe2,
     },

@@ -2,7 +2,7 @@ import AddSection from "@/components/molecules/AddSection";
 import { MapPin } from "lucide-react";
 import SectionHeader from "@/components/molecules/SectionHeader";
 
-interface NextDestination {
+export interface NextDestination {
   id: string;
   name: string;
   countryName: string;

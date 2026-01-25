@@ -2,24 +2,24 @@
 
 import React from "react";
 import AppShell from "@/components/templates/AppShell";
+import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
 
 interface DiscoveryLayoutProps {
   header: React.ReactNode;
-  userList?: React.ReactNode;
   children: React.ReactNode;
 }
 
 export default function DiscoveryLayout({
   header,
-  userList,
   children,
 }: DiscoveryLayoutProps) {
   return (
     <AppShell variant="full" headerSlot={header}>
-      <div className="flex flex-col gap-md">
-        {userList && <div className="mt-md">{userList}</div>}
-        <div className="pb-xl">{children}</div>
-      </div>
+      <ErrorBoundary componentName="Discovery">
+        <div className="flex flex-col gap-md">
+          <div className="pb-xl">{children}</div>
+        </div>
+      </ErrorBoundary>
     </AppShell>
   );
 }

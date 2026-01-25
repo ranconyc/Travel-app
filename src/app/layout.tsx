@@ -42,6 +42,8 @@ import { UserProvider } from "@/app/providers/UserProvider";
 import { PersonaProvider } from "@/providers/PersonaProvider";
 import React from "react";
 import { Toaster } from "sonner";
+import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
+import PusherHealthIndicator from "@/components/molecules/PusherHealthIndicator";
 
 export default async function RootLayout({
   children,
@@ -57,18 +59,21 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <ReactQueryProvider>
-          <UserProvider user={user}>
-            <PersonaProvider user={user}>
-              <SessionProviderWrapper>
-                <LocationProvider>
-                  <AutoLocationUpdater />
-                  {children}
-                </LocationProvider>
-              </SessionProviderWrapper>
-              <ConditionalNavbar />
-              <Toaster position="top-center" richColors />
-            </PersonaProvider>
-          </UserProvider>
+          <ErrorBoundary componentName="Root Layout">
+            <UserProvider user={user}>
+              <PersonaProvider user={user}>
+                <SessionProviderWrapper>
+                  <LocationProvider>
+                    <AutoLocationUpdater />
+                    {children}
+                  </LocationProvider>
+                </SessionProviderWrapper>
+                <ConditionalNavbar />
+                <Toaster position="top-center" richColors />
+                <PusherHealthIndicator />
+              </PersonaProvider>
+            </UserProvider>
+          </ErrorBoundary>
         </ReactQueryProvider>
       </body>
     </html>

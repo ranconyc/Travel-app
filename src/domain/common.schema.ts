@@ -18,7 +18,10 @@ export const PlatformEnum = z.enum([
 ]);
 export type Platform = z.infer<typeof PlatformEnum>;
 
-/** Language representation with code and name */
+/**
+ * Language representation with code and name.
+ * This is the standard schema for language objects across the app.
+ */
 export const languageSchema = z.object({
   code: z.string(),
   name: z.string(),
@@ -26,6 +29,12 @@ export const languageSchema = z.object({
   flag: z.string().optional(),
 });
 export type Language = z.infer<typeof languageSchema>;
+
+/**
+ * Language code schema (string only, for arrays of language codes).
+ * Use this when you only need language codes, not full language objects.
+ */
+export const languageCodeSchema = z.string().min(2);
 
 // --- Common Schemas ---
 

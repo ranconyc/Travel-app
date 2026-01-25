@@ -5,6 +5,7 @@ import * as z from "zod";
 import {
   GenderEnum,
   socialLinkSchema as SocialLinkSchema,
+  languageCodeSchema,
 } from "@/domain/common.schema";
 
 // SocialLinkSchema is now imported and aliased if needed, or we just use it directly.
@@ -13,8 +14,6 @@ export const UserSocialLinksSchema = z.array(SocialLinkSchema);
 
 // 4. Extract the TypeScript type from the schema for frontend use
 export type UserSocialLinks = z.infer<typeof UserSocialLinksSchema>;
-
-const languageSchema = z.string().min(2);
 /**
  * Gender enum used in the profile.
  * Adjust values if your Prisma enum uses different casing.
@@ -113,10 +112,10 @@ export const completeProfileSchema = z.object({
 
   /**
    * Languages as codes, e.g. ["en", "he"].
-   * languageSchema comes from user.schema.ts and is simply z.string().min(2).
+   * Uses languageCodeSchema from common.schema.ts for consistency.
    */
   languages: z
-    .array(languageSchema)
+    .array(languageCodeSchema)
     .min(1, "Please select at least one language"),
 
   /**

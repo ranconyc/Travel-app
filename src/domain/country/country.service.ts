@@ -224,3 +224,88 @@ export async function handleGetAllCountries(limit?: number, offset?: number) {
   const { getAllCountries } = await import("@/lib/db/country.repo");
   return await getAllCountries(limit, offset);
 }
+
+// --- Travel Form Country Selection Functions ---
+
+import worldData from "@/data/world.json";
+import continentsData from "@/data/continents.json";
+
+export interface SortedCountry {
+  code: string;
+  name: string;
+  flag: string;
+  isPopular: boolean;
+  rank?: number;
+}
+
+// Popular Countries (Top destinations by region)
+const POPULAR_COUNTRIES: Record<string, string[]> = {
+  Europe: ["FR", "IT", "ES", "GB", "DE"],
+  Asia: ["JP", "TH", "CN", "IN", "SG"],
+  Americas: ["US", "BR", "MX", "CA", "AR"],
+  Africa: ["ZA", "EG", "MA", "KE", "TZ"],
+  Oceania: ["AU", "NZ", "FJ", "NC", "PF"],
+  Antarctic: ["AQ"],
+};
+
+/**
+ * Get all continents in order
+ */
+export function getContinents(): string[] {
+  return continentsData as string[];
+}
+
+/**
+ * Get country by code (cca2)
+ */
+export function getCountryByCode(code: string): RestCountry | undefined {
+  return (worldData as RestCountry[]).find((country) => country.cca2 === code);
+}
+
+/**
+ * Get sorted countries by continent
+ * Prioritizes popular countries (top 5) then sorts A-Z
+ *
+ * @param continentId - The continent/region name (e.g., "Europe", "Asia")
+ * @returns Array of sorted countries with popularity flags
+ */
+export function getSortedCountriesByContinent(
+  continentId: string,
+): SortedCountry[] {
+  const countries = (worldData as RestCountry[]).filter(
+    (country) => country.region === continentId,
+  );
+
+  const popularCodes = POPULAR_COUNTRIES[continentId] || [];
+
+  // Map to SortedCountry format
+  const mappedCountries: SortedCountry[] = countries.map((country) => {
+    const isPopular = popularCodes.includes(country.cca2);
+    const rank = isPopular ? popularCodes.indexOf(country.cca2) : undefined;
+
+    return {
+      code: country.cca2,
+      name: country.name.common,
+      flag: country.flag || "",
+      isPopular,
+      rank,
+    };
+  });
+
+  // Sort: Popular first (by rank), then alphabetically
+  return mappedCountries.sort((a, b) => {
+    // Both popular: sort by rank
+    if (a.isPopular && b.isPopular) {
+      return (a.rank ?? 0) - (b.rank ?? 0);
+    }
+
+    // Only a is popular
+    if (a.isPopular) return -1;
+
+    // Only b is popular
+    if (b.isPopular) return 1;
+
+    // Neither popular: sort alphabetically
+    return a.name.localeCompare(b.name);
+  });
+}

@@ -109,7 +109,7 @@ export default function SummaryStep({
   };
 
   return (
-    <div className="flex flex-col gap-xl w-full max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-xll">
+    <div className="flex flex-col gap-xl w-full mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-xll">
       <div className="text-center mb-xxl">
         <h2 className="text-h2 font-bold mb-sm">Almost done!</h2>
         <p className="text-p text-secondary">

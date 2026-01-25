@@ -1,180 +1,68 @@
 import { z } from "zod";
 
-// ============================================
-// DOMAIN ENUMS & CONSTANTS
-// ============================================
+// --- Constants (Restored for Legacy Compatibility) ---
+export const DAILY_RHYTHMS = ["Early Bird", "Night Owl", "Flexible"] as const;
+export const TRAVEL_STYLES = [
+  "Backpacking",
+  "Luxury",
+  "Budget",
+  "Standard", // Added to ensure coverage
+] as const;
+export const BUDGET_LEVELS = ["Low", "Medium", "High"] as const;
 
-export const DAILY_RHYTHMS = {
-  EARLY_BIRD: "early_bird",
-  BALANCED: "balanced",
-  NIGHT_OWL: "night_owl",
-  SPONTANEOUS: "spontaneous",
-} as const;
+export type DailyRhythm = (typeof DAILY_RHYTHMS)[number];
+export type TravelStyle = (typeof TRAVEL_STYLES)[number];
+export type BudgetLevel = (typeof BUDGET_LEVELS)[number];
 
-export const TRAVEL_STYLES = {
-  PLANNER: "planner",
-  EXPLORER: "explorer",
-  RELAXER: "relaxer",
-  ADVENTURER: "adventurer",
-  CULTURAL: "cultural",
-} as const;
+// Placeholder for legacy PersonaDbModel if needed
+export type PersonaDbModel = z.infer<typeof TravelPersonaSchema>;
+export type PersonaFormValues = z.infer<typeof TravelPersonaSchema>;
 
-export const BUDGET_LEVELS = {
-  BACKPACKER: "backpacker",
-  BUDGET: "budget",
-  MID_RANGE: "mid_range",
-  COMFORT: "comfort",
-  LUXURY: "luxury",
-} as const;
+// Zod Schema for Travel Persona
+export const TravelPersonaSchema = z.object({
+  // Rhythm Step
+  dailyRhythm: z
+    .enum(["Early Bird", "Night Owl", "Flexible"])
+    .nullable()
+    .optional(),
 
-export type DailyRhythm = (typeof DAILY_RHYTHMS)[keyof typeof DAILY_RHYTHMS];
-export type TravelStyle = (typeof TRAVEL_STYLES)[keyof typeof TRAVEL_STYLES];
-export type BudgetTier = (typeof BUDGET_LEVELS)[keyof typeof BUDGET_LEVELS];
-export type BudgetLevel = BudgetTier;
+  // Style Step
+  travelStyle: z.array(z.string()).default([]), // ["Backpacking", "Luxury", "Budget", etc.]
+  planningStyle: z
+    .enum(["Structured", "Spontaneous", "Balanced"])
+    .nullable()
+    .optional(),
 
-export const DailyRhythmEnum = z.enum([
-  "early_bird",
-  "balanced",
-  "night_owl",
-  "spontaneous",
-]);
+  // Interests/Summary
+  interests: z.array(z.string()).default([]), // ["Hiking", "Museums", "Food", etc.]
 
-export const TravelStyleEnum = z.enum([
-  "planner",
-  "explorer",
-  "relaxer",
-  "adventurer",
-  "cultural",
-]);
-
-export const BudgetTierEnum = z.enum([
-  "backpacker",
-  "budget",
-  "mid_range",
-  "comfort",
-  "luxury",
-]);
-
-export const InterestCategoryEnum = z.enum([
-  "food_tours",
-  "street_food",
-  "fine_dining",
-  "cooking_classes",
-  "wine_beer",
-  "hiking",
-  "water_sports",
-  "extreme_sports",
-  "wildlife",
-  "museums",
-  "architecture",
-  "history",
-  "local_festivals",
-  "religious_sites",
-  "nightlife",
-  "shopping",
-  "wellness_spa",
-  "photography",
-  "solo_travel",
-  "group_activities",
-  "local_meetups",
-  "general_exploration",
-]);
-
-// ============================================
-// DOMAIN MODELS
-// ============================================
-
-export interface Insight {
-  code: string;
-  label: string;
-  category: "LUXURY" | "ADVENTURE" | "CULTURE" | "GENERAL" | "RHYTHM";
-  score?: number;
-}
-
-export interface PersonaDbModel {
-  dailyRhythm: DailyRhythm | string;
-  travelStyle: TravelStyle | string;
-  budget: BudgetLevel | string;
-  currency: string;
-  interests: string[];
-  insights?: string[]; // Array of insight codes
-}
-
-export type InterestCategory = z.infer<typeof InterestCategoryEnum>;
-
-// ============================================
-// CORE PERSONA SCHEMA (Immutable Structure)
-// ============================================
-
-/**
- * Shared UserPersona Entity - Single Source of Truth
- * Exactly matches the structure defined in Section 5 of the Architecture Audit.
- */
-export const personaSchema = z.object({
-  identity: z.object({
-    firstName: z.string().min(2),
-    hometown: z.string().min(2),
-    avatarUrl: z.string().url().optional(),
-  }),
-  preferences: z.object({
-    dailyRhythm: DailyRhythmEnum,
-    travelStyle: TravelStyleEnum,
-    budgetTier: BudgetTierEnum,
-    currency: z.string().default("USD"),
-  }),
-  interests: z.array(z.string()).default([]), // IDs mapping to interests.json
-  insights: z.array(z.string()).default([]), // Derived codes from InsightsEngine
-  metadata: z.object({
-    lastSyncedAt: z.number(), // timestamp
-    version: z.number().default(1),
-  }),
+  // Additional (Optional)
+  bio: z.string().optional(),
 });
 
-export type UserPersona = z.infer<typeof personaSchema>;
+// TypeScript Type inferred from Zod Schema
+export type TravelPersona = z.infer<typeof TravelPersonaSchema>;
 
-// ============================================
-// FORM SCHEMAS (Persona Creation Flow)
-// ============================================
-
-/**
- * Persona Form Schema
- * This extends the base persona fields with form-specific validation
- */
-export const personaFormSchema = z.object({
-  // Basic Info (required in form flow)
-  firstName: z.string().min(1, "First name is required"),
-  hometown: z.string().min(1, "Home city is required"),
-  avatarUrl: z.string().optional(),
-
-  // Persona (required in form flow, optional in entity)
-  interests: z.array(z.string()).min(1, "Please select at least one interest"),
-  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
-  travelStyle: z.string().min(1, "Please select a travel style"),
-  budget: z.string().min(1, "Please select a budget"),
-  currency: z.string().min(1, "Please select a currency"),
-});
-
-export type PersonaFormValues = z.infer<typeof personaFormSchema>;
-
-export type TravelPersonaFormValues = {
-  areaPreferences: string[];
-  accommodationTypes: string[];
-  travelRhythm: string;
-  travelStyle: string;
+// Default / Initial State
+export const defaultTravelPersona: TravelPersona = {
+  dailyRhythm: null,
+  travelStyle: [],
+  planningStyle: null,
+  interests: [],
 };
 
-// ============================================
-// SOCIALS SCHEMA
-// ============================================
+// --- Legacy / Backwards Compatibility ---
+// Exposing these to satisfy user.schema.ts imports until fully refactored
+export const personaSchema = TravelPersonaSchema; // Alias for now
+export type UserPersona = TravelPersona; // Alias for now
 
-export const socialsSchema = z
-  .object({
-    instagram: z.string().optional().nullable(),
-    tiktok: z.string().optional().nullable(),
-    twitter: z.string().optional().nullable(),
-    linkedin: z.string().optional().nullable(),
-  })
-  .optional()
-  .nullable();
-
+// Placeholder for socials if it was removed, or if it needs to be defined
+export const socialsSchema = z.object({
+  instagram: z.string().optional(),
+  linkedin: z.string().optional(),
+  twitter: z.string().optional(),
+  website: z.string().optional(),
+});
 export type UserSocials = z.infer<typeof socialsSchema>;
+
+export const personaFormSchema = TravelPersonaSchema; // Alias for form usage

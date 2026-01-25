@@ -7,7 +7,7 @@ export default function ResidentOrVisitorBadge({ isResident }: Props) {
     <div
       className={`${
         isResident ? "bg-brand-warm" : "bg-brand-success"
-      } text-white px-2 py-0.5 rounded-pill shadow-sm w-fit`}
+      } text-white px-1.5 py-1 inline-flex items-center justify-center rounded-pill shadow-sm w-fit`}
     >
       <Typography variant="micro" className="text-white font-bold leading-none">
         {isResident ? "Local" : "Visitor"}

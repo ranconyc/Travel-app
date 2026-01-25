@@ -13,7 +13,7 @@ export async function GET(
     // Get all travel data sources
     const [cityVisits, user] = await Promise.all([
       getTravelHistory(userId, 100),
-      getUserById(userId),
+      getUserById(userId, { strategy: "full" }),
     ]);
 
     if (!user) {

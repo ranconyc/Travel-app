@@ -8,9 +8,12 @@ import WeatherWidget from "@/components/molecules/WeatherWidget";
 import PageHeader from "@/components/molecules/PageHeader";
 
 import { useAppStore } from "@/store/appStore";
+import { useLocationStore } from "@/store/locationStore";
 
 export default function HomeHeader() {
-  const { user, coords } = useAppStore();
+  const { user } = useAppStore();
+  const { getFinalLocation } = useLocationStore();
+  const coords = getFinalLocation();
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
 
   return (

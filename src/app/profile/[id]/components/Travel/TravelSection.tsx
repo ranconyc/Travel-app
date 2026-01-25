@@ -1,7 +1,7 @@
 "use client";
-
-import NextDestinations from "./NextDestinations";
-
+import NextDestinations, { NextDestination } from "./NextDestinations";
+import { TravelHistoryItem } from "./TravelHistory";
+import { User } from "@/domain/user/user.schema";
 import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
 import TravelHistory from "./TravelHistory";
 import TravelPartners from "./TravelPartners";
@@ -13,9 +13,9 @@ export default function TravelSection() {
   if (!profileUser) return null;
 
   // These will be fetched by the components themselves or passed from store if added later
-  const travelHistory = [] as any[];
-  const travelPartners = [] as any[];
-  const nextDestinations = [] as any[];
+  const travelHistory: TravelHistoryItem[] = [];
+  const travelPartners: User[] = [];
+  const nextDestinations: NextDestination[] = [];
 
   if (
     travelHistory?.length === 0 &&

@@ -7,6 +7,8 @@ import { useUser } from "@/app/providers/UserProvider";
 
 /**
  * Hook to manage and sync unread message count across the application
+ * 
+ * Uses functional state update to prevent subscription churn and memory leaks.
  */
 export function useUnreadCount() {
   const user = useUser();
@@ -17,10 +19,12 @@ export function useUnreadCount() {
       // Only increment if we're not currently looking at this chat
       const currentPath = window.location.pathname;
       if (!currentPath.includes(`/chats/${message.chatId}`)) {
-        setUnreadCount(unreadCount + 1);
+        // Use functional update to avoid dependency on unreadCount
+        // This prevents the callback from changing on every count update
+        setUnreadCount((prev) => prev + 1);
       }
     },
-    [unreadCount, setUnreadCount],
+    [setUnreadCount], // Removed unreadCount from dependencies
   );
 
   // Listen for new messages globally for the user's private channel

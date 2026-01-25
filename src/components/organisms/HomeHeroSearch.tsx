@@ -1,102 +1,87 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { Search, MapPin, Loader2, Globe, ArrowRight } from "lucide-react";
-import { useSearch, useExternalSearch } from "@/domain/search/search.hooks";
-import {
-  trackSearchEvent,
-  saveExternalDestinationAction,
-} from "@/domain/search/search.actions";
+import { useCitySearch } from "@/domain/search/search.hooks";
 import { SearchResult } from "@/domain/search/search.schema";
+import { useClickOutside } from "@/hooks/ui/useClickOutside";
+
+/**
+ * Memoized search result item component to prevent unnecessary re-renders
+ */
+const SearchResultItem = memo(
+  ({
+    item,
+    index,
+    onClick,
+  }: {
+    item: SearchResult;
+    index: number;
+    onClick: (item: SearchResult, index: number) => void;
+  }) => (
+    <button
+      key={item.id}
+      onClick={() => onClick(item, index)}
+      className="w-full px-4 py-3 flex items-center gap-md hover:bg-surface-hover transition-colors text-left group"
+    >
+      <div className="w-10 h-10 rounded-full bg-surface-secondary flex items-center justify-center shrink-0 text-xl overflow-hidden border border-border">
+        {item.flag ? (
+          <span className="text-2xl">{item.flag}</span>
+        ) : item.type === "CITY" ? (
+          <MapPin className="w-5 h-5 text-brand" />
+        ) : (
+          <Globe className="w-5 h-5 text-blue-400" />
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="font-bold text-txt-main truncate group-hover:text-brand transition-colors">
+          {item.name}
+        </p>
+        <p className="text-sm text-secondary truncate">{item.subText}</p>
+      </div>
+      {item.type === "EXTERNAL" && (
+        <span className="text-xs bg-brand/20 text-brand px-2 py-1 rounded-full">
+          New
+        </span>
+      )}
+    </button>
+  ),
+);
+
+SearchResultItem.displayName = "SearchResultItem";
 
 export default function HomeHeroSearch() {
-  const router = useRouter();
-  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [triggerExternal, setTriggerExternal] = useState(false);
-  const [isExternalLoadingManual, setIsExternalLoadingManual] = useState(false);
-
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data: internalResults, isLoading: isInternalLoading } =
-    useSearch(query);
-  const { data: externalResults, isFetching: isExternalFetching } =
-    useExternalSearch(query, {
-      enabled: triggerExternal,
-    });
+  const {
+    query,
+    setQuery,
+    results,
+    isLoading,
+    isExternalLoading,
+    showExternalOption,
+    handleSelect,
+    handleExternalSearch,
+  } = useCitySearch();
 
-  // Combine results
-  const results = [...(internalResults || []), ...(externalResults || [])];
-  const isLoading = isInternalLoading;
-  const isExternalLoading = isExternalFetching || isExternalLoadingManual;
-
-  // Close when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // Close dropdown when clicking outside
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => {
+    setIsOpen(false);
+  });
 
   // Show dropdown when results arrive
   useEffect(() => {
-    if (internalResults && internalResults.length > 0) {
+    if (results.length > 0) {
       setIsOpen(true);
     }
-  }, [internalResults]);
+  }, [results.length]);
 
-  const handleSelect = async (item: SearchResult, index: number) => {
-    // Generate a simple session for tracking if not available
-    const sessionId = `session-${Date.now()}`;
-
-    await trackSearchEvent({
-      searchQuery: query,
-      resultCount: results.length,
-      clickedResultIndex: index,
-      pagePath: window.location.pathname,
-      sessionId,
-      clickedEntityType:
-        item.type === "CITY"
-          ? "city"
-          : item.type === "COUNTRY"
-            ? "country"
-            : undefined,
-    });
-
-    if (item.type === "EXTERNAL") {
-      setIsExternalLoadingManual(true);
-      try {
-        const res = await saveExternalDestinationAction({
-          externalItem: item.externalData,
-        });
-        if (res.success && res.data) {
-          router.push(`/cities/${res.data}`);
-        } else {
-          alert("Could not load this destination details.");
-        }
-      } finally {
-        setIsExternalLoadingManual(false);
-      }
-    } else if (item.type === "CITY") {
-      router.push(`/cities/${item.slug}`);
-    } else {
-      router.push(`/countries/${item.slug.toLowerCase()}`);
-    }
+  // Enhanced handleSelect that closes dropdown
+  const handleSelectAndClose = (item: SearchResult, index: number) => {
+    handleSelect(item, index);
     setIsOpen(false);
   };
-
-  const handleExternalSearch = () => {
-    setTriggerExternal(true);
-  };
-
-  const showExternalOption = query.length >= 2 && !triggerExternal;
 
   return (
     <div ref={containerRef} className="relative w-full flex flex-col">
@@ -127,34 +112,12 @@ export default function HomeHeroSearch() {
                 Destinations
               </span>
               {results.map((item, index) => (
-                <button
+                <SearchResultItem
                   key={item.id}
-                  onClick={() => handleSelect(item, index)}
-                  className="w-full px-4 py-3 flex items-center gap-md hover:bg-surface-hover transition-colors text-left group"
-                >
-                  <div className="w-10 h-10 rounded-full bg-surface-secondary flex items-center justify-center flex-shrink-0 text-xl overflow-hidden border border-border">
-                    {item.flag ? (
-                      <span className="text-2xl">{item.flag}</span>
-                    ) : item.type === "CITY" ? (
-                      <MapPin className="w-5 h-5 text-brand" />
-                    ) : (
-                      <Globe className="w-5 h-5 text-blue-400" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-txt-main truncate group-hover:text-brand transition-colors">
-                      {item.name}
-                    </p>
-                    <p className="text-sm text-secondary truncate">
-                      {item.subText}
-                    </p>
-                  </div>
-                  {item.type === "EXTERNAL" && (
-                    <span className="text-xs bg-brand/20 text-brand px-2 py-1 rounded-full">
-                      New
-                    </span>
-                  )}
-                </button>
+                  item={item}
+                  index={index}
+                  onClick={handleSelectAndClose}
+                />
               ))}
             </div>
           )}

@@ -1,14 +1,57 @@
 import { Prisma } from "@prisma/client";
 
 /**
- * Standard select for User objects across the app.
- * Provides basic info including identity and profile bio.
+ * Minimal user select for list views and basic operations.
+ * Only fetches essential fields: id, email, name, avatarUrl, profileCompleted.
+ * Use for admin tables, dropdowns, and when only basic identity is needed.
+ */
+export const userBasicSelect = {
+  id: true,
+  email: true,
+  name: true,
+  avatarUrl: true,
+  profileCompleted: true,
+} satisfies Prisma.UserSelect;
+
+/**
+ * Base user select for user cards and list views (e.g., MateCard).
+ * Includes minimum fields needed to render a user card/avatar:
+ * - Identity (id, name, avatarUrl)
+ * - Profile basics (firstName, lastName, homeBaseCityId)
+ * - Location (currentCityId)
+ * - Media (avatar image)
+ * 
+ * This is the default for lightweight fetches.
  */
 export const baseUserSelect = {
   id: true,
   name: true,
   avatarUrl: true,
-  role: true,
+  currentCityId: true,
+  profile: {
+    select: {
+      firstName: true,
+      lastName: true,
+      homeBaseCityId: true,
+    },
+  },
+  media: {
+    where: { category: "AVATAR" },
+    take: 1,
+    select: {
+      id: true,
+      url: true,
+      category: true,
+    },
+  },
+} satisfies Prisma.UserSelect;
+
+/**
+ * Extended user select with profile bio and additional details.
+ * Use when you need more profile information but not full relations.
+ */
+export const extendedUserSelect = {
+  ...baseUserSelect,
   profile: {
     select: {
       firstName: true,
@@ -17,6 +60,7 @@ export const baseUserSelect = {
       description: true,
       gender: true,
       languages: true,
+      homeBaseCityId: true,
       homeBaseCity: {
         select: {
           name: true,
@@ -24,10 +68,6 @@ export const baseUserSelect = {
         },
       },
     },
-  },
-  media: {
-    where: { category: "AVATAR" },
-    take: 1,
   },
 } satisfies Prisma.UserSelect;
 

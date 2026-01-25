@@ -3,16 +3,43 @@ import type { Prisma } from "@prisma/client";
 import { type Coordinates } from "@/domain/common.schema";
 import { type NearbyUserResult } from "@/domain/user/user.schema";
 
-import { userFullInclude } from "./prisma.presets";
+import { userFullInclude, userBasicSelect, baseUserSelect } from "./prisma.presets";
 
 // Type for user with all related data
 export type UserWithRelations = Prisma.UserGetPayload<{
   include: typeof userFullInclude;
 }>;
 
+// Type for basic user data (minimal)
+export type UserBasic = Prisma.UserGetPayload<{
+  select: typeof userBasicSelect;
+}>;
+
+// Type for base user data (for cards/lists)
+export type UserBase = Prisma.UserGetPayload<{
+  select: typeof baseUserSelect;
+}>;
+
+/**
+ * Fetches a user by ID with configurable data fetching strategy.
+ * 
+ * @param id - User ID
+ * @param options - Query options
+ * @param options.strategy - 'base' for lightweight (card/list views) or 'full' for complete data. Default: 'base'
+ * @returns UserBase if strategy is 'base', UserWithRelations if 'full'
+ * 
+ * @example
+ * // Lightweight fetch (default) - for cards, lists, avatars
+ * const user = await getUserById(userId); // Returns UserBase
+ * 
+ * @example
+ * // Full fetch - for profile pages, detailed views
+ * const user = await getUserById(userId, { strategy: 'full' }); // Returns UserWithRelations
+ */
 export async function getUserById(
   id: string,
-): Promise<UserWithRelations | null> {
+  options: { strategy?: "base" | "full" } = { strategy: "base" },
+): Promise<UserBase | UserWithRelations | null> {
   if (!id) return null;
   // Validate MongoDB ObjectId format (24 hex characters)
   if (!/^[0-9a-fA-F]{24}$/.test(id)) {
@@ -20,9 +47,16 @@ export async function getUserById(
     return null;
   }
   try {
+    if (options.strategy === "full") {
+      return await prisma.user.findUnique({
+        where: { id },
+        include: userFullInclude,
+      });
+    }
+    // Default: lightweight 'base' strategy
     return await prisma.user.findUnique({
       where: { id },
-      include: userFullInclude,
+      select: baseUserSelect,
     });
   } catch (error) {
     console.error("getUserById error:", error);
@@ -30,8 +64,59 @@ export async function getUserById(
   }
 }
 
-// get all users
-export async function getAllUsers() {
+/**
+ * Fetches a user by ID with only basic fields (id, email, name, avatarUrl, profileCompleted).
+ * Use this for list views, dropdowns, and when you don't need profile data.
+ */
+export async function getUserBasicById(
+  id: string,
+): Promise<UserBasic | null> {
+  if (!id) return null;
+  if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+    console.warn(`getUserBasicById: Invalid ObjectId format: "${id}"`);
+    return null;
+  }
+  try {
+    return await prisma.user.findUnique({
+      where: { id },
+      select: userBasicSelect,
+    });
+  } catch (error) {
+    console.error("getUserBasicById error:", error);
+    throw new Error("Failed to fetch user");
+  }
+}
+
+/**
+ * Fetches all users with base fields (optimized for list views).
+ * Uses baseUserSelect which includes fields needed for user cards:
+ * - id, name, avatarUrl, currentCityId
+ * - profile: firstName, lastName, homeBaseCityId
+ * - media: avatar image
+ * 
+ * This is FORCED lightweight - perfect for MateCard, user lists, etc.
+ * 
+ * @returns Array of UserBase objects
+ */
+export async function getAllUsers(): Promise<UserBase[]> {
+  try {
+    return await prisma.user.findMany({
+      select: baseUserSelect, // FORCE lightweight select
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("getAllUsers error:", error);
+    throw new Error("Unable to fetch users at this time");
+  }
+}
+
+/**
+ * Fetches all users with full relations.
+ * Use only when you need complete user data (e.g., admin user management).
+ */
+export async function getAllUsersFull(): Promise<UserWithRelations[]> {
   try {
     return await prisma.user.findMany({
       include: userFullInclude,
@@ -40,7 +125,7 @@ export async function getAllUsers() {
       },
     });
   } catch (error) {
-    console.error("getAllUsers error:", error);
+    console.error("getAllUsersFull error:", error);
     throw new Error("Unable to fetch users at this time");
   }
 }
@@ -203,20 +288,97 @@ export async function updateUserRole(userId: string, role: "USER" | "ADMIN") {
   });
 }
 
-export async function getUsersForMatching(userIds: string[]) {
+/**
+ * Fetches users for matching algorithm with selective relation loading.
+ * By default, uses baseUserSelect for lightweight fetching.
+ * Only includes heavy relations (visits, friendships) when explicitly requested.
+ * 
+ * @param userIds - Array of user IDs to fetch
+ * @param options - Optional flags for heavy relations
+ * @param options.includeVisits - If true, includes cityVisits with city data. Default: false
+ * @param options.includeFriendships - If true, includes friendship relations. Default: false
+ * @param options.strategy - 'base' for lightweight or 'full' for all relations. Default: 'base'
+ * @returns Array of users with selected relations
+ * 
+ * @example
+ * // Lightweight (default) - for basic matching
+ * const users = await getUsersForMatching(userIds);
+ * 
+ * @example
+ * // With visits only
+ * const users = await getUsersForMatching(userIds, { includeVisits: true });
+ * 
+ * @example
+ * // Full data for complex matching
+ * const users = await getUsersForMatching(userIds, { strategy: 'full' });
+ */
+export async function getUsersForMatching(
+  userIds: string[],
+  options?: {
+    includeVisits?: boolean;
+    includeFriendships?: boolean;
+    strategy?: "base" | "full";
+  },
+): Promise<(UserBase | UserWithRelations)[]> {
   if (!userIds || userIds.length === 0) return [];
 
+  const {
+    includeVisits = false,
+    includeFriendships = false,
+    strategy = "base",
+  } = options || {};
+
   try {
-    return await prisma.user.findMany({
-      where: { id: { in: userIds } },
-      include: {
-        ...userFullInclude,
+    // Full strategy: use include with all relations
+    if (strategy === "full") {
+      return await prisma.user.findMany({
+        where: { id: { in: userIds } },
+        include: {
+          ...userFullInclude,
+          ...(includeVisits && {
+            cityVisits: {
+              include: { city: true },
+            },
+          }),
+          ...(includeFriendships && {
+            friendshipsRequested: true,
+            friendshipsReceived: true,
+          }),
+        },
+      });
+    }
+
+    // Base strategy: use select with optional relations
+    const baseSelect: Prisma.UserSelect = {
+      ...baseUserSelect,
+      ...(includeVisits && {
         cityVisits: {
           include: { city: true },
         },
-        friendshipsRequested: true,
-        friendshipsReceived: true,
-      },
+      }),
+      ...(includeFriendships && {
+        friendshipsRequested: {
+          select: {
+            id: true,
+            requesterId: true,
+            addresseeId: true,
+            status: true,
+          },
+        },
+        friendshipsReceived: {
+          select: {
+            id: true,
+            requesterId: true,
+            addresseeId: true,
+            status: true,
+          },
+        },
+      }),
+    };
+
+    return await prisma.user.findMany({
+      where: { id: { in: userIds } },
+      select: baseSelect,
     });
   } catch (error) {
     console.error("getUsersForMatching error:", error);
