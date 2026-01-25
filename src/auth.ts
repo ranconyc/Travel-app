@@ -3,7 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db/prisma";
 import bcrypt from "bcrypt";
 import authConfig from "./auth.config";
-import { User } from "@/domain/user/user.schema";
+import { User, Role } from "@/domain/user/user.schema";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const {
@@ -36,7 +36,7 @@ export const {
   events: {
     // Sync provider image to avatarUrl on user creation
     createUser: async ({ user }) => {
-      const u = user as User;
+      const u = user as User & { image?: string | null };
       if (u.image && !u.avatarUrl) {
         await prisma.user.update({
           where: { id: u.id },
@@ -73,7 +73,7 @@ export const {
       if (session.user) {
         const u = session.user as User;
         u.id = token.uid as string;
-        u.role = token.role as string;
+        u.role = token.role as Role;
         u.currentCityId = token.currentCityId as string;
         u.profileCompleted = token.profileCompleted as boolean;
       }

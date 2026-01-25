@@ -52,7 +52,7 @@ export const hasLocation = (user: User): user is UserWithLocation => {
  */
 export const hasFullProfile = (user: User): user is UserWithFullProfile => {
   return (
-    user.profile !== null &&
+    !!user.profile &&
     user.profile.persona !== null &&
     user.profile.socials !== null
   );
