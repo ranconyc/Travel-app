@@ -4,6 +4,10 @@ import { redirect } from "next/navigation";
 import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 import NearbyMatesClient from "./components/NearbyMatesClient";
 import UserList from "@/components/organisms/HomeSections/UserList";
+import {
+  hasLocation,
+  UserWithLocation,
+} from "@/domain/user/user.types";
 
 export default async function NearbyMatesPage() {
   const session = await getSession();
@@ -11,6 +15,10 @@ export default async function NearbyMatesPage() {
 
   if (!loggedUser) {
     redirect("/signin");
+  }
+
+  if (!hasLocation(loggedUser)) {
+    redirect("/");
   }
 
   const userLocation = loggedUser.currentLocation;

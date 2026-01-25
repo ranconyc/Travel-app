@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db/prisma";
 import bcrypt from "bcrypt";
 import authConfig from "./auth.config";
+import { User } from "@/domain/user/user.schema";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const {
@@ -35,10 +36,11 @@ export const {
   events: {
     // Sync provider image to avatarUrl on user creation
     createUser: async ({ user }) => {
-      if (user.image && !(user as any).avatarUrl) {
+      const u = user as User;
+      if (u.image && !u.avatarUrl) {
         await prisma.user.update({
-          where: { id: user.id },
-          data: { avatarUrl: user.image },
+          where: { id: u.id },
+          data: { avatarUrl: u.image },
         });
       }
     },
@@ -46,10 +48,11 @@ export const {
   callbacks: {
     async jwt({ token, user, trigger }) {
       if (user) {
-        token.uid = user.id;
-        token.role = (user as any).role;
-        token.currentCityId = (user as any).currentCityId;
-        token.profileCompleted = (user as any).profileCompleted;
+        const u = user as User;
+        token.uid = u.id;
+        token.role = u.role;
+        token.currentCityId = u.currentCityId;
+        token.profileCompleted = u.profileCompleted;
       }
 
       // Always refresh profileCompleted from DB to avoid stale cache
@@ -68,11 +71,11 @@ export const {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.uid as string;
-        (session.user as any).role = token.role as string;
-        (session.user as any).currentCityId = token.currentCityId as string;
-        (session.user as any).profileCompleted =
-          token.profileCompleted as boolean;
+        const u = session.user as User;
+        u.id = token.uid as string;
+        u.role = token.role as string;
+        u.currentCityId = token.currentCityId as string;
+        u.profileCompleted = token.profileCompleted as boolean;
       }
       return session;
     },
