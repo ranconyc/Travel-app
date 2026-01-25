@@ -55,15 +55,15 @@ const ChatMessageBubble = memo(
             </Typography>
           )}
           <div
-            className={`px-lg py-sm rounded-2xl shadow-sm transition-all ${
+            className={`px-lg py-sm rounded-2xl shadow-sm transition-all  ${
               isSent
-                ? "bg-brand text-white rounded-br-none"
+                ? "bg-brand rounded-br-none"
                 : "bg-surface text-txt-main rounded-bl-none border border-stroke"
             }`}
           >
             <Typography
               variant="p"
-              className="whitespace-pre-wrap wrap-break-word leading-relaxed"
+              className="whitespace-pre-wrap wrap-break-word leading-relaxed text-white"
             >
               {message.content}
             </Typography>
