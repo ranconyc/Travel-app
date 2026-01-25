@@ -27,7 +27,7 @@ export default function EmptyState({
         {title}
       </Typography>
       {description && (
-        <Typography variant="p" className="text-txt-sec max-w-sm">
+        <Typography variant="p" className="text-txt-sec">
           {description}
         </Typography>
       )}

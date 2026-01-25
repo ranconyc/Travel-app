@@ -1,34 +1,60 @@
 import PusherServer from "pusher";
 import PusherClient from "pusher-js";
 
-// Capture env vars in constants to avoid repetitive process.env access/inlining issues
+// Server-side variables
 const appId = process.env.PUSHER_APP_ID;
-const key = process.env.NEXT_PUBLIC_PUSHER_KEY;
+const serverKey = process.env.PUSHER_KEY;
 const secret = process.env.PUSHER_SECRET;
-const cluster = process.env.PUSHER_CLUSTER || "mt1";
+const serverCluster = process.env.PUSHER_CLUSTER || "mt1";
+
+// Client-side variables
+const clientKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
+const clientCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "mt1";
+const host = process.env.NEXT_PUBLIC_PUSHER_HOST;
+const port = process.env.NEXT_PUBLIC_PUSHER_PORT
+  ? parseInt(process.env.NEXT_PUBLIC_PUSHER_PORT)
+  : undefined;
 
 /**
  * Pusher Server instance for triggering events from server actions
  */
 export const pusherServer =
-  appId && key && secret
+  appId && serverKey && secret
     ? new PusherServer({
         appId,
-        key,
+        key: serverKey,
         secret,
-        cluster,
-        useTLS: true,
+        cluster: serverCluster,
+        useTLS: !host, // Disable TLS if using local host without it (simplified logic)
+        host,
+        port: port ? String(port) : undefined,
       })
     : (null as unknown as PusherServer);
 
 /**
  * Pusher Client instance for subscribing to channels in client components
+ * Only initialized on the client side (in the browser)
  */
-export const pusherClient = key
-  ? new PusherClient(key, {
-      cluster,
-    })
-  : (null as unknown as PusherClient);
+export const pusherClient =
+  typeof window !== "undefined" && clientKey
+    ? new PusherClient(clientKey, {
+        cluster: clientCluster,
+        wsHost: host,
+        wsPort: port,
+        wssPort: port,
+        forceTLS: !host,
+        enabledTransports: ["ws", "wss"],
+      })
+    : (null as unknown as PusherClient);
+
+if (pusherClient) {
+  pusherClient.connection.bind("state_change", (states: any) => {
+    console.log("[Pusher] Connection State:", states.current);
+  });
+  pusherClient.connection.bind("error", (err: any) => {
+    console.error("[Pusher] Connection Error:", err);
+  });
+}
 
 /**
  * Centralized Event Dispatcher for server-side triggers

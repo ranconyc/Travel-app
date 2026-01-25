@@ -1,12 +1,12 @@
 "use client";
 
 import { User } from "@/domain/user/user.schema";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useAuthenticatedUser } from "@/domain/user/user.hooks";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { Client } from "@pusher/push-notifications-web";
 
 const UserContext = createContext<User | null>(null);
-
-import { useUnreadCount } from "@/hooks/useUnreadCount";
 
 export function UserProvider({
   children,
@@ -27,6 +27,35 @@ export function UserProvider({
 
 function GlobalListeners() {
   useUnreadCount();
+  const user = useUser();
+
+  console.log("GlobalListeners mounted");
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !user) return; // Only run on client and if logged in
+
+    const instanceId = process.env.NEXT_PUBLIC_PUSHER_BEAMS_INSTANCE_ID;
+    if (!instanceId) {
+      console.warn("[Pusher Beams] Missing Instance ID");
+      return;
+    }
+
+    const beamsClient = new Client({
+      instanceId,
+    });
+
+    beamsClient
+      .start()
+      .then(() => beamsClient.addDeviceInterest("global"))
+      .then(() => beamsClient.addDeviceInterest(`user-${user.id}`)) // Subscribe to user specific channel
+      .then(() =>
+        console.log("[Pusher Beams] Successfully registered and subscribed!"),
+      )
+      .catch((e: unknown) =>
+        console.error("[Pusher Beams] Could not register:", e),
+      );
+  }, [user]);
+
   return null;
 }
 

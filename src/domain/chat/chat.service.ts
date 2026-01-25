@@ -8,6 +8,7 @@ import {
 } from "@/lib/db/chat.repo";
 import { getFriends } from "@/lib/db/friendship.repo";
 import { triggerRealTimeEvent } from "@/lib/pusher";
+import { sendPushNotification } from "@/lib/beams";
 
 import { formatDistanceToNow, format, isToday, isYesterday } from "date-fns";
 import { Message } from "@/types/chat.d";
@@ -83,6 +84,24 @@ export async function handleSendMessage(
 
   // Trigger real-time event via Pusher
   await triggerRealTimeEvent(`chat-${chatId}`, "new-message", message);
+
+  // Send Push Notification to other members
+  const chat = await findChatById(chatId);
+  if (chat) {
+    const recipients = chat.members
+      .filter((m) => m.userId !== userId)
+      .map((m) => `user-${m.userId}`);
+
+    if (recipients.length > 0) {
+      const senderName = getMessageSenderName(message.sender);
+      const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+      await sendPushNotification(recipients, {
+        title: senderName,
+        body: content,
+        deep_link: `${baseUrl}/chats/${chatId}`,
+      });
+    }
+  }
 
   return message;
 }

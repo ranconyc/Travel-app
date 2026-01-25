@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ProfileErrorBoundary } from "@/app/profile/edit/ProfileErrorBoundary";
+import { motion } from "framer-motion";
 
 export type AppShellVariant = "default" | "narrow" | "full" | "screen";
 
@@ -35,6 +36,12 @@ export default function AppShell({
     screen: "w-full",
   }[variant];
 
+  // Page Transition Variants
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    enter: { opacity: 1, y: 0 },
+  };
+
   // Variant 1: Screen (100vh, typically for Chats or Map-only views)
   if (variant === "screen") {
     return (
@@ -45,7 +52,17 @@ export default function AppShell({
         <main
           className={`flex-1 relative ${scrollable ? "overflow-y-auto" : "overflow-hidden"}`}
         >
-          <ProfileErrorBoundary>{children}</ProfileErrorBoundary>
+          <ProfileErrorBoundary>
+            <motion.div
+              initial="initial"
+              animate="enter"
+              variants={pageVariants}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="h-full"
+            >
+              {children}
+            </motion.div>
+          </ProfileErrorBoundary>
         </main>
         {footerSlot && <div className="flex-none z-40">{footerSlot}</div>}
       </div>
@@ -61,8 +78,18 @@ export default function AppShell({
         </div>
       )}
 
-      <main className={`${containerClass} flex-1 py-md`}>
-        <ProfileErrorBoundary>{children}</ProfileErrorBoundary>
+      {/* Added pb-32 for floating nav safety */}
+      <main className={`${containerClass} flex-1 py-md pb-32`}>
+        <ProfileErrorBoundary>
+          <motion.div
+            initial="initial"
+            animate="enter"
+            variants={pageVariants}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            {children}
+          </motion.div>
+        </ProfileErrorBoundary>
       </main>
 
       {footerSlot && (

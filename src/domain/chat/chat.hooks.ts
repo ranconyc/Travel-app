@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useRealTime } from "@/hooks/useRealTime";
 import type { Message } from "@/types/chat.d";
 import { useUser } from "@/app/providers/UserProvider";
@@ -21,26 +21,17 @@ export function useChat(chatId: string, initialMessages: Message[]) {
 
   const handleNewMessage = useCallback((newMessage: Message) => {
     setMessages((prev) => {
-      // If we have an optimistic message with a tempId that matches logic, we should replace it.
-      // However, usually the real message ID is different.
-      // We deduplicate by ID.
       const exists = prev.some((m) => m.id === newMessage.id);
       if (exists) return prev;
-
-      // If we have a temp message that matches the content and sender (rudimentary matching),
-      // we might want to replace it, but proper optimistic UI often removes the temp one upon success
-      // or the server returns the same UUID if generated client-side.
-      // For now, simpler approach: Deduplicate exact IDs.
       return [...prev, newMessage];
     });
-    setOtherUserTyping(false); // Stop typing indicator on message
+    setOtherUserTyping(false);
   }, []);
 
   const handleTyping = useCallback(
     (data: { userId: string }) => {
       if (data.userId !== user?.id) {
         setOtherUserTyping(true);
-        // Auto-clear after 3 seconds of no events
         setTimeout(() => setOtherUserTyping(false), 3000);
       }
     },
@@ -53,6 +44,19 @@ export function useChat(chatId: string, initialMessages: Message[]) {
   // Subscribe to typing events
   useRealTime(`chat-${chatId}`, "client-typing", handleTyping);
 
+  // Sync with initialMessages when they change (e.g. server revalidation or navigation)
+  useEffect(() => {
+    setMessages((prev) => {
+      // Keep optimistically sending messages that aren't confirmed yet
+      const sendingMessages = prev.filter((m) => m.status === "sending");
+
+      const newIds = new Set(initialMessages.map((m) => m.id));
+      const stillSending = sendingMessages.filter((m) => !newIds.has(m.id));
+
+      return [...initialMessages, ...stillSending];
+    });
+  }, [initialMessages]);
+
   // --- Optimistic Mutation ---
 
   const { mutateAsync: sendMessageMutation, isPending: isSending } =
@@ -62,7 +66,8 @@ export function useChat(chatId: string, initialMessages: Message[]) {
       },
       onMutate: async (content) => {
         // 1. Create Optimistic Message
-        const tempId = crypto.randomUUID();
+        const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
         const optimisticMessage: Message = {
           id: tempId,
           content,
@@ -93,32 +98,34 @@ export function useChat(chatId: string, initialMessages: Message[]) {
         if (context?.tempId) {
           setMessages((prev) => prev.filter((m) => m.id !== context.tempId));
         }
-        toast.error("Failed to send message");
+        toast.error(
+          "Failed to send message: " +
+            (err instanceof Error ? err.message : "Unknown error"),
+        );
       },
       onSuccess: (data, content, context) => {
-        // 4. Replace Optimistic Message with Real One (or let Pusher do it)
-        // Since Pusher will trigger 'handleNewMessage', we mostly just need to remove the temp one
-        // OR update the temp one to 'sent' if we want to smooth transition.
-        // Ideally, the server response (data.data) contains the real message.
+        // 4. Update status or replace
         if (data.success && data.data) {
           setMessages((prev) =>
             prev.map((m) =>
               m.id === context?.tempId ? { ...data.data!, status: "sent" } : m,
             ),
           );
+        } else {
+          if (context?.tempId) {
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === context?.tempId ? { ...m, status: "error" } : m,
+              ),
+            );
+          }
+          toast.error(data.error || "Message sent but server returned error");
         }
-      },
-      onSettled: () => {
-        // 5. Sync with DB (Optional if Pusher is reliable, but good practice)
-        // queryClient.invalidateQueries({ queryKey: ["chat", chatId] });
       },
     });
 
-  // --- Typing Logic ---
-
   /**
    * Identifies boundaries between different senders for better UI grouping.
-   * Logic moved here from the UI layer to reach 10/10 decoupling.
    */
   const groupedMessages = useMemo(() => {
     return messages.map((message, index) => {

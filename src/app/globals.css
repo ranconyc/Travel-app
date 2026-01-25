@@ -90,7 +90,7 @@
 /* Base Variable Definitions */
 :root {
   /* Light Mode - Optimized for Clarity & Pop */
-  --background: #f1f5f9; /* Slate 100 - Visible contrast for cards */
+  --background: #f8fafc; /* Slate 50 - Floating Design */
   --foreground: #0f172a;
   --secondary: #64748b;
   --surface: #ffffff; /* Pure White Cards */

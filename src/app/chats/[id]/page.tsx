@@ -1,5 +1,4 @@
 import { ChatShell } from "@/features/chats/components/ChatShell";
-import React from "react";
 import { getChatById } from "@/domain/chat/chat.actions";
 import { getChatDisplayName } from "@/domain/chat/chat.utils";
 import { getCurrentUser } from "@/lib/auth/get-current-user";

@@ -46,7 +46,7 @@ export default function BaseCard({
   const card = (
     <div
       className={
-        "bg-white rounded-2xl overflow-hidden shadow w-full relative aspect-[3.2/4] " +
+        "bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] w-full relative aspect-[3.2/4] " +
         (className ?? "")
       }
     >

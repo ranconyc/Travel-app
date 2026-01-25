@@ -4,6 +4,7 @@ import { Loader2, ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import React from "react";
+import { motion } from "framer-motion";
 
 type ButtonVariant =
   | "primary"
@@ -19,7 +20,9 @@ type ButtonVariant =
 
 type ButtonSize = "sm" | "md" | "lg";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+import { HTMLMotionProps } from "framer-motion";
+
+interface ButtonProps extends HTMLMotionProps<"button"> {
   children?: React.ReactNode;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
@@ -50,20 +53,21 @@ export default function Button({
 
   if (variant === "back") {
     return (
-      <button
+      <motion.button
         type="button"
-        className={`top-xl left-xl z-50 w-11 h-11 flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 hover:bg-surface-hover ${className}`}
+        whileTap={{ scale: 0.9 }}
+        className={`top-xl left-xl z-50 w-11 h-11 flex items-center justify-center transition-all disabled:opacity-50 hover:bg-surface-hover ${className}`}
         onClick={href ? () => router.push(href) : () => router.back()}
         disabled={props.disabled}
         aria-label="Go back"
       >
         <ChevronLeft size={24} />
-      </button>
+      </motion.button>
     );
   }
 
   const baseStyles =
-    "inline-flex items-center justify-center gap-sm font-medium transition-all active:scale-[0.97] cursor-pointer focus:outline-none focus:ring-sm focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none";
+    "inline-flex items-center justify-center gap-sm font-medium transition-colors cursor-pointer focus:outline-none focus:ring-sm focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none";
 
   const sizeStyles = {
     sm: "px-lg h-9 text-upheader",
@@ -100,11 +104,11 @@ export default function Button({
       ) : (
         <>
           {icon && iconPosition === "left" && (
-            <span className="flex-shrink-0">{icon}</span>
+            <span className="shrink-0">{icon}</span>
           )}
           {children && <span>{children}</span>}
           {icon && iconPosition === "right" && (
-            <span className="flex-shrink-0">{icon}</span>
+            <span className="shrink-0">{icon}</span>
           )}
         </>
       )}
@@ -120,12 +124,13 @@ export default function Button({
   }
 
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.95 }}
       className={combinedClasses}
       disabled={loading || props.disabled}
       {...props}
     >
       {content}
-    </button>
+    </motion.button>
   );
 }
