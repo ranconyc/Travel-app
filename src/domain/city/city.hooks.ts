@@ -1,62 +1,36 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  generateCityAction,
-  getAllCitiesAction,
-  getNearbyCitiesAction,
-  GenerateCityResult,
-} from "@/domain/city/city.actions";
-import { ActionResponse } from "@/types/actions";
-import { City } from "@/domain/city/city.schema";
+"use client";
 
-export function useGenerateCity() {
-  const queryClient = useQueryClient();
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { City } from "./city.schema";
 
-  return useMutation<
-    ActionResponse<GenerateCityResult>,
-    Error,
-    { cityName: string; countryCode?: string }
-  >({
-    mutationFn: async ({ cityName, countryCode }) => {
-      return await generateCityAction({ cityName, countryCode });
-    },
-    onSuccess: (res) => {
-      if (res.success) {
-        queryClient.invalidateQueries({ queryKey: ["cities"] });
-        if (res.data.countryCode) {
-          queryClient.invalidateQueries({
-            queryKey: ["country", res.data.countryCode],
-          });
-        }
-      }
-    },
-  });
+async function getCities(): Promise<City[]> {
+  const res = await fetch("/api/cities");
+  if (!res.ok) {
+    throw new Error("Failed to fetch cities");
+  }
+  return res.json();
 }
 
-export function useCities(options?: {
-  initialData?: City[];
-  coords?: { lat: number; lng: number };
-}) {
-  return useQuery({
-    queryKey: ["cities", options?.coords],
-    queryFn: async () => {
-      if (options?.coords) {
-        const res = await getNearbyCitiesAction({
-          lat: options.coords.lat,
-          lng: options.coords.lng,
-          km: 500,
-          limit: 20,
-        });
-        if (res.success) {
-          return res.data as unknown as City[];
-        }
-      }
-
-      const res = await getAllCitiesAction({ limit: 20 });
-      if (res.success) {
-        return res.data as unknown as City[];
-      }
-      throw new Error(res.error);
-    },
-    initialData: options?.initialData,
+export function useCities() {
+  const { data: cities, ...queryInfo } = useQuery<City[]>({
+    queryKey: ["cities"],
+    queryFn: getCities,
   });
+  const [search, setSearch] = useState("");
+
+  const filteredCities = cities?.filter(
+    (city) =>
+      city.name.toLowerCase().includes(search.toLowerCase()) ||
+      city.country?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      city.country?.code?.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  return {
+    ...queryInfo,
+    cities,
+    search,
+    setSearch,
+    filteredCities,
+  };
 }

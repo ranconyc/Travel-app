@@ -5,6 +5,8 @@ import { User } from "@/domain/user/user.schema";
 import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
 import TravelHistory from "./TravelHistory";
 import TravelPartners from "./TravelPartners";
+import Block from "@/components/atoms/Block";
+import Title from "@/components/atoms/Title";
 
 export default function TravelSection() {
   const profileUser = useProfileUser();
@@ -27,11 +29,13 @@ export default function TravelSection() {
   }
 
   return (
-    <section className="mb-md flex flex-col gap-md">
-      <h2 className="header-1">Travel</h2>
+    <Block className="mb-md flex flex-col gap-md">
+      <Title as="h2" className="header-1">
+        Travel
+      </Title>
       <TravelHistory />
       <TravelPartners partner={travelPartners?.[0] || null} />
       <NextDestinations nextDestinations={nextDestinations || []} />
-    </section>
+    </Block>
   );
 }

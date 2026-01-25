@@ -1,34 +1,39 @@
 "use client";
 
-import { useState } from "react";
 import HeaderWrapper from "@/components/molecules/Header";
 import Input from "@/components/atoms/Input";
 import { useCities } from "@/domain/city/city.hooks";
-import Link from "next/link";
-import { Loader2, Search, MapPin } from "lucide-react";
+import { Search } from "lucide-react";
+import Block from "@/components/atoms/Block";
+import Typography from "@/components/atoms/Typography";
+import Title from "@/components/atoms/Title";
+import Loader from "@/components/atoms/Loader";
+import CityCard from "@/components/molecules/CityCard";
+import { City } from "@/domain/city/city.schema";
 
 export default function CitiesPage() {
-  const { data: cities, isLoading, isSuccess } = useCities();
-  const [search, setSearch] = useState("");
-
-  const filteredCities = cities?.filter(
-    (city) =>
-      city.name.toLowerCase().includes(search.toLowerCase()) ||
-      city.country?.name?.toLowerCase().includes(search.toLowerCase()) ||
-      city.country?.code?.toLowerCase().includes(search.toLowerCase()),
-  );
+  const {
+    filteredCities,
+    isLoading,
+    isSuccess,
+    search,
+    setSearch,
+  } = useCities();
 
   return (
-    <div className="min-h-screen bg-main pb-20">
+    <Block className="min-h-screen bg-main pb-20">
       <HeaderWrapper backButton className="sticky top-0 z-50">
-        <div className="mt-md">
-          <p className="text-sm text-secondary uppercase tracking-wider font-medium">
+        <Block className="mt-md">
+          <Typography className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore the
-          </p>
-          <h1 className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6">
+          </Typography>
+          <Title
+            as="h1"
+            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6"
+          >
             Cities
-          </h1>
-          <div className="relative">
+          </Title>
+          <Block className="relative">
             <Input
               placeholder="Search cities..."
               value={search}
@@ -36,71 +41,40 @@ export default function CitiesPage() {
               className="pl-10"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary w-4 h-4" />
-          </div>
-        </div>
+          </Block>
+        </Block>
       </HeaderWrapper>
 
-      <main className="p-md mt-md">
+      <Block as="main" className="p-md mt-md">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-md">
-            <Loader2 className="w-8 h-8 animate-spin text-brand" />
-            <p className="text-secondary animate-pulse">
+          <Block className="flex flex-col items-center justify-center py-20 gap-md">
+            <Loader />
+            <Typography className="text-secondary animate-pulse">
               Loading amazing cities...
-            </p>
-          </div>
+            </Typography>
+          </Block>
         ) : isSuccess && filteredCities && filteredCities.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-md">
-            {filteredCities.map((city: any) => (
-              <Link
-                key={city.id}
-                href={`/cities/${city.cityId}`}
-                className="group relative flex flex-col rounded-2xl overflow-hidden bg-surface border border-surface-secondary shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
-              >
-                <div className="aspect-[3/4] relative overflow-hidden">
-                  {city.imageHeroUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={city.imageHeroUrl}
-                      alt={city.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-surface-secondary flex items-center justify-center">
-                      <MapPin className="text-secondary w-8 h-8 opacity-20" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                  <div className="absolute bottom-0 left-0 p-3 w-full">
-                    <h2 className="text-white font-bold text-lg leading-tight group-hover:text-brand transition-colors">
-                      {city.name}
-                    </h2>
-                    <div className="flex items-center gap-1 mt-1">
-                      <span className="text-white/70 text-micro uppercase tracking-wider font-medium">
-                        {city.country?.name ||
-                          city.country?.code ||
-                          city.countryRefId}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+          <Block className="grid grid-cols-2 md:grid-cols-3 gap-md">
+            {filteredCities.map((city: City) => (
+              <CityCard key={city.id} city={city} />
             ))}
-          </div>
+          </Block>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="bg-surface p-6 rounded-full mb-md shadow-sm border border-surface-secondary">
+          <Block className="flex flex-col items-center justify-center py-20 text-center">
+            <Block className="bg-surface p-6 rounded-full mb-md shadow-sm border border-surface-secondary">
               <Search className="w-10 h-10 text-secondary opacity-20" />
-            </div>
-            <h3 className="text-lg font-bold text-txt-main">No cities found</h3>
-            <p className="text-secondary max-w-[240px] mt-2">
+            </Block>
+            <Title as="h3" className="text-lg font-bold text-txt-main">
+              No cities found
+            </Title>
+            <Typography className="text-secondary max-w-[240px] mt-2">
               {search
                 ? `We couldn't find any results for "${search}". Try a different city?`
                 : "No cities available in the database yet."}
-            </p>
-          </div>
+            </Typography>
+          </Block>
         )}
-      </main>
-    </div>
+      </Block>
+    </Block>
   );
 }
