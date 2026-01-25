@@ -12,13 +12,7 @@ import {
 } from "@/domain/friendship/friendship.actions";
 import Button from "@/components/atoms/Button";
 import MatchAvatars from "./MatchAvatars";
-import {
-  UserRoundCheck,
-  UserRoundX,
-  UserPlus,
-  UserMinus,
-  Users,
-} from "lucide-react";
+import { UserRoundCheck, UserRoundX, UserPlus, UserMinus } from "lucide-react";
 import { toast } from "sonner";
 
 type FriendshipStatus = {
@@ -33,13 +27,11 @@ export default function FriendRequestBlock() {
   const [friendship, setFriendship] = useState<FriendshipStatus | undefined>(
     undefined,
   );
-  const [isLoading, setIsLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     async function fetchStatus() {
       if (!user || !profileUser || user.id === profileUser.id) {
-        setIsLoading(false);
         return;
       }
 
@@ -47,13 +39,12 @@ export default function FriendRequestBlock() {
         targetUserId: profileUser.id,
       });
 
-      if (res?.data) {
+      if (res?.success && res.data) {
         // @ts-expect-error - Prisma enum type mismatch with local type if specific enums aren't imported, but string matching works
         setFriendship(res.data);
       } else {
         setFriendship(null);
       }
-      setIsLoading(false);
     }
 
     fetchStatus();
@@ -74,16 +65,20 @@ export default function FriendRequestBlock() {
   ) => {
     startTransition(async () => {
       const res = await action({ targetUserId: profileUser.id });
-      if (res?.serverError || res?.validationErrors) {
-        toast.error("Action failed");
+      if (!res?.success) {
+        toast.error(res?.error || "Action failed");
       } else {
         toast.success(successMessage);
         // Refresh status
         const statusRes = await getFriendshipStatusAction({
           targetUserId: profileUser.id,
         });
-        // @ts-expect-error - Prisma enum type mismatch
-        setFriendship(statusRes?.data || null);
+        if (statusRes?.success && statusRes.data) {
+          // @ts-expect-error - Prisma enum type mismatch
+          setFriendship(statusRes.data);
+        } else {
+          setFriendship(null);
+        }
       }
     });
   };
@@ -95,13 +90,16 @@ export default function FriendRequestBlock() {
   const isFriends = friendship?.status === "ACCEPTED";
   const noRelation = !friendship;
 
+  const displayName =
+    profileUser.profile?.firstName ?? profileUser.name ?? "User";
+
   // Render logic based on state
   if (isIncomingRequest) {
     return (
       <div className="w-full bg-bg-card p-md flex flex-col gap-md rounded-card shadow-soft border border-stroke">
         <h2 className="text-p text-center text-txt-main">
           <span className="text-brand capitalize font-bold">
-            {profileUser.firstName}{" "}
+            {displayName}{" "}
           </span>
           wants to be your friend
         </h2>
@@ -143,9 +141,7 @@ export default function FriendRequestBlock() {
       <div className="w-full bg-bg-card p-md flex flex-col gap-md rounded-card shadow-soft border border-stroke">
         <h2 className="text-p text-center text-txt-main">
           You and{" "}
-          <span className="text-brand capitalize font-bold">
-            {profileUser.firstName}
-          </span>{" "}
+          <span className="text-brand capitalize font-bold">{displayName}</span>{" "}
           are friends
         </h2>
         <MatchAvatars size={80} />
@@ -171,9 +167,7 @@ export default function FriendRequestBlock() {
       <div className="w-full bg-bg-card p-md flex flex-col gap-md rounded-card shadow-soft border border-stroke">
         <h2 className="text-p text-center text-txt-main">
           Friend request sent to{" "}
-          <span className="text-brand capitalize font-bold">
-            {profileUser.firstName}
-          </span>
+          <span className="text-brand capitalize font-bold">{displayName}</span>
         </h2>
         <MatchAvatars size={80} />
         <div className="flex gap-md justify-center">
@@ -195,9 +189,7 @@ export default function FriendRequestBlock() {
       <div className="w-full bg-bg-card p-md flex flex-col gap-md rounded-card shadow-soft border border-stroke">
         <h2 className="text-p text-center text-txt-main">
           Add{" "}
-          <span className="text-brand capitalize font-bold">
-            {profileUser.firstName}
-          </span>{" "}
+          <span className="text-brand capitalize font-bold">{displayName}</span>{" "}
           to your network
         </h2>
         <MatchAvatars size={80} />

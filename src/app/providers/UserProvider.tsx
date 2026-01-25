@@ -6,6 +6,8 @@ import { useAuthenticatedUser } from "@/domain/user/user.hooks";
 
 const UserContext = createContext<User | null>(null);
 
+import { useUnreadCount } from "@/hooks/useUnreadCount";
+
 export function UserProvider({
   children,
   user: initialUser,
@@ -17,9 +19,15 @@ export function UserProvider({
 
   return (
     <UserContext.Provider value={user || initialUser}>
+      <GlobalListeners />
       {children}
     </UserContext.Provider>
   );
+}
+
+function GlobalListeners() {
+  useUnreadCount();
+  return null;
 }
 
 export function useUser() {

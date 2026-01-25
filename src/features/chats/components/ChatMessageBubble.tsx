@@ -8,6 +8,7 @@ import {
   formatTimestamp,
 } from "@/domain/chat/chat.service";
 import type { Message } from "@/types/chat.d";
+import { motion } from "framer-motion";
 
 interface ChatMessageBubbleProps {
   message: Message;
@@ -19,9 +20,13 @@ interface ChatMessageBubbleProps {
 const ChatMessageBubble = memo(
   ({ message, isSent, showSenderName, showTime }: ChatMessageBubbleProps) => {
     const senderName = getMessageSenderName(message.sender);
+    const isSending = message.status === "sending";
 
     return (
-      <div
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+        animate={{ opacity: isSending ? 0.7 : 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         className={`flex gap-2 ${isSent ? "flex-row-reverse" : "flex-row items-end"}`}
       >
         {!isSent && (
@@ -34,7 +39,7 @@ const ChatMessageBubble = memo(
               undefined
             }
             name={senderName}
-            size={32}
+            size={36}
           />
         )}
         <div
@@ -50,7 +55,7 @@ const ChatMessageBubble = memo(
             </Typography>
           )}
           <div
-            className={`px-md py-sm rounded-2xl shadow-sm ${
+            className={`px-lg py-sm rounded-2xl shadow-sm transition-all ${
               isSent
                 ? "bg-brand text-white rounded-br-none"
                 : "bg-surface text-txt-main rounded-bl-none border border-stroke"
@@ -63,17 +68,24 @@ const ChatMessageBubble = memo(
               {message.content}
             </Typography>
           </div>
-          {showTime && (
-            <Typography
-              variant="micro"
-              color="sec"
-              className={`mt-1 px-xs ${isSent ? "text-right" : "text-left"} opacity-70`}
-            >
-              {formatTimestamp(message.createdAt)}
-            </Typography>
-          )}
+          <div className="flex items-center gap-1 mt-1 px-xs">
+            {showTime && (
+              <Typography
+                variant="micro"
+                color="sec"
+                className={`${isSent ? "text-right" : "text-left"} opacity-70`}
+              >
+                {formatTimestamp(message.createdAt)}
+              </Typography>
+            )}
+            {isSending && (
+              <span className="text-[10px] text-brand/80 font-medium">
+                Sending...
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+      </motion.div>
     );
   },
 );

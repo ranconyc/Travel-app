@@ -23,6 +23,7 @@ export type Message = {
   };
   readBy?: string[];
   tempId?: string; // For optimistic UI
+  status?: "sending" | "sent" | "error";
 };
 
 /**
