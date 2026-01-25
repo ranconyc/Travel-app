@@ -8,6 +8,7 @@ import { useDiscovery } from "@/domain/discovery/discovery.hooks";
 import GenderToggle from "@/components/molecules/GenderToggle";
 import EmptyState from "@/components/atoms/EmptyState";
 import DiscoveryLayout from "@/components/molecules/DiscoveryLayout";
+import MateGrid from "@/components/organisms/MateGrid";
 
 export default function NearbyMatesClient({
   mates,
@@ -37,24 +38,7 @@ export default function NearbyMatesClient({
       }
       userList={<UserList />}
     >
-      {filteredMates.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-sm">
-          {filteredMates.map((mate) => (
-            <MateCard
-              key={mate.id}
-              mate={mate}
-              loggedUser={loggedUser}
-              priority={false}
-            />
-          ))}
-        </div>
-      ) : (
-        <EmptyState
-          title="No mates found"
-          description="Try adjusting your filters to find more travel partners."
-          icon={<span>🔍</span>}
-        />
-      )}
+      <MateGrid mates={filteredMates} loggedUser={loggedUser} />
     </DiscoveryLayout>
   );
 }

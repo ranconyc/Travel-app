@@ -6,6 +6,7 @@ import Stats from "@/components/molecules/Stats";
 import { getFriends } from "@/lib/db/friendship.repo";
 import { InterestsSection } from "./components/sections/InterestsSection";
 import { personaService } from "@/domain/persona/persona.service";
+import ProfilePageLayout from "@/components/organisms/ProfilePageLayout";
 
 export default async function ProfilePage({
   params,
@@ -46,10 +47,10 @@ export default async function ProfilePage({
   ];
 
   return (
-    <main className="max-w-2xl mx-auto px-lg flex flex-col gap-xxl mt-xl">
+    <ProfilePageLayout>
       <Stats stats={stats} />
       <TravelSection />
       <InterestsSection interests={persona.interests} />
-    </main>
+    </ProfilePageLayout>
   );
 }

@@ -8,6 +8,7 @@ export const baseUserSelect = {
   id: true,
   name: true,
   avatarUrl: true,
+  visitedCountries: true,
   role: true,
   profile: {
     select: {
