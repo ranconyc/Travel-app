@@ -43,11 +43,11 @@ export default async function CityPage({
   const countryName = city.country?.name || "Unknown Country";
 
   return (
-    <div className="bg-appbg min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
+    <div className="bg-bg-main min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 p-md flex items-center justify-between">
         <Button variant="back" />
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 border border-r-amber-400">
           <Button variant="icon" icon={<Heart size={20} />} />
           <Button variant="icon" icon={<Shield size={20} />} />
           <Button
@@ -78,7 +78,7 @@ export default async function CityPage({
       </div>
 
       {/* Main Content Container */}
-      <main className="pt-24 px-4 max-w-md mx-auto min-h-screen flex flex-col gap-8">
+      <main className="p-4 flex flex-col gap-8">
         {/* Identity & Hero */}
         <div className="flex flex-col items-center gap-md mt-md">
           <HeroImage

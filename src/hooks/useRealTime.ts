@@ -18,6 +18,11 @@ export function useRealTime<T = unknown>(
   useEffect(() => {
     if (!channelName) return;
 
+    if (!pusherClient) {
+      console.warn("Pusher client not initialized. Check your env variables.");
+      return;
+    }
+
     // Subscribe to the channel
     const channel = pusherClient.subscribe(channelName);
 
