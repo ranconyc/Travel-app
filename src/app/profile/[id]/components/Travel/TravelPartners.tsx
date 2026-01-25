@@ -17,7 +17,7 @@ export default function TravelPartners({ partner }: { partner: User | null }) {
         <div className="bg-surface/50 p-md rounded-xl border border-surface flex items-center gap-md">
           <Avatar
             image={partner.avatarUrl || ""}
-            name={partner.name || ""}
+            alt={partner.name || ""}
             size={40}
           />
           <div>

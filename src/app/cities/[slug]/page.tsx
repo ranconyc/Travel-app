@@ -60,31 +60,43 @@ export default async function CityPage({
       <div className="fixed top-0 left-0 right-0 z-50 p-md flex items-center justify-between">
         <Button variant="back" />
         <div className="flex items-center gap-3 border border-r-amber-400">
-          <Button variant="icon" icon={<Heart size={20} />} />
-          <Button variant="icon" icon={<Shield size={20} />} />
+          <Button
+            variant="icon"
+            icon={<Heart size={20} />}
+            aria-label="Add to favorites"
+          />
+          <Button
+            variant="icon"
+            icon={<Shield size={20} />}
+            aria-label="Safety information"
+          />
           <Button
             variant="icon"
             href={`${social.filter((s) => s.name === "tiktok")[0].groupsURL}${city.name}`}
             target="_blank"
             icon={<AiFillTikTok size={20} />}
+            aria-label="TikTok"
           />
           <Button
             variant="icon"
             href={`${social.filter((s) => s.name === "facebook")[0].groupsURL}${city.name}`}
             target="_blank"
             icon={<FacebookIcon size={20} />}
+            aria-label="Facebook"
           />
           <Button
             variant="icon"
             href={`${social.filter((s) => s.name === "reddit")[0].groupsURL}${city.name} travel`}
             target="_blank"
             icon={<AiFillRedditCircle size={20} />}
+            aria-label="Reddit"
           />
           <Button
             variant="icon"
             href={`${social.filter((s) => s.name === "instagram")[0].groupsURL}${city.name}`}
             target="_blank"
             icon={<Instagram size={20} />}
+            aria-label="Instagram"
           />
         </div>
       </div>

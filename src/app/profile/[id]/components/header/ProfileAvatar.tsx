@@ -22,7 +22,7 @@ export default function ProfileAvatar() {
     <div className="relative">
       <Avatar
         image={avatarUrl}
-        name={profileUser.name || "User"}
+        alt={profileUser.name || "User"}
         size={150}
         variant="square"
         border

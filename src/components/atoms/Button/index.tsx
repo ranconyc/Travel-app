@@ -22,18 +22,29 @@ type ButtonSize = "sm" | "md" | "lg";
 
 import { HTMLMotionProps } from "framer-motion";
 
-interface ButtonProps extends HTMLMotionProps<"button"> {
+type CommonProps = {
   children?: React.ReactNode;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   loading?: boolean;
-  variant?: ButtonVariant;
   href?: string | false;
   size?: ButtonSize;
   fullWidth?: boolean;
   target?: string;
   color?: "purple" | "blue" | "green" | "yellow" | "red" | "pink";
-}
+};
+
+type ButtonProps = Omit<HTMLMotionProps<"button">, "variant"> &
+  CommonProps &
+  (
+    | {
+        variant?: Exclude<ButtonVariant, "icon">;
+      }
+    | {
+        variant: "icon";
+        "aria-label": string;
+      }
+  );
 
 export default function Button({
   children,

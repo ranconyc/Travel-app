@@ -48,7 +48,7 @@ export default function Navbar({ pathname }: { pathname: string }) {
             <Avatar
               className="cursor-pointer"
               image={user?.avatarUrl || ""}
-              name={user?.name || ""}
+              alt={user?.name || ""}
               size={iconsSize}
             />
           </Link>
