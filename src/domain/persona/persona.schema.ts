@@ -1,8 +1,36 @@
 import { z } from "zod";
 
 // ============================================
-// PERSONA ENUMS
+// DOMAIN ENUMS & CONSTANTS
 // ============================================
+
+export const DAILY_RHYTHMS = {
+  EARLY_BIRD: "early_bird",
+  BALANCED: "balanced",
+  NIGHT_OWL: "night_owl",
+  SPONTANEOUS: "spontaneous",
+} as const;
+
+export const TRAVEL_STYLES = {
+  PLANNER: "planner",
+  EXPLORER: "explorer",
+  RELAXER: "relaxer",
+  ADVENTURER: "adventurer",
+  CULTURAL: "cultural",
+} as const;
+
+export const BUDGET_LEVELS = {
+  BACKPACKER: "backpacker",
+  BUDGET: "budget",
+  MID_RANGE: "mid_range",
+  COMFORT: "comfort",
+  LUXURY: "luxury",
+} as const;
+
+export type DailyRhythm = (typeof DAILY_RHYTHMS)[keyof typeof DAILY_RHYTHMS];
+export type TravelStyle = (typeof TRAVEL_STYLES)[keyof typeof TRAVEL_STYLES];
+export type BudgetTier = (typeof BUDGET_LEVELS)[keyof typeof BUDGET_LEVELS];
+export type BudgetLevel = BudgetTier;
 
 export const DailyRhythmEnum = z.enum([
   "early_bird",
@@ -53,6 +81,28 @@ export const InterestCategoryEnum = z.enum([
 ]);
 
 // ============================================
+// DOMAIN MODELS
+// ============================================
+
+export interface Insight {
+  code: string;
+  label: string;
+  category: "LUXURY" | "ADVENTURE" | "CULTURE" | "GENERAL" | "RHYTHM";
+  score?: number;
+}
+
+export interface PersonaDbModel {
+  dailyRhythm: DailyRhythm | string;
+  travelStyle: TravelStyle | string;
+  budget: BudgetLevel | string;
+  currency: string;
+  interests: string[];
+  insights?: string[]; // Array of insight codes
+}
+
+export type InterestCategory = z.infer<typeof InterestCategoryEnum>;
+
+// ============================================
 // CORE PERSONA SCHEMA (Immutable Structure)
 // ============================================
 
@@ -81,10 +131,37 @@ export const personaSchema = z.object({
 });
 
 export type UserPersona = z.infer<typeof personaSchema>;
-export type DailyRhythm = z.infer<typeof DailyRhythmEnum>;
-export type TravelStyle = z.infer<typeof TravelStyleEnum>;
-export type BudgetTier = z.infer<typeof BudgetTierEnum>;
-export type InterestCategory = z.infer<typeof InterestCategoryEnum>;
+
+// ============================================
+// FORM SCHEMAS (Persona Creation Flow)
+// ============================================
+
+/**
+ * Persona Form Schema
+ * This extends the base persona fields with form-specific validation
+ */
+export const personaFormSchema = z.object({
+  // Basic Info (required in form flow)
+  firstName: z.string().min(1, "First name is required"),
+  hometown: z.string().min(1, "Home city is required"),
+  avatarUrl: z.string().optional(),
+
+  // Persona (required in form flow, optional in entity)
+  interests: z.array(z.string()).min(1, "Please select at least one interest"),
+  dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
+  travelStyle: z.string().min(1, "Please select a travel style"),
+  budget: z.string().min(1, "Please select a budget"),
+  currency: z.string().min(1, "Please select a currency"),
+});
+
+export type PersonaFormValues = z.infer<typeof personaFormSchema>;
+
+export type TravelPersonaFormValues = {
+  areaPreferences: string[];
+  accommodationTypes: string[];
+  travelRhythm: string;
+  travelStyle: string;
+};
 
 // ============================================
 // SOCIALS SCHEMA

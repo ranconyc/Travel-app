@@ -6,6 +6,14 @@ import * as userRepository from "@/lib/db/user.repo";
 import { getAge } from "@/domain/shared/utils/age";
 
 /**
+ * Retrieves the current authenticated user with full profile data.
+ * Used for reactive client-side state synchronization.
+ */
+export async function handleGetAuthenticatedUser(userId: string) {
+  return await userRepository.getUserById(userId);
+}
+
+/**
  * Completes the user profile with the provided data.
  */
 export async function completeProfile(

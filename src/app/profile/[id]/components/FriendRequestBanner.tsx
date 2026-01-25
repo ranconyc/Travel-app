@@ -53,7 +53,7 @@ export default function FriendRequestBanner({
         toast.success("Friend request rejected");
       }
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
@@ -73,7 +73,8 @@ export default function FriendRequestBanner({
         <div className="flex gap-md w-full">
           <Button
             variant="outline"
-            className="flex-1 rounded-2xl h-12 border-2 hover:bg-red-50 hover:border-red-200 hover:text-red-500 text-base"
+            className="flex-1"
+            size="lg"
             onClick={() => handleAction("reject")}
             loading={isLoading}
             disabled={isLoading}
@@ -83,7 +84,8 @@ export default function FriendRequestBanner({
           </Button>
           <Button
             variant="brand"
-            className="flex-1 rounded-2xl h-12 shadow-lg shadow-brand/20 text-base"
+            className="flex-1"
+            size="lg"
             onClick={() => handleAction("accept")}
             loading={isLoading}
             disabled={isLoading}

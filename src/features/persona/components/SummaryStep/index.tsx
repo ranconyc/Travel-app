@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { PersonaFormValues } from "@/domain/persona/persona.schema";
 import { Edit2, Lock } from "lucide-react";
 import Button from "@/components/atoms/Button";
 
@@ -17,6 +17,7 @@ interface SummarySectionProps {
   stepIndex: number;
   onEdit: (step: number) => void;
   isPrivate?: boolean;
+  isList?: boolean;
 }
 
 function SummarySection({
@@ -25,8 +26,10 @@ function SummarySection({
   stepIndex,
   onEdit,
   isPrivate,
+  isList,
 }: SummarySectionProps) {
   const displayValue = Array.isArray(value) ? value.join(", ") : value;
+  const items = Array.isArray(value) ? value : [value];
 
   return (
     <div className="bg-surface rounded-xl p-md border border-surface-secondary">
@@ -43,7 +46,25 @@ function SummarySection({
           <Edit2 size={14} />
         </Button>
       </div>
-      <p className="text-lg font-medium text-txt-main">{displayValue}</p>
+      {isList ? (
+        <div className="space-y-sm">
+          {items.map((item, index) => (
+            <div
+              key={`${item}-${index}`}
+              className="flex items-center justify-between p-sm bg-bg-sub rounded-xl border border-stroke shadow-soft"
+            >
+              <div className="flex items-center gap-sm">
+                <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center text-brand">
+                  ✈️
+                </div>
+                <span className="font-medium text-txt-main">{item}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-lg font-medium text-txt-main">{displayValue}</p>
+      )}
       {isPrivate && (
         <div className="flex items-center gap-1 mt-2 text-xs text-secondary/70">
           <Lock size={12} />
@@ -55,29 +76,29 @@ function SummarySection({
 }
 
 export default function SummaryStep({
-  imgUrl,
   onJumpToStep,
 }: {
-  imgUrl?: string; // Optional user avatar
   onJumpToStep: (step: number) => void;
 }) {
   const { watch } = useFormContext<PersonaFormValues>();
   const values = watch();
 
-  // Helper to get labels
   const getRhythmLabel = (id: string) =>
     dailyRhythms.find((r) => r.id === id)?.label || id;
   const getStyleLabel = (id: string) =>
     travelStyles.find((s) => s.id === id)?.label || id;
   const getBudgetLabel = (id: string) =>
-    budgetTiers.find((b: any) => b.id === id)?.label || id;
+    (budgetTiers as Array<{ id: string; label: string }>).find(
+      (b) => b.id === id,
+    )?.label || id;
 
   const getInterestLabels = (ids: string[]) => {
+    if (!ids || ids.length === 0) return [];
     const labels: string[] = [];
     const categories = Object.values(interestsDataRaw);
     ids.forEach((id) => {
       for (const cat of categories) {
-        const item = cat.items.find((i: any) => i.id === id);
+        const item = (cat as any).items.find((i: any) => i.id === id);
         if (item) {
           labels.push(item.label);
           break;
@@ -130,6 +151,7 @@ export default function SummaryStep({
         value={getInterestLabels(values.interests)}
         stepIndex={5}
         onEdit={onJumpToStep}
+        isList
       />
     </div>
   );

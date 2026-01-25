@@ -19,6 +19,7 @@ import {
   updateUserProfilePersona,
   handleUpdateUserLocation,
   handleGenerateBio,
+  handleGetAuthenticatedUser,
 } from "@/domain/user/user.service";
 import {
   deleteUserAccount,
@@ -27,9 +28,9 @@ import {
   updateVisitedCountries,
 } from "@/lib/db/user.repo";
 
-import { mapUiToDb } from "@/features/persona/logic/persona.mapper";
-import { InsightsEngine } from "@/features/persona/logic/insights.engine";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { mapUiToDb } from "@/domain/persona/persona.mapper";
+import { InsightsEngine } from "@/domain/persona/insights.engine";
+import { PersonaFormValues } from "@/domain/persona/persona.schema";
 
 /* -------------------------------------------------------------------------- */
 /*                                USER ACTIONS                                */
@@ -140,5 +141,12 @@ export const updateUserLocationAction = createSafeAction(
     const result = await handleUpdateUserLocation(userId, coords);
     revalidatePath(`/profile/${userId}`);
     return result;
+  },
+);
+
+export const getAuthenticatedUserAction = createSafeAction(
+  z.object({}),
+  async (_, userId) => {
+    return await handleGetAuthenticatedUser(userId);
   },
 );

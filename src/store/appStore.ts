@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { User } from "@/domain/user/user.schema";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { PersonaFormValues } from "@/domain/persona/persona.schema";
 
 type Coords = { lat: number; lng: number };
 

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Send } from "lucide-react";
 import Button from "@/components/atoms/Button";
+import ChatInputWrapper from "./ChatInputWrapper";
 
 export function MessageInput({ chatId }: { chatId: string }) {
   const [content, setContent] = useState("");
@@ -42,10 +43,10 @@ export function MessageInput({ chatId }: { chatId: string }) {
   };
 
   return (
-    <div className="flex-none p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke z-40">
+    <ChatInputWrapper>
       <form
         onSubmit={handleSubmit}
-        className="max-w-xl mx-auto flex gap-sm items-end bg-bg-sub rounded-3xl p-xs border-2 border-transparent focus-within:border-brand/40 focus-within:bg-bg-main transition-all duration-300 shadow-soft"
+        className="flex gap-sm items-end bg-bg-sub rounded-3xl p-xs border-2 border-transparent focus-within:border-brand/40 focus-within:bg-bg-main transition-all duration-300 shadow-soft"
       >
         <textarea
           value={content}
@@ -66,6 +67,6 @@ export function MessageInput({ chatId }: { chatId: string }) {
           icon={!isSending && <Send size={20} />}
         />
       </form>
-    </div>
+    </ChatInputWrapper>
   );
 }

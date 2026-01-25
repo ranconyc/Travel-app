@@ -15,10 +15,16 @@ export default function FriendRequestBlock() {
           icon={<UserRoundX size={20} />}
           className="flex-1"
           variant="outline"
+          size="lg"
         >
           Reject
         </Button>
-        <Button icon={<UserRoundCheck size={20} />} className="flex-1">
+        <Button
+          icon={<UserRoundCheck size={20} />}
+          className="flex-1"
+          variant="brand"
+          size="lg"
+        >
           Accept
         </Button>
       </div>

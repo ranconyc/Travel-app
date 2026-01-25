@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { PersonaFormValues } from "@/domain/persona/persona.schema";
 import { InterestsSelector } from "@/components/organisms/forms";
 
 /**

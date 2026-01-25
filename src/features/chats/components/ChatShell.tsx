@@ -2,7 +2,7 @@
 
 import React from "react";
 import PageHeader from "@/components/molecules/PageHeader";
-import { ProfileErrorBoundary } from "@/app/profile/edit/ProfileErrorBoundary";
+import AppShell from "@/components/templates/AppShell";
 
 interface ChatShellProps {
   title: string;
@@ -17,18 +17,19 @@ export function ChatShell({
   children,
   input,
 }: ChatShellProps) {
+  const headerSlot = (
+    <PageHeader backButton title={title} subtitle={subtitle} />
+  );
+
   return (
-    <div className="flex flex-col h-screen bg-bg-main">
-      <div className="flex-none z-50">
-        <PageHeader backButton title={title} subtitle={subtitle} />
-      </div>
-
-      <main className="flex-1 overflow-hidden flex flex-col relative">
-        <ProfileErrorBoundary>{children}</ProfileErrorBoundary>
-      </main>
-
-      <div className="flex-none">{input}</div>
-    </div>
+    <AppShell
+      variant="screen"
+      headerSlot={headerSlot}
+      footerSlot={input}
+      scrollable={false}
+    >
+      <div className="flex flex-col h-full relative">{children}</div>
+    </AppShell>
   );
 }
 

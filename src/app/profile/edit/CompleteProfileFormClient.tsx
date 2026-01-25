@@ -2,31 +2,28 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import NameSectionShell from "@/app/profile/edit/sections/NameSection/NameSectionShell";
+
 import {
   CompleteProfileFormValues,
   completeProfileSchema,
 } from "@/domain/user/completeProfile.schema";
 
-import { updateProfile } from "@/domain/user/user.actions";
+import NameSectionShell from "@/app/profile/edit/sections/NameSection/NameSectionShell";
 import GenderSectionShell from "@/app/profile/edit/sections/GenderSection/GenderSectionShell";
 import LanguagesSectionShell from "@/app/profile/edit/sections/LanguagesSection/LanguagesSectionShell";
 import BirthdaySectionShell from "@/app/profile/edit/sections/BirthdaySection/BirthdaySectionShell";
 import AvatarSectionShell from "@/app/profile/edit/sections/AvatarSection/AvatarSectionShell";
-
-import { useProfileDraft } from "@/domain/user/user.hooks";
-import type { User, Gender } from "@/domain/user/user.schema";
-import Button from "@/components/atoms/Button";
 import HomeBaseSectionShell from "@/app/profile/edit/sections/HomeBaseSection/HomeBaseSectionShell";
 import OccupationSectionShell from "@/app/profile/edit/sections/OccupationSection/OccupationSectionShell";
 import SocialSectionShell from "@/app/profile/edit/sections/SocialSection/SocialSectionShell";
-
 import BioSectionShell from "@/app/profile/edit/sections/BioSection/BioSectionShell";
-import { useUser } from "@/app/providers/UserProvider";
+
+import { useProfileUpdate } from "@/domain/user/hooks/useProfileUpdate";
+import type { User, Gender } from "@/domain/user/user.schema";
+import Button from "@/components/atoms/Button";
+import AppShell from "@/components/templates/AppShell";
 
 function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
   return {
@@ -53,8 +50,9 @@ function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
 }
 
 export default function CompleteProfileFormClient() {
+  const { user, isUpdating, handleUpdate } = useProfileUpdate();
   const router = useRouter();
-  const user = useUser();
+
   const defaultValues = useMemo(() => mapUserToDefaults(user), [user]);
 
   const methods = useForm<CompleteProfileFormValues>({
@@ -63,102 +61,71 @@ export default function CompleteProfileFormClient() {
     mode: "onBlur",
   });
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
   useEffect(() => {
     if (user) {
       methods.reset(mapUserToDefaults(user));
     }
   }, [user, methods]);
 
-  const { clearDraft } = useProfileDraft(methods as any);
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    return handleSubmit(onSubmit as any, () => {
-      toast.error("Please fix the highlighted errors");
-    })(e);
-  };
-
   const onSubmit = async (values: CompleteProfileFormValues) => {
-    const result = await updateProfile({ ...values });
-
-    if (!result.success) {
-      if (result.fieldErrors) {
-        Object.entries(result.fieldErrors).forEach(([field, message]) => {
-          methods.setError(field as keyof CompleteProfileFormValues, {
-            message,
-          });
-        });
+    const success = await handleUpdate(values);
+    if (success) {
+      if (user) {
+        router.push(`/profile/${user.id}`);
+      } else {
+        router.push("/profile");
       }
-
-      toast.error(
-        result.error === "VALIDATION_ERROR"
-          ? "Please fix the errors in the form"
-          : "Something went wrong. Please try again.",
-      );
-      return;
-    }
-
-    toast.success("Profile updated!");
-    clearDraft();
-    router.refresh();
-    if (user) {
-      router.push(`/profile/${user.id}`);
-    } else {
-      router.push("/profile");
     }
   };
 
   if (!user) return null;
 
+  const footerSlot = (
+    <div className="fixed bottom-0 left-0 right-0 p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke z-50">
+      <div className="max-w-(--max-width-narrow) mx-auto">
+        <Button
+          type="submit"
+          loading={isUpdating}
+          disabled={isUpdating}
+          className="w-full shadow-xl"
+          size="lg"
+          onClick={methods.handleSubmit(onSubmit)}
+        >
+          Update Profile
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleFormSubmit} className="pb-32 bg-bg-main" noValidate>
-        <div className="max-w-xl mx-auto">
+      <AppShell variant="narrow" footerSlot={footerSlot}>
+        <div className="flex flex-col gap-xl pb-32">
           <AvatarSectionShell />
 
-          <div className="px-md">
-            <div className="flex justify-center mb-lg">
-              <Button
-                variant="outline"
-                onClick={() => router.push("/profile/persona?step=1")}
-                className="w-full sm:w-auto"
-              >
-                Travel Interests
-              </Button>
-            </div>
-
-            <div className="space-y-xl">
-              <NameSectionShell />
-              <BioSectionShell />
-              <SocialSectionShell />
-              <HomeBaseSectionShell />
-              <OccupationSectionShell />
-              <LanguagesSectionShell />
-              <BirthdaySectionShell />
-              <GenderSectionShell />
-            </div>
-          </div>
-        </div>
-
-        {/* Sticky Bottom Save Bar */}
-        <div className="fixed bottom-0 left-0 right-0 p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke z-50">
-          <div className="max-w-xl mx-auto">
+          <div className="flex justify-center">
             <Button
-              type="submit"
-              loading={isSubmitting}
-              disabled={isSubmitting}
-              className="w-full shadow-xl"
-              size="lg"
+              variant="outline"
+              type="button"
+              onClick={() => router.push("/profile/persona?step=1")}
+              className="w-full sm:w-auto"
             >
-              Update Profile
+              Travel Interests
             </Button>
           </div>
+
+          <div className="space-y-xl">
+            <NameSectionShell />
+            <BioSectionShell />
+            <SocialSectionShell />
+            <HomeBaseSectionShell />
+            <OccupationSectionShell />
+            <LanguagesSectionShell />
+            <BirthdaySectionShell />
+            <GenderSectionShell />
+          </div>
         </div>
-      </form>
+      </AppShell>
     </FormProvider>
   );
 }

@@ -48,7 +48,6 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
         id="home-main"
       >
         {/* <div className="flex flex-col"> */}
-        {/* <UserList /> */}
         <CountryList />
         <CityList />
         {/* </div> */}

@@ -12,15 +12,15 @@ import { NotificationBadge } from "@/components/molecules/Navbar/NotificationBad
 import { Avatar } from "@/components/molecules/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
 
-const iconsSize = 26;
+const iconsSize = 32;
 
 export default function Navbar({ pathname }: { pathname: string }) {
   const user = useUser();
   const unreadCount = useUnreadCount();
 
   return (
-    <nav className="fixed bottom-8 left-16 right-16">
-      <ul className="p-md bg-surface/40 backdrop-blur-sm text-secondary flex items-center justify-around rounded-full shadow-xl">
+    <nav className="fixed bottom-xs left-12 right-12 z-50">
+      <ul className="p-md bg-surface/80 backdrop-blur-sm text-secondary flex items-center justify-around rounded-full shadow-xl">
         <li className={pathname === "/" ? "text-brand" : ""}>
           <Link href="/">
             <Binoculars size={iconsSize} />

@@ -1,62 +1,54 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  sendMessage,
-  markMessagesAsRead,
-  createOrGetChat,
-} from "@/domain/chat/chat.actions";
-import { TMessage } from "@/domain/chat/chat.schema";
+"use client";
 
-export function useSendMessage() {
-  const queryClient = useQueryClient();
+import { useState, useCallback, useMemo } from "react";
+import { useRealTime } from "@/hooks/useRealTime";
+import type { Message } from "@/types/chat.d";
+import { useUser } from "@/app/providers/UserProvider";
 
-  return useMutation<TMessage, Error, { chatId: string; content: string }>({
-    mutationFn: async ({ chatId, content }) => {
-      const res = await sendMessage({ chatId, content });
-      if (!res.success) {
-        throw new Error(res.error);
-      }
-      return res.data;
-    },
-    onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["chat", variables.chatId] });
-      queryClient.invalidateQueries({ queryKey: ["chats"] });
-    },
-  });
-}
+/**
+ * useChat - Logic wrapper for real-time chat sessions.
+ * Manages message state, real-time sync via Pusher, and grouping logic.
+ */
+export function useChat(chatId: string, initialMessages: Message[]) {
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const user = useUser();
 
-export function useMarkMessagesAsRead() {
-  const queryClient = useQueryClient();
+  const handleNewMessage = useCallback((newMessage: Message) => {
+    setMessages((prev) => {
+      const exists = prev.some((m) => m.id === newMessage.id);
+      if (exists) return prev;
+      return [...prev, newMessage];
+    });
+  }, []);
 
-  return useMutation<any, Error, { chatId: string; userId: string }>({
-    mutationFn: async ({ chatId, userId }) => {
-      const res = await markMessagesAsRead({ chatId });
-      if (!res.success) {
-        throw new Error(res.error);
-      }
-      return res.data;
-    },
-    onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["chat", variables.chatId] });
-      queryClient.invalidateQueries({ queryKey: ["chats"] });
-      // Might also want to invalidate unread counts if that query exists
-      queryClient.invalidateQueries({ queryKey: ["unread"] });
-    },
-  });
-}
+  // Sync with Pusher channel
+  useRealTime(`chat-${chatId}`, "new-message", handleNewMessage);
 
-export function useCreateOrGetChat() {
-  const queryClient = useQueryClient();
+  /**
+   * Identifies boundaries between different senders for better UI grouping.
+   * Logic moved here from the UI layer to reach 10/10 decoupling.
+   */
+  const groupedMessages = useMemo(() => {
+    return messages.map((message, index) => {
+      const prevMessage = index > 0 ? messages[index - 1] : null;
+      const nextMessage =
+        index < messages.length - 1 ? messages[index + 1] : null;
 
-  return useMutation<string, Error, { otherUserId: string }>({
-    mutationFn: async ({ otherUserId }) => {
-      const res = await createOrGetChat({ otherUserId });
-      if (!res.success) {
-        throw new Error(res.error);
-      }
-      return res.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["chats"] });
-    },
-  });
+      const isSameSenderAsPrev = prevMessage?.senderId === message.senderId;
+      const isLastInSequence = nextMessage?.senderId !== message.senderId;
+
+      return {
+        ...message,
+        isSent: message.senderId === user?.id,
+        showSenderName: !isSameSenderAsPrev,
+        showTime: isLastInSequence,
+      };
+    });
+  }, [messages, user?.id]);
+
+  return {
+    messages: groupedMessages,
+    isEmpty: messages.length === 0,
+    user,
+  };
 }

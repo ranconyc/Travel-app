@@ -4,23 +4,27 @@ import PusherClient from "pusher-js";
 /**
  * Pusher Server instance for triggering events from server actions
  */
-export const pusherServer = new PusherServer({
-  appId: process.env.PUSHER_APP_ID!,
-  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
-  secret: process.env.PUSHER_SECRET!,
-  cluster: process.env.PUSHER_CLUSTER || "mt1",
-  useTLS: true,
-});
+export const pusherServer =
+  process.env.PUSHER_APP_ID &&
+  process.env.NEXT_PUBLIC_PUSHER_KEY &&
+  process.env.PUSHER_SECRET
+    ? new PusherServer({
+        appId: process.env.PUSHER_APP_ID,
+        key: process.env.NEXT_PUBLIC_PUSHER_KEY,
+        secret: process.env.PUSHER_SECRET,
+        cluster: process.env.PUSHER_CLUSTER || "mt1",
+        useTLS: true,
+      })
+    : (null as unknown as PusherServer);
 
 /**
  * Pusher Client instance for subscribing to channels in client components
  */
-export const pusherClient = new PusherClient(
-  process.env.NEXT_PUBLIC_PUSHER_KEY!,
-  {
-    cluster: process.env.PUSHER_CLUSTER || "mt1",
-  },
-);
+export const pusherClient = process.env.NEXT_PUBLIC_PUSHER_KEY
+  ? new PusherClient(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+      cluster: process.env.PUSHER_CLUSTER || "mt1",
+    })
+  : (null as unknown as PusherClient);
 
 /**
  * Centralized Event Dispatcher for server-side triggers

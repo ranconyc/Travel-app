@@ -24,6 +24,12 @@
   --radius-card: 16px;
   --radius-pill: 12px;
 
+  /* Layout Tokens */
+  --max-width-default: 1280px;
+  --max-width-narrow: 576px;
+  --navbar-height: 64px;
+  --page-padding: var(--spacing-md);
+
   /* Bolder Spacing Scale */
   --spacing-xxs: 4px;
   --spacing-xs: 8px;

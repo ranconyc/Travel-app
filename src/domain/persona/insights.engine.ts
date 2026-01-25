@@ -4,7 +4,7 @@ import {
   BUDGET_LEVELS,
   DAILY_RHYTHMS,
   TRAVEL_STYLES,
-} from "@/features/persona/types/domain";
+} from "./persona.schema";
 
 export class InsightsEngine {
   private static rules: Array<(data: PersonaDbModel) => Insight | null> = [

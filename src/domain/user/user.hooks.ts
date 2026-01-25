@@ -9,6 +9,7 @@ import {
   updateUserLocationAction,
   updateUserRoleAction,
   getAllUsersAction,
+  getAuthenticatedUserAction,
 } from "@/domain/user/user.actions";
 import { useEffect, useRef } from "react";
 import type { UseFormReturn, FieldValues } from "react-hook-form";
@@ -19,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { useLocationStore } from "@/store/locationStore";
 import { useAppStore } from "@/store/appStore";
 import { User } from "@/domain/user/user.schema";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { PersonaFormValues } from "@/domain/persona/persona.schema";
 import {
   SaveInterestsFormValues,
   SaveTravelFormValues,
@@ -45,7 +46,10 @@ export function useUpdateProfile() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user", "profile"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "me"] });
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      // Automate draft cleanup
+      useAppStore.getState().clearDraft();
     },
   });
 }
@@ -66,6 +70,9 @@ export function useSaveInterests() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user", "interests"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "me"] });
+      // Automate draft cleanup
+      useAppStore.getState().clearDraft();
     },
   });
 }
@@ -445,5 +452,21 @@ export function useLanguages() {
       return languagesData as LanguageItem[];
     },
     staleTime: Infinity,
+  });
+}
+
+export function useAuthenticatedUser(initialUser: User | null) {
+  return useQuery({
+    queryKey: ["user", "me"],
+    queryFn: async () => {
+      const result = await getAuthenticatedUserAction({});
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      return result.data as User;
+    },
+    initialData: initialUser || undefined,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!initialUser,
   });
 }

@@ -8,7 +8,7 @@ import Logo from "@/components/atoms/Logo";
 import { saveTravelPersona } from "@/domain/user/user.actions";
 import { User } from "@/domain/user/user.schema";
 import { personaService } from "@/domain/persona/persona.service";
-import { TravelPersonaFormValues } from "@/features/persona/types/form";
+import { TravelPersonaFormValues } from "@/domain/persona/persona.schema";
 
 // ----- GENERIC CARD LIST -----
 

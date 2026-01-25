@@ -23,7 +23,7 @@ export default function UserList() {
 
   return (
     <SectionList
-      title="Travel Partners"
+      title="Your Friends"
       href="/mates"
       data={friends}
       isLoading={isLoading}

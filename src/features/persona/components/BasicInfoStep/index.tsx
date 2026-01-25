@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import Input from "@/components/atoms/Input";
-import { PersonaFormValues } from "@/features/persona/types/form";
+import { PersonaFormValues } from "@/domain/persona/persona.schema";
 import { Autocomplete } from "@/components/molecules/Autocomplete";
 import AvatarCropModal from "@/features/persona/components/AvatarCropModal";
 import { searchCitiesAction } from "@/domain/city/city.search.action";

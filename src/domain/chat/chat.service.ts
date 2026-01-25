@@ -9,6 +9,41 @@ import {
 import { getFriends } from "@/lib/db/friendship.repo";
 import { triggerRealTimeEvent } from "@/lib/pusher";
 
+import { formatDistanceToNow, format, isToday, isYesterday } from "date-fns";
+import { Message } from "@/types/chat.d";
+
+/**
+ * Domain-specific logic for resolving a sender's display name.
+ * Centralized here to handle fallbacks consistently across the app.
+ */
+export function getMessageSenderName(sender: Message["sender"]): string {
+  return (
+    sender.name ||
+    `${sender.profile?.firstName || ""} ${sender.profile?.lastName || ""}`.trim() ||
+    "Unknown"
+  );
+}
+
+/**
+ * Standardized timestamp formatting for messages.
+ */
+export function formatTimestamp(date: Date | string): string {
+  const messageDate = typeof date === "string" ? new Date(date) : date;
+
+  if (isToday(messageDate)) {
+    return formatDistanceToNow(messageDate, { addSuffix: true }).replace(
+      "minutes",
+      "min",
+    );
+  }
+
+  if (isYesterday(messageDate)) {
+    return `Yesterday ${format(messageDate, "h:mm a")}`;
+  }
+
+  return format(messageDate, "MMM d, h:mm a");
+}
+
 export async function handleGetUserChats(userId: string) {
   return await findUserChats(userId);
 }

@@ -1,11 +1,14 @@
-import { PersonaFormValues } from "@/features/persona/types/form";
-import { PersonaDbModel } from "@/features/persona/types/domain";
-import { InsightsEngine } from "@/features/persona/logic/insights.engine";
-import { UserPersona } from "./persona.schema";
+import {
+  UserPersona,
+  PersonaFormValues,
+  DailyRhythm,
+  TravelStyle,
+  BudgetTier,
+} from "./persona.schema";
+import { User } from "@/domain/user/user.schema";
 
 /**
  * Persona Constants & Options
- * Centralized here to prevent "Enterprise Drift" in UI components.
  */
 export const AREA_OPTIONS = [
   {
@@ -126,14 +129,88 @@ export const TRAVEL_STYLE_OPTIONS = [
   },
 ];
 
+export interface StepConfig {
+  header: string;
+  description: string;
+  validationFields: (keyof PersonaFormValues)[];
+}
+
+interface PersonaJson {
+  identity?: {
+    firstName?: string;
+    hometown?: string;
+    avatarUrl?: string;
+  };
+  preferences?: {
+    dailyRhythm?: string;
+    travelStyle?: string;
+    budgetTier?: string;
+    currency?: string;
+  };
+  interests?: string[];
+  insights?: string[];
+  areaPreferences?: string[];
+  accommodationTypes?: string[];
+  travelRhythm?: string;
+  travelStyle?: string;
+  budget?: string;
+  currency?: string;
+  dailyRhythm?: string;
+  metadata?: {
+    lastSyncedAt?: number;
+    version?: number;
+  };
+}
+
 /**
  * Domain Service for Persona logic.
- * Centralizes all business rules related to user onboarding and travel styles.
  */
 export class PersonaService {
-  /**
-   * Applies default values when a user skips high-friction onboarding steps.
-   */
+  private readonly steps: StepConfig[] = [
+    {
+      header: "Let's get to know you",
+      description: "Tell us a bit about yourself",
+      validationFields: ["firstName", "hometown"],
+    },
+    {
+      header: "What's your natural travel rhythm?",
+      description: "Select the option that matches you the most",
+      validationFields: ["dailyRhythm"],
+    },
+    {
+      header: "Which travel style feels most like you?",
+      description: "Select the option that matches you the most",
+      validationFields: ["travelStyle"],
+    },
+    {
+      header: "What's your typical travel budget?",
+      description: "Select your budget level and preferred currency",
+      validationFields: ["budget", "currency"],
+    },
+    {
+      header: "What do you enjoy when traveling?",
+      description: "Help us personalize your trip recommendations",
+      validationFields: ["interests"],
+    },
+    {
+      header: "Review your profile",
+      description: "Make sure everything looks good",
+      validationFields: [],
+    },
+  ];
+
+  public getSteps() {
+    return this.steps;
+  }
+
+  public getStepConfig(step: number): StepConfig {
+    return this.steps[step - 1] || this.steps[0];
+  }
+
+  public getStepValidationFields(step: number): (keyof PersonaFormValues)[] {
+    return this.getStepConfig(step).validationFields;
+  }
+
   public applySkipDefaults(
     currentValues: Partial<PersonaFormValues>,
   ): PersonaFormValues {
@@ -151,51 +228,45 @@ export class PersonaService {
     };
   }
 
-  /**
-   * Initializes form values from the nested UserPersona entity or legacy store.
-   */
-  public getInitialValues(user: any): PersonaFormValues {
-    const persona = (user?.profile?.persona || {}) as any;
-    const identity = persona.identity || {};
-    const prefs = persona.preferences || {};
+  public getInitialValues(user: User | null): PersonaFormValues {
+    const persona = user?.profile?.persona as PersonaJson | undefined;
+    const identity = persona?.identity || {};
+    const prefs = persona?.preferences || {};
 
     return {
       firstName: identity.firstName || user?.name || "",
       hometown: identity.hometown || user?.profile?.homeBaseCityId || "",
       avatarUrl: identity.avatarUrl || user?.avatarUrl || "",
-      interests: persona.interests || [],
-      dailyRhythm: prefs.dailyRhythm || persona.dailyRhythm || "",
-      travelStyle: prefs.travelStyle || persona.travelStyle || "",
-      budget: prefs.budgetTier || persona.budget || "",
-      currency: prefs.currency || persona.currency || "USD",
+      interests: persona?.interests || [],
+      dailyRhythm: prefs.dailyRhythm || persona?.dailyRhythm || "",
+      travelStyle: prefs.travelStyle || persona?.travelStyle || "",
+      budget: prefs.budgetTier || persona?.budget || "",
+      currency: prefs.currency || persona?.currency || "USD",
     };
   }
 
-  /**
-   * Specifically for the detailed TravelPersona flow.
-   */
-  public getInitialTravelPersonaValues(user: any) {
-    const persona = (user?.profile?.persona || {}) as any;
-    const prefs = persona.preferences || {};
+  public getInitialTravelPersonaValues(user: User | null) {
+    const persona = user?.profile?.persona as PersonaJson | undefined;
+    const prefs = persona?.preferences || {};
 
     return {
-      areaPreferences: persona.areaPreferences || [],
-      accommodationTypes: persona.accommodationTypes || [],
+      areaPreferences: persona?.areaPreferences || [],
+      accommodationTypes: persona?.accommodationTypes || [],
       travelRhythm:
-        prefs.dailyRhythm || persona.dailyRhythm || persona.travelRhythm || "",
-      travelStyle: prefs.travelStyle || persona.travelStyle || "",
+        prefs.dailyRhythm ||
+        persona?.dailyRhythm ||
+        persona?.travelRhythm ||
+        "",
+      travelStyle: prefs.travelStyle || persona?.travelStyle || "",
     };
   }
 
-  /**
-   * Maps form values to the finalized UserPersona entity structure.
-   */
   public toEntity(formValues: PersonaFormValues): UserPersona {
     return {
       identity: {
         firstName: formValues.firstName,
         hometown: formValues.hometown,
-        avatarUrl: formValues.avatarUrl,
+        avatarUrl: formValues.avatarUrl || undefined,
       },
       preferences: {
         dailyRhythm: formValues.dailyRhythm as any,
@@ -204,7 +275,7 @@ export class PersonaService {
         currency: formValues.currency,
       },
       interests: formValues.interests,
-      insights: [], // Derived code logic elsewhere
+      insights: [],
       metadata: {
         lastSyncedAt: Date.now(),
         version: 1,
@@ -212,47 +283,42 @@ export class PersonaService {
     };
   }
 
-  /**
-   * Maps a raw User object from the DB to the immutable UserPersona entity for display.
-   */
-  public fromUser(user: any): UserPersona {
-    const profile = user?.profile || {};
-    const persona = (profile.persona || {}) as any;
+  public fromUser(user: User): UserPersona {
+    const profile = user?.profile;
+    const persona = profile?.persona as PersonaJson | undefined;
 
-    // Identity mapping (prefers profile fields, falls back to User root)
     const identity = {
       firstName:
-        persona.identity?.firstName ||
-        profile.firstName ||
+        persona?.identity?.firstName ||
+        profile?.firstName ||
         user?.name ||
         "Traveler",
       hometown:
-        persona.identity?.hometown || profile.homeBaseCityId || "Somewhere",
-      avatarUrl: persona.identity?.avatarUrl || user?.avatarUrl,
+        persona?.identity?.hometown || profile?.homeBaseCityId || "Somewhere",
+      avatarUrl: persona?.identity?.avatarUrl || user?.avatarUrl || undefined,
     };
 
-    // Preferences mapping (handles legacy flattened structure)
     const preferences = {
-      dailyRhythm: (persona.preferences?.dailyRhythm ||
-        persona.dailyRhythm ||
-        "balanced") as any,
-      travelStyle: (persona.preferences?.travelStyle ||
-        persona.travelStyle ||
-        "explorer") as any,
-      budgetTier: (persona.preferences?.budgetTier ||
-        persona.budget ||
-        "mid_range") as any,
-      currency: persona.preferences?.currency || persona.currency || "USD",
+      dailyRhythm: (persona?.preferences?.dailyRhythm ||
+        persona?.dailyRhythm ||
+        "balanced") as DailyRhythm,
+      travelStyle: (persona?.preferences?.travelStyle ||
+        persona?.travelStyle ||
+        "explorer") as TravelStyle,
+      budgetTier: (persona?.preferences?.budgetTier ||
+        persona?.budget ||
+        "mid_range") as BudgetTier,
+      currency: persona?.preferences?.currency || persona?.currency || "USD",
     };
 
     return {
       identity,
       preferences,
-      interests: persona.interests || [],
-      insights: persona.insights || [],
+      interests: persona?.interests || [],
+      insights: persona?.insights || [],
       metadata: {
-        lastSyncedAt: persona.metadata?.lastSyncedAt || Date.now(),
-        version: persona.metadata?.version || 1,
+        lastSyncedAt: persona?.metadata?.lastSyncedAt || Date.now(),
+        version: persona?.metadata?.version || 1,
       },
     };
   }

@@ -6,8 +6,8 @@ import {
   BudgetLevel,
   BUDGET_LEVELS,
   PersonaDbModel,
-} from "@/features/persona/types/domain";
-import { PersonaFormValues } from "@/features/persona/types/form";
+  PersonaFormValues,
+} from "./persona.schema";
 
 /**
  * Maps Rhythm ID from UI to DB.

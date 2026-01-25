@@ -3,6 +3,7 @@ import { getAllUsers, getUserById } from "@/lib/db/user.repo";
 import { redirect } from "next/navigation";
 import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 import NearbyMatesClient from "./components/NearbyMatesClient";
+import UserList from "@/components/organisms/HomeSections/UserList";
 
 export default async function NearbyMatesPage() {
   const session = await getSession();
