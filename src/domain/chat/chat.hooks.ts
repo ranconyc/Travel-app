@@ -119,7 +119,10 @@ export function useChat(chatId: string, initialMessages: Message[]) {
               ),
             );
           }
-          toast.error(data.error || "Message sent but server returned error");
+          const errorMessage =
+            (!data.success && "error" in data ? data.error : null) ||
+            "Message sent but server returned error";
+          toast.error(errorMessage);
         }
       },
     });
