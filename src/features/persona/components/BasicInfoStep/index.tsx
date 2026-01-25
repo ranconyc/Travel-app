@@ -46,9 +46,10 @@ export default function BasicInfoStep() {
     setValue("avatarUrl", previewUrl);
 
     try {
-      const { uploadToCloudinary } = await import("@/lib/media/cloudinary.service");
+      const { uploadToCloudinary } =
+        await import("@/lib/media/cloudinary.service");
       const result = await uploadToCloudinary(blob);
-      
+
       // Update with the secure URL from Cloudinary
       setValue("avatarUrl", result.secure_url);
       toast.success("Profile photo updated");
@@ -62,7 +63,7 @@ export default function BasicInfoStep() {
   };
 
   return (
-    <div className="flex flex-col gap-xl w-full max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col gap-xl w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Avatar Section */}
       <div className="flex flex-col items-center gap-md">
         <div

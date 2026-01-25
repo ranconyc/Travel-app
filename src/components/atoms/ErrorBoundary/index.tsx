@@ -84,7 +84,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
       // Default error UI
       return (
-        <div className="flex flex-col items-center justify-center p-xxl text-center space-y-md min-h-[200px]">
+        <div className="screen flex flex-col items-center justify-center p-xxl text-center space-y-md min-h-screen">
           <div className="flex items-center gap-2 text-brand-warm mb-2">
             <AlertTriangle size={24} />
             <Typography variant="h3" className="text-txt-main">
@@ -92,7 +92,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </Typography>
           </div>
 
-          <Typography variant="p" className="text-txt-sec max-w-md">
+          <Typography variant="p" className="text-txt-sec">
             {this.props.componentName
               ? `An error occurred in ${this.props.componentName}.`
               : "An unexpected error occurred."}
@@ -114,8 +114,8 @@ export class ErrorBoundary extends Component<Props, State> {
               onClick={this.handleReset}
               variant="primary"
               className="flex items-center gap-2"
+              icon={<RefreshCw size={16} />}
             >
-              <RefreshCw size={16} />
               Reload Component
             </Button>
             <Button
