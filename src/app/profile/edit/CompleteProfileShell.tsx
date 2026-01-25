@@ -1,19 +1,17 @@
 "use client";
-import type { User } from "@/domain/user/user.schema";
-import CompleteProfileFormClient from "@/app/profile/edit/CompleteProfileFormClient";
-import Button from "@/components/atoms/Button";
-type Props = {
-  user: User;
-};
 
-export default function CompleteProfileShell({ user }: Props) {
+import CompleteProfileFormClient from "@/app/profile/edit/CompleteProfileFormClient";
+import PageHeader from "@/components/molecules/PageHeader";
+import { ProfileErrorBoundary } from "@/app/profile/edit/ProfileErrorBoundary";
+
+export default function CompleteProfileShell() {
   return (
-    <div className="">
-      <header className="sticky top-0 z-10 w-full p-md pt-8 bg-main flex justify-between border-b border-app-border">
-        <Button variant="back" href={`/profile/${user.id}`} />
-      </header>
-      <main className="p-md pt-8">
-        <CompleteProfileFormClient user={user} />
+    <div className="min-h-screen bg-bg-main flex flex-col">
+      <PageHeader title="Edit Profile" backButton />
+      <main className="flex-1 overflow-y-auto">
+        <ProfileErrorBoundary>
+          <CompleteProfileFormClient />
+        </ProfileErrorBoundary>
       </main>
     </div>
   );

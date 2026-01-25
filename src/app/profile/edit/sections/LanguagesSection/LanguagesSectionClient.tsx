@@ -32,24 +32,11 @@ function LanguagesSectionClient() {
 
   // Load languages data with optimized strategy
   const [allLanguages, setAllLanguages] = useState<FormLanguage[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    const loadStart = performance.now();
-
-    // Use requestIdleCallback for non-blocking loading
     const loadLanguages = () => {
       import("@/data/languages.json").then((module) => {
-        const loadEnd = performance.now();
-        // console.log(
-        //   `Languages JSON load took: ${(loadEnd - loadStart).toFixed(2)}ms`
-        // );
-
-        // Optimize mapping with batch processing
-        const mapStart = performance.now();
         const languageData = module.default as LanguageJson[];
 
-        // Use more efficient mapping
         const languages = languageData.map((l) => ({
           code: l.code,
           name: l.name,
@@ -59,17 +46,10 @@ function LanguagesSectionClient() {
           proficiency: "fluent",
         }));
 
-        const mapEnd = performance.now();
-        // console.log(
-        //   `Languages mapping took: ${(mapEnd - mapStart).toFixed(2)}ms`
-        // );
-
         setAllLanguages(languages);
-        setIsLoading(false);
       });
     };
 
-    // Use requestIdleCallback if available, otherwise fallback to setTimeout
     if (window.requestIdleCallback) {
       window.requestIdleCallback(loadLanguages, { timeout: 100 });
     } else {
@@ -77,25 +57,19 @@ function LanguagesSectionClient() {
     }
   }, []);
 
-  // Codes currently stored in the form, e.g. ["en","he"]
-  const selectedCodes = field.value ?? [];
-
   // Map codes -> full FormLanguage objects for the UI (chips, labels)
   const selectedLanguages: FormLanguage[] = useMemo(() => {
-    const filtered = allLanguages.filter((lang) =>
-      selectedCodes.includes(lang.code)
-    );
-    return filtered;
-  }, [allLanguages, selectedCodes]);
+    const selectedCodes = field.value ?? [];
+    return allLanguages.filter((lang) => selectedCodes.includes(lang.code));
+  }, [allLanguages, field.value]);
 
   return (
-    <div className="space-y-2">
+    <div className="mb-lg">
       <MultiSelectAutocomplete<FormLanguage>
         label="Languages you speak"
         name="languages"
         items={allLanguages}
         selected={selectedLanguages}
-        // Store only codes in the form state
         onChange={(nextSelected: FormLanguage[]) => {
           const nextCodes = nextSelected.map((l) => l.code);
           field.onChange(nextCodes);

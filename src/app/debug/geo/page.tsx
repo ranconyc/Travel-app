@@ -25,7 +25,8 @@ export default function GeoDebugPage() {
               {loading ? "Yes" : "No"}
             </p>
             <p>
-              <span className="font-bold">Error:</span> {error || "None"}
+              <span className="font-bold">Error:</span>{" "}
+              {typeof error === "string" ? error : error?.message || "None"}
             </p>
             <div className="bg-main p-md rounded-lg mt-2">
               <p className="font-bold mb-1">Coordinates:</p>

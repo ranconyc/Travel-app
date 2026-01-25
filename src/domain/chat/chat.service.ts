@@ -7,6 +7,7 @@ import {
   markMessagesAsRead as markReadRepo,
 } from "@/lib/db/chat.repo";
 import { getFriends } from "@/lib/db/friendship.repo";
+import { triggerRealTimeEvent } from "@/lib/pusher";
 
 export async function handleGetUserChats(userId: string) {
   return await findUserChats(userId);
@@ -43,7 +44,12 @@ export async function handleSendMessage(
     throw new Error("Unauthorized - not a member of this chat");
   }
 
-  return await createMessage(chatId, userId, content);
+  const message = await createMessage(chatId, userId, content);
+
+  // Trigger real-time event via Pusher
+  await triggerRealTimeEvent(`chat-${chatId}`, "new-message", message);
+
+  return message;
 }
 
 export async function handleMarkMessagesAsRead(chatId: string, userId: string) {

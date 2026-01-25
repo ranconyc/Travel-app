@@ -17,6 +17,8 @@ const OPTIONS: { value: GenderValue; label: string; icon: LucideIcon }[] = [
   { value: "NON_BINARY", label: "Non Binary", icon: NonBinary },
 ];
 
+import Typography from "@/components/atoms/Typography";
+
 function GenderSectionClient() {
   const { control } = useFormContext<CompleteProfileFormValues>();
 
@@ -27,12 +29,12 @@ function GenderSectionClient() {
   });
 
   return (
-    <fieldset className="mb-6">
-      <legend className="block mb-3 text-sm font-semibold capitalize text-txt-main">
+    <fieldset className="mb-lg">
+      <Typography variant="h4" as="legend" className="mb-md">
         How do you identify?
-      </legend>
+      </Typography>
 
-      <div className="flex gap-2">
+      <div className="flex gap-sm">
         {OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.value}
@@ -40,6 +42,7 @@ function GenderSectionClient() {
             type="radio"
             isSelected={field.value === opt.value}
             onChange={() => field.onChange(opt.value)}
+            className="flex-1"
           />
         ))}
       </div>

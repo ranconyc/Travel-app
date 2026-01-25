@@ -47,11 +47,11 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
         className="flex-1 overflow-y-auto max-w-11/12 mx-auto"
         id="home-main"
       >
-        <div className="flex flex-col">
-          <UserList />
-          <CountryList />
-          <CityList />
-        </div>
+        {/* <div className="flex flex-col"> */}
+        {/* <UserList /> */}
+        <CountryList />
+        <CityList />
+        {/* </div> */}
       </main>
     </div>
   );

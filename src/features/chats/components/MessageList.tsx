@@ -2,119 +2,149 @@
 
 import { Avatar } from "@/components/molecules/Avatar";
 import { formatMessageTime } from "@/domain/chat/chat.utils";
-import { useEffect, useRef, useState } from "react";
-import { useChatRoom } from "@/lib/socket/useWebSocket";
-import type { Message, MessageListProps } from "@/types/chat";
+import { useEffect, useRef, useState, useCallback, memo } from "react";
+import { useRealTime } from "@/hooks/useRealTime";
+import type { Message } from "@/types/chat";
+import { useUser } from "@/app/providers/UserProvider";
+import Typography from "@/components/atoms/Typography";
+
+interface MessageBubbleProps {
+  message: Message;
+  isSent: boolean;
+  showSenderName: boolean;
+  showTime: boolean;
+}
+
+const MessageBubble = memo(
+  ({ message, isSent, showSenderName, showTime }: MessageBubbleProps) => {
+    const senderName =
+      message.sender.name ||
+      `${message.sender.profile?.firstName || ""} ${
+        message.sender.profile?.lastName || ""
+      }`.trim() ||
+      "Unknown";
+
+    return (
+      <div
+        className={`flex gap-2 ${isSent ? "flex-row-reverse" : "flex-row items-end"}`}
+      >
+        {!isSent && (
+          <Avatar
+            className="-mb-3 border-2 border-white shadow-sm"
+            image={
+              message.sender.media?.find((img) => img.category === "AVATAR")
+                ?.url ||
+              message.sender.avatarUrl ||
+              undefined
+            }
+            name={senderName}
+            size={32}
+          />
+        )}
+        <div
+          className={`flex flex-col ${isSent ? "items-end" : "items-start"} max-w-[80%]`}
+        >
+          {showSenderName && !isSent && (
+            <Typography
+              variant="tiny"
+              color="sec"
+              className="mb-1 ml-1 px-xs uppercase tracking-widest font-bold"
+            >
+              {senderName}
+            </Typography>
+          )}
+          <div
+            className={`px-md py-sm rounded-2xl shadow-sm ${
+              isSent
+                ? "bg-brand text-white rounded-br-none"
+                : "bg-surface text-txt-main rounded-bl-none border border-stroke"
+            }`}
+          >
+            <Typography
+              variant="p"
+              className="whitespace-pre-wrap break-words leading-relaxed"
+            >
+              {message.content}
+            </Typography>
+          </div>
+          {showTime && (
+            <Typography
+              variant="micro"
+              color="sec"
+              className={`mt-1 px-xs ${isSent ? "text-right" : "text-left"} opacity-70`}
+            >
+              {formatMessageTime(message.createdAt)}
+            </Typography>
+          )}
+        </div>
+      </div>
+    );
+  },
+);
+
+MessageBubble.displayName = "MessageBubble";
 
 export function MessageList({
   messages: initialMessages,
-  currentUserId,
   chatId,
-}: MessageListProps) {
+}: {
+  messages: Message[];
+  chatId: string;
+}) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const { on, off } = useChatRoom(chatId);
+  const user = useUser();
 
-  // Listen for new messages via WebSocket
-  useEffect(() => {
-    const handleNewMessage = (...args: unknown[]) => {
-      const newMessage = args[0] as Message;
-      console.log("📨 Received new message:", newMessage);
+  const handleNewMessage = useCallback((newMessage: Message) => {
+    setMessages((prev) => {
+      const exists = prev.some((m) => m.id === newMessage.id);
+      if (exists) return prev;
+      return [...prev, newMessage];
+    });
+  }, []);
 
-      setMessages((prev) => {
-        // Remove temp message if it exists (optimistic UI)
-        const withoutTemp = newMessage.tempId
-          ? prev.filter((m) => m.id !== newMessage.tempId)
-          : prev;
+  useRealTime(`chat-${chatId}`, "new-message", handleNewMessage);
 
-        // Add new message if it doesn't already exist
-        const exists = withoutTemp.some((m) => m.id === newMessage.id);
-        if (exists) return prev;
-
-        return [...withoutTemp, newMessage];
-      });
-    };
-
-    on("new-message", handleNewMessage);
-
-    return () => {
-      off("new-message", handleNewMessage);
-    };
-  }, [on, off]);
-
-  // Auto-scroll to bottom on mount and when messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  if (!user) return null;
+
   if (messages.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center text-secondary">
-        <p>No messages yet. Start the conversation!</p>
+      <div className="flex-1 flex flex-col items-center justify-center p-xl text-center space-y-md">
+        <div className="w-16 h-16 bg-bg-sub rounded-full flex items-center justify-center text-txt-sec">
+          <Typography variant="h2">💬</Typography>
+        </div>
+        <Typography variant="p" color="sec">
+          No messages yet. Start the conversation!
+        </Typography>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-md space-y-4">
+    <div className="flex-1 overflow-y-auto px-md py-lg space-y-6 no-scrollbar">
       {messages.map((message, index) => {
-        const isSent = message.senderId === currentUserId;
-        const senderName =
-          message.sender.name ||
-          `${message.sender.profile?.firstName || ""} ${
-            message.sender.profile?.lastName || ""
-          }`.trim() ||
-          "Unknown";
+        const isSent = message.senderId === user.id;
+        const prevMessage = index > 0 ? messages[index - 1] : null;
+        const isSameSender = prevMessage?.senderId === message.senderId;
 
         return (
-          <div
+          <MessageBubble
             key={message.id}
-            className={`flex gap-2 ${isSent ? "flex-row-reverse " : "flex-row items-end"}`}
-          >
-            {!isSent && (
-              <Avatar
-                className="-mb-3"
-                image={
-                  message.sender.media?.find((img) => img.category === "AVATAR")
-                    ?.url ||
-                  message.sender.avatarUrl ||
-                  undefined
-                }
-                name={senderName}
-                size={32}
-              />
-            )}
-            <div
-              className={`flex flex-col ${
-                isSent ? "items-end" : "items-start"
-              }`}
-            >
-              <div
-                className={`max-w-md px-3 p-2 rounded-lg ${
-                  isSent
-                    ? "bg-black text-white dark:bg-surface-secondary dark:text-white rounded-br-xs"
-                    : "bg-surface rounded-bl-xs"
-                }`}
-              >
-                {!isSent && (
-                  <span className="text-xs text-secondary mb-1">
-                    {senderName}
-                  </span>
-                )}
-                <p className="whitespace-pre-wrap break-words">
-                  {message.content}
-                </p>
-                {messages.length - 1 === index && (
-                  <span className="text-xs text-secondary mt-1 text-right w-full block">
-                    {formatMessageTime(message.createdAt)}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+            message={message}
+            isSent={isSent}
+            showSenderName={!isSameSender}
+            showTime={
+              index === messages.length - 1 ||
+              messages[index + 1]?.senderId !== message.senderId
+            }
+          />
         );
       })}
-      <div ref={bottomRef} />
+      <div ref={bottomRef} className="h-4" />
     </div>
   );
 }

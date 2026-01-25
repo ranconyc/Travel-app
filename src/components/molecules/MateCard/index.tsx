@@ -1,18 +1,9 @@
 "use client";
 import BaseCard from "@/components/molecules/BaseCard";
-import { AvatarList } from "@/components/molecules/AvatarList";
 import { User } from "@/domain/user/user.schema";
-import { useSocket } from "@/lib/socket/socket-context";
+import Typography from "@/components/atoms/Typography";
 
-const ResidentOrVisitorLabel = ({ isResident }: { isResident: boolean }) => (
-  <span
-    className={`${
-      isResident ? "text-[#f97316]" : "text-[#facc15]"
-    } text-xs font-bold uppercase tracking-wider block mb-0.5`}
-  >
-    {isResident ? "Local" : "Visitor"}
-  </span>
-);
+import ResidentOrVisitorBadge from "@/components/atoms/ResidentOrVisitorBadge";
 
 export default function MateCard({
   mate,
@@ -46,35 +37,41 @@ export default function MateCard({
       linkHref={`/profile/${userId}`}
       image={{ src: mainImage ?? undefined, alt: name ?? undefined }}
       priority={priority}
-      className="!aspect-[3/4]"
+      className="aspect-3/4! group overflow-hidden"
     >
       <div className="p-2 h-full flex flex-col justify-between relative">
         {/* Top section - Match percentage */}
         {loggedUser?.id !== userId && (
           <div className="w-full flex items-center justify-end">
-            <div className="text-white border border-surface/30 px-2 py-2 w-fit bg-surface/40 backdrop-blur-sm  rounded-full">
-              <div className="flex flex-col items-center justify-center gap-0.5">
-                <h1 className="text-tiny font-bold leading-[1.1]">
+            <div className="text-white border border-white/20 px-2 py-2 w-fit bg-black/30 backdrop-blur-md rounded-full shadow-lg">
+              <div className="flex flex-col items-center justify-center gap-0">
+                <Typography
+                  variant="tiny"
+                  className="text-white font-bold leading-none"
+                >
                   {match?.score}%
-                </h1>
-                <h2 className="text-micro font-bold uppercase leading-none">
+                </Typography>
+                <Typography
+                  variant="micro"
+                  className="text-white/80 font-bold uppercase leading-none mt-0.5"
+                >
                   match
-                </h2>
+                </Typography>
               </div>
             </div>
           </div>
         )}
 
         {/* Bottom section - User info */}
-        <div className="pb-1 px-1">
+        <div className="pb-2 px-1 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
           {/* Local/Visitor Label */}
-          <ResidentOrVisitorLabel isResident={isResident} />
+          <ResidentOrVisitorBadge isResident={isResident} />
 
           {/* Name and Age */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <h3 className="text-white font-bold text-md leading-tight tracking-tight">
+            <Typography variant="h3" className="text-white font-bold truncate">
               {name}
-            </h3>
+            </Typography>
           </div>
         </div>
       </div>

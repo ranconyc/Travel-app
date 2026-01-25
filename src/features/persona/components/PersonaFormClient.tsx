@@ -15,7 +15,6 @@ import { FormHeader, ProgressIndicator } from "@/components/molecules/forms";
 import useStep from "@/features/persona/hooks/useStep";
 import { PersonaFormValues, formSchema } from "@/features/persona/types/form";
 import { saveInterests } from "@/domain/user/user.actions";
-import { User } from "@/domain/user/user.schema";
 import { DevTool } from "@hookform/devtools";
 import { useProfileDraft } from "@/domain/user/user.hooks";
 import { personaService } from "@/domain/persona/persona.service";
@@ -47,27 +46,22 @@ const steps = [
   },
 ];
 
-export default function PersonaFormClient({
-  initialUser,
-}: {
-  initialUser: User | null;
-}) {
-  const router = useRouter();
-  const { step, handleContinue, handleBack, setStep } = useStep(6);
+import { useUser } from "@/app/providers/UserProvider";
+import { ProfileErrorBoundary } from "@/app/profile/edit/ProfileErrorBoundary";
 
-  // Pre-populate from user persona if exists
-  // Type assertion needed since persona is stored as Json in Prisma
-  const initialData = (initialUser?.profile?.persona || {}) as any;
-  const initialProfile = (initialUser?.profile || {}) as any;
+export default function PersonaFormClient() {
+  const router = useRouter();
+  const user = useUser();
+  const { step, handleContinue, handleBack, setStep } = useStep(6);
 
   const methods = useForm<PersonaFormValues>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
-    defaultValues: personaService.getInitialValues(initialUser),
+    defaultValues: personaService.getInitialValues(user),
   });
 
   // Global State Sync & Conflict Resolution
-  const { clearDraft } = useProfileDraft(methods as any, initialUser?.id || "");
+  const { clearDraft } = useProfileDraft(methods as any);
 
   const {
     control,
@@ -81,8 +75,7 @@ export default function PersonaFormClient({
     try {
       const result = await saveInterests(data);
       if ((result as any)?.data?.userId) {
-        // Refresh server components and navigate
-        clearDraft(); // Success! Clear the draft.
+        clearDraft();
         router.refresh();
         router.push(`/profile/${(result as any).data.userId}`);
       } else {
@@ -104,7 +97,6 @@ export default function PersonaFormClient({
   };
 
   const onNext = async () => {
-    // Trigger validation for current step fields only
     let fieldsToValidate: (keyof PersonaFormValues)[] = [];
     if (step === 1) fieldsToValidate = ["firstName", "hometown"];
     if (step === 2) fieldsToValidate = ["dailyRhythm"];
@@ -139,64 +131,78 @@ export default function PersonaFormClient({
 
   const isLastStep = step === 6;
 
+  if (!user) return null;
+
   return (
-    <FormProvider {...methods}>
-      <div className="flex flex-col h-screen bg-main">
-        <div className="flex-none pt-md px-4">
-          {/* Back Button logic could be added here if needed, utilizing handleBack */}
-          {step > 1 && (
-            <Button
-              variant="ghost"
-              className="mb-2 pl-0 hover:bg-transparent"
-              onClick={handleBack}
-            >
-              Back
-            </Button>
-          )}
+    <ProfileErrorBoundary>
+      <FormProvider {...methods}>
+        <div className="flex flex-col h-screen bg-bg-main">
+          <div className="flex-none pt-md px-4">
+            {step > 1 && (
+              <Button
+                variant="ghost"
+                className="mb-2 pl-0 hover:bg-transparent"
+                onClick={handleBack}
+                icon={<Button variant="back" className="mr-2" />}
+              >
+                Back
+              </Button>
+            )}
+          </div>
+
+          <FormHeader
+            title={steps[step - 1].header}
+            description={steps[step - 1].description}
+            onBack={step > 1 ? handleBack : undefined}
+            showBackButton={step > 1}
+            rightElement={
+              <ProgressIndicator currentStep={step} totalSteps={6} showLabel />
+            }
+          />
+
+          <div className="flex-1 overflow-y-auto px-lg pb-32 max-w-xl mx-auto w-full">
+            <div className="animate-in fade-in duration-500">
+              {stepContent(step)}
+            </div>
+          </div>
+
+          <div className="flex-none p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke fixed bottom-0 w-full max-w-xl left-1/2 -translate-x-1/2 z-50">
+            {step === 5 && (
+              <Button
+                type="button"
+                variant="ghost"
+                className="w-full mb-2"
+                onClick={handleSkipAnalysis}
+              >
+                Skip for now
+              </Button>
+            )}
+
+            {isLastStep ? (
+              <Button
+                type="button"
+                onClick={handleSubmit(onSubmit)}
+                disabled={isSubmitting}
+                className="w-full shadow-xl"
+                loading={isSubmitting}
+                size="lg"
+              >
+                Confirm & Save Profile
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                onClick={onNext}
+                className="w-full"
+                size="lg"
+              >
+                Continue
+              </Button>
+            )}
+          </div>
+          <DevTool control={control} />
         </div>
-
-        <FormHeader
-          title={steps[step - 1].header}
-          description={steps[step - 1].description}
-          rightElement={
-            <ProgressIndicator currentStep={step} totalSteps={6} showLabel />
-          }
-        />
-
-        <div className="flex-1 overflow-y-auto px-4 pb-32">
-          {stepContent(step)}
-        </div>
-
-        <div className="flex-none p-md bg-main border-t border-surface fixed bottom-0 w-full max-w-md left-1/2 -translate-x-1/2 z-10">
-          {step === 5 && (
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full mb-2"
-              onClick={handleSkipAnalysis}
-            >
-              Skip for now
-            </Button>
-          )}
-
-          {isLastStep ? (
-            <Button
-              type="button" // Changed to button to handle submit in onClick to prevent default form submission issues if any
-              onClick={handleSubmit(onSubmit)}
-              disabled={isSubmitting}
-              className="w-full"
-              loading={isSubmitting}
-            >
-              Confirm & Save Profile
-            </Button>
-          ) : (
-            <Button type="button" onClick={onNext} className="w-full">
-              Continue
-            </Button>
-          )}
-        </div>
-        <DevTool control={control} />
-      </div>
-    </FormProvider>
+      </FormProvider>
+    </ProfileErrorBoundary>
   );
 }

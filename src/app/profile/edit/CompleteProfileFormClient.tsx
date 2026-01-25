@@ -19,42 +19,42 @@ import BirthdaySectionShell from "@/app/profile/edit/sections/BirthdaySection/Bi
 import AvatarSectionShell from "@/app/profile/edit/sections/AvatarSection/AvatarSectionShell";
 
 import { useProfileDraft } from "@/domain/user/user.hooks";
-import type { User } from "@/domain/user/user.schema";
-import type { Gender } from "@/domain/user/user.schema";
+import type { User, Gender } from "@/domain/user/user.schema";
 import Button from "@/components/atoms/Button";
-import SocialSection from "./sections/SocialSection";
+import HomeBaseSectionShell from "@/app/profile/edit/sections/HomeBaseSection/HomeBaseSectionShell";
+import OccupationSectionShell from "@/app/profile/edit/sections/OccupationSection/OccupationSectionShell";
+import SocialSectionShell from "@/app/profile/edit/sections/SocialSection/SocialSectionShell";
 
-// sections
+import BioSectionShell from "@/app/profile/edit/sections/BioSection/BioSectionShell";
+import { useUser } from "@/app/providers/UserProvider";
 
 function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
   return {
     firstName: user?.profile?.firstName ?? "",
     lastName: user?.profile?.lastName ?? "",
+    description: user?.profile?.description ?? "",
     birthday: user?.profile?.birthday
       ? new Date(user.profile.birthday).toISOString().slice(0, 10)
       : "",
     gender: (user?.profile?.gender as Gender | "") ?? "",
     avatarUrl: user?.avatarUrl ?? null,
-    // homeBase: user?.profile?.homeBaseCity?.name
-    //   ? `${user.profile.homeBaseCity.name}${
-    //       user.profile.homeBaseCity.country?.name
-    //         ? `, ${user.profile.homeBaseCity.country.name}`
-    //         : ""
-    //     }`
-    //   : "",
-    // homeBaseCityId: user?.profile?.homeBaseCityId ?? null,
+    homeBase: user?.profile?.homeBaseCity?.name
+      ? `${user.profile.homeBaseCity.name}${
+          user.profile.homeBaseCity.country?.name
+            ? `, ${user.profile.homeBaseCity.country.name}`
+            : ""
+        }`
+      : "",
+    homeBaseCityId: user?.profile?.homeBaseCityId ?? null,
     socialLinks: user?.profile?.socialLinks ?? [],
     occupation: user?.profile?.occupation ?? "",
     languages: user?.profile?.languages ?? [],
   };
 }
 
-type Props = {
-  user: User;
-};
-
-export default function CompleteProfileFormClient({ user }: Props) {
+export default function CompleteProfileFormClient() {
   const router = useRouter();
+  const user = useUser();
   const defaultValues = useMemo(() => mapUserToDefaults(user), [user]);
 
   const methods = useForm<CompleteProfileFormValues>({
@@ -65,34 +65,28 @@ export default function CompleteProfileFormClient({ user }: Props) {
 
   const {
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
   useEffect(() => {
-    console.log("form errors", errors);
-  }, [errors]);
+    if (user) {
+      methods.reset(mapUserToDefaults(user));
+    }
+  }, [user, methods]);
 
-  const { clearDraft } = useProfileDraft(methods as any, user.id);
+  const { clearDraft } = useProfileDraft(methods as any);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
-    console.log("submitting", e);
-    // e.preventDefault(); // handleSubmit handles preventDefault
-    return handleSubmit(onSubmit as any, (errors) => {
-      // console.log("Form validation errors:", errors);
+    return handleSubmit(onSubmit as any, () => {
       toast.error("Please fix the highlighted errors");
     })(e);
   };
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
-    // console.log("submit starting", values);
     const result = await updateProfile({ ...values });
 
     if (!result.success) {
-      console.error("updateProfile failed:", result);
-
-      // Handle field-specific validation errors
       if (result.fieldErrors) {
-        // Set field errors for each field
         Object.entries(result.fieldErrors).forEach(([field, message]) => {
           methods.setError(field as keyof CompleteProfileFormValues, {
             message,
@@ -100,7 +94,6 @@ export default function CompleteProfileFormClient({ user }: Props) {
         });
       }
 
-      // Show general error toast
       toast.error(
         result.error === "VALIDATION_ERROR"
           ? "Please fix the errors in the form"
@@ -110,41 +103,60 @@ export default function CompleteProfileFormClient({ user }: Props) {
     }
 
     toast.success("Profile updated!");
-
     clearDraft();
-
-    // Refresh to update server components with new data
     router.refresh();
-    // Smooth client-side navigation
-    router.push(`/profile/${user.id}`);
+    if (user) {
+      router.push(`/profile/${user.id}`);
+    } else {
+      router.push("/profile");
+    }
   };
+
+  if (!user) return null;
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleFormSubmit} className="pb-24" noValidate>
-        <div>
+      <form onSubmit={handleFormSubmit} className="pb-32 bg-bg-main" noValidate>
+        <div className="max-w-xl mx-auto">
           <AvatarSectionShell />
-          <div className="px-4">
-            <div className="flex gap-2 w-full justify-center mb-6">
-              <Button onClick={() => router.push("/profile/persona?step=1")}>
+
+          <div className="px-md">
+            <div className="flex justify-center mb-lg">
+              <Button
+                variant="outline"
+                onClick={() => router.push("/profile/persona?step=1")}
+                className="w-full sm:w-auto"
+              >
                 Travel Interests
               </Button>
             </div>
-            <div className="pt-6 space-y-6">
+
+            <div className="space-y-xl">
               <NameSectionShell />
-              <SocialSection />
-              {/* <HomeBaseSectionShell /> */}
-              {/* <OccupationSectionShell /> */}
+              <BioSectionShell />
+              <SocialSectionShell />
+              <HomeBaseSectionShell />
+              <OccupationSectionShell />
               <LanguagesSectionShell />
               <BirthdaySectionShell />
               <GenderSectionShell />
             </div>
           </div>
         </div>
-        <div className="bg-main p-md pb-8 fixed bottom-0 left-0 right-0">
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? "Saving..." : "Update Profile"}
-          </Button>
+
+        {/* Sticky Bottom Save Bar */}
+        <div className="fixed bottom-0 left-0 right-0 p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke z-50">
+          <div className="max-w-xl mx-auto">
+            <Button
+              type="submit"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+              className="w-full shadow-xl"
+              size="lg"
+            >
+              Update Profile
+            </Button>
+          </div>
         </div>
       </form>
     </FormProvider>

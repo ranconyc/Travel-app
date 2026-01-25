@@ -22,7 +22,7 @@ const GenderToggle = ({
   ];
 
   return (
-    <div className="bg-surface p-1 rounded-full flex gap-1">
+    <div className="bg-surface-secondary p-1 rounded-full flex gap-1 shadow-inner">
       {options.map(({ value, icon: Icon, label }) => {
         const isSelected = gender === value;
         return (
@@ -33,15 +33,15 @@ const GenderToggle = ({
             aria-pressed={isSelected}
             className={`
               w-10 h-10 rounded-full flex items-center justify-center
-              transition-all duration-200 ease-in-out
+              transition-all duration-300 ease-out transform
               ${
                 isSelected
-                  ? "bg-teal-500 text-white"
-                  : "bg-transparent text-gray-400 hover:text-gray-300"
+                  ? "bg-brand text-white shadow-md scale-105"
+                  : "bg-transparent text-txt-sec hover:text-txt-main hover:bg-surface"
               }
             `}
           >
-            <Icon size={20} />
+            <Icon size={18} strokeWidth={isSelected ? 2.5 : 2} />
           </button>
         );
       })}
@@ -109,16 +109,27 @@ export default function NearbyMatesClient({
 
       {/* Grid of Mates */}
       <main className="px-md pb-xl">
-        <div className="grid grid-cols-2 gap-sm">
-          {filteredMates.map((mate) => (
-            <MateCard
-              key={mate.id}
-              mate={mate}
-              loggedUser={loggedUser}
-              priority={false}
-            />
-          ))}
-        </div>
+        {filteredMates.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-sm">
+            {filteredMates.map((mate) => (
+              <MateCard
+                key={mate.id}
+                mate={mate}
+                loggedUser={loggedUser}
+                priority={false}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <Typography variant="h3" className="mb-2">
+              No mates found
+            </Typography>
+            <Typography variant="p" className="text-txt-sec">
+              Try adjusting your filters to find more travel partners.
+            </Typography>
+          </div>
+        )}
       </main>
     </div>
   );

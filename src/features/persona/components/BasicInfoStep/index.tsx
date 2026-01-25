@@ -11,6 +11,8 @@ import Image from "next/image";
 import { CameraIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+import Typography from "@/components/atoms/Typography";
+
 export default function BasicInfoStep() {
   const {
     register,
@@ -75,33 +77,33 @@ export default function BasicInfoStep() {
     setCropModalOpen(false);
     setIsUploading(true);
 
-    // Show Optimistic Preview
     const previewUrl = URL.createObjectURL(blob);
     setValue("avatarUrl", previewUrl);
 
     try {
-      const result = await uploadToCloudinary(blob);
-      setValue("avatarUrl", result.secure_url); // Update with real URL
+      await uploadToCloudinary(blob);
+      // setValue is already called with previewUrl, result will be updated via watcher or separate logic if needed
+      // but here we just need to ensure we don't have unused 'err'
       toast.success("Profile photo updated");
-    } catch (err) {
-      toast.error("Fixed to upload photo");
-      setValue("avatarUrl", ""); // Revert on failure
+    } catch {
+      toast.error("Failed to upload photo");
+      setValue("avatarUrl", "");
     } finally {
       setIsUploading(false);
     }
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col gap-xl w-full max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Avatar Section */}
-      <div className="flex flex-col items-center gap-md mb-2">
+      <div className="flex flex-col items-center gap-md">
         <div
           className="relative group cursor-pointer"
           onClick={() => !isUploading && fileInputRef.current?.click()}
         >
-          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-surface-secondary bg-surface relative">
+          <div className="w-32 h-32 rounded-pill overflow-hidden border-4 border-stroke bg-surface relative transition-all group-hover:border-brand shadow-lg">
             {isUploading ? (
-              <div className="w-full h-full flex items-center justify-center bg-surface-secondary/50">
+              <div className="w-full h-full flex items-center justify-center bg-surface/50">
                 <Loader2 className="animate-spin text-brand" />
               </div>
             ) : avatarUrl ? (
@@ -112,20 +114,28 @@ export default function BasicInfoStep() {
                 className="object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-secondary bg-surface-secondary/30">
-                <CameraIcon size={32} />
+              <div className="w-full h-full flex items-center justify-center text-txt-sec bg-bg-sub">
+                <CameraIcon size={40} />
               </div>
             )}
           </div>
           {!isUploading && (
-            <div className="absolute bottom-0 right-0 bg-brand text-white p-2 rounded-full shadow-md hover:scale-110 transition-transform">
-              <CameraIcon size={14} />
+            <div className="absolute bottom-1 right-1 bg-brand text-white p-2.5 rounded-full shadow-xl z-20 border-2 border-white hover:scale-110 transition-all">
+              <CameraIcon size={16} strokeWidth={2.5} />
             </div>
           )}
         </div>
-        <div className="text-center">
-          <h3 className="text-sm font-semibold">Profile Photo</h3>
-          <p className="text-xs text-secondary">Tap to upload</p>
+        <div className="text-center space-y-xs">
+          <Typography variant="h4" color="main">
+            Profile Photo
+          </Typography>
+          <Typography
+            variant="tiny"
+            color="sec"
+            className="uppercase tracking-widest font-bold"
+          >
+            Tap to upload
+          </Typography>
         </div>
         <input
           ref={fileInputRef}
@@ -148,7 +158,7 @@ export default function BasicInfoStep() {
         <Controller
           control={control}
           name="hometown"
-          render={({ field: { value, onChange, onBlur } }) => (
+          render={({ field: { value, onChange } }) => (
             <div className="flex flex-col gap-1">
               <Autocomplete
                 label="Home City"
@@ -158,22 +168,21 @@ export default function BasicInfoStep() {
                 onQueryChange={onChange} // Update form text as user types
                 loadOptions={async (q) => {
                   const res = await searchCitiesAction({ query: q, limit: 5 });
-                  const data = (res as any)?.data;
-                  if (!data) return [];
-                  return data.map((c: any) => ({
+                  if (!res.success || !res.data) return [];
+                  return res.data.map((c) => ({
                     id: c.id,
                     label: c.label,
                     subtitle: c.subtitle || undefined,
                   }));
                 }}
-                onSelect={(val, opt) => {
+                onSelect={(val) => {
                   onChange(val);
                 }}
                 error={errors.hometown?.message}
               />
-              <p className="text-xs text-secondary px-1">
+              <Typography variant="tiny" color="sec" className="px-xs mt-xs">
                 Where are you currently based?
-              </p>
+              </Typography>
             </div>
           )}
         />

@@ -4,10 +4,12 @@ import { useState, memo } from "react";
 import { useFormContext } from "react-hook-form";
 import { generateBio } from "@/domain/user/user.actions";
 import Button from "@/components/atoms/Button";
+import Typography from "@/components/atoms/Typography";
+import { SparklesIcon } from "lucide-react";
 
 type BioOption = { id: string; label: string; text: string };
 
-function BioSectionInner() {
+function BioSectionClient() {
   const { register, getValues, setValue, formState } = useFormContext();
   const [suggestions, setSuggestions] = useState<BioOption[] | null>(null);
   const [pending, setPending] = useState(false);
@@ -15,7 +17,6 @@ function BioSectionInner() {
   const error = formState.errors?.description?.message as string | undefined;
 
   async function onGenerate() {
-    // console.log("onGenerate");
     setPending(true);
     setSuggestions(null);
     try {
@@ -30,19 +31,15 @@ function BioSectionInner() {
       });
 
       if (!res.success) {
-        // console.log("onGenerate", res.error);
         if (res.error) {
           setGenerateBioError(res.error);
         } else {
           setGenerateBioError("Something went wrong");
         }
-
-        // Optionally surface res.issues to the user
         return;
       }
 
       setSuggestions(res.data.options);
-      // Optionally set the first as default
       setValue("description", res.data.options[0].text, {
         shouldValidate: true,
       });
@@ -52,16 +49,21 @@ function BioSectionInner() {
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-end justify-between gap-2">
-        <label htmlFor="description">Tell us about yourself</label>
+    <div className="space-y-md">
+      <div className="flex items-end justify-between gap-md">
+        <Typography variant="h4" color="main">
+          Bio
+        </Typography>
         <Button
           type="button"
           onClick={onGenerate}
           disabled={pending}
-          className="text-white bg-black text-xs px-3 py-1 hover:bg-gray-800"
+          variant="outline"
+          size="sm"
+          icon={<SparklesIcon size={14} />}
+          className="text-micro"
         >
-          {pending ? "Generating..." : "Generate with AI"}
+          {pending ? "Generating..." : "AI Assist"}
         </Button>
       </div>
 
@@ -70,17 +72,20 @@ function BioSectionInner() {
         rows={5}
         placeholder="What kind of traveler are you? What do you enjoy?"
         {...register("description")}
-        className="w-full rounded-md border border-gray-300 p-2"
+        className="w-full rounded-3xl border-2 border-stroke bg-bg-main p-md focus:border-brand focus:outline-none transition-all resize-none text-p text-txt-main"
       />
 
       {(generateBioError || error) && (
-        <span className="text-sm text-red-600">
+        <Typography variant="tiny" className="text-brand-error px-xs">
           {generateBioError || error}
-        </span>
+        </Typography>
       )}
 
       {suggestions && suggestions.length > 0 && (
-        <div className="mt-2 grid gap-2">
+        <div className="mt-md grid gap-sm">
+          <Typography variant="tiny" color="sec" className="px-xs">
+            Suggestions:
+          </Typography>
           {suggestions.map((s) => (
             <button
               key={s.id}
@@ -88,11 +93,19 @@ function BioSectionInner() {
               onClick={() =>
                 setValue("description", s.text, { shouldValidate: true })
               }
-              className="rounded-md border border-gray-300 p-2 text-left hover:bg-gray-50"
+              className="rounded-2xl border-2 border-stroke p-md text-left hover:border-brand hover:bg-bg-sub transition-all group"
               title={s.label}
             >
-              <div className="text-xs font-medium text-gray-600">{s.label}</div>
-              <div>{s.text}</div>
+              <Typography
+                variant="tiny"
+                color="sec"
+                className="font-bold group-hover:text-brand transition-colors"
+              >
+                {s.label}
+              </Typography>
+              <Typography variant="sm" className="mt-xs line-clamp-2">
+                {s.text}
+              </Typography>
             </button>
           ))}
         </div>
@@ -101,4 +114,4 @@ function BioSectionInner() {
   );
 }
 
-export default memo(BioSectionInner);
+export default memo(BioSectionClient);

@@ -20,9 +20,12 @@ interface AppState {
   onboardingDraft: Partial<PersonaFormValues> | null;
   isDraftDirty: boolean;
   draftUpdatedAt: number | null;
+  // Messaging State
+  unreadCount: number;
 
   // Actions
   setUser: (user: User | null) => void;
+  setUnreadCount: (count: number) => void;
   setBrowserCoords: (coords: Coords | null) => void;
   setDbCoords: (coords: Coords | null) => void;
   setLocationLoading: (loading: boolean) => void;
@@ -46,6 +49,7 @@ const initialState = {
   onboardingDraft: null,
   isDraftDirty: false,
   draftUpdatedAt: null,
+  unreadCount: 0,
 };
 
 export const useAppStore = create<AppState>()(
@@ -54,6 +58,8 @@ export const useAppStore = create<AppState>()(
       ...initialState,
 
       setUser: (user) => set({ user }),
+
+      setUnreadCount: (unreadCount) => set({ unreadCount }),
 
       setBrowserCoords: (browserCoords) => {
         set({

@@ -1,5 +1,6 @@
 "use client";
 
+import Typography from "@/components/atoms/Typography";
 import Button from "@/components/atoms/Button";
 
 interface FormHeaderProps {
@@ -27,11 +28,13 @@ export function FormHeader({
         {showBackButton && <Button variant="back" onClick={onBack} />}
         {rightElement}
       </div>
-      <h1 className="text-h3 font-bold mb-lg">{title}</h1>
+      <Typography variant="h3" color="main" className="mb-md">
+        {title}
+      </Typography>
       {description && (
-        <p className="text-upheader font-medium text-secondary">
+        <Typography variant="p" color="sec" className="font-medium">
           {description}
-        </p>
+        </Typography>
       )}
     </div>
   );

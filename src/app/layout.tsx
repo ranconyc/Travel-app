@@ -4,7 +4,6 @@ import { Inter, Sora } from "next/font/google";
 import ReactQueryProvider from "@/app/providers/reactQueryProvider";
 import SessionProviderWrapper from "@/app/providers/SessionProviderWrapper";
 import ConditionalNavbar from "@/app/ConditionalNavbar";
-import { SocketProvider } from "@/lib/socket/socket-context";
 import { LocationProvider } from "@/app/providers/LocationProvider";
 import AutoLocationUpdater from "@/components/molecules/AutoLocationUpdater";
 
@@ -63,7 +62,7 @@ export default async function RootLayout({
               <SessionProviderWrapper>
                 <LocationProvider>
                   <AutoLocationUpdater />
-                  <SocketProvider>{children}</SocketProvider>
+                  {children}
                 </LocationProvider>
               </SessionProviderWrapper>
               <ConditionalNavbar />

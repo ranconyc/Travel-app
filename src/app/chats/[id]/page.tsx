@@ -1,11 +1,8 @@
-import PageHeader from "@/components/molecules/PageHeader";
+import { ChatShell } from "@/features/chats/components/ChatShell";
 import React from "react";
 import { getChatById } from "@/domain/chat/chat.actions";
-import {
-  getChatDisplayName,
-  getChatDisplayImage,
-} from "@/domain/chat/chat.utils";
-import { getCurrentUser, getSession } from "@/lib/auth/get-current-user";
+import { getChatDisplayName } from "@/domain/chat/chat.utils";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { MessageList } from "@/features/chats/components/MessageList";
 import { MessageInput } from "@/features/chats/components/MessageInput";
 import { redirect } from "next/navigation";
@@ -26,36 +23,27 @@ export default async function ChatPage({ params }: Props) {
 
   if (!result.success) {
     return (
-      <div>
-        <PageHeader backButton title="Chat Not Found" />
-        <main className="p-md">
+      <ChatShell title="Chat Not Found" input={null}>
+        <div className="flex-1 flex items-center justify-center p-xl">
           <p className="text-center text-secondary">
             {result.error ||
               "This chat doesn't exist or you don't have access to it."}
           </p>
-        </main>
-      </div>
+        </div>
+      </ChatShell>
     );
   }
 
   const chat = result.data;
   const chatName = getChatDisplayName(chat, loggedUser.id);
-  const chatImage = getChatDisplayImage(chat, loggedUser.id);
 
   return (
-    <div className="flex flex-col h-screen">
-      <PageHeader
-        backButton
-        subtitle="Your chat with"
-        title={chatName}
-        // rightContent={<Avatar image={chatImage || undefined} size={40} />} // Optional: if we want to show avatar
-      />
-      <MessageList
-        messages={chat.messages}
-        currentUserId={loggedUser.id}
-        chatId={id}
-      />
-      <MessageInput chatId={id} />
-    </div>
+    <ChatShell
+      title={chatName}
+      subtitle="Conversation"
+      input={<MessageInput chatId={id} />}
+    >
+      <MessageList messages={chat.messages} chatId={id} />
+    </ChatShell>
   );
 }

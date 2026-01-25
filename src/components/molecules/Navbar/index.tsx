@@ -5,10 +5,9 @@ import {
   UserRoundSearch,
   Binoculars,
   MessageCircle,
-  Settings,
   TowerControl,
 } from "lucide-react";
-import { useUnreadCount } from "@/lib/socket/useWebSocket";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 import { NotificationBadge } from "@/components/molecules/Navbar/NotificationBadge";
 import { Avatar } from "@/components/molecules/Avatar";
 import { useUser } from "@/app/providers/UserProvider";

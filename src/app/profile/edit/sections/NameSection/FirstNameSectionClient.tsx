@@ -17,13 +17,15 @@ function FirstNameSectionClient() {
   });
 
   return (
-    <Input
-      label="First Name"
-      id="firstName"
-      placeholder="Enter your first name"
-      {...field}
-      error={fieldState.error?.message}
-    />
+    <div className="mb-lg">
+      <Input
+        label="First Name"
+        id="firstName"
+        placeholder="Enter your first name"
+        {...field}
+        error={fieldState.error?.message}
+      />
+    </div>
   );
 }
 

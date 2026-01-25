@@ -124,7 +124,7 @@ export function useGenerateBio() {
 export function useDeleteAccount() {
   return useMutation<void, Error, void>({
     mutationFn: async () => {
-      const res = await deleteAccountAction(undefined);
+      const res = await deleteAccountAction({});
       if (!res.success) {
         throw new Error(res.error);
       }
@@ -170,7 +170,7 @@ export function useUsers() {
   return useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const result = await getAllUsersAction(undefined);
+      const result = await getAllUsersAction({});
       if (!result.success) {
         throw new Error(result.error);
       }
@@ -186,7 +186,6 @@ export function useUsers() {
  */
 export function useProfileDraft<TFormValues extends FieldValues>(
   methods: UseFormReturn<TFormValues>,
-  userId: string,
 ) {
   const { reset, watch } = methods;
   const onboardingDraft = useAppStore((state) => state.onboardingDraft);
@@ -225,6 +224,44 @@ export type UseGeoOptions = {
   refreshOnUpdate?: boolean;
 };
 
+/**
+ * Helper to normalize different GeoPoint shapes into {lat, lng}
+ */
+function parseGeoPoint(
+  loc: GeoPoint | { lat: number; lng: number } | null | unknown,
+): { lat: number; lng: number } | null {
+  if (!loc || typeof loc !== "object") return null;
+
+  try {
+    // Handle Prisma/GeoJSON Point: { type: "Point", coordinates: [lng, lat] }
+    if (
+      "type" in loc &&
+      loc.type === "Point" &&
+      "coordinates" in loc &&
+      Array.isArray(loc.coordinates)
+    ) {
+      const [lng, lat] = loc.coordinates;
+      if (typeof lat === "number" && typeof lng === "number") {
+        return { lat, lng };
+      }
+    }
+
+    // Handle direct coords: { lat, lng }
+    if (
+      "lat" in loc &&
+      "lng" in loc &&
+      typeof loc.lat === "number" &&
+      typeof loc.lng === "number"
+    ) {
+      return { lat: loc.lat, lng: loc.lng };
+    }
+  } catch (err) {
+    console.error("[parseGeoPoint] Failed to parse location", err);
+  }
+
+  return null;
+}
+
 export function useGeo(options: UseGeoOptions = {}) {
   const {
     persistToDb = false,
@@ -236,180 +273,151 @@ export function useGeo(options: UseGeoOptions = {}) {
 
   const router = useRouter();
   const user = useUser();
-
   const {
     coords,
-    lastSavedCoords,
-    loading,
-    error,
     setCoords,
+    lastSavedCoords,
     setLastSavedCoords,
+    loading,
     setLoading,
+    error,
     setError,
   } = useLocationStore();
 
   const lastSaveTimeRef = useRef<number>(0);
   const isSavingRef = useRef(false);
-  const lastSavedCoordsRef = useRef<{ lat: number; lng: number } | null>(null);
+  const initializedRef = useRef(false);
 
-  // save last saved coords to ref
+  // Refs for timeout protection to avoid dependency noise
+  const coordsRef = useRef(coords);
+  const loadingRef = useRef(loading);
+
   useEffect(() => {
-    if (lastSavedCoords && !lastSavedCoordsRef.current) {
-      lastSavedCoordsRef.current = lastSavedCoords;
+    coordsRef.current = coords;
+    loadingRef.current = loading;
+  }, [coords, loading]);
+
+  // 1. Initialization Effect: Runs once to sync initialUser state to store
+  useEffect(() => {
+    if (initializedRef.current || coords || !initialUser?.currentLocation)
+      return;
+
+    const initialCoords = parseGeoPoint(initialUser.currentLocation);
+    if (initialCoords) {
+      setCoords(initialCoords);
+      setLastSavedCoords(initialCoords);
+      setLoading(false);
+      initializedRef.current = true;
     }
-  }, [lastSavedCoords]);
+  }, [
+    initialUser?.currentLocation,
+    coords,
+    setCoords,
+    setLastSavedCoords,
+    setLoading,
+  ]);
 
-  // set coords from initial user
+  // 2. Tracking Effect: Manages browser geolocation watch with timeout protection
   useEffect(() => {
-    if (!coords && initialUser?.currentLocation) {
-      try {
-        const loc = initialUser?.currentLocation as
-          | GeoPoint
-          | { lat: number; lng: number }
-          | null;
-
-        if (loc && typeof loc === "object") {
-          if (
-            "type" in loc &&
-            loc.type === "Point" &&
-            "coordinates" in loc &&
-            Array.isArray(loc.coordinates)
-          ) {
-            const [lng, lat] = loc.coordinates;
-            if (typeof lat === "number" && typeof lng === "number") {
-              const initialCoords = { lat, lng };
-              setCoords(initialCoords);
-              setLastSavedCoords(initialCoords);
-              lastSavedCoordsRef.current = initialCoords;
-              setLoading(false);
-            }
-          } else if (
-            "lat" in loc &&
-            "lng" in loc &&
-            typeof loc.lat === "number" &&
-            typeof loc.lng === "number"
-          ) {
-            const initialCoords = { lat: loc.lat, lng: loc.lng };
-            setCoords(initialCoords);
-            setLastSavedCoords(initialCoords);
-            lastSavedCoordsRef.current = initialCoords;
-            setLoading(false);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to parse initial user location", err);
-      }
-    }
-  }, [initialUser, coords, setCoords, setLastSavedCoords, setLoading]);
-
-  // get coords from browser
-  useEffect(() => {
-    if (!user) {
+    const userId = user?.id;
+    if (!userId) {
       setLoading(false);
       return;
     }
 
     if (!hasGeolocation()) {
-      setError("Geolocation not supported");
+      setError({ code: "UNSUPPORTED", message: "Geolocation not supported" });
       setLoading(false);
       return;
     }
 
-    const onSuccess = (pos: GeolocationPosition) => {
-      const newCoords = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-      };
+    let watchId: number | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
 
-      setCoords(newCoords);
+    // Timeout protection: Stop loading if browser doesn't respond in 15s
+    timeoutId = setTimeout(() => {
+      // Use refs to get current state without triggering effect re-run
+      if (loadingRef.current && !coordsRef.current) {
+        setLoading(false);
+        setError({
+          code: "TIMEOUT",
+          message: "Location request timed out",
+        });
+      }
+    }, 15000);
+
+    try {
+      watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          if (timeoutId) clearTimeout(timeoutId);
+          setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setLoading(false);
+        },
+        (err) => {
+          if (timeoutId) clearTimeout(timeoutId);
+          setError({ code: "PERMISSION_DENIED", message: err.message });
+          setLoading(false);
+        },
+        { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 },
+      );
+    } catch (err) {
+      if (timeoutId) clearTimeout(timeoutId);
+      console.error("[useGeo] Geolocation failed", err);
       setLoading(false);
-    };
-
-    const onError = (err: GeolocationPositionError) => {
-      setError(err.message);
-      setLoading(false);
-    };
-
-    const watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 10000,
-    });
+    }
 
     return () => {
-      navigator.geolocation.clearWatch(watchId);
+      if (timeoutId) clearTimeout(timeoutId);
+      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     };
-  }, [user, setCoords, setError, setLoading]);
+  }, [user?.id, setCoords, setError, setLoading]);
 
-  // save coords to db
+  // 3. Persistence Sync: Smart DB synchronization
   useEffect(() => {
-    if (!persistToDb || !coords || !user?.id) return;
+    const userId = user?.id;
+    if (!persistToDb || !coords || !userId || isSavingRef.current) return;
 
-    const attemptSave = async () => {
+    const syncToDb = async () => {
       const now = Date.now();
+      const timeSinceLastSave = now - lastSaveTimeRef.current;
 
-      console.log("[useGeo] attemptSave check", {
-        coords,
-        persistToDb,
-        hasUser: !!user?.id,
-      });
+      // Throttle Check
+      if (timeSinceLastSave < debounceMs) return;
 
-      if (now - lastSaveTimeRef.current < debounceMs) {
-        console.log(
-          "[useGeo] Debounced",
-          (debounceMs - (now - lastSaveTimeRef.current)) / 1000,
-          "s remaining",
-        );
-        return;
-      }
-
-      let shouldSave = false;
-      const lastSaved = lastSavedCoordsRef.current;
-      console.log("lastSavedCoordsRef.current gor here ", lastSaved);
-
-      if (!lastSaved) {
-        shouldSave = true;
-      } else {
-        const distKm = getDistance(
-          lastSaved.lat,
-          lastSaved.lng,
+      // Distance Threshold Check
+      if (lastSavedCoords) {
+        const dist = getDistance(
+          lastSavedCoords.lat,
+          lastSavedCoords.lng,
           coords.lat,
           coords.lng,
           "KM",
         );
-
-        if (distKm >= Math.max(distanceThresholdKm, 0.01)) {
-          shouldSave = true;
-        }
+        if (dist < Math.max(distanceThresholdKm, 0.01)) return;
       }
 
-      if (shouldSave && !isSavingRef.current) {
-        isSavingRef.current = true;
-        try {
-          console.log("[useGeo] Calling updateUserLocationAction...", coords);
-          const result = await updateUserLocationAction(coords);
-          console.log("[useGeo] Action result:", result);
+      isSavingRef.current = true;
+      try {
+        await updateUserLocationAction(coords);
+        lastSaveTimeRef.current = now;
+        setLastSavedCoords(coords);
 
-          lastSavedCoordsRef.current = coords;
-          lastSaveTimeRef.current = now;
-          setLastSavedCoords(coords);
-
-          if (refreshOnUpdate) {
-            router.refresh();
-          }
-        } catch (err) {
-          console.error("Failed to update user location:", err);
-        } finally {
-          isSavingRef.current = false;
+        if (refreshOnUpdate) {
+          router.refresh();
         }
+      } catch (err) {
+        console.error("[useGeo] Persistence failed", err);
+      } finally {
+        isSavingRef.current = false;
       }
     };
 
-    attemptSave();
+    syncToDb();
   }, [
     coords,
     persistToDb,
     user?.id,
+    lastSavedCoords,
     distanceThresholdKm,
     debounceMs,
     setLastSavedCoords,
@@ -417,7 +425,10 @@ export function useGeo(options: UseGeoOptions = {}) {
     router,
   ]);
 
-  return { coords, error, loading };
+  // Atomic Design Ready state
+  const isLocating = loading && !coords;
+
+  return { coords, error, loading, isLocating };
 }
 
 type LanguageItem = {

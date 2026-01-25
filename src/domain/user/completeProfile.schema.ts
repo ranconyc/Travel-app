@@ -4,7 +4,6 @@ import * as z from "zod";
 // 1. Define allowed platforms based on our JSON metadata
 import {
   GenderEnum,
-  PlatformEnum,
   socialLinkSchema as SocialLinkSchema,
 } from "@/domain/common.schema";
 
@@ -124,6 +123,7 @@ export const completeProfileSchema = z.object({
    * External location meta (LocationIQ) used when the city is not in DB yet.
    * We will use this on the server to call ensureCountryAndCityFromLocation().
    */
+  description: z.string().max(1000, "Bio is too long").optional(),
   homeBaseLocation: homeBaseLocationMetaSchema.nullable().optional(),
   socialLinks: UserSocialLinksSchema,
 });

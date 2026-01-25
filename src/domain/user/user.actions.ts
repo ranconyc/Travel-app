@@ -45,7 +45,7 @@ export const updateProfile = createSafeAction(
 );
 
 export const deleteAccountAction = createSafeAction(
-  z.any(),
+  z.object({}),
   async (_, userId) => {
     await deleteUserAccount(userId);
   },
@@ -116,7 +116,7 @@ export const saveTravelPersona = createSafeAction(
   },
 );
 
-export const getAllUsersAction = createAdminAction(z.any(), async () => {
+export const getAllUsersAction = createAdminAction(z.object({}), async () => {
   return await getAllUsers();
 });
 

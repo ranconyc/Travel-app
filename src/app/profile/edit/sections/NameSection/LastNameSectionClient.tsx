@@ -16,13 +16,15 @@ function LastNameSectionClient() {
   });
 
   return (
-    <Input
-      label="Last Name"
-      id="lastName"
-      placeholder="Enter your last name"
-      {...field}
-      error={fieldState.error?.message}
-    />
+    <div className="mb-lg">
+      <Input
+        label="Last Name"
+        id="lastName"
+        placeholder="Enter your last name"
+        {...field}
+        error={fieldState.error?.message}
+      />
+    </div>
   );
 }
 
