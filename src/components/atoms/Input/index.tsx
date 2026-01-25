@@ -9,10 +9,23 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   hintId?: string;
   hintText?: string;
   className?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, error, className = "", id, name, hintId, hintText, ...rest },
+  {
+    label,
+    error,
+    className = "",
+    id,
+    name,
+    hintId,
+    hintText,
+    leftIcon,
+    rightIcon,
+    ...rest
+  },
   ref,
 ) {
   const autoId = useId();
@@ -38,21 +51,39 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         </label>
       )}
 
-      <input
-        id={inputId}
-        name={name}
-        ref={ref}
-        aria-invalid={Boolean(error) || undefined}
-        aria-describedby={describedBy}
-        className={[
-          "text-txt-main px-4 h-11 rounded-md font-medium border-2 border-surface transition-all",
-          "focus:outline-none focus:ring-2 focus:ring-brand/50",
-          "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-          error ? "border-red-500 ring-1 ring-red-500" : "border-surface",
-          className,
-        ].join(" ")}
-        {...rest}
-      />
+      <div className="relative group w-full">
+        {leftIcon && (
+          <div className="absolute inset-y-0 left-md flex items-center pointer-events-none z-10 text-secondary group-focus-within:text-brand transition-colors">
+            {leftIcon}
+          </div>
+        )}
+
+        <input
+          id={inputId}
+          name={name}
+          ref={ref}
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={describedBy}
+          className={[
+            "w-full bg-surface text-txt-main font-medium transition-all shadow-sm",
+            "h-12 rounded-xl border border-border", // Updated sizing/border
+            "placeholder:text-secondary/60",
+            "focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand",
+            "disabled:bg-surface-secondary disabled:cursor-not-allowed",
+            error ? "border-red-500 ring-1 ring-red-500" : "border-border",
+            leftIcon ? "pl-11" : "px-4", // Adjust padding for icon
+            rightIcon ? "pr-11" : "px-4",
+            className,
+          ].join(" ")}
+          {...rest}
+        />
+
+        {rightIcon && (
+          <div className="absolute inset-y-0 right-md flex items-center pointer-events-none z-10 text-secondary">
+            {rightIcon}
+          </div>
+        )}
+      </div>
 
       {/* HINT BELOW INPUT (only if no error) */}
       {hintText && !error && (
