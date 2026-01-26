@@ -1,0 +1,33 @@
+import { cn } from "@/lib/utils";
+
+interface BadgeProps {
+  children: React.ReactNode;
+  className?: string;
+  variant?: "default" | "secondary" | "success" | "warning" | "danger";
+}
+
+const variantClasses = {
+  default: "bg-brand text-white",
+  secondary: "bg-surface-secondary text-secondary",
+  success: "bg-green-500 text-white",
+  warning: "bg-yellow-500 text-white",
+  danger: "bg-red-500 text-white",
+};
+
+export default function Badge({
+  children,
+  className,
+  variant = "default",
+}: BadgeProps) {
+  return (
+    <div
+      className={cn(
+        "px-2 py-0.5 text-micro font-bold rounded-full",
+        variantClasses[variant],
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}

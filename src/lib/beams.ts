@@ -1,17 +1,19 @@
 import PushNotifications from "@pusher/push-notifications-server";
 
+// Instance ID from Pusher Beams dashboard
 const instanceId = process.env.NEXT_PUBLIC_PUSHER_BEAMS_INSTANCE_ID;
-const secretKey = process.env.PUSHER_SECRET;
+// Specific secret key for Beams (Primary Key)
+const secretKey = process.env.PUSHER_BEAMS_SECRET;
 
 if (!instanceId || !secretKey) {
-  // Warn only ensuring we don't crash purely on import, but this functionality won't work.
   if (process.env.NODE_ENV !== "production") {
-    console.warn(
-      "[Pusher Beams] Instance ID or Secret Key is missing in environment variables.",
-    );
+    console.warn("[Pusher Beams] Instance ID or Beams Secret Key is missing.");
   }
 }
 
+/**
+ * Pusher Beams Server client for sending push notifications
+ */
 export const beamsClient =
   instanceId && secretKey
     ? new PushNotifications({
@@ -29,18 +31,14 @@ interface PushNotificationPayload {
 }
 
 /**
- * Sends a push notification to specific interests
- * @param interests Array of interest strings (e.g. ['global', 'user-123'])
- * @param notification Notification payload
+ * Publishes a notification to specific interests
  */
 export async function sendPushNotification(
   interests: string[],
   notification: PushNotificationPayload,
 ) {
   if (!beamsClient) {
-    console.error(
-      "[Pusher Beams] Client not initialized. Check environment variables.",
-    );
+    console.error("[Pusher Beams] Client not initialized.");
     return { success: false, error: "Client not initialized" };
   }
 

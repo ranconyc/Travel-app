@@ -10,7 +10,7 @@ import { getAge } from "@/domain/shared/utils/age";
  * Used for reactive client-side state synchronization.
  */
 export async function handleGetAuthenticatedUser(userId: string) {
-  return await userRepository.getUserById(userId);
+  return await userRepository.getUserById(userId, { strategy: "full" });
 }
 
 /**

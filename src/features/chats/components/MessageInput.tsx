@@ -46,14 +46,14 @@ export function MessageInput({ chatId }: { chatId: string }) {
     <ChatInputWrapper>
       <form
         onSubmit={handleSubmit}
-        className="flex gap-sm items-end bg-bg-sub rounded-3xl p-xs border-2 border-transparent focus-within:border-brand/40 focus-within:bg-bg-main transition-all duration-300 shadow-soft"
+        className="flex gap-xs items-end bg-bg-sub rounded-2xl p-xs border-2 border-transparent focus-within:border-brand/40 focus-within:bg-bg-main transition-all duration-300 shadow-soft"
       >
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Message..."
-          className="flex-1 resize-none bg-transparent px-md py-sm max-h-32 focus:outline-none text-txt-main placeholder:text-txt-sec/50 font-medium"
+          className="flex-1 resize-none bg-transparent px-md py-xs  focus:outline-none text-txt-main placeholder:text-txt-sec/50 font-medium"
           rows={1}
           disabled={isSending}
         />
@@ -62,9 +62,9 @@ export function MessageInput({ chatId }: { chatId: string }) {
           disabled={!content.trim() || isSending}
           variant="primary"
           size="sm"
-          className="rounded-full w-11 h-11 p-0 flex items-center justify-center shadow-pill shrink-0"
+          className="h-10 w-10 rounded-lg flex items-center justify-center shadow-pill shrink-0"
           loading={isSending}
-          icon={!isSending && <Send size={20} />}
+          icon={!isSending && <Send size={18} />}
         />
       </form>
     </ChatInputWrapper>

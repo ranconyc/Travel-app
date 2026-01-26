@@ -1,17 +1,20 @@
 import { getSession } from "@/lib/auth/get-current-user";
-import { getAllUsers, getUserById } from "@/lib/db/user.repo";
+import { getUserById } from "@/lib/db/user.repo";
 import { redirect } from "next/navigation";
-import { calculateMatchScoreBatch } from "@/domain/match/match.queries";
 import NearbyMatesClient from "./components/NearbyMatesClient";
-import UserList from "@/components/organisms/HomeSections/UserList";
-import {
-  hasLocation,
-  UserWithLocation,
-} from "@/domain/user/user.types";
+import { getMatesPageData } from "@/domain/mates/mates.service";
+import Block from "@/components/atoms/Block";
+import { hasLocation } from "@/domain/user/user.types";
 
-export default async function NearbyMatesPage() {
+export default async function NearbyMatesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const session = await getSession();
-  const loggedUser = await getUserById(session?.user?.id || "");
+  const loggedUser = await getUserById(session?.user?.id || "", {
+    strategy: "full",
+  });
 
   if (!loggedUser) {
     redirect("/signin");
@@ -21,21 +24,22 @@ export default async function NearbyMatesPage() {
     redirect("/");
   }
 
-  const userLocation = loggedUser.currentLocation;
+ 
+  const params = await searchParams;
+  const currentPage = parseInt(params.page || "1", 10);
 
-  console.log("NearbyMates", userLocation);
-  const mates = await getAllUsers();
-  const matesWithMatch = await Promise.all(
-    mates.map(async (mate) => {
-      const match = await calculateMatchScoreBatch(loggedUser, mate, "current");
-      return { match, ...mate };
-    }),
+  const { matesWithMatch, pagination } = await getMatesPageData(
+    loggedUser,
+    currentPage,
   );
-  // console.log("mates", matesWithMatch);
 
   return (
-    <div>
-      {<NearbyMatesClient mates={matesWithMatch} loggedUser={loggedUser} />}
-    </div>
+    <Block>
+      <NearbyMatesClient
+        mates={matesWithMatch}
+        loggedUser={loggedUser}
+        pagination={pagination}
+      />
+    </Block>
   );
 }

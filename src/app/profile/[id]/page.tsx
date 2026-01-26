@@ -14,9 +14,9 @@ export default async function ProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const profileUser = await getUserById(id);
+  const profileUser = await getUserById(id, { strategy: "full" });
 
-  if (!profileUser) return null; // Handled by layout, but for TS safety
+  if (!profileUser) return null;
 
   const friends = await getFriends(id);
   const persona = personaService.fromUser(profileUser);

@@ -23,7 +23,7 @@ export default function PageHeader({
 }: PageHeaderProps) {
   return (
     <header
-      className={`bg-bg-main px-lg pt-lg pb-lg sticky top-0 left-0 right-0 z-50  ${className}`}
+      className={`bg-bg-main sticky top-0 left-0 right-0 z-50 ${className}`}
     >
       {/* Top Bar: Back Button, Right Content */}
       <div className="flex items-center justify-between mb-sm min-h-[44px]">

@@ -238,3 +238,60 @@ export default function calculateBoundingBox(
     ne: [lng + lngDelta, lat + latDelta],
   };
 }
+
+/**
+ * Validated metadata return type for UI consumption
+ */
+export type DistanceMetadata = {
+  distanceStr: string; // e.g. "12,450 km"
+  flightStr: string; // e.g. "~15h flight"
+  isFlight: boolean; // True if distance > 3000km (implies flight mode)
+  fullLabel: string; // "12,450 km (~15h flight)" or just "12,450 km"
+};
+
+/**
+ * Centralized logic for formatting distance/flight time meta-data.
+ * Replaces ad-hoc caching and formatting in UI components.
+ */
+export function getDistanceMetadata(
+  userCoords: { lat: number; lng: number } | null | undefined,
+  targetCoords: { lat: number; lng: number } | null | undefined,
+  unit: DistanceUnit = "KM",
+): DistanceMetadata | null {
+  if (!userCoords || !targetCoords) return null;
+
+  const distance = getDistance(
+    userCoords.lat,
+    userCoords.lng,
+    targetCoords.lat,
+    targetCoords.lng,
+    unit,
+  );
+
+  if (distance === null || typeof distance === "undefined") return null;
+
+  // Round for consistency
+  const roundedDistance = Math.round(distance);
+
+  // Format Distance
+  const distanceStr = formatDistanceLabel(roundedDistance, unit);
+
+  // Calculate Flight Time
+  const flightStr = formatFlightTimeLabelFromDistance(roundedDistance, unit);
+
+  // Threshold: > 3000km usually implies flight context visually
+  const isFlight = roundedDistance >= 3000;
+
+  // Compose Full Label
+  let fullLabel = distanceStr;
+  if (isFlight && flightStr) {
+    fullLabel = `${distanceStr} (${flightStr})`;
+  }
+
+  return {
+    distanceStr,
+    flightStr,
+    isFlight,
+    fullLabel,
+  };
+}

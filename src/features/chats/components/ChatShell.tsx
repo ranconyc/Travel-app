@@ -3,6 +3,7 @@
 import React from "react";
 import PageHeader from "@/components/molecules/PageHeader";
 import AppShell from "@/components/templates/AppShell";
+import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
 
 interface ChatShellProps {
   title: string;
@@ -28,7 +29,9 @@ export function ChatShell({
       footerSlot={input}
       scrollable={false}
     >
-      <div className="flex flex-col h-full relative">{children}</div>
+      <ErrorBoundary componentName="Chat">
+        <div className="flex flex-col h-full relative">{children}</div>
+      </ErrorBoundary>
     </AppShell>
   );
 }

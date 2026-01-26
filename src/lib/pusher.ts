@@ -1,15 +1,15 @@
 import PusherServer from "pusher";
 import PusherClient from "pusher-js";
 
-// Server-side variables
-const appId = process.env.PUSHER_APP_ID;
-const serverKey = process.env.PUSHER_KEY;
-const secret = process.env.PUSHER_SECRET;
-const serverCluster = process.env.PUSHER_CLUSTER || "mt1";
+// Public key shared by both server and client
+const key = process.env.NEXT_PUBLIC_PUSHER_KEY;
+const cluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "mt1";
 
-// Client-side variables
-const clientKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
-const clientCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "mt1";
+// Server-only secret variables
+const appId = process.env.PUSHER_APP_ID;
+const secret = process.env.PUSHER_SECRET;
+
+// Local development settings
 const host = process.env.NEXT_PUBLIC_PUSHER_HOST;
 const port = process.env.NEXT_PUBLIC_PUSHER_PORT
   ? parseInt(process.env.NEXT_PUBLIC_PUSHER_PORT)
@@ -19,26 +19,25 @@ const port = process.env.NEXT_PUBLIC_PUSHER_PORT
  * Pusher Server instance for triggering events from server actions
  */
 export const pusherServer =
-  appId && serverKey && secret
+  appId && key && secret
     ? new PusherServer({
         appId,
-        key: serverKey,
+        key,
         secret,
-        cluster: serverCluster,
-        useTLS: !host, // Disable TLS if using local host without it (simplified logic)
+        cluster,
+        useTLS: !host,
         host,
         port: port ? String(port) : undefined,
       })
     : (null as unknown as PusherServer);
 
 /**
- * Pusher Client instance for subscribing to channels in client components
- * Only initialized on the client side (in the browser)
+ * Pusher Client instance for browser-side subscriptions
  */
 export const pusherClient =
-  typeof window !== "undefined" && clientKey
-    ? new PusherClient(clientKey, {
-        cluster: clientCluster,
+  typeof window !== "undefined" && key
+    ? new PusherClient(key, {
+        cluster,
         wsHost: host,
         wsPort: port,
         wssPort: port,
@@ -58,7 +57,6 @@ if (pusherClient) {
 
 /**
  * Centralized Event Dispatcher for server-side triggers
- * Decouples the rest of the app from Pusher's internal logic
  */
 export async function triggerRealTimeEvent<T = unknown>(
   channel: string,
@@ -67,7 +65,7 @@ export async function triggerRealTimeEvent<T = unknown>(
 ) {
   if (!pusherServer) {
     console.warn(
-      `[RealTime] Skipped event "${event}" on channel "${channel}" (Pusher not initialized)`,
+      `[RealTime] Skipped event "${event}" (Pusher not initialized)`,
     );
     return { success: false, error: "Pusher not initialized" };
   }

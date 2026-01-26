@@ -16,6 +16,7 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       allowDangerousEmailAccountLinking: true,
       profile(profile) {
+        console.log("google profile", profile);
         return {
           id: profile.sub,
           name: profile.name,
@@ -33,6 +34,7 @@ export default {
         },
       },
       profile(profile) {
+        console.log("facebook profile", profile);
         return {
           id: profile.id,
           name: profile.name,

@@ -1,4 +1,7 @@
+"use client";
+import Button from "@/components/atoms/Button";
 import { User } from "@/domain/user/user.schema";
+import { signOut } from "next-auth/react";
 
 export function Footer({ profileUser }: { profileUser: User }) {
   return (
@@ -10,6 +13,7 @@ export function Footer({ profileUser }: { profileUser: User }) {
           year: "numeric",
         })}
       </p>
+      <Button onClick={() => signOut()}>Logout</Button>
     </footer>
   );
 }

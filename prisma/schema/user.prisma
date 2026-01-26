@@ -45,6 +45,8 @@ model User {
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([currentCityId])
 }
 
 /**
@@ -76,4 +78,7 @@ model UserProfile {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([birthday])
+  @@index([languages])
 }

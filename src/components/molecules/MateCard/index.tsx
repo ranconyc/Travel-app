@@ -4,6 +4,7 @@ import { User } from "@/domain/user/user.schema";
 import Typography from "@/components/atoms/Typography";
 
 import ResidentOrVisitorBadge from "@/components/atoms/ResidentOrVisitorBadge";
+import { useMateCard } from "./useMateCard";
 
 export default function MateCard({
   mate,
@@ -14,23 +15,15 @@ export default function MateCard({
   loggedUser: User;
   priority: boolean;
 }) {
-  const { id: userId, avatarUrl, match } = mate;
-  const mainImage =
-    mate.media?.find(
-      (img: { category: string; url: string }) => img.category === "AVATAR",
-    )?.url || avatarUrl;
-
-  const isResident =
-    !!mate.currentCityId &&
-    !!mate.profile?.homeBaseCityId &&
-    mate.currentCityId === mate.profile.homeBaseCityId;
-
-  const name =
-    (mate?.name &&
-      mate.profile?.firstName &&
-      mate.profile?.lastName &&
-      `${mate.profile.firstName} ${mate.profile.lastName}`) ||
-    mate.profile?.firstName;
+  const {
+    userId,
+    mainImage,
+    isResident,
+    name,
+    interests,
+    showMatchScore,
+    matchScore,
+  } = useMateCard({ mate, loggedUser });
 
   return (
     <BaseCard
@@ -41,7 +34,7 @@ export default function MateCard({
     >
       <div className="p-2 h-full flex flex-col justify-between relative">
         {/* Top section - Match percentage */}
-        {loggedUser?.id !== userId && (
+        {showMatchScore && (
           <div className="w-full flex items-center justify-end">
             <div className="text-white border border-white/20 px-2 py-2 w-fit bg-black/30 backdrop-blur-md rounded-full shadow-lg">
               <div className="flex flex-col items-center justify-center gap-0">
@@ -49,7 +42,7 @@ export default function MateCard({
                   variant="tiny"
                   className="text-white font-bold leading-none"
                 >
-                  {match?.score}%
+                  {matchScore}%
                 </Typography>
                 <Typography
                   variant="micro"
@@ -68,11 +61,23 @@ export default function MateCard({
           <ResidentOrVisitorBadge isResident={isResident} />
 
           {/* Name and Age */}
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <Typography variant="h3" className="text-white font-bold truncate">
-              {name}
-            </Typography>
-          </div>
+          <Typography variant="h3" className="text-white font-bold truncate">
+            {name}
+          </Typography>
+
+          {/* Persona Glimpse - Top 3 Interests */}
+          {interests.length > 0 && (
+            <div className="flex gap-1 mt-1.5 flex-wrap">
+              {interests.map((interest, i) => (
+                <span
+                  key={i}
+                  className="text-[10px] bg-white/20 backdrop-blur-md text-white px-1.5 py-0.5 rounded-md font-medium tracking-wide uppercase shadow-sm"
+                >
+                  {interest}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </BaseCard>

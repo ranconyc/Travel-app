@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { useClickOutside } from "@/hooks/ui/useClickOutside";
+import { bg } from "zod/v4/locales";
 
 interface ModalProps {
   isOpen: boolean;
@@ -53,30 +54,30 @@ export default function Modal({
     <div
       role="dialog"
       aria-modal="true"
-      className={`fixed inset-0 bg-blur flex z-50 animate-fade-in ${
-        isSlideUp ? "items-end justify-center" : "items-center justify-center"
+      className={`fixed inset-0 z-50 flex justify-center bg-black/40 backdrop-blur-sm animate-fade-in ${
+        isSlideUp ? "items-end" : "items-center"
       }`}
     >
       <div
         ref={modalRef}
-        className={`w-full h-fit max-h-[90vh] bg-main px-4 py-6 shadow-2xl flex flex-col transition-all duration-300 ${
+        /* Removed h-fit to let content define height, added overflow-hidden for rounded corners */
+        className={`w-full bg-white shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
           isSlideUp
-            ? "animate-slide-up rounded-t-4xl md:rounded-4xl md:max-w-md md:mb-8"
-            : "animate-scale-in rounded-4xl max-w-md mx-4"
+            ? "mx-xs animate-slide-up rounded-t-4xl md:rounded-4xl md:mb-8"
+            : "mx-lg animate-scale-in rounded-3xl"
         } ${className}`}
       >
         {/* Header Section */}
         {(title || showCloseButton) && (
-          <div
-            className={`flex items-start justify-between mb-md ${!title ? "justify-end" : ""}`}
-          >
-            {title && <div className="text-xl font-bold">{title}</div>}
-
+          <div className="flex items-center justify-between p-6 pb-2">
+            {title && (
+              <div className="text-xl font-bold text-gray-900">{title}</div>
+            )}
             {showCloseButton && (
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1 hover:bg-surface rounded-full transition-colors -mr-1"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="Close modal"
               >
                 <X size={20} />
@@ -85,8 +86,8 @@ export default function Modal({
           </div>
         )}
 
-        {/* Content */}
-        <div className="overflow-y-auto">{children}</div>
+        {/* Content Section - Added padding and scrolling fix */}
+        <div className="p-6 pt-2 overflow-y-auto max-h-[80vh]">{children}</div>
       </div>
     </div>
   );

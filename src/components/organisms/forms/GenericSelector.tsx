@@ -46,7 +46,7 @@ export function GenericSelector({
   variant = "full",
 }: GenericSelectorProps) {
   return (
-    <div className="grid grid-cols-1 gap-sm">
+    <div className="px-md grid grid-cols-1 gap-sm">
       {options.map((item) => (
         <SelectionCard
           key={item.id}

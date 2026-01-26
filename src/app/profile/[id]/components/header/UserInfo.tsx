@@ -1,38 +1,59 @@
 "use client";
 import { memo } from "react";
 import { useProfileUser } from "../../store/useProfileStore";
-import SocialMediaLinks from "./SocialMediaLinks";
-import { personaService } from "@/domain/persona/persona.service";
+import MediaLinks from "@/components/atoms/MediaLinks";
+import { Briefcase, Home as HomeIcon } from "lucide-react";
 
 function UserInfo() {
   const profileUser = useProfileUser();
 
   if (!profileUser) return null;
 
-  const persona = personaService.fromUser(profileUser);
-  const { identity } = persona;
+  // Identity info is now on the profile directly
+  const occupation = profileUser.profile?.occupation;
+  const hometown = profileUser.profile?.homeBaseCity?.name;
 
-  const locationText = profileUser.currentCity
-    ? `${profileUser.currentCity.name}, ${
-        profileUser.currentCity.country?.name === "United States of America"
-          ? "USA"
-          : profileUser.currentCity.country?.name
-      }`
-    : identity.hometown;
+  // Transform socials array to Record<string, string> for MediaLinks
+  const socialsArray = (profileUser?.profile?.socials || []) as Array<{
+    platform: string;
+    url: string;
+  }>;
+  const socialLinks = socialsArray.reduce(
+    (acc, social) => {
+      if (social.platform && social.url) {
+        acc[social.platform.toLowerCase()] = social.url;
+      }
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
   return (
     <div className="text-center space-y-sm">
-      <h1 className="text-h2 font-bold text-txt-main">{identity.firstName}</h1>
+      <h1 className="text-h2 font-bold text-txt-main">
+        {profileUser.profile?.firstName || profileUser.name}
+      </h1>
 
-      {Array.isArray(profileUser.profile?.socials) &&
-        (profileUser.profile?.socials as unknown[]).length > 0 && (
-          <div className="w-full flex items-center justify-center gap-xs">
-            <SocialMediaLinks />
-          </div>
-        )}
+      <MediaLinks
+        links={socialLinks}
+        className="justify-center md:justify-start"
+      />
 
-      {locationText && (
-        <p className="text-upheader text-secondary italic">{locationText}</p>
+      {(occupation || hometown) && (
+        <div className="flex items-center justify-center gap-4 text-sm text-secondary">
+          {occupation && (
+            <div className="flex items-center gap-1">
+              <Briefcase size={16} />
+              <span>{occupation}</span>
+            </div>
+          )}
+          {hometown && (
+            <div className="flex items-center gap-1">
+              <HomeIcon size={16} />
+              <span>From {hometown}</span>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

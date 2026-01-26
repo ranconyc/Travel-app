@@ -39,7 +39,7 @@ export default function PersonaFormClient() {
       case 1:
         return <BasicInfoStep />;
       case 2:
-        return <RhythmStep />;
+        return <Rhyt hmStep />;
       case 3:
         return <StyleStep />;
       case 4:
@@ -55,11 +55,6 @@ export default function PersonaFormClient() {
 
   const headerSlot = (
     <div className="flex-none bg-bg-main z-50">
-      <div className="pt-md px-md h-12 flex items-center">
-        {!isFirstStep && (
-          <Button variant="back" onClick={handleBack} className="-ml-2" />
-        )}
-      </div>
       <FormHeader
         title={header}
         description={description}
@@ -78,7 +73,7 @@ export default function PersonaFormClient() {
           <Button
             type="button"
             variant="ghost"
-            className="w-full mb-3"
+            className="w-full mb-3 text-text-secondary"
             onClick={handleSkipAnalysis}
           >
             Skip for now
@@ -106,12 +101,12 @@ export default function PersonaFormClient() {
         headerSlot={headerSlot}
         footerSlot={footerSlot}
       >
-        <div className="max-w-(--max-width-narrow) mx-auto px-(--page-padding) w-full">
+        <div className="w-full">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
             {stepContent(step)}
           </div>
         </div>
-        <DevTool control={methods.control} />
+        {/* <DevTool control={methods.control} /> */}
       </AppShell>
     </FormProvider>
   );

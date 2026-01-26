@@ -5,11 +5,12 @@ import { useCountries } from "@/domain/country/country.hooks";
 import { Country } from "@/domain/country/country.schema";
 import DestinationCard from "@/components/molecules/DestinationCard";
 
-import { useAppStore } from "@/store/appStore";
+import { useLocationStore } from "@/store/locationStore";
 import SectionList from "@/components/molecules/SectionList";
 
 export default function CountryList() {
-  const { coords } = useAppStore();
+  const { getFinalLocation } = useLocationStore();
+  const coords = getFinalLocation();
   const { data: countries, isLoading } = useCountries<Country[]>({
     coords: coords || undefined,
   });

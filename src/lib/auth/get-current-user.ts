@@ -20,11 +20,12 @@ export const getUserId = cache(async () => {
 /**
  * Get the full user object from the DB.
  * Cached to deduplicate DB calls across the server tree.
+ * Returns full user data with profile, media, and currentCity.
  */
 export const getCurrentUser = cache(async () => {
   const userId = await getUserId();
   if (!userId) {
     return null;
   }
-  return await getUserById(userId);
+  return await getUserById(userId, { strategy: "full" });
 });

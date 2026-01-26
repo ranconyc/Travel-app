@@ -3,34 +3,35 @@
 import MateCard from "@/components/molecules/MateCard";
 import { User } from "@/domain/user/user.schema";
 import PageHeader from "@/components/molecules/PageHeader";
-import UserList from "@/components/organisms/HomeSections/UserList";
 import { useDiscovery } from "@/domain/discovery/discovery.hooks";
 import GenderToggle from "@/components/molecules/GenderToggle";
 import EmptyState from "@/components/atoms/EmptyState";
-import DiscoveryLayout from "@/components/molecules/DiscoveryLayout";
-import MateGrid from "@/components/organisms/MateGrid";
+import DiscoveryLayout from "@/components/molecules/DiscoveryLayout"
 
 export default function NearbyMatesClient({
   mates,
   loggedUser,
+  pagination,
 }: {
   mates: User[];
   loggedUser: User;
+  pagination: PaginationInfo;
 }) {
   const { filters, filteredMates, updateFilters } = useDiscovery(mates);
 
   return (
-    <DiscoveryLayout
-      header={
-        <PageHeader
-          subtitle={loggedUser.currentCity?.name || "Worldwide"}
-          title="Mates"
-          rightContent={
-            <div className="flex items-center gap-sm">
+    <ErrorBoundary componentName="Mates List">
+      <DiscoveryLayout
+        header={
+          <PageHeader
+            subtitle={!loggedUser.currentCity?.name || "Worldwide"}
+            title="Mates"
+            rightContent={
               <GenderToggle
                 gender={filters.gender}
                 setGender={(gender) => updateFilters({ gender })}
               />
+
             </div>
           }
           backButton={false}
@@ -40,5 +41,42 @@ export default function NearbyMatesClient({
     >
       <MateGrid mates={filteredMates} loggedUser={loggedUser} />
     </DiscoveryLayout>
+
+            }
+            backButton={false}
+          />
+        }
+      >
+        {filteredMates.length > 0 ? (
+          <Block className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-sm">
+            {filteredMates.map((mate) => (
+              <MateCard
+                key={mate.id}
+                mate={mate}
+                loggedUser={loggedUser}
+                priority={false}
+              />
+            ))}
+          </Block>
+        ) : (
+          <EmptyState
+            title="No mates found"
+            description="Try adjusting your filters to find more travel partners."
+            icon={<Typography variant="span">🔍</Typography>}
+          />
+        )}
+
+        {pagination.totalPages > 1 && (
+          <Pagination
+            pagination={{
+              ...pagination,
+              totalItems: pagination.totalMates,
+            }}
+            basePath="/mates"
+          />
+        )}
+      </DiscoveryLayout>
+    </ErrorBoundary>
+
   );
 }

@@ -46,7 +46,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
 
   return (
     <div className="space-y-6">
-      <div className="relative max-w-md">
+      <div className="relative">
         <Search
           className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary"
           size={20}

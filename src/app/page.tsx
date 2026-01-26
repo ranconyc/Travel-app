@@ -20,7 +20,8 @@ export default async function Home() {
   const queryClient = new QueryClient();
   const user = await getCurrentUser();
   console.log("user", user);
-  const location = user?.currentLocation as {
+  // Use any cast because TS inference struggles with union return type of getUserById
+  const location = (user as any)?.currentLocation as {
     type: string;
     coordinates: [number, number];
   } | null;

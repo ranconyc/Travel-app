@@ -2,9 +2,12 @@
 
 import "@/components/molecules/CityStamp/styles.css";
 import { useEffect, useState } from "react";
-import { Loader2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import Block from "@/components/atoms/Block";
+import Loader from "@/components/atoms/Loader";
+import Badge from "@/components/atoms/Badge";
 
-type TravelHistoryItem = {
+export type TravelHistoryItem = {
   id: string;
   type: "city" | "country";
   cityId: string | null;
@@ -74,14 +77,14 @@ export default function TravelHistory({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="animate-spin w-6 h-6 text-secondary" />
-      </div>
+      <Block className="flex items-center justify-center py-8">
+        <Loader />
+      </Block>
     );
   }
 
   return (
-    <div className="flex flex-col gap-md">
+    <Block className="flex flex-col gap-md">
       <SectionHeader
         title="Travel History"
         linkText={`${visits.length} places`}
@@ -120,9 +123,7 @@ export default function TravelHistory({
                   size="sm"
                 />
                 {item.isCurrent && (
-                  <div className="absolute -top-2 -right-2 bg-brand text-white text-micro font-bold px-2 py-0.5 rounded-full">
-                    CURRENT
-                  </div>
+                  <Badge className="absolute -top-2 -right-2">CURRENT</Badge>
                 )}
               </Link>
             );
@@ -130,12 +131,12 @@ export default function TravelHistory({
         )}
         {isMyProfile && visits.length > 0 && (
           <Link href="/profile/travelc?content=europe" className="shrink-0">
-            <div className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
+            <Block className="w-16 h-16 rounded-full bg-surface-secondary border border-dashed border-secondary/30 flex items-center justify-center hover:bg-surface-tertiary transition-colors">
               <Plus className="text-secondary" />
-            </div>
+            </Block>
           </Link>
         )}
       </HorizontalList>
-    </div>
+    </Block>
   );
 }

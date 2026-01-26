@@ -32,7 +32,7 @@ export default function QRCodeModal() {
       title="Share Profile"
       variant="popup"
     >
-      <div className="py-8 flex flex-col items-center gap-6">
+      <div className="py-4 flex flex-col items-center gap-6">
         <div className="bg-white p-md rounded-xl shadow-lg">
           {profileUrl && (
             <QRCodeSVG

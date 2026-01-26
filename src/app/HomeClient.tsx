@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { useLocation } from "@/app/providers/LocationProvider";
 
 import { useAppStore } from "@/store/appStore";
+import { useLocationStore } from "@/store/locationStore";
 import { useEffect } from "react";
 
 interface HomeClientProps {
@@ -18,7 +19,8 @@ interface HomeClientProps {
 export default function HomeClient({ dbLocation }: HomeClientProps) {
   const loggedUser = useUser();
   const { location: browserLocation } = useLocation();
-  const { setUser, setBrowserCoords, setDbCoords } = useAppStore();
+  const { setUser } = useAppStore();
+  const { setBrowserLocation, setDbLocation } = useLocationStore();
 
   // Sync state to Zustand on mount/change
   useEffect(() => {
@@ -27,16 +29,18 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
 
   useEffect(() => {
     if (browserLocation) {
-      setBrowserCoords({
+      setBrowserLocation({
         lat: browserLocation.latitude,
         lng: browserLocation.longitude,
       });
     }
-  }, [browserLocation, setBrowserCoords]);
+  }, [browserLocation, setBrowserLocation]);
 
   useEffect(() => {
-    if (dbLocation) setDbCoords(dbLocation);
-  }, [dbLocation, setDbCoords]);
+    if (dbLocation) {
+      setDbLocation(dbLocation);
+    }
+  }, [dbLocation, setDbLocation]);
 
   if (!loggedUser) return redirect("/signin");
 

@@ -34,30 +34,6 @@ function AvatarSectionClient() {
     setImages(Array.from(uniqueImages).slice(0, 6));
   }, [field.value]);
 
-  const uploadToCloudinary = async (file: File) => {
-    const sigRes = await fetch("/api/profile/upload", { method: "POST" });
-    if (!sigRes.ok) throw new Error("Failed to get Cloudinary signature");
-
-    const { cloudName, apiKey, timestamp, folder, signature, transformation } =
-      await sigRes.json();
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("api_key", apiKey);
-    formData.append("timestamp", String(timestamp));
-    formData.append("folder", folder);
-    formData.append("signature", signature);
-    if (transformation) formData.append("transformation", transformation);
-
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-      { method: "POST", body: formData },
-    );
-
-    if (!res.ok) throw new Error(`Cloudinary upload failed`);
-    return res.json();
-  };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || uploadingRef.current) return;
@@ -70,7 +46,11 @@ function AvatarSectionClient() {
         [avatarUrl, ...prev.filter((img) => img !== avatarUrl)].slice(0, 6),
       );
 
+      // Use centralized Cloudinary service
+      const { uploadToCloudinary } =
+        await import("@/lib/media/cloudinary.service");
       const result = await uploadToCloudinary(file);
+
       field.onChange(result.secure_url);
       publicIdField.onChange(result.public_id);
       setImages((prev) =>
