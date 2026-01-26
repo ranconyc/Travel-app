@@ -50,18 +50,27 @@ export const {
         token.role = (user as any).role;
         token.currentCityId = (user as any).currentCityId;
         token.profileCompleted = (user as any).profileCompleted;
+        token.isBanned = (user as any).isBanned;
+        token.isActive = (user as any).isActive;
       }
 
-      // Always refresh profileCompleted from DB to avoid stale cache
-      // This is especially important after persona/profile updates
+      // Always refresh security and status flags from DB to avoid stale cache
       if (token.uid && (trigger === "update" || !token.role)) {
         const u = await prisma.user.findUnique({
           where: { id: token.uid as string },
-          select: { role: true, currentCityId: true, profileCompleted: true },
+          select: {
+            role: true,
+            currentCityId: true,
+            profileCompleted: true,
+            isBanned: true,
+            isActive: true,
+          },
         });
         token.role = u?.role ?? "USER";
         token.currentCityId = u?.currentCityId ?? undefined;
         token.profileCompleted = u?.profileCompleted ?? false;
+        token.isBanned = u?.isBanned ?? false;
+        token.isActive = u?.isActive ?? true;
       }
 
       return token;
@@ -73,6 +82,8 @@ export const {
         (session.user as any).currentCityId = token.currentCityId as string;
         (session.user as any).profileCompleted =
           token.profileCompleted as boolean;
+        (session.user as any).isBanned = token.isBanned as boolean;
+        (session.user as any).isActive = token.isActive as boolean;
       }
       return session;
     },

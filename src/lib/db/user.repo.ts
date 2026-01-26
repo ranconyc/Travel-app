@@ -100,17 +100,31 @@ export async function getUserBasicById(id: string): Promise<UserBasic | null> {
  *
  * @returns Array of UserBase objects
  */
-export async function getAllUsers(): Promise<UserBase[]> {
+/**
+ * Fetches users with base fields (optimized for list views) with pagination.
+ */
+export async function getPaginatedUsers(options: {
+  take: number;
+  skip: number;
+  excludeUserId?: string;
+}): Promise<UserBase[]> {
   try {
     return await prisma.user.findMany({
-      select: baseUserSelect, // FORCE lightweight select
+      where: {
+        id: { not: options.excludeUserId },
+        isBanned: false,
+        isActive: true,
+      },
+      select: baseUserSelect,
+      take: options.take,
+      skip: options.skip,
       orderBy: {
         createdAt: "desc",
       },
     });
   } catch (error) {
-    console.error("getAllUsers error:", error);
-    throw new Error("Unable to fetch users at this time");
+    console.error("getPaginatedUsers error:", error);
+    throw new Error("Unable to fetch users");
   }
 }
 
@@ -427,9 +441,6 @@ export async function updateUserPersona(userId: string, persona: any) {
   });
 }
 
-/**
- * Updates user geolocation and city reference.
- */
 export async function updateUserLocation(
   userId: string,
   location: { type: string; coordinates: [number, number] },
@@ -442,4 +453,20 @@ export async function updateUserLocation(
       currentCityId: cityId,
     },
   });
+}
+
+/**
+ * @deprecated Use getPaginatedUsers or getAllUsersFull instead.
+ */
+export async function getAllUsers(): Promise<UserBase[]> {
+  try {
+    return await prisma.user.findMany({
+      where: { isBanned: false, isActive: true },
+      select: baseUserSelect,
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    console.error("getAllUsers error:", error);
+    throw new Error("Unable to fetch users");
+  }
 }

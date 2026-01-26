@@ -32,12 +32,16 @@ export default function NearbyMatesClient({
   pagination: PaginationInfo;
 }) {
   const { data } = useMates(initialPagination.currentPage, {
-    matesWithMatch: initialMates,
+    matesWithMatch: initialMates as (User & { match: MatchResult })[],
     pagination: initialPagination,
+    meta: { isGlobal: true },
   });
 
-  const matesWithMatch = (data?.matesWithMatch || initialMates) as User[];
+  const matesWithMatch = (data?.matesWithMatch || initialMates) as (User & {
+    match: MatchResult;
+  })[];
   const pagination = (data?.pagination || initialPagination) as PaginationInfo;
+  const isGlobal = data?.meta?.isGlobal ?? true;
 
   const { filters, filteredMates, updateFilters } =
     useDiscovery(matesWithMatch);
@@ -47,7 +51,11 @@ export default function NearbyMatesClient({
       <DiscoveryLayout
         header={
           <PageHeader
-            subtitle={!loggedUser.currentCity?.name || "Worldwide"}
+            subtitle={
+              isGlobal
+                ? "Global Suggestions"
+                : loggedUser.currentCity?.name || "Nearby you"
+            }
             title="Mates"
             rightContent={
               <GenderToggle

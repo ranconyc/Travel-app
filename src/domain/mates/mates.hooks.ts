@@ -14,6 +14,9 @@ export type PaginationInfo = {
 export type MatesResponse = {
   matesWithMatch: (User & { match: MatchResult })[];
   pagination: PaginationInfo;
+  meta: {
+    isGlobal: boolean;
+  };
 };
 
 export function useMates(

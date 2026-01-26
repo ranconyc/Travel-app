@@ -16,6 +16,8 @@ model User {
   avatarUrl        String?   
   emailVerified    DateTime?
   profileCompleted Boolean   @default(false)
+  isBanned         Boolean   @default(false)
+  isActive         Boolean   @default(true)
   // Refactored Media Relations
   media        Media[] // Media uploaded by this user
 
