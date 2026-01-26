@@ -66,6 +66,7 @@ export const Icon: Story = {
   args: {
     variant: "icon",
     icon: <Heart size={20} />,
+    "aria-label": "Like",
   },
 };
 

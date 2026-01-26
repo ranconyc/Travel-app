@@ -37,12 +37,12 @@ export default function MatchAvatars({ size = 112 }: { size?: number }) {
     <div className="relative flex -space-x-4 justify-center mb-md">
       <Avatar
         image={profileUser.avatarUrl ?? undefined}
-        name={profileUser.name ?? ""}
+        alt={profileUser.name ?? ""}
         size={size}
       />
       <Avatar
         image={loggedUser.avatarUrl ?? undefined}
-        name={loggedUser.name ?? ""}
+        alt={loggedUser.name ?? ""}
         size={size}
       />
       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex bg-brand text-white rounded-full">

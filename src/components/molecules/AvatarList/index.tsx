@@ -98,7 +98,7 @@ export function AvatarList({
                 user.image ||
                 undefined
               }
-              name={displayName}
+              alt={displayName || "User"}
               style={{
                 marginLeft: index === 0 ? 0 : size * -0.45, // overlap only here
               }}

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 type AvatarProps = {
   image?: string;
-  name?: string;
+  alt: string;
   size?: number; // size in pixels
   className?: string;
   style?: React.CSSProperties;
@@ -13,7 +13,7 @@ type AvatarProps = {
 // cleaner, more flexible avatar component
 export function Avatar({
   image,
-  name = "",
+  alt,
   size = 40, // default size
   className = "",
   style,
@@ -42,7 +42,7 @@ export function Avatar({
           image ||
           "https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1577909/"
         }
-        alt={`${name} profile`}
+        alt={alt}
         fill
         className="object-cover"
         sizes={`${size}px`}

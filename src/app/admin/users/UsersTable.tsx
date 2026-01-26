@@ -81,7 +81,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                     <div className="flex items-center gap-3">
                       <Avatar
                         image={user.avatarUrl || undefined}
-                        name={user.name || "User"}
+                        alt={user.name || "User"}
                         size={40}
                       />
                       <div>
