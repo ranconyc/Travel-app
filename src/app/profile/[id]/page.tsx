@@ -46,10 +46,10 @@ export default async function ProfilePage({
   ];
 
   return (
-    <main className="max-w-2xl mx-auto px-lg flex flex-col gap-xxl mt-xl">
+    <Block className="max-w-2xl mx-auto px-lg flex flex-col gap-xxl mt-xl">
       <Stats stats={stats} />
       <TravelSection />
       <InterestsSection interests={persona.interests} />
-    </main>
+    </Block>
   );
 }

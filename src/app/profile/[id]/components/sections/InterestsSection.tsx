@@ -4,12 +4,13 @@ import AddSection from "@/components/molecules/AddSection";
 import InterestsList from "../InterestsList";
 import SectionHeader from "@/components/molecules/SectionHeader";
 import { useIsMyProfile } from "../../store/useProfileStore";
+import Block from "@/components/atoms/Block";
 
 export function InterestsSection({ interests }: { interests: string[] }) {
   const isMyProfile = useIsMyProfile();
   if (!isMyProfile && interests.length === 0) return null;
   return (
-    <section>
+    <Block>
       <SectionHeader
         title="Interests"
         href={
@@ -31,6 +32,6 @@ export function InterestsSection({ interests }: { interests: string[] }) {
       ) : (
         <InterestsList interests={interests} />
       )}
-    </section>
+    </Block>
   );
 }

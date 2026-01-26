@@ -1,6 +1,8 @@
 import AddSection from "@/components/molecules/AddSection";
 import { MapPin } from "lucide-react";
 import SectionHeader from "@/components/molecules/SectionHeader";
+import Block from "@/components/atoms/Block";
+import Typography from "@/components/atoms/Typography";
 
 export interface NextDestination {
   id: string;
@@ -15,26 +17,30 @@ export default function NextDestinations({
   nextDestinations: NextDestination[];
 }) {
   return (
-    <div className="flex flex-col gap-md">
+    <Block className="flex flex-col gap-md">
       <SectionHeader title="Next Destinations" />
 
       {nextDestinations.length > 0 ? (
-        <div className="flex flex-col gap-2">
+        <Block className="flex flex-col gap-2">
           {nextDestinations.map((dest) => (
-            <div
+            <Block
               key={dest.id}
               className="bg-surface/50 p-md rounded-xl border border-surface flex items-center gap-3"
             >
-              <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center">
+              <Block className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center">
                 <MapPin className="text-brand w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-sm font-bold">{dest.name}</p>
-                <p className="text-xs text-secondary">{dest.countryName}</p>
-              </div>
-            </div>
+              </Block>
+              <Block>
+                <Typography variant="p" className="text-sm font-bold">
+                  {dest.name}
+                </Typography>
+                <Typography variant="p" className="text-xs text-secondary">
+                  {dest.countryName}
+                </Typography>
+              </Block>
+            </Block>
           ))}
-        </div>
+        </Block>
       ) : (
         <AddSection
           title="Have upcoming trips planned?"
@@ -44,6 +50,6 @@ export default function NextDestinations({
           }}
         />
       )}
-    </div>
+    </Block>
   );
 }

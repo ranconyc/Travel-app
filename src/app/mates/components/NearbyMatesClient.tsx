@@ -8,9 +8,9 @@ import GenderToggle from "@/components/molecules/GenderToggle";
 import EmptyState from "@/components/atoms/EmptyState";
 import DiscoveryLayout from "@/components/molecules/DiscoveryLayout";
 import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
-import Button from "@/components/atoms/Button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import Pagination from "@/components/molecules/Pagination";
+import Block from "@/components/atoms/Block";
+import Typography from "@/components/atoms/Typography";
 
 type PaginationInfo = {
   currentPage: number;
@@ -30,14 +30,6 @@ export default function NearbyMatesClient({
   pagination: PaginationInfo;
 }) {
   const { filters, filteredMates, updateFilters } = useDiscovery(mates);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const handlePageChange = (newPage: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(newPage));
-    router.push(`/mates?${params.toString()}`);
-  };
 
   return (
     <ErrorBoundary componentName="Mates List">
@@ -56,9 +48,8 @@ export default function NearbyMatesClient({
           />
         }
       >
-        {/* {userList && <div className="">{userList}</div>} */}
         {filteredMates.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-sm">
+          <Block className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-sm">
             {filteredMates.map((mate) => (
               <MateCard
                 key={mate.id}
@@ -67,47 +58,23 @@ export default function NearbyMatesClient({
                 priority={false}
               />
             ))}
-          </div>
+          </Block>
         ) : (
           <EmptyState
             title="No mates found"
             description="Try adjusting your filters to find more travel partners."
-            icon={<span>🔍</span>}
+            icon={<Typography variant="span">🔍</Typography>}
           />
         )}
 
-        {/* Pagination Controls */}
         {pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between mt-lg pt-lg border-t border-stroke">
-            <div className="text-sm text-txt-sec">
-              Showing {((pagination.currentPage - 1) * 20) + 1}-
-              {Math.min(pagination.currentPage * 20, pagination.totalMates)} of{" "}
-              {pagination.totalMates} mates
-            </div>
-            <div className="flex items-center gap-sm">
-              <Button
-                variant="secondary"
-                onClick={() => handlePageChange(pagination.currentPage - 1)}
-                disabled={!pagination.hasPrevPage}
-                className="flex items-center gap-1"
-              >
-                <ChevronLeft size={16} />
-                Previous
-              </Button>
-              <span className="text-sm text-txt-sec px-2">
-                Page {pagination.currentPage} of {pagination.totalPages}
-              </span>
-              <Button
-                variant="secondary"
-                onClick={() => handlePageChange(pagination.currentPage + 1)}
-                disabled={!pagination.hasNextPage}
-                className="flex items-center gap-1"
-              >
-                Next
-                <ChevronRight size={16} />
-              </Button>
-            </div>
-          </div>
+          <Pagination
+            pagination={{
+              ...pagination,
+              totalItems: pagination.totalMates,
+            }}
+            basePath="/mates"
+          />
         )}
       </DiscoveryLayout>
     </ErrorBoundary>
