@@ -6,19 +6,7 @@ import PageHeader from "@/components/molecules/PageHeader";
 import { useDiscovery } from "@/domain/discovery/discovery.hooks";
 import GenderToggle from "@/components/molecules/GenderToggle";
 import EmptyState from "@/components/atoms/EmptyState";
-import DiscoveryLayout from "@/components/molecules/DiscoveryLayout";
-import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
-import Pagination from "@/components/molecules/Pagination";
-import Block from "@/components/atoms/Block";
-import Typography from "@/components/atoms/Typography";
-
-type PaginationInfo = {
-  currentPage: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-  totalMates: number;
-};
+import DiscoveryLayout from "@/components/molecules/DiscoveryLayout"
 
 export default function NearbyMatesClient({
   mates,
@@ -43,6 +31,17 @@ export default function NearbyMatesClient({
                 gender={filters.gender}
                 setGender={(gender) => updateFilters({ gender })}
               />
+
+            </div>
+          }
+          backButton={false}
+        />
+      }
+      userList={<UserList />}
+    >
+      <MateGrid mates={filteredMates} loggedUser={loggedUser} />
+    </DiscoveryLayout>
+
             }
             backButton={false}
           />
@@ -78,5 +77,6 @@ export default function NearbyMatesClient({
         )}
       </DiscoveryLayout>
     </ErrorBoundary>
+
   );
 }

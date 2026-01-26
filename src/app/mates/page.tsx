@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import NearbyMatesClient from "./components/NearbyMatesClient";
 import { getMatesPageData } from "@/domain/mates/mates.service";
 import Block from "@/components/atoms/Block";
+import { hasLocation } from "@/domain/user/user.types";
 
 export default async function NearbyMatesPage({
   searchParams,
@@ -19,6 +20,11 @@ export default async function NearbyMatesPage({
     redirect("/signin");
   }
 
+  if (!hasLocation(loggedUser)) {
+    redirect("/");
+  }
+
+ 
   const params = await searchParams;
   const currentPage = parseInt(params.page || "1", 10);
 

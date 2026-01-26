@@ -6,6 +6,7 @@ import Stats from "@/components/molecules/Stats";
 import { getFriends } from "@/lib/db/friendship.repo";
 import { InterestsSection } from "./components/sections/InterestsSection";
 import { personaService } from "@/domain/persona/persona.service";
+import ProfilePageLayout from "@/components/organisms/ProfilePageLayout";
 
 export default async function ProfilePage({
   params,
@@ -15,7 +16,7 @@ export default async function ProfilePage({
   const { id } = await params;
   const profileUser = await getUserById(id, { strategy: "full" });
 
-  if (!profileUser) return null; // Handled by layout, but for TS safety
+  if (!profileUser) return null;
 
   const friends = await getFriends(id);
   const persona = personaService.fromUser(profileUser);
@@ -46,10 +47,10 @@ export default async function ProfilePage({
   ];
 
   return (
-    <Block className="max-w-2xl mx-auto px-lg flex flex-col gap-xxl mt-xl">
+    <ProfilePageLayout>
       <Stats stats={stats} />
       <TravelSection />
       <InterestsSection interests={persona.interests} />
-    </Block>
+    </ProfilePageLayout>
   );
 }

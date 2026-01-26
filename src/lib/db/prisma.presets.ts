@@ -16,18 +16,19 @@ export const userBasicSelect = {
 /**
  * Base user select for user cards and list views (e.g., MateCard).
  * Includes minimum fields needed to render a user card/avatar:
- * - Identity (id, name, avatarUrl)
+ * - Identity (id, name, avatarUrl, role)
  * - Profile basics (firstName, lastName, homeBaseCityId)
- * - Location (currentCityId)
+ * - Location (currentCityId, visitedCountries)
  * - Media (avatar image)
- * 
- * This is the default for lightweight fetches.
+ * * This is the default for lightweight fetches.
  */
 export const baseUserSelect = {
   id: true,
   name: true,
   avatarUrl: true,
-  currentCityId: true,
+  visitedCountries: true, // From refactor
+  role: true,             // From refactor
+  currentCityId: true,    // From main
   profile: {
     select: {
       firstName: true,
@@ -54,13 +55,14 @@ export const extendedUserSelect = {
   ...baseUserSelect,
   profile: {
     select: {
+      // Re-including base profile fields + additional ones
       firstName: true,
       lastName: true,
+      homeBaseCityId: true,
       occupation: true,
       description: true,
       gender: true,
       languages: true,
-      homeBaseCityId: true,
       homeBaseCity: {
         select: {
           name: true,
