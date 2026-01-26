@@ -11,13 +11,13 @@ interface AppState {
   onboardingDraft: Partial<PersonaFormValues> | null;
   isDraftDirty: boolean;
   draftUpdatedAt: number | null;
-  
+
   // Messaging State
   unreadCount: number;
 
   // Actions
   setUser: (user: User | null) => void;
-  setUnreadCount: (count: number) => void;
+  setUnreadCount: (count: number | ((prev: number) => number)) => void;
 
   // Draft Actions
   updateDraft: (update: Partial<PersonaFormValues>) => void;
@@ -42,7 +42,11 @@ export const useAppStore = create<AppState>()(
 
       setUser: (user) => set({ user }),
 
-      setUnreadCount: (unreadCount) => set({ unreadCount }),
+      setUnreadCount: (count) =>
+        set((state) => ({
+          unreadCount:
+            typeof count === "function" ? count(state.unreadCount) : count,
+        })),
 
       updateDraft: (update) => {
         const current = get().onboardingDraft || {};

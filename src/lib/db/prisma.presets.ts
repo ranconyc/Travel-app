@@ -20,7 +20,7 @@ export const userBasicSelect = {
  * - Profile basics (firstName, lastName, homeBaseCityId)
  * - Location (currentCityId)
  * - Media (avatar image)
- * 
+ *
  * This is the default for lightweight fetches.
  */
 export const baseUserSelect = {
@@ -33,6 +33,12 @@ export const baseUserSelect = {
       firstName: true,
       lastName: true,
       homeBaseCityId: true,
+      homeBaseCity: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   },
   media: {

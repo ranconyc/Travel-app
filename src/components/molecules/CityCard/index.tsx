@@ -5,7 +5,7 @@ import Typography from "@/components/atoms/Typography";
 
 interface CityCardProps {
   city: {
-    id: string;
+    id?: string;
     cityId: string;
     name: string;
     imageHeroUrl?: string | null;
@@ -28,7 +28,7 @@ export default function CityCard({ city }: CityCardProps) {
     >
       <div className="aspect-[3/4] relative overflow-hidden">
         <ImageWithFallback
-          src={city.imageHeroUrl}
+          src={city.imageHeroUrl || ""}
           alt={city.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           fallback={
@@ -49,7 +49,7 @@ export default function CityCard({ city }: CityCardProps) {
           {countryName && (
             <div className="flex items-center gap-1 mt-1">
               <Typography
-                variant="span"
+                variant="tiny"
                 className="text-white/70 text-micro uppercase tracking-wider font-medium"
               >
                 {countryName}

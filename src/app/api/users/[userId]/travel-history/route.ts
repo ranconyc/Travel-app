@@ -1,5 +1,5 @@
 import { getTravelHistory } from "@/domain/user/travelHistory.queries";
-import { getUserById } from "@/lib/db/user.repo";
+import { getUserById, UserWithRelations } from "@/lib/db/user.repo";
 import { getCountriesByCodes } from "@/lib/db/country.repo";
 import { NextResponse } from "next/server";
 
@@ -20,8 +20,11 @@ export async function GET(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    // Cast user to UserWithRelations since we used strategy: "full"
+    const fullUser = user as UserWithRelations;
+
     // Get visited countries data
-    const visitedCountryCodes = user.visitedCountries || [];
+    const visitedCountryCodes = (fullUser as any).visitedCountries || [];
     const visitedCountries = await getCountriesByCodes(visitedCountryCodes);
 
     // Create a Set of city IDs that have detailed visit records
@@ -41,7 +44,7 @@ export async function GET(
         countryCode: visit.city.country?.code || "",
         date: visit.startDate,
         isCurrent:
-          visit.endDate === null && visit.cityId === user.currentCityId,
+          visit.endDate === null && visit.cityId === fullUser.currentCityId,
       });
     });
 
@@ -69,14 +72,14 @@ export async function GET(
     });
 
     // 3. Ensure current city is included (if not already in visits)
-    if (user.currentCity && !cityVisitIds.has(user.currentCityId!)) {
+    if (fullUser.currentCity && !cityVisitIds.has(fullUser.currentCityId!)) {
       mergedHistory.push({
-        id: `current-${user.currentCityId}`,
+        id: `current-${fullUser.currentCityId}`,
         type: "city" as const,
-        cityId: user.currentCityId!,
-        cityName: user.currentCity.name,
-        countryName: user.currentCity.country?.name || "",
-        countryCode: user.currentCity.country?.code || "",
+        cityId: fullUser.currentCityId!,
+        cityName: fullUser.currentCity.name,
+        countryName: fullUser.currentCity.country?.name || "",
+        countryCode: fullUser.currentCity.country?.code || "",
         date: new Date(),
         isCurrent: true,
       });

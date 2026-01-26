@@ -1,8 +1,8 @@
 import { useEffect, useCallback, useRef } from "react";
-import { UseFormWatch } from "react-hook-form";
+import { UseFormWatch, FieldValues } from "react-hook-form";
 import { DEBOUNCE_DELAYS } from "@/config/ui-constants";
 
-export interface UseFormPersistenceOptions<T> {
+export interface UseFormPersistenceOptions<T extends FieldValues> {
   /** Unique key for localStorage */
   storageKey: string;
   /** Form watch function from react-hook-form */
@@ -37,7 +37,7 @@ export interface UseFormPersistenceOptions<T> {
  * };
  * ```
  */
-export function useFormPersistence<T extends Record<string, any>>(
+export function useFormPersistence<T extends FieldValues>(
   options: UseFormPersistenceOptions<T>,
 ) {
   const {
@@ -48,7 +48,7 @@ export function useFormPersistence<T extends Record<string, any>>(
     onSave,
   } = options;
 
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Save to localStorage
   const saveToStorage = useCallback(

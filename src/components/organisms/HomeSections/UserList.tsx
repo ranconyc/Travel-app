@@ -45,7 +45,7 @@ export default function UserList() {
           <div className="flex flex-col items-center gap-xs group">
             <Avatar
               image={friend?.avatarUrl || friend?.profilePicture || ""}
-              name={friend?.name || `${friend?.firstName} ${friend?.lastName}`}
+              alt={friend?.name || `${friend?.firstName} ${friend?.lastName}`}
               size={60}
               className="group-hover:ring-2 ring-brand ring-offset-2 transition-all"
             />

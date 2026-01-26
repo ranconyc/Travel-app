@@ -17,7 +17,7 @@ export const COMPONENT_PREVIEWS: Record<string, React.ReactNode> = {
   Avatar: (
     <Avatar
       image="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-      name="JD"
+      alt="JD"
       size={48}
     />
   ),

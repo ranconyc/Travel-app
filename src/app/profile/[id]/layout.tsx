@@ -52,7 +52,10 @@ export default async function ProfileLayout({
   // Calculate match score on the server
   let matchResult = null;
   if (loggedUser && !isMyProfile) {
-    matchResult = calculateMatchScoreBatch(loggedUser, profileUser);
+    matchResult = calculateMatchScoreBatch(
+      loggedUser as User,
+      profileUser as User,
+    );
   }
 
   return (

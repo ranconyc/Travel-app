@@ -56,9 +56,12 @@ export const mapBudgetToDb = (id: string): BudgetLevel | string => {
 
 export const mapUiToDb = (formValues: PersonaFormValues): PersonaDbModel => {
   return {
-    dailyRhythm: mapRhythmToDb(formValues.dailyRhythm),
-    travelStyle: mapStyleToDb(formValues.travelStyle),
-    budget: mapBudgetToDb(formValues.budget),
+    dailyRhythm: mapRhythmToDb(formValues.dailyRhythm ?? "") as any,
+    travelStyle: (formValues.travelStyle || []).map((s) =>
+      mapStyleToDb(s),
+    ) as string[],
+    planningStyle: formValues.planningStyle,
+    budget: mapBudgetToDb(formValues.budget || "") as string,
     currency: formValues.currency,
     interests: formValues.interests,
   };
@@ -68,8 +71,9 @@ export const mapDbToUi = (
   dbModel: Partial<PersonaDbModel>,
 ): Partial<PersonaFormValues> => {
   return {
-    dailyRhythm: dbModel.dailyRhythm as string,
-    travelStyle: dbModel.travelStyle as string,
+    dailyRhythm: dbModel.dailyRhythm as any,
+    travelStyle: Array.isArray(dbModel.travelStyle) ? dbModel.travelStyle : [],
+    planningStyle: dbModel.planningStyle,
     budget: dbModel.budget as string,
     currency: dbModel.currency,
     interests: dbModel.interests,

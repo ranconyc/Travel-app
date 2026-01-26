@@ -4,10 +4,7 @@ import { User } from "@/domain/user/user.schema";
 
 const MATES_PER_PAGE = 20;
 
-export async function getMatesPageData(
-  loggedUser: User,
-  currentPage: number,
-) {
+export async function getMatesPageData(loggedUser: User, currentPage: number) {
   const offset = (currentPage - 1) * MATES_PER_PAGE;
 
   // Get all user IDs first (lightweight query)
@@ -30,7 +27,7 @@ export async function getMatesPageData(
   // Calculate matches using service with caching
   const matesWithMatch = calculateMatchesBatch(
     loggedUser,
-    matesFull,
+    matesFull as User[],
     "current",
   );
 

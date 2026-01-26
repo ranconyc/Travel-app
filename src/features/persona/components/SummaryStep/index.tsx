@@ -126,21 +126,23 @@ export default function SummaryStep({
 
       <SummarySection
         title="Travel Rhythm"
-        value={getRhythmLabel(values.dailyRhythm)}
+        value={getRhythmLabel(values.dailyRhythm ?? "")}
         stepIndex={2}
         onEdit={onJumpToStep}
       />
 
       <SummarySection
         title="Travel Style"
-        value={getStyleLabel(values.travelStyle)}
+        value={(values.travelStyle || [])
+          .map((s) => getStyleLabel(s))
+          .join(", ")}
         stepIndex={3}
         onEdit={onJumpToStep}
       />
 
       <SummarySection
         title="Budget"
-        value={`${getBudgetLabel(values.budget)} (${values.currency})`}
+        value={`${getBudgetLabel(values.budget ?? "")} (${values.currency})`}
         stepIndex={4}
         onEdit={onJumpToStep}
         isPrivate

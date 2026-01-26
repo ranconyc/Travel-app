@@ -76,9 +76,9 @@ export const saveInterests = createSafeAction(
       hometown: data.hometown,
       avatarUrl: data.avatarUrl,
       interests: dbModel.interests,
-      dailyRhythm: dbModel.dailyRhythm as string,
-      travelStyle: dbModel.travelStyle as string,
-      budget: dbModel.budget as string,
+      dailyRhythm: dbModel.dailyRhythm as any,
+      travelStyle: dbModel.travelStyle as any,
+      budget: dbModel.budget as any,
       currency: dbModel.currency,
       insights: insightCodes,
     });

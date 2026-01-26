@@ -39,7 +39,7 @@ export default function PersonaFormClient() {
       case 1:
         return <BasicInfoStep />;
       case 2:
-        return <Rhyt hmStep />;
+        return <RhythmStep />;
       case 3:
         return <StyleStep />;
       case 4:

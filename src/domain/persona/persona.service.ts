@@ -222,7 +222,11 @@ export class PersonaService {
         ? currentValues.interests
         : ["general_exploration"],
       dailyRhythm: currentValues.dailyRhythm || "balanced",
-      travelStyle: currentValues.travelStyle || "explorer",
+      travelStyle: Array.isArray(currentValues.travelStyle)
+        ? currentValues.travelStyle
+        : currentValues.travelStyle
+          ? [currentValues.travelStyle as string]
+          : ["explorer"],
       budget: currentValues.budget || "mid_range",
       currency: currentValues.currency || "USD",
     };
@@ -238,9 +242,9 @@ export class PersonaService {
       hometown: identity.hometown || user?.profile?.homeBaseCityId || "",
       avatarUrl: identity.avatarUrl || user?.avatarUrl || "",
       interests: persona?.interests || [],
-      dailyRhythm: prefs.dailyRhythm || persona?.dailyRhythm || "",
-      travelStyle: prefs.travelStyle || persona?.travelStyle || "",
-      budget: prefs.budgetTier || persona?.budget || "",
+      dailyRhythm: (prefs.dailyRhythm || persona?.dailyRhythm || "") as any,
+      travelStyle: (prefs.travelStyle || persona?.travelStyle || []) as any,
+      budget: (prefs.budgetTier || persona?.budget || "") as any,
       currency: prefs.currency || persona?.currency || "USD",
     };
   }
@@ -315,7 +319,7 @@ export class PersonaService {
       identity,
       preferences,
       interests: persona?.interests || [],
-      insights: persona?.insights || [],
+      insights: (persona?.insights || []) as any,
       metadata: {
         lastSyncedAt: persona?.metadata?.lastSyncedAt || Date.now(),
         version: persona?.metadata?.version || 1,

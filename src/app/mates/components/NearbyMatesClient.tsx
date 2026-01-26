@@ -11,6 +11,8 @@ import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
 import Pagination from "@/components/molecules/Pagination";
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
+import { useMates } from "@/domain/mates/mates.hooks";
+import { MatchResult } from "@/domain/match/match.schema";
 
 type PaginationInfo = {
   currentPage: number;
@@ -21,15 +23,24 @@ type PaginationInfo = {
 };
 
 export default function NearbyMatesClient({
-  mates,
+  mates: initialMates,
   loggedUser,
-  pagination,
+  pagination: initialPagination,
 }: {
-  mates: User[];
+  mates: (User & { match: MatchResult })[];
   loggedUser: User;
   pagination: PaginationInfo;
 }) {
-  const { filters, filteredMates, updateFilters } = useDiscovery(mates);
+  const { data } = useMates(initialPagination.currentPage, {
+    matesWithMatch: initialMates,
+    pagination: initialPagination,
+  });
+
+  const matesWithMatch = (data?.matesWithMatch || initialMates) as User[];
+  const pagination = (data?.pagination || initialPagination) as PaginationInfo;
+
+  const { filters, filteredMates, updateFilters } =
+    useDiscovery(matesWithMatch);
 
   return (
     <ErrorBoundary componentName="Mates List">
@@ -63,7 +74,11 @@ export default function NearbyMatesClient({
           <EmptyState
             title="No mates found"
             description="Try adjusting your filters to find more travel partners."
-            icon={<Typography variant="span">🔍</Typography>}
+            icon={
+              <Typography variant="tiny" as="span">
+                🔍
+              </Typography>
+            }
           />
         )}
 

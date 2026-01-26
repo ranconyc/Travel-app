@@ -6,6 +6,8 @@ import Stats from "@/components/molecules/Stats";
 import { getFriends } from "@/lib/db/friendship.repo";
 import { InterestsSection } from "./components/sections/InterestsSection";
 import { personaService } from "@/domain/persona/persona.service";
+import { User } from "@/domain/user/user.schema";
+import Block from "@/components/atoms/Block";
 
 export default async function ProfilePage({
   params,
@@ -18,10 +20,11 @@ export default async function ProfilePage({
   if (!profileUser) return null; // Handled by layout, but for TS safety
 
   const friends = await getFriends(id);
-  const persona = personaService.fromUser(profileUser);
+  const fullProfileUser = profileUser as User;
+  const persona = personaService.fromUser(fullProfileUser);
 
   // Calculate stats
-  const visitedCountriesCodes = profileUser.visitedCountries || [];
+  const visitedCountriesCodes = fullProfileUser.visitedCountries || [];
 
   const stats: StatItem[] = [
     {
@@ -35,10 +38,10 @@ export default async function ProfilePage({
       icon: Users,
     },
     {
-      value: profileUser?.profile?.languages?.length || 0,
-      label: !profileUser?.profile?.languages
+      value: fullProfileUser?.profile?.languages?.length || 0,
+      label: !fullProfileUser?.profile?.languages
         ? ""
-        : profileUser?.profile?.languages?.length > 1
+        : fullProfileUser?.profile?.languages?.length > 1
           ? "Languages"
           : "Language",
       icon: LanguagesIcon,

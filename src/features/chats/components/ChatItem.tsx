@@ -35,7 +35,7 @@ export default function ChatItem({
       >
         <Avatar
           image={displayImage || undefined}
-          name={displayName}
+          alt={displayName}
           size={56}
           variant="square"
         />

@@ -152,8 +152,10 @@ export const saveInterestsSchema = z.object({
   // Interests & Persona
   interests: z.array(z.string()).min(1, "Please select at least one interest"),
   dailyRhythm: z.string().min(1, "Please select a daily rhythm"),
-  travelStyle: z.string().min(1, "Please select a travel style"),
-  budget: z.string().min(1, "Please select a budget"),
+  travelStyle: z
+    .array(z.string())
+    .min(1, "Please select at least one travel style"),
+  budget: z.string().nullable(),
   currency: z.string().min(1, "Please select a currency"),
 });
 

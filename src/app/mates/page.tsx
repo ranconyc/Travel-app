@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import NearbyMatesClient from "./components/NearbyMatesClient";
 import { getMatesPageData } from "@/domain/mates/mates.service";
 import Block from "@/components/atoms/Block";
+import { User } from "@/domain/user/user.schema";
 
 export default async function NearbyMatesPage({
   searchParams,
@@ -11,9 +12,9 @@ export default async function NearbyMatesPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const session = await getSession();
-  const loggedUser = await getUserById(session?.user?.id || "", {
+  const loggedUser = (await getUserById(session?.user?.id || "", {
     strategy: "full",
-  });
+  })) as User | null;
 
   if (!loggedUser) {
     redirect("/signin");

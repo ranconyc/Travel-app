@@ -90,20 +90,6 @@ export async function findNearbyCities(
   );
 }
 
-export async function getRecommendedCities(userInterests: string[]) {
-  return await prisma.city.findMany({
-    where: {
-      tags: {
-        hasSome: userInterests, // מוצא ערים שיש להן לפחות אינטרס אחד משותף
-      },
-    },
-    orderBy: {
-      // כאן אפשר להוסיף לוגיקה של מי הכי מתאימה
-    },
-    take: 10,
-  });
-}
-
 // find the nearest CITY to a given point
 export async function findNearestCity(
   lng: number,

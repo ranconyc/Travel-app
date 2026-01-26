@@ -38,7 +38,7 @@ export function usePersonaForm() {
 
   const onSubmit = async (data: PersonaFormValues) => {
     try {
-      const result = await saveInterests(data);
+      const result = await saveInterests(data as any);
       if (result.success && result.data?.userId) {
         useAppStore.getState().clearDraft();
         router.refresh();

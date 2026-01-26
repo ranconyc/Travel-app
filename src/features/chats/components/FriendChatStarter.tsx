@@ -49,7 +49,7 @@ export function FriendChatStarter({
     >
       <Avatar
         image={friendImage || undefined}
-        name={friendName}
+        alt={friendName}
         size={48}
         variant="square"
       />

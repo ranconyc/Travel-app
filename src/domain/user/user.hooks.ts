@@ -291,7 +291,7 @@ export function useGeo(options: UseGeoOptions = {}) {
     error,
     setError,
   } = useLocationStore();
-  
+
   // Get computed final location
   const coords = getFinalLocation();
 
@@ -324,7 +324,7 @@ export function useGeo(options: UseGeoOptions = {}) {
   }, [
     initialUser?.currentLocation,
     coords,
-    setCoords,
+    setDbLocation,
     setLastSavedCoords,
     setLoading,
   ]);
@@ -362,7 +362,10 @@ export function useGeo(options: UseGeoOptions = {}) {
       watchId = navigator.geolocation.watchPosition(
         (pos) => {
           if (timeoutId) clearTimeout(timeoutId);
-          setBrowserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setBrowserLocation({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          });
           setLoading(false);
         },
         (err) => {

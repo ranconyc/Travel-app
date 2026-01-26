@@ -31,8 +31,8 @@ export class InsightsEngine {
     // Rule 2: Nature Explorer
     (data) => {
       const isAdventure =
-        data.travelStyle === TRAVEL_STYLES.ADVENTURER ||
-        data.travelStyle === TRAVEL_STYLES.EXPLORER;
+        data.travelStyle.includes(TRAVEL_STYLES.ADVENTURER) ||
+        data.travelStyle.includes(TRAVEL_STYLES.EXPLORER);
       const hasNatureInterests = data.interests.some((i) =>
         [
           "national_park_hiking",
@@ -54,7 +54,7 @@ export class InsightsEngine {
 
     // Rule 3: Culture Vulture
     (data) => {
-      const isCultural = data.travelStyle === TRAVEL_STYLES.CULTURAL;
+      const isCultural = data.travelStyle.includes(TRAVEL_STYLES.CULTURAL);
       const hasCultureInterests = data.interests.some((i) =>
         [
           "museums",
@@ -77,8 +77,8 @@ export class InsightsEngine {
     // Rule 4: Chill Seeker
     (data) => {
       const isChill =
-        data.dailyRhythm === DAILY_RHYTHMS.SPONTANEOUS ||
-        data.dailyRhythm === DAILY_RHYTHMS.BALANCED;
+        data.planningStyle === "Spontaneous" ||
+        data.planningStyle === "Balanced";
       const hasChillInterests = data.interests.some((i) =>
         ["beach_lounging", "spa_massage", "meditation_centers"].includes(i),
       );

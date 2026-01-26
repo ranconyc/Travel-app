@@ -3,7 +3,11 @@ import type { Prisma } from "@prisma/client";
 import { type Coordinates } from "@/domain/common.schema";
 import { type NearbyUserResult } from "@/domain/user/user.schema";
 
-import { userFullInclude, userBasicSelect, baseUserSelect } from "./prisma.presets";
+import {
+  userFullInclude,
+  userBasicSelect,
+  baseUserSelect,
+} from "./prisma.presets";
 
 // Type for user with all related data
 export type UserWithRelations = Prisma.UserGetPayload<{
@@ -22,16 +26,16 @@ export type UserBase = Prisma.UserGetPayload<{
 
 /**
  * Fetches a user by ID with configurable data fetching strategy.
- * 
+ *
  * @param id - User ID
  * @param options - Query options
  * @param options.strategy - 'base' for lightweight (card/list views) or 'full' for complete data. Default: 'base'
  * @returns UserBase if strategy is 'base', UserWithRelations if 'full'
- * 
+ *
  * @example
  * // Lightweight fetch (default) - for cards, lists, avatars
  * const user = await getUserById(userId); // Returns UserBase
- * 
+ *
  * @example
  * // Full fetch - for profile pages, detailed views
  * const user = await getUserById(userId, { strategy: 'full' }); // Returns UserWithRelations
@@ -68,9 +72,7 @@ export async function getUserById(
  * Fetches a user by ID with only basic fields (id, email, name, avatarUrl, profileCompleted).
  * Use this for list views, dropdowns, and when you don't need profile data.
  */
-export async function getUserBasicById(
-  id: string,
-): Promise<UserBasic | null> {
+export async function getUserBasicById(id: string): Promise<UserBasic | null> {
   if (!id) return null;
   if (!/^[0-9a-fA-F]{24}$/.test(id)) {
     console.warn(`getUserBasicById: Invalid ObjectId format: "${id}"`);
@@ -93,9 +95,9 @@ export async function getUserBasicById(
  * - id, name, avatarUrl, currentCityId
  * - profile: firstName, lastName, homeBaseCityId
  * - media: avatar image
- * 
+ *
  * This is FORCED lightweight - perfect for MateCard, user lists, etc.
- * 
+ *
  * @returns Array of UserBase objects
  */
 export async function getAllUsers(): Promise<UserBase[]> {
@@ -268,6 +270,7 @@ export async function createUser(data: {
       name: data.name,
       passwordHash: data.passwordHash,
       role: data.role || "USER",
+      visitedCountries: [],
     },
   });
 }
@@ -292,22 +295,22 @@ export async function updateUserRole(userId: string, role: "USER" | "ADMIN") {
  * Fetches users for matching algorithm with selective relation loading.
  * By default, uses baseUserSelect for lightweight fetching.
  * Only includes heavy relations (visits, friendships) when explicitly requested.
- * 
+ *
  * @param userIds - Array of user IDs to fetch
  * @param options - Optional flags for heavy relations
  * @param options.includeVisits - If true, includes cityVisits with city data. Default: false
  * @param options.includeFriendships - If true, includes friendship relations. Default: false
  * @param options.strategy - 'base' for lightweight or 'full' for all relations. Default: 'base'
  * @returns Array of users with selected relations
- * 
+ *
  * @example
  * // Lightweight (default) - for basic matching
  * const users = await getUsersForMatching(userIds);
- * 
+ *
  * @example
  * // With visits only
  * const users = await getUsersForMatching(userIds, { includeVisits: true });
- * 
+ *
  * @example
  * // Full data for complex matching
  * const users = await getUsersForMatching(userIds, { strategy: 'full' });
@@ -376,10 +379,10 @@ export async function getUsersForMatching(
       }),
     };
 
-    return await prisma.user.findMany({
+    return (await prisma.user.findMany({
       where: { id: { in: userIds } },
       select: baseSelect,
-    });
+    })) as any as (UserBase | UserWithRelations)[];
   } catch (error) {
     console.error("getUsersForMatching error:", error);
     return [];

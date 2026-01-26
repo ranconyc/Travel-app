@@ -62,7 +62,24 @@ interface LocationState {
   reset: () => void;
 }
 
-const initialState: Omit<LocationState, "getFinalLocation" | "getLocationSource"> = {
+const initialState: Omit<
+  LocationState,
+  | "setDbLocation"
+  | "setBrowserLocation"
+  | "setManualLocation"
+  | "setDbCoords"
+  | "setBrowserCoords"
+  | "setCoords"
+  | "setLastSavedCoords"
+  | "setCurrentCity"
+  | "setLoading"
+  | "setLocationLoading"
+  | "setError"
+  | "setLocationError"
+  | "getFinalLocation"
+  | "getLocationSource"
+  | "reset"
+> = {
   // Raw sources
   dbCoords: null,
   browserCoords: null,
@@ -232,12 +249,10 @@ export const useLocationStore = create<LocationState>()(
       setLastSavedCoords: (coords: Coords | null) =>
         set({ lastSavedCoords: coords }),
 
-      setCurrentCity: (cityId: string | null) =>
-        set({ currentCityId: cityId }),
+      setCurrentCity: (cityId: string | null) => set({ currentCityId: cityId }),
 
       setLoading: (loading: boolean) => set({ loading }),
-      setLocationLoading: (isLocationLoading) =>
-        set({ isLocationLoading }),
+      setLocationLoading: (isLocationLoading) => set({ isLocationLoading }),
       setError: (error: GeoError | string | null) => set({ error }),
       setLocationError: (locationError: string | null) =>
         set({ locationError }),

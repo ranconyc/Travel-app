@@ -7,6 +7,7 @@ import Typography from "@/components/atoms/Typography";
 interface ImageWithFallbackProps extends Omit<ImageProps, "onError"> {
   fallbackSrc?: string;
   fallbackText?: string;
+  fallback?: React.ReactNode;
 }
 
 export default function ImageWithFallback({
@@ -14,11 +15,17 @@ export default function ImageWithFallback({
   alt,
   fallbackSrc,
   fallbackText,
+  fallback,
   fill,
   className = "",
   ...props
 }: ImageWithFallbackProps) {
   const [error, setError] = useState(false);
+
+  // If we have an error and a custom fallback component, show it
+  if (error && fallback) {
+    return <div className={className}>{fallback}</div>;
+  }
 
   // If we have an error and no fallback source, show a stylized placeholder
   if (error && !fallbackSrc) {

@@ -38,7 +38,7 @@ const ChatMessageBubble = memo(
               message.sender.avatarUrl ||
               undefined
             }
-            name={senderName}
+            alt={senderName}
             size={36}
           />
         )}
