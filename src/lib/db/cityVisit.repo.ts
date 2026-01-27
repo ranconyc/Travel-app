@@ -71,6 +71,7 @@ export async function createCityVisit(
   userId: string,
   cityId: string,
   coords?: { lat: number; lng: number },
+  meta?: { source?: "AUTO" | "MANUAL"; isVerified?: boolean },
 ) {
   try {
     const entryCoords = coords
@@ -85,6 +86,8 @@ export async function createCityVisit(
         userId,
         cityId,
         entryCoords,
+        source: meta?.source ?? "MANUAL",
+        isVerified: meta?.isVerified ?? false,
       },
       include: {
         city: true,

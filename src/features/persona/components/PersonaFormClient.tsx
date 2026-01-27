@@ -4,12 +4,9 @@ import { FormProvider } from "react-hook-form";
 import Button from "@/components/atoms/Button";
 import { DevTool } from "@hookform/devtools";
 
-import BasicInfoStep from "@/features/persona/components/BasicInfoStep";
-import RhythmStep from "@/features/persona/components/RhythmStep";
-import StyleStep from "@/features/persona/components/StyleStep";
-import BudgetStep from "@/features/persona/components/BudgetStep";
+import IdentityStep from "@/features/persona/components/IdentityStep";
+import HometownStep from "@/features/persona/components/HometownStep";
 import InterestsStep from "@/features/persona/components/InterestsStep";
-import SummaryStep from "@/features/persona/components/SummaryStep";
 
 import AppShell from "@/components/templates/AppShell";
 import { FormHeader, ProgressIndicator } from "@/components/molecules/forms";
@@ -22,7 +19,6 @@ export default function PersonaFormClient() {
     step,
     handleBack,
     onNext,
-    handleSkipAnalysis,
     onSubmit,
     isSubmitting,
     isFirstStep,
@@ -37,19 +33,13 @@ export default function PersonaFormClient() {
   const stepContent = (index: number) => {
     switch (index) {
       case 1:
-        return <BasicInfoStep />;
+        return <IdentityStep />;
       case 2:
-        return <RhythmStep />;
+        return <HometownStep />;
       case 3:
-        return <StyleStep />;
-      case 4:
-        return <BudgetStep />;
-      case 5:
         return <InterestsStep />;
-      case 6:
-        return <SummaryStep onJumpToStep={setStep} />;
       default:
-        return <BasicInfoStep />;
+        return <IdentityStep />;
     }
   };
 
@@ -58,9 +48,10 @@ export default function PersonaFormClient() {
       <FormHeader
         title={header}
         description={description}
-        showBackButton={false}
+        showBackButton={!isFirstStep}
+        onBack={handleBack}
         rightElement={
-          <ProgressIndicator currentStep={step} totalSteps={6} showLabel />
+          <ProgressIndicator currentStep={step} totalSteps={3} showLabel />
         }
       />
     </div>
@@ -68,18 +59,7 @@ export default function PersonaFormClient() {
 
   const footerSlot = (
     <div className="p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke shadow-soft">
-      <div className="max-w-(--max-width-narrow) mx-auto">
-        {step === 5 && (
-          <Button
-            type="button"
-            variant="ghost"
-            className="w-full mb-3 text-text-secondary"
-            onClick={handleSkipAnalysis}
-          >
-            Skip for now
-          </Button>
-        )}
-
+      <div className="max-w-narrow mx-auto">
         <Button
           type="button"
           onClick={isLastStep ? onSubmit : onNext}

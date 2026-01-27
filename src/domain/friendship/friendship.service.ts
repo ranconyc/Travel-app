@@ -11,9 +11,25 @@ export async function requestFriendship(
   requesterId: string,
   addresseeId: string,
 ) {
-  // Any pre-request logic (e.g. check if user is blocked in a separate way, or if they are already friends)
-  // The repo already does some of this, but we can add more "service" level logic here.
-  return await sendFriendRequest(requesterId, addresseeId);
+  const result = await sendFriendRequest(requesterId, addresseeId);
+
+  // Side Effect: Notify addressee
+  if (result) {
+    const { getUserById } = await import("@/lib/db/user.repo");
+    const { notificationService } =
+      await import("@/domain/notification/notification.service");
+    const requester = await getUserById(requesterId);
+
+    await notificationService.createNotification({
+      userId: addresseeId,
+      type: "FRIEND_REQUEST",
+      title: "New Friend Request",
+      message: `${requester?.name || "Someone"} sent you a friend request.`,
+      data: { requesterId },
+    });
+  }
+
+  return result;
 }
 
 export async function handleCancelRequest(
@@ -34,10 +50,21 @@ export async function handleAcceptRequest(
 
   const result = await acceptFriendRequest(friendship.id, currentUserId);
 
-  // Side effect: Notify users, create chat session, etc.
-  // if (result) {
-  //   await createChat({ participants: [currentUserId, targetUserId] });
-  // }
+  // Side Effect: Notify the other user
+  if (result) {
+    const { getUserById } = await import("@/lib/db/user.repo");
+    const { notificationService } =
+      await import("@/domain/notification/notification.service");
+    const user = await getUserById(currentUserId);
+
+    await notificationService.createNotification({
+      userId: targetUserId,
+      type: "FRIEND_ACCEPT",
+      title: "Friend Request Accepted",
+      message: `${user?.name || "Someone"} accepted your friend request!`,
+      data: { friendId: currentUserId },
+    });
+  }
 
   return result;
 }

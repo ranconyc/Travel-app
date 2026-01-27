@@ -43,6 +43,8 @@ export async function GET(
         countryName: visit.city.country?.name || "",
         countryCode: visit.city.country?.code || "",
         date: visit.startDate,
+        isVerified: visit.isVerified,
+        source: visit.source,
         isCurrent:
           visit.endDate === null && visit.cityId === fullUser.currentCityId,
       });

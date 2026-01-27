@@ -183,6 +183,9 @@ model City {
   autoCreated Boolean @default(false)
   needsReview Boolean @default(false)
 
+  aggregatedVibes String[]
+  discoveryScore  Float    @default(0.0)
+
   capitalOf Country[] @relation("CountryCapital")
 
   @@index([countryRefId])
@@ -251,8 +254,12 @@ model Place {
   highlights String[]
   tags       String[]
 
-  autoCreated Boolean @default(false)
+  autoCreated Boolean @default(true)
   needsReview Boolean @default(false)
+
+  googleData  Json?
+  priceLevel  Int?
+  vibeScores  Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

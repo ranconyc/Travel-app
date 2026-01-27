@@ -99,6 +99,10 @@ export default function TravelHistory({
               label: "Add your first stamp",
             }}
           />
+        ) : visits.length === 0 && !isMyProfile ? (
+          <Block className="w-full text-center py-4 opacity-40">
+            No travel history yet
+          </Block>
         ) : (
           visits.map((item, index) => {
             const displayDate = item.date

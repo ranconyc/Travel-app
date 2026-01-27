@@ -3,7 +3,6 @@
 import { useUser } from "@/app/providers/UserProvider";
 import HomeHeader from "@/components/organisms/HomeHeader";
 import CountryList from "@/components/organisms/HomeSections/CountryList";
-import UserList from "@/components/organisms/HomeSections/UserList";
 import CityList from "@/components/organisms/HomeSections/CityList";
 import { redirect } from "next/navigation";
 import { useLocation } from "@/app/providers/LocationProvider";
@@ -15,6 +14,8 @@ import { useEffect } from "react";
 interface HomeClientProps {
   dbLocation?: { lat: number; lng: number };
 }
+
+import PersonaEditor from "@/features/persona/components/PersonaEditor";
 
 export default function HomeClient({ dbLocation }: HomeClientProps) {
   const loggedUser = useUser();
@@ -45,16 +46,21 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
   if (!loggedUser) return redirect("/signin");
 
   return (
-    <div className="flex flex-col h-screen bg-bg-main">
+    <div className="flex flex-col min-h-screen bg-bg-main">
       <HomeHeader />
       <main
-        className="flex-1 overflow-y-auto max-w-11/12 mx-auto"
+        className="flex-1 overflow-y-auto max-w-11/12 mx-auto px-md py-lg"
         id="home-main"
       >
-        {/* <div className="flex flex-col"> */}
-        <CountryList />
-        <CityList />
-        {/* </div> */}
+        <div className="flex flex-col gap-xl">
+          <PersonaEditor
+            user={loggedUser}
+            title="Discovery Optimization"
+            description="Complete your persona to find better travel matches around you."
+          />
+          <CountryList />
+          <CityList />
+        </div>
       </main>
     </div>
   );

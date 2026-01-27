@@ -10,7 +10,7 @@ import {
   PersonaFormValues,
   personaFormSchema,
 } from "@/domain/persona/persona.schema";
-import { saveInterests } from "@/domain/user/user.actions";
+import { upsertUserProfile } from "@/domain/user/user.actions";
 import useStep from "@/features/persona/hooks/useStep";
 
 /**
@@ -20,7 +20,7 @@ import useStep from "@/features/persona/hooks/useStep";
 export function usePersonaForm() {
   const router = useRouter();
   const user = useUser();
-  const { step, handleContinue, handleBack, setStep } = useStep(6);
+  const { step, handleContinue, handleBack, setStep } = useStep(3);
 
   const methods = useForm<PersonaFormValues>({
     resolver: zodResolver(personaFormSchema),
@@ -30,31 +30,30 @@ export function usePersonaForm() {
 
   const {
     handleSubmit,
-    setValue,
     trigger,
-    getValues,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async (data: PersonaFormValues) => {
     try {
-      const result = await saveInterests(data as any);
-      if (result.success && result.data?.userId) {
+      const result = await upsertUserProfile({
+        firstName: data.firstName,
+        homeBaseCityId: data.hometown, // Use hometown string as cityId for now per existing logic, or better yet, verify with user later.
+        avatarUrl: data.avatarUrl,
+        persona: {
+          interests: data.interests,
+        },
+        profileCompleted: true,
+      });
+
+      if (result.success && result.data?.id) {
         useAppStore.getState().clearDraft();
         router.refresh();
-        router.push(`/profile/${result.data.userId}`);
+        router.push(`/profile/${result.data.id}`);
       }
     } catch (error) {
       console.error("[PersonaForm] Submission failed:", error);
     }
-  };
-
-  const handleSkipAnalysis = () => {
-    const defaultedValues = personaService.applySkipDefaults(getValues());
-    Object.entries(defaultedValues).forEach(([key, val]) => {
-      setValue(key as keyof PersonaFormValues, val);
-    });
-    handleContinue();
   };
 
   const onNext = async () => {
@@ -73,11 +72,10 @@ export function usePersonaForm() {
     step,
     handleBack,
     onNext,
-    handleSkipAnalysis,
     onSubmit: handleSubmit(onSubmit),
     isSubmitting,
     isFirstStep: step === 1,
-    isLastStep: step === 6,
+    isLastStep: step === 3,
     header: currentStepConfig.header,
     description: currentStepConfig.description,
     setStep,

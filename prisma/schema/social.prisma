@@ -30,6 +30,11 @@ model Friendship {
 /**
  * ------------------------- CITY VISIT (Travel History) -------------------------
  */
+enum VisitSource {
+  AUTO
+  MANUAL
+}
+
 model CityVisit {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -42,6 +47,9 @@ model CityVisit {
   startDate DateTime @default(now())
   endDate   DateTime? // null = current/active visit
 
+  source     VisitSource @default(MANUAL)
+  isVerified Boolean     @default(false)
+
   // Optional: store entry/exit coordinates for detailed tracking
   entryCoords Json? // GeoJSON Point { type: "Point", coordinates: [lng, lat] }
   exitCoords  Json? // GeoJSON Point
@@ -52,4 +60,35 @@ model CityVisit {
   @@index([userId, endDate]) // Query for current location (endDate = null)
   @@index([userId, startDate]) // Query travel history chronologically
   @@index([cityId])
+}
+
+/**
+ * ------------------------- NOTIFICATION -------------------------
+ */
+enum NotificationType {
+  MESSAGE
+  FRIEND_REQUEST
+  FRIEND_ACCEPT
+  PASSPORT_STAMPED
+  SYSTEM
+}
+
+model Notification {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type    NotificationType
+  title   String
+  message String
+  data    Json? // Optional contextual data (e.g. { chatId, friendId, cityId })
+
+  isRead Boolean @default(false)
+  isSeen Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }

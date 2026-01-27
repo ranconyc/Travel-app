@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Plane,
   Anchor,
@@ -20,6 +20,7 @@ import {
   Train,
   Landmark,
   Castle,
+  Check,
 } from "lucide-react";
 
 const BORDER_STYLES = [
@@ -99,9 +100,10 @@ interface PassportStampProps {
   size?: "sm" | "md" | "lg" | "xl";
   showIcon?: boolean;
   rotation?: number;
+  isVerified?: boolean;
 }
 
-export default function PassportStamp({
+function PassportStamp({
   city,
   country,
   date,
@@ -111,6 +113,7 @@ export default function PassportStamp({
   size = "md",
   showIcon = true,
   rotation,
+  isVerified,
 }: PassportStampProps) {
   const getVariant = () => {
     if (variant) return variant;
@@ -228,13 +231,18 @@ export default function PassportStamp({
       }}
     >
       <div
-        className={`w-fit border-4 ${sizeClasses.innerPadding} flex flex-col items-center justify-center gap-1 ${radiusClass}`}
+        className={`w-fit border-4 ${sizeClasses.innerPadding} flex flex-col items-center justify-center gap-1 ${radiusClass} relative`}
         style={{
           borderColor: stampColor,
           borderStyle: borderInner,
           color: stampColor,
         }}
       >
+        {isVerified && (
+          <div className="absolute top-1 right-1 bg-white dark:bg-bg-dark rounded-full p-0.5 shadow-sm border border-current">
+            <Check size={size === "sm" ? 8 : 10} strokeWidth={3} />
+          </div>
+        )}
         <span
           className={`${sizeClasses.text} font-black uppercase tracking-[0.2em] opacity-90`}
         >
@@ -246,23 +254,6 @@ export default function PassportStamp({
         >
           {city}
         </h1>
-
-        {/* {IconComponent && (
-          <div className="my-1 opacity-80">
-            <IconComponent
-              size={
-                size === "sm"
-                  ? 14
-                  : size === "lg"
-                    ? 24
-                    : size === "xl"
-                      ? 28
-                      : 18
-              }
-              strokeWidth={2.5}
-            />
-          </div>
-        )} */}
 
         {date && (
           <p
@@ -276,3 +267,5 @@ export default function PassportStamp({
     </div>
   );
 }
+
+export default memo(PassportStamp);

@@ -169,33 +169,18 @@ export class PersonaService {
   private readonly steps: StepConfig[] = [
     {
       header: "Let's get to know you",
-      description: "Tell us a bit about yourself",
-      validationFields: ["firstName", "hometown"],
+      description: "How should we call you?",
+      validationFields: ["firstName"],
     },
     {
-      header: "What's your natural travel rhythm?",
-      description: "Select the option that matches you the most",
-      validationFields: ["dailyRhythm"],
+      header: "Where are you based?",
+      description: "Help us find mates nearby",
+      validationFields: ["hometown"],
     },
     {
-      header: "Which travel style feels most like you?",
-      description: "Select the option that matches you the most",
-      validationFields: ["travelStyle"],
-    },
-    {
-      header: "What's your typical travel budget?",
-      description: "Select your budget level and preferred currency",
-      validationFields: ["budget", "currency"],
-    },
-    {
-      header: "What do you enjoy when traveling?",
-      description: "Help us personalize your trip recommendations",
+      header: "What do you enjoy?",
+      description: "Pick your favorite travel interests",
       validationFields: ["interests"],
-    },
-    {
-      header: "Review your profile",
-      description: "Make sure everything looks good",
-      validationFields: [],
     },
   ];
 
@@ -233,19 +218,18 @@ export class PersonaService {
   }
 
   public getInitialValues(user: User | null): PersonaFormValues {
-    const persona = user?.profile?.persona as PersonaJson | undefined;
-    const identity = persona?.identity || {};
-    const prefs = persona?.preferences || {};
+    const profile = user?.profile;
+    const persona = profile?.persona as PersonaJson | undefined;
 
     return {
-      firstName: identity.firstName || user?.name || "",
-      hometown: identity.hometown || user?.profile?.homeBaseCityId || "",
-      avatarUrl: identity.avatarUrl || user?.avatarUrl || "",
+      firstName: profile?.firstName || user?.name || "",
+      hometown: profile?.homeBaseCityId || "",
+      avatarUrl: user?.avatarUrl || "",
       interests: persona?.interests || [],
-      dailyRhythm: (prefs.dailyRhythm || persona?.dailyRhythm || "") as any,
-      travelStyle: (prefs.travelStyle || persona?.travelStyle || []) as any,
-      budget: (prefs.budgetTier || persona?.budget || "") as any,
-      currency: prefs.currency || persona?.currency || "USD",
+      dailyRhythm: (persona?.dailyRhythm || "balanced") as any,
+      travelStyle: (persona?.travelStyle || []) as any,
+      budget: (persona?.budget || "mid_range") as any,
+      currency: persona?.currency || "USD",
     };
   }
 

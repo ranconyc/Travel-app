@@ -20,7 +20,9 @@ import {
   handleUpdateUserLocation,
   handleGenerateBio,
   handleGetAuthenticatedUser,
+  handleUpsertUserProfile,
 } from "@/domain/user/user.service";
+import { UserUpdateSchema } from "./userUpdate.schema";
 import {
   deleteUserAccount,
   getAllUsers,
@@ -37,6 +39,13 @@ import { PersonaFormValues } from "@/domain/persona/persona.schema";
 /* -------------------------------------------------------------------------- */
 
 // Standardized ActionResponse is imported from @/types/actions
+
+export const upsertUserProfile = createSafeAction(
+  UserUpdateSchema,
+  async (data, userId) => {
+    return await handleUpsertUserProfile(userId, data);
+  },
+);
 
 export const updateProfile = createSafeAction(
   completeProfileSchema,
@@ -104,7 +113,9 @@ export const generateBio = createPublicAction(BioInputSchema, async (data) => {
 export const saveVisitedCountries = createSafeAction(
   saveTravelSchema,
   async (data, userId) => {
-    await updateVisitedCountries(userId, data.countries);
+    const { handleSaveVisitedCountries } =
+      await import("@/domain/user/user.service");
+    await handleSaveVisitedCountries(userId, data.countries);
     return { userId };
   },
 );

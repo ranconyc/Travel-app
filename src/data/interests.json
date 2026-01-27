@@ -3,83 +3,310 @@
     "id": "cat_food_nightlife",
     "label": "Food & Nightlife",
     "items": [
-      { "id": "street_food_markets", "label": "Street food markets" },
-      { "id": "fine_dining", "label": "Fine dining" },
-      { "id": "wine_brewery_tours", "label": "Wine & Brewery tours" },
-      { "id": "cooking_classes", "label": "Cooking classes" },
-      { "id": "nightclubs_dancing", "label": "Nightclubs & Dancing" },
-      { "id": "rooftop_bars", "label": "Rooftop bars" },
-      { "id": "live_music_venues", "label": "Live music venues" }
+      {
+        "id": "street_food_markets",
+        "label": "Street food markets",
+        "google_types": ["food", "point_of_interest", "establishment"],
+        "google_keywords": ["street food", "night market", "food market"]
+      },
+      {
+        "id": "fine_dining",
+        "label": "Fine dining",
+        "google_types": ["restaurant", "food"],
+        "google_keywords": [
+          "fine dining",
+          "michelin star",
+          "upscale restaurant"
+        ]
+      },
+      {
+        "id": "wine_brewery_tours",
+        "label": "Wine & Brewery tours",
+        "google_types": ["bar", "food", "point_of_interest"],
+        "google_keywords": ["winery", "brewery", "vineyard"]
+      },
+      {
+        "id": "cooking_classes",
+        "label": "Cooking classes",
+        "google_types": ["food", "point_of_interest"],
+        "google_keywords": ["cooking class", "culinary workshop"]
+      },
+      {
+        "id": "nightclubs_dancing",
+        "label": "Nightclubs & Dancing",
+        "google_types": ["night_club", "bar"],
+        "google_keywords": ["nightclub", "disco", "techno club"]
+      },
+      {
+        "id": "rooftop_bars",
+        "label": "Rooftop bars",
+        "google_types": ["bar", "restaurant"],
+        "google_keywords": ["rooftop bar", "sky bar"]
+      },
+      {
+        "id": "live_music_venues",
+        "label": "Live music venues",
+        "google_types": ["bar", "point_of_interest"],
+        "google_keywords": ["live music", "jazz club", "concert hall"]
+      }
     ]
   },
   "Nature_Adventure": {
     "id": "cat_nature_adventure",
     "label": "Nature & Adventure",
     "items": [
-      { "id": "national_park_hiking", "label": "National park hiking" },
-      { "id": "waterfall_visits", "label": "Waterfall visits" },
-      { "id": "cave_exploration", "label": "Cave exploration" },
-      { "id": "mountain_trekking", "label": "Mountain trekking" },
-      { "id": "wildlife_safaris", "label": "Wildlife safaris" },
-      { "id": "surfing", "label": "Surfing" },
-      { "id": "scuba_diving", "label": "Scuba diving" },
-      { "id": "rock_climbing", "label": "Rock climbing" },
-      { "id": "zip_lining", "label": "Zip-lining" },
-      { "id": "skydiving", "label": "Skydiving" }
+      {
+        "id": "national_park_hiking",
+        "label": "National park hiking",
+        "google_types": ["park", "natural_feature"],
+        "google_keywords": ["national park", "hiking trail", "trekking"]
+      },
+      {
+        "id": "waterfall_visits",
+        "label": "Waterfall visits",
+        "google_types": ["natural_feature"],
+        "google_keywords": ["waterfall"]
+      },
+      {
+        "id": "cave_exploration",
+        "label": "Cave exploration",
+        "google_types": ["natural_feature", "point_of_interest"],
+        "google_keywords": ["cave", "cavern"]
+      },
+      {
+        "id": "mountain_trekking",
+        "label": "Mountain trekking",
+        "google_types": ["natural_feature"],
+        "google_keywords": ["mountain peaks", "summit"]
+      },
+      {
+        "id": "wildlife_safaris",
+        "label": "Wildlife safaris",
+        "google_types": ["zoo", "park", "aquarium"],
+        "google_keywords": ["safari", "wildlife sanctuary"]
+      },
+      {
+        "id": "surfing",
+        "label": "Surfing",
+        "google_types": ["natural_feature", "point_of_interest"],
+        "google_keywords": ["surfing spot", "beach surf"]
+      },
+      {
+        "id": "scuba_diving",
+        "label": "Scuba diving",
+        "google_types": ["point_of_interest"],
+        "google_keywords": ["scuba diving", "diving center"]
+      },
+      {
+        "id": "rock_climbing",
+        "label": "Rock climbing",
+        "google_types": ["point_of_interest"],
+        "google_keywords": ["rock climbing", "climbing wall"]
+      },
+      {
+        "id": "zip_lining",
+        "label": "Zip-lining",
+        "google_types": ["amusement_park", "point_of_interest"],
+        "google_keywords": ["zip line", "adventure park"]
+      },
+      {
+        "id": "skydiving",
+        "label": "Skydiving",
+        "google_types": ["point_of_interest"],
+        "google_keywords": ["skydiving", "parachute"]
+      }
     ]
   },
   "Wellness_Relaxation": {
     "id": "cat_wellness_relaxation",
     "label": "Wellness & Relaxation",
     "items": [
-      { "id": "spa_massage", "label": "Spa & Massage" },
-      { "id": "yoga_retreats", "label": "Yoga retreats" },
-      { "id": "meditation_centers", "label": "Meditation centers" },
-      { "id": "beach_lounging", "label": "Beach lounging" },
-      { "id": "hot_springs", "label": "Hot springs" },
-      { "id": "wellness_resorts", "label": "Wellness resorts" }
+      {
+        "id": "spa_massage",
+        "label": "Spa & Massage",
+        "google_types": ["spa", "beauty_salon", "health"],
+        "google_keywords": ["massage", "spa treatment", "wellness center"]
+      },
+      {
+        "id": "yoga_retreats",
+        "label": "Yoga retreats",
+        "google_types": ["gym", "health", "point_of_interest"],
+        "google_keywords": ["yoga studio", "retreat center"]
+      },
+      {
+        "id": "meditation_centers",
+        "label": "Meditation centers",
+        "google_types": ["place_of_worship", "point_of_interest"],
+        "google_keywords": ["meditation center", "ashram"]
+      },
+      {
+        "id": "beach_lounging",
+        "label": "Beach lounging",
+        "google_types": ["natural_feature"],
+        "google_keywords": ["beach club", "resort beach"]
+      },
+      {
+        "id": "hot_springs",
+        "label": "Hot springs",
+        "google_types": ["natural_feature", "spa"],
+        "google_keywords": ["hot springs", "onsen"]
+      },
+      {
+        "id": "wellness_resorts",
+        "label": "Wellness resorts",
+        "google_types": ["lodging", "spa"],
+        "google_keywords": ["wellness resort", "health retreat"]
+      }
     ]
   },
   "Culture_History": {
     "id": "cat_culture_history",
     "label": "Culture & History",
     "items": [
-      { "id": "museums", "label": "Museums" },
-      { "id": "art_galleries", "label": "Art galleries" },
-      { "id": "historic_landmarks", "label": "Historic landmarks" },
-      { "id": "archaeological_sites", "label": "Archaeological sites" },
-      { "id": "cultural_festivals", "label": "Cultural festivals" },
+      {
+        "id": "museums",
+        "label": "Museums",
+        "google_types": ["museum", "art_gallery", "point_of_interest"],
+        "google_keywords": ["museum", "exhibition"]
+      },
+      {
+        "id": "art_galleries",
+        "label": "Art galleries",
+        "google_types": ["art_gallery", "museum"],
+        "google_keywords": ["art gallery", "modern art"]
+      },
+      {
+        "id": "historic_landmarks",
+        "label": "Historic landmarks",
+        "google_types": ["historical_landmark", "tourist_attraction"],
+        "google_keywords": ["historic site", "palace", "castle"]
+      },
+      {
+        "id": "archaeological_sites",
+        "label": "Archaeological sites",
+        "google_types": ["historical_landmark", "point_of_interest"],
+        "google_keywords": ["archaeological", "ruins"]
+      },
+      {
+        "id": "cultural_festivals",
+        "label": "Cultural festivals",
+        "google_types": ["event_venue", "point_of_interest"],
+        "google_keywords": ["festival", "cultural event"]
+      },
       {
         "id": "religious_sites",
-        "label": "Religious sites (Temples/Churches)"
+        "label": "Religious sites (Temples/Churches)",
+        "google_types": [
+          "place_of_worship",
+          "church",
+          "hindu_temple",
+          "mosque",
+          "synagogue"
+        ],
+        "google_keywords": ["temple", "church", "cathedral", "mosque"]
       },
-      { "id": "craft_workshops", "label": "Craft workshops" }
+      {
+        "id": "craft_workshops",
+        "label": "Craft workshops",
+        "google_types": ["point_of_interest"],
+        "google_keywords": ["craft class", "pottery workshop", "artisan center"]
+      }
     ]
   },
   "Shopping_Urban": {
     "id": "cat_shopping_urban",
     "label": "Shopping & Urban",
     "items": [
-      { "id": "shopping_malls", "label": "Shopping malls" },
-      { "id": "designer_boutiques", "label": "Designer boutiques" },
-      { "id": "local_artisan_markets", "label": "Local artisan markets" },
-      { "id": "souvenir_hunting", "label": "Souvenir hunting" },
-      { "id": "city_viewpoints", "label": "City viewpoints" },
-      { "id": "instagrammable_spots", "label": "Instagrammable spots" },
-      { "id": "theme_parks", "label": "Theme parks" }
+      {
+        "id": "shopping_malls",
+        "label": "Shopping malls",
+        "google_types": ["shopping_mall", "store"],
+        "google_keywords": ["mall", "department store"]
+      },
+      {
+        "id": "designer_boutiques",
+        "label": "Designer boutiques",
+        "google_types": ["clothing_store", "store"],
+        "google_keywords": ["boutique", "designer shop"]
+      },
+      {
+        "id": "local_artisan_markets",
+        "label": "Local artisan markets",
+        "google_types": ["point_of_interest", "store"],
+        "google_keywords": ["flea market", "artisan market", "craft market"]
+      },
+      {
+        "id": "souvenir_hunting",
+        "label": "Souvenir hunting",
+        "google_types": ["store"],
+        "google_keywords": ["souvenir shop", "gift shop"]
+      },
+      {
+        "id": "city_viewpoints",
+        "label": "City viewpoints",
+        "google_types": ["tourist_attraction", "point_of_interest"],
+        "google_keywords": ["viewpoint", "observation deck", "panorama"]
+      },
+      {
+        "id": "instagrammable_spots",
+        "label": "Instagrammable spots",
+        "google_types": ["tourist_attraction"],
+        "google_keywords": ["street art", "landmark", "iconic building"]
+      },
+      {
+        "id": "theme_parks",
+        "label": "Theme parks",
+        "google_types": ["amusement_park", "tourist_attraction"],
+        "google_keywords": ["theme park", "water park"]
+      }
     ]
   },
   "Social_Work": {
     "id": "cat_social_work",
     "label": "Social & Digital Nomad",
     "items": [
-      { "id": "coworking_spaces", "label": "Coworking spaces" },
-      { "id": "work_friendly_cafes", "label": "Work-friendly cafes" },
-      { "id": "meeting_locals", "label": "Meeting locals" },
-      { "id": "group_tours", "label": "Group tours" },
-      { "id": "volunteering", "label": "Volunteering" },
-      { "id": "homestays", "label": "Homestays" },
-      { "id": "traveler_meetups", "label": "Traveler meetups" }
+      {
+        "id": "coworking_spaces",
+        "label": "Coworking spaces",
+        "google_types": ["establishment", "point_of_interest"],
+        "google_keywords": ["coworking", "shared office", "digital nomad"]
+      },
+      {
+        "id": "work_friendly_cafes",
+        "label": "Work-friendly cafes",
+        "google_types": ["cafe", "food"],
+        "google_keywords": ["laptop friendly", "wifi cafe"]
+      },
+      {
+        "id": "meeting_locals",
+        "label": "Meeting locals",
+        "google_types": ["point_of_interest"],
+        "google_keywords": ["community center", "gathering spot"]
+      },
+      {
+        "id": "group_tours",
+        "label": "Group tours",
+        "google_types": ["travel_agency", "point_of_interest"],
+        "google_keywords": ["walking tour", "group excursion"]
+      },
+      {
+        "id": "volunteering",
+        "label": "Volunteering",
+        "google_types": ["establishment"],
+        "google_keywords": ["volunteer center", "charity"]
+      },
+      {
+        "id": "homestays",
+        "label": "Homestays",
+        "google_types": ["lodging"],
+        "google_keywords": ["homestay", "local house"]
+      },
+      {
+        "id": "traveler_meetups",
+        "label": "Traveler meetups",
+        "google_types": ["bar", "cafe", "point_of_interest"],
+        "google_keywords": ["hostel", "social club", "meetup"]
+      }
     ]
   }
 }

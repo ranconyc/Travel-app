@@ -1,9 +1,86 @@
 import { prisma } from "@/lib/db/prisma";
 import { CompleteProfileFormValues } from "@/domain/user/completeProfile.schema";
+import { UserUpdateValues } from "@/domain/user/userUpdate.schema";
 import { findNearestCityFromCoords } from "@/domain/city/city.service";
 import { DetectedCity } from "@/domain/city/city.schema";
 import * as userRepository from "@/lib/db/user.repo";
 import { getAge } from "@/domain/shared/utils/age";
+
+/**
+ * Unified upsert for user profile and persona data.
+ * Handles identity, demographics, location, and deep-merges persona JSON.
+ */
+export async function handleUpsertUserProfile(
+  userId: string,
+  data: UserUpdateValues,
+) {
+  if (!userId) throw new Error("User ID missing");
+
+  const { persona, ...profileData } = data;
+
+  // 1. Fetch current profile to get existing persona for merging
+  const currentProfile = await prisma.userProfile.findUnique({
+    where: { userId },
+    select: { persona: true },
+  });
+
+  const existingPersona =
+    (currentProfile?.persona as Record<string, any>) || {};
+  const mergedPersona = persona
+    ? { ...existingPersona, ...persona }
+    : existingPersona;
+
+  const birthdayDate =
+    profileData.birthday && profileData.birthday.length > 0
+      ? new Date(profileData.birthday)
+      : undefined;
+
+  // 2. Perform Atomic Update
+  return await prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...(profileData.firstName && { name: profileData.firstName }),
+      ...(profileData.avatarUrl && { avatarUrl: profileData.avatarUrl }),
+      ...(profileData.profileCompleted !== undefined && {
+        profileCompleted: profileData.profileCompleted,
+      }),
+      profile: {
+        upsert: {
+          create: {
+            firstName: profileData.firstName,
+            lastName: profileData.lastName,
+            birthday: birthdayDate,
+            gender: profileData.gender,
+            occupation: profileData.occupation,
+            languages: profileData.languages,
+            description: profileData.description,
+            homeBaseCityId: profileData.homeBaseCityId,
+            socials: profileData.socials,
+            persona: mergedPersona,
+          },
+          update: {
+            ...(profileData.firstName && { firstName: profileData.firstName }),
+            ...(profileData.lastName && { lastName: profileData.lastName }),
+            ...(birthdayDate && { birthday: birthdayDate }),
+            ...(profileData.gender && { gender: profileData.gender }),
+            ...(profileData.occupation && {
+              occupation: profileData.occupation,
+            }),
+            ...(profileData.languages && { languages: profileData.languages }),
+            ...(profileData.description && {
+              description: profileData.description,
+            }),
+            ...(profileData.homeBaseCityId && {
+              homeBaseCityId: profileData.homeBaseCityId,
+            }),
+            ...(profileData.socials && { socials: profileData.socials }),
+            persona: mergedPersona,
+          },
+        },
+      },
+    },
+  });
+}
 
 /**
  * Retrieves the current authenticated user with full profile data.
@@ -66,6 +143,59 @@ export async function completeProfile(
   } catch (error) {
     console.error("completeProfile error:", error);
     throw new Error("Failed to update profile");
+  }
+}
+
+/**
+ * Updates the user's visited countries and ensures corresponding city visits exist.
+ */
+export async function handleSaveVisitedCountries(
+  userId: string,
+  countryCodes: string[],
+): Promise<void> {
+  const { updateVisitedCountries } = await import("@/lib/db/user.repo");
+  const { getStructuredWorld } = await import("@/lib/utils/world.utils");
+  const { findCityByCapitalName } = await import("@/lib/db/cityLocation.repo");
+  const { getActiveVisit, createCityVisit } =
+    await import("@/lib/db/cityVisit.repo");
+
+  // 1. Update the user's flat array
+  await updateVisitedCountries(userId, countryCodes);
+
+  // 2. Sync with CityVisits (Manual Entry)
+  const { allCountries } = getStructuredWorld();
+  const existingVisits = await prisma.cityVisit.findMany({
+    where: { userId },
+    select: {
+      cityId: true,
+      city: { select: { country: { select: { code: true } } } },
+    },
+  });
+
+  const visitedCountryCodes = new Set(
+    existingVisits.map((v) => v.city.country?.code).filter(Boolean),
+  );
+
+  for (const code of countryCodes) {
+    if (!visitedCountryCodes.has(code)) {
+      const countryData = allCountries.find((c) => c.cca2 === code);
+      if (countryData) {
+        // Look up capital or first major city (placeholder)
+        // Capital is not in the cca2 mock usually, but we'll try to match name
+        // For simplicity, we find city by capital name if we can
+        // We'll use a placeholder logic: if capital matches a city in our DB, we use it.
+        const capitalName = (countryData as any).capital?.[0];
+        if (capitalName) {
+          const city = await findCityByCapitalName(capitalName, code);
+          if (city) {
+            await createCityVisit(userId, city.id, undefined, {
+              source: "MANUAL",
+              isVerified: false,
+            });
+          }
+        }
+      }
+    }
   }
 }
 
@@ -173,10 +303,61 @@ export async function handleUpdateUserLocation(
   const activeVisit = await getActiveVisit(userId);
 
   if (!activeVisit) {
-    await createCityVisit(userId, detected.id, { lat, lng });
+    await createCityVisit(
+      userId,
+      detected.id,
+      { lat, lng },
+      { source: "AUTO", isVerified: true },
+    );
+
+    // Notify User
+    const { notificationService } =
+      await import("@/domain/notification/notification.service");
+    await notificationService.createNotification({
+      userId,
+      type: "PASSPORT_STAMPED",
+      title: "New Stamp! ✈️",
+      message: `You've just been stamped in ${detected.cityName}!`,
+      data: { cityId: detected.id },
+    });
   } else if (activeVisit.cityId !== detected.id) {
     await closeCityVisit(activeVisit.id, { lat, lng });
-    await createCityVisit(userId, detected.id, { lat, lng });
+    await createCityVisit(
+      userId,
+      detected.id,
+      { lat, lng },
+      { source: "AUTO", isVerified: true },
+    );
+
+    // Notify User
+    const { notificationService } =
+      await import("@/domain/notification/notification.service");
+    await notificationService.createNotification({
+      userId,
+      type: "PASSPORT_STAMPED",
+      title: "New Destination! 📍",
+      message: `Passport stamped in ${detected.cityName}. Safe travels!`,
+      data: { cityId: detected.id },
+    });
+  }
+
+  // 1. Fetch user to check visitedCountries
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { visitedCountries: true },
+  });
+
+  // 2. Sync Country if missing
+  const countryCode = detected.countryCode;
+  if (countryCode && !user?.visitedCountries.includes(countryCode)) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        visitedCountries: {
+          push: countryCode,
+        },
+      },
+    });
   }
 
   await userRepository.updateUserLocation(

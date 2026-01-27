@@ -11,6 +11,7 @@ import { useUnreadCount } from "@/hooks/useUnreadCount";
 import { NotificationBadge } from "@/components/molecules/Navbar/NotificationBadge";
 import { Avatar } from "@/components/molecules/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
+import NotificationBell from "@/components/organisms/NotificationBell";
 
 const iconsSize = 32;
 
@@ -36,6 +37,9 @@ export default function Navbar({ pathname }: { pathname: string }) {
             <MessageCircle size={iconsSize} />
             <NotificationBadge count={unreadCount} />
           </Link>
+        </li>
+        <li>
+          <NotificationBell userId={user?.id || ""} />
         </li>
         <li
           className={

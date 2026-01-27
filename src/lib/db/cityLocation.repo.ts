@@ -2,14 +2,7 @@ import { prisma } from "@/lib/db/prisma";
 import { NearestCityResult } from "@/domain/city/city.schema";
 import { Prisma } from "@prisma/client";
 
-function slugify(input: string): string {
-  return input
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
-}
+import { slugify } from "@/lib/utils/slugify";
 
 export function makeCityId(cityName: string, countryCode2: string): string {
   const slug = slugify(cityName);
@@ -211,6 +204,18 @@ export async function createState(data: {
   countryRefId: string;
 }) {
   return prisma.state.create({ data });
+}
+
+/**
+ * Finds a city by its name and country code (cca2).
+ */
+export async function findCityByCapitalName(name: string, countryCode: string) {
+  return prisma.city.findFirst({
+    where: {
+      name: { equals: name, mode: "insensitive" },
+      country: { code: countryCode.toUpperCase() },
+    },
+  });
 }
 
 /**

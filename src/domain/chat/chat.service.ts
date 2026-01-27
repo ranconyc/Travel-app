@@ -82,10 +82,16 @@ export async function handleSendMessage(
 
   const message = await createMessage(chatId, userId, content);
 
-  // Trigger real-time event via Pusher
-  await triggerRealTimeEvent(`chat-${chatId}`, "new-message", message);
+  // Trigger real-time event via NotificationService (Centralized)
+  const { notificationService } =
+    await import("@/domain/notification/notification.service");
+  await notificationService.triggerEvent(
+    `chat-${chatId}`,
+    "new-message",
+    message,
+  );
 
-  // Send Push Notification to other members
+  // Send Notifications
   const chat = await findChatById(chatId);
   if (chat) {
     const recipients = chat.members
@@ -95,11 +101,30 @@ export async function handleSendMessage(
     if (recipients.length > 0) {
       const senderName = getMessageSenderName(message.sender);
       const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+
+      // 1. Trigger standard push (Beams)
       await sendPushNotification(recipients, {
         title: senderName,
         body: content,
         deep_link: `${baseUrl}/chats/${chatId}`,
       });
+
+      // 2. Persist in-app and trigger Pusher
+      const { notificationService } =
+        await import("@/domain/notification/notification.service");
+      await Promise.all(
+        chat.members
+          .filter((m) => m.userId !== userId)
+          .map((m) =>
+            notificationService.createNotification({
+              userId: m.userId,
+              type: "MESSAGE",
+              title: senderName,
+              message: content,
+              data: { chatId, messageId: message.id },
+            }),
+          ),
+      );
     }
   }
 
