@@ -10,6 +10,7 @@ import {
   updateUserRoleAction,
   getAllUsersAction,
   getAuthenticatedUserAction,
+  completeOnboarding,
 } from "@/domain/user/user.actions";
 import { useEffect, useRef } from "react";
 import type { UseFormReturn, FieldValues } from "react-hook-form";
@@ -169,6 +170,29 @@ export function useUpdateUserRole() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+}
+
+export function useCompleteOnboarding() {
+  const queryClient = useQueryClient();
+
+  return useMutation<{ success: boolean }, Error, {
+    interests: string[];
+    budget: string;
+    travelRhythm: string;
+  }>({
+    mutationFn: async (values) => {
+      const res = await completeOnboarding(values);
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user", "me"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "persona"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "interests"] });
     },
   });
 }

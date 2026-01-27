@@ -1,11 +1,10 @@
 import { notFound } from "next/navigation";
-import Header from "./components/Header";
 import { FinanceSection } from "./components/FinanceSection";
 import CultureSection from "./components/CultureSection";
 import HealthSection from "./components/HealthSection";
 import { getCountryWithCities } from "@/lib/db/country.repo";
 import SocialLinks from "./components/SocialLinks";
-import InfoSection from "./components/InfoSection";
+import PageInfo from "@/components/atoms/PageInfo";
 import CitiesSection from "./components/CitiesSection";
 import HeroImage from "@/components/molecules/HeroImage";
 import Stats from "@/components/molecules/Stats";
@@ -16,10 +15,14 @@ import { getCurrentUser } from "@/lib/auth/get-current-user";
 import LogisticsSection from "./components/LogisticsSection";
 import { Country } from "@/domain/country/country.schema";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
-
 import StateSection from "./components/StateSection";
 import LanguageSection from "@/components/organisms/LanguageSection";
 import Block from "@/components/atoms/Block";
+import FloatingCardList from "@/components/molecules/FloatingCardList";
+import VisaRequirement from "@/components/molecules/VisaRequirement";
+import { type VisaRequirement as VisaRequirementType } from "@/types/visa.types";
+import { visaService } from "@/services/visa.service";
+import { countryLanguageMappingService } from "@/services/country-language-mapping.service";
 
 // Business Logic: Gini Insights move to a helper or could be in the Mapper/Service
 export const getGiniInsight = (giniValue: number): string => {
@@ -39,6 +42,16 @@ export default async function CountryPage({
   const loggedUser = await getCurrentUser();
 
   if (!country) return notFound();
+
+  // Get visa requirements for this country using the visa service
+  const visaRequirements = visaService.getVisaRequirement(country.code);
+
+  // Get primary language for common phrases using the country mapping service
+  // This maps ISO3 country codes (like "ISR") to language codes (like "he")
+  const primaryLanguageCode = countryLanguageMappingService.getPrimaryLanguageForCountry(country.code) ||
+                              // Fallback to existing language detection logic
+                              country.languages?.codes?.[0] || 
+                              country.languages?.official?.[0]?.toLowerCase();
 
   // Geography & Logistics Logic
   // Cast to any for Alpha speed - type definition mismatch fix scheduled for Beta
@@ -87,14 +100,15 @@ export default async function CountryPage({
 
   return (
     <div className="bg-main min-h-screen selection:bg-brand selection:text-white">
-      <Header />
-      <main className="pb-xxl px-lg max-w-2xl mx-auto min-h-screen flex flex-col gap-xxl">
-        <div className="flex flex-col gap-lg mt-xl">
-          <InfoSection
+      <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-12">
+        <div className="flex flex-col gap-8 mt-8 md:mt-12">
+          {/* Page Info */}
+          <PageInfo
             title={country.name}
             subtitle={country.subRegion || country.region || ""}
           />
 
+          {/* User Location Indicator */}
           {inThisCountry && (
             <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
               <Globe2 size={14} />
@@ -104,6 +118,7 @@ export default async function CountryPage({
             </div>
           )}
 
+          {/* Hero Image */}
           <HeroImage
             src={
               country.imageHeroUrl ||
@@ -113,15 +128,33 @@ export default async function CountryPage({
             name={country.name}
           />
 
+          {/* Social Links */}
           <SocialLinks query={country.name} />
         </div>
 
+        {/* Stats */}
         <Stats stats={stats} />
 
+        {/* Cities Section - Now Floating */}
         {hasStates ? (
           <StateSection country={country} />
         ) : (
-          <CitiesSection country={country} />
+          <div className="flex flex-col gap-8">
+            <FloatingCardList
+              title="Popular Cities"
+              description={`Discover the most visited destinations in ${country.name}`}
+              items={country.cities?.map((city: any) => ({
+                id: city.cityId,
+                title: city.name,
+                subtitle: city.isCapital ? "Capital" : undefined,
+                image: city.media?.[0]?.url || city.imageHeroUrl,
+                href: `/cities/${city.cityId}`,
+                badge: city.isCapital ? "Capital" : undefined
+              })) || []}
+              showViewAll={(country.cities?.length || 0) > 5}
+              viewAllHref="/countries"
+            />
+          </div>
         )}
 
         <div className="flex flex-col gap-lg">
@@ -149,30 +182,22 @@ export default async function CountryPage({
             )}
           </div>
 
-          <FinanceSection
-            data={{
-              currency: {
-                symbol: finance.currency?.symbol || "$",
-                name: finance.currency?.name || "USD",
-              },
-              budget: {
-                daily: {
-                  budget: finance.avgDailyCost?.budget?.toString() || "45",
-                  mid: finance.avgDailyCost?.mid?.toString() || "100",
-                  luxury: finance.avgDailyCost?.luxury?.toString() || "250",
-                },
-              },
-              cashCulture: {
-                cashPreferred: finance.cashCulture?.primaryPayment === "Cash",
-              },
-            }}
-          />
+          <FinanceSection />
 
           {country.languages && (
-            <LanguageSection {...(country.languages as any)} />
+            <LanguageSection 
+              {...(country.languages as any)} 
+              primaryLanguageCode={primaryLanguageCode}
+            />
           )}
 
-          <LogisticsSection data={country.logistics as any} />
+          <LogisticsSection />
+
+          {/* Visa Requirements */}
+          {visaRequirements && (
+            <VisaRequirement visa={visaRequirements} />
+          )}
+
           <CultureSection />
           <HealthSection />
         </div>

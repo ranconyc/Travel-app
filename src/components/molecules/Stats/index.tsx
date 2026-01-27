@@ -13,7 +13,7 @@ export default function Stats({
 }: StatsProps) {
   return (
     <div
-      className={`flex items-center justify-between px-sm py-md bg-bg-card rounded-card shadow-soft border border-stroke ${className}`}
+      className={`flex items-center justify-between px-6 py-4 bg-surface rounded-2xl shadow-lg border border-surface-secondary/50 backdrop-blur-sm ${className}`}
     >
       {stats.map((stat, index) => {
         const Icon = stat.icon;
@@ -22,20 +22,22 @@ export default function Stats({
         return (
           <div
             key={`${stat.label}-${index}`}
-            className={`text-center flex-1 ${
-              isMiddle ? "border-l border-r border-surface-secondary" : ""
-            }`}
+            className={`text-center flex-1 animate-scale-in`}
+            style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="flex flex-col items-center">
-              <span className="text-h3 font-bold font-sora capitalize truncate w-full text-txt-main">
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-2xl md:text-3xl font-bold font-sora text-txt-main leading-tight">
                 {stat.value}
               </span>
 
-              <span className="text-tiny text-txt-sec font-bold uppercase tracking-wider flex items-center gap-xs">
-                {/* {Icon && <Icon size={stat.iconSize || 12} />} */}
+              <span className="text-xs text-secondary font-bold uppercase tracking-wider flex items-center gap-1">
+                {Icon && <Icon size={12} className="text-brand" />}
                 {stat.label}
               </span>
             </div>
+            {isMiddle && (
+              <div className="absolute left-0 top-1/2 h-8 w-px bg-surface-secondary/50 -translate-x-1/2 -translate-y-1/2" />
+            )}
           </div>
         );
       })}

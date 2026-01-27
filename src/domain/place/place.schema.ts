@@ -53,6 +53,9 @@ export const PlaceSchema = z.object({
   websiteUrl: z.string().url().optional().nullable(),
   phoneNumber: z.string().optional().nullable(),
   googlePlaceId: z.string().optional().nullable(),
+  googleData: z.any().optional().nullable(),
+  priceLevel: z.number().int().optional().nullable(),
+  vibeScores: z.any().optional().nullable(),
 
   // Ops
   openingHours: WeeklyHours.optional().nullable(),
@@ -83,7 +86,7 @@ export const PlaceSchema = z.object({
   tags: z.array(z.string()).default([]),
 
   // CMS flags
-  autoCreated: z.boolean().default(false),
+  autoCreated: z.boolean().default(true),
   needsReview: z.boolean().default(false),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),

@@ -1,17 +1,52 @@
+"use client";
+
 import { City } from "@/domain/city/city.schema";
 import { MapPin, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Country } from "@/domain/country/country.schema";
+import { useState, useEffect } from "react";
+import { getCityImage } from "@/utils/image-helpers";
 
 export default function CitiesSection({ country }: { country: Country }) {
   const cities = country.cities || [];
+  const [cityImages, setCityImages] = useState<Record<string, string>>({});
+
+  // Fetch images for cities that don't have them
+  useEffect(() => {
+    const fetchCityImages = async () => {
+      const images: Record<string, string> = {};
+      
+      for (const city of cities) {
+        // Use existing image if available
+        if (city.media?.[0]?.url || city.imageHeroUrl) {
+          images[city.cityId] = city.media?.[0]?.url || city.imageHeroUrl!;
+        } else {
+          // Fetch from Unsplash
+          try {
+            const imageUrl = await getCityImage(city.name, country.name);
+            if (imageUrl) {
+              images[city.cityId] = imageUrl;
+            }
+          } catch (error) {
+            console.warn(`Failed to fetch image for ${city.name}:`, error);
+          }
+        }
+      }
+      
+      setCityImages(images);
+    };
+
+    if (cities.length > 0) {
+      fetchCityImages();
+    }
+  }, [cities, country.name]);
 
   return (
     <section className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <h3 className="text-2xl font-bold font-sora text-txt-main tracking-tight">
+          <h3 className="text-display-sm font-sora text-txt-main tracking-tight">
             Popular Cities
           </h3>
           <p className="text-sm text-secondary">
@@ -28,7 +63,7 @@ export default function CitiesSection({ country }: { country: Country }) {
       {cities.length > 0 ? (
         <div className="flex gap-md overflow-x-auto pb-6 -mx-4 px-4 no-scrollbar snap-x snap-mandatory">
           {cities.map((city: City) => {
-            const imageUrl = city.media?.[0]?.url || city.imageHeroUrl;
+            const imageUrl = cityImages[city.cityId];
 
             return (
               <Link
@@ -53,7 +88,7 @@ export default function CitiesSection({ country }: { country: Country }) {
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-md">
                   <div className="flex flex-col gap-0.5 transform transition-transform duration-500 group-hover:-translate-y-1">
-                    <span className="font-bold text-white text-p leading-tight">
+                    <span className="font-bold text-inverse text-p leading-tight">
                       {city.name}
                     </span>
                     {city.isCapital && (

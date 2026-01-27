@@ -25,6 +25,7 @@ export default function CountryList() {
 
   return (
     <SectionList
+      isFloating={true}
       title="Countries"
       href="/countries"
       data={countries?.slice(0, 20)}

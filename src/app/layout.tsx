@@ -5,6 +5,7 @@ import ReactQueryProvider from "@/app/providers/reactQueryProvider";
 import SessionProviderWrapper from "@/app/providers/SessionProviderWrapper";
 import ConditionalNavbar from "@/app/ConditionalNavbar";
 import { LocationProvider } from "@/app/providers/LocationProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import AutoLocationUpdater from "@/components/molecules/AutoLocationUpdater";
 
 const inter = Inter({
@@ -44,6 +45,7 @@ import React from "react";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
 import PusherHealthIndicator from "@/components/molecules/PusherHealthIndicator";
+import OnboardingWrapper from "./components/OnboardingWrapper";
 
 export default async function RootLayout({
   children,
@@ -59,21 +61,24 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <ReactQueryProvider>
-          <ErrorBoundary componentName="Root Layout">
-            <UserProvider user={user}>
-              <PersonaProvider user={user}>
-                <SessionProviderWrapper>
-                  <LocationProvider>
-                    <AutoLocationUpdater />
-                    {children}
-                  </LocationProvider>
-                </SessionProviderWrapper>
-                <ConditionalNavbar />
-                <Toaster position="top-center" richColors />
-                <PusherHealthIndicator />
-              </PersonaProvider>
-            </UserProvider>
-          </ErrorBoundary>
+          <ThemeProvider>
+            <ErrorBoundary componentName="Root Layout">
+              <UserProvider user={user}>
+                <PersonaProvider user={user}>
+                  <SessionProviderWrapper>
+                    <LocationProvider>
+                      <AutoLocationUpdater />
+                      {children}
+                    </LocationProvider>
+                  </SessionProviderWrapper>
+                  <ConditionalNavbar />
+                  <Toaster position="top-center" richColors />
+                  <PusherHealthIndicator />
+                  <OnboardingWrapper />
+                </PersonaProvider>
+              </UserProvider>
+            </ErrorBoundary>
+          </ThemeProvider>
         </ReactQueryProvider>
       </body>
     </html>

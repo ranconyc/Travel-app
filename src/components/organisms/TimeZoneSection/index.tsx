@@ -7,7 +7,7 @@ type TimeZoneProps = {
   timeZone?: string;
 };
 
-const subtitle = "text-sm font-medium capitalize mb-1";
+const subtitle = "text-ui-sm capitalize mb-1";
 const paragraph = "text-p";
 const flexBetween = "flex items-center justify-between";
 

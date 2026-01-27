@@ -1,0 +1,548 @@
+{
+  "commonPhrases": {
+    "en": [
+      {
+        "label": "Hello",
+        "local": "Hello",
+        "romanized": "heh-LOH",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Thank you",
+        "romanized": "THANGK-yoo",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Excuse me",
+        "romanized": "ex-KYOOS mee",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Where is the restroom?",
+        "romanized": "WAIR is thuh REST-room?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "The bill, please",
+        "romanized": "thuh BIL, pleez",
+        "category": "Dining"
+      }
+    ],
+    "es": [
+      {
+        "label": "Hello",
+        "local": "Hola",
+        "romanized": "OH-lah",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Gracias",
+        "romanized": "GRAH-see-ahs",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Disculpe",
+        "romanized": "dees-KOOL-peh",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "¿Dónde está el baño?",
+        "romanized": "DOHN-deh ehs-tah el BAH-nyoh?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "La cuenta, por favor",
+        "romanized": "lah KWEHN-tah, por fah-VOR",
+        "category": "Dining"
+      }
+    ],
+    "fr": [
+      {
+        "label": "Hello",
+        "local": "Bonjour",
+        "romanized": "bon-ZHOOR",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Merci",
+        "romanized": "mer-SEE",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Excusez-moi",
+        "romanized": "ex-kew-zay-MWAH",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Où sont les toilettes?",
+        "romanized": "oo sohn lay twah-LET?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "L'addition, s'il vous plaît",
+        "romanized": "lah-dee-SYOHN, seel voo PLAY",
+        "category": "Dining"
+      }
+    ],
+    "th": [
+      {
+        "label": "Hello",
+        "local": "สวัสดี",
+        "romanized": "sah-was-dee",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "ขอบคุณ",
+        "romanized": "khawp-khun",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "ขอโทษ",
+        "romanized": "khaw-toht",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "ห้องน้ำอยู่ที่ไหน",
+        "romanized": "hawng-nahm yoo tee nai",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "ขอบิล",
+        "romanized": "khaw-bin",
+        "category": "Dining"
+      }
+    ],
+    "ja": [
+      {
+        "label": "Hello",
+        "local": "こんにちは",
+        "romanized": "konnichiwa",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "ありがとう",
+        "romanized": "arigatou",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "すみません",
+        "romanized": "sumimasen",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "トイレはどこですか",
+        "romanized": "toire wa doko desu ka",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "お会計お願いします",
+        "romanized": "o-kaikei onegai shimasu",
+        "category": "Dining"
+      }
+    ],
+    "he": [
+      {
+        "label": "Hello",
+        "local": "שלום",
+        "romanized": "shalom",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "תודה",
+        "romanized": "todah",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "סליחה",
+        "romanized": "slicha",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "איפה השירותים?",
+        "romanized": "eifo ha-sherutim?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "החשבון בבקשה",
+        "romanized": "ha-cheshbon be-bakasha",
+        "category": "Dining"
+      }
+    ],
+    "de": [
+      {
+        "label": "Hello",
+        "local": "Hallo",
+        "romanized": "HAH-loh",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Danke",
+        "romanized": "DAHN-keh",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Entschuldigung",
+        "romanized": "ent-SHOOL-dee-goong",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Wo ist die Toilette?",
+        "romanized": "voh ist dee toy-LEH-teh?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "Die Rechnung, bitte",
+        "romanized": "dee REKH-noong, BIT-teh",
+        "category": "Dining"
+      }
+    ],
+    "it": [
+      {
+        "label": "Hello",
+        "local": "Ciao",
+        "romanized": "chah-OH",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Grazie",
+        "romanized": "GRAH-tsee-eh",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Scusi",
+        "romanized": "SKOO-see",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Dov'è il bagno?",
+        "romanized": "doh-VEH eel BAH-nyoh?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "Il conto, per favore",
+        "romanized": "eel KOHN-toh, per fah-VOR-eh",
+        "category": "Dining"
+      }
+    ],
+    "pt": [
+      {
+        "label": "Hello",
+        "local": "Olá",
+        "romanized": "oh-LAH",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Obrigado",
+        "romanized": "oh-bree-GAH-doo",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Com licença",
+        "romanized": "kohng lee-SEN-sah",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Onde fica o banheiro?",
+        "romanized": "OHN-dee FEE-kah oo bah-NYAY-roh?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "A conta, por favor",
+        "romanized": "ah KOHN-tah, por fah-VOR",
+        "category": "Dining"
+      }
+    ],
+    "ru": [
+      {
+        "label": "Hello",
+        "local": "Здравствуйте",
+        "romanized": "zdravstvuyte",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Спасибо",
+        "romanized": "spasibo",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Извините",
+        "romanized": "izvinite",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Где туалет?",
+        "romanized": "gde tualet?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "Счёт, пожалуйста",
+        "romanized": "schyot, pozhaluysta",
+        "category": "Dining"
+      }
+    ],
+    "ar": [
+      {
+        "label": "Hello",
+        "local": "مرحبا",
+        "romanized": "marhaban",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "شكرا",
+        "romanized": "shukran",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "عفوا",
+        "romanized": "afwan",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "أين دورة المياه؟",
+        "romanized": "ayna dawrat al-miyah?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "الفاتورة، من فضلك",
+        "romanized": "al-faturah, min fadlik",
+        "category": "Dining"
+      }
+    ],
+    "hi": [
+      {
+        "label": "Hello",
+        "local": "नमस्ते",
+        "romanized": "namaste",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "धन्यवाद",
+        "romanized": "dhanyavaad",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "माफ कीजिए",
+        "romanized": "maaf keejiye",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "शौचालय कहाँ है?",
+        "romanized": "shauchalaya kahan hai?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "बिल, कृपया",
+        "romanized": "bil, krupya",
+        "category": "Dining"
+      }
+    ],
+    "zh": [
+      {
+        "label": "Hello",
+        "local": "你好",
+        "romanized": "nǐ hǎo",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "谢谢",
+        "romanized": "xièxie",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "不好意思",
+        "romanized": "bù hǎo yìsi",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "洗手间在哪里？",
+        "romanized": "xǐshǒujiān zài nǎlǐ?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "买单，谢谢",
+        "romanized": "mǎidān, xièxie",
+        "category": "Dining"
+      }
+    ],
+    "ko": [
+      {
+        "label": "Hello",
+        "local": "안녕하세요",
+        "romanized": "annyeonghaseyo",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "감사합니다",
+        "romanized": "gamsahamnida",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "실례합니다",
+        "romanized": "sillyehamnida",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "화장실이 어디에 있어요?",
+        "romanized": "hwajangsil-i eodi-e isseoyo?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "계산서 주세요",
+        "romanized": "gyesanseo juseyo",
+        "category": "Dining"
+      }
+    ],
+    "nl": [
+      {
+        "label": "Hello",
+        "local": "Hallo",
+        "romanized": "HAH-loh",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Dank je",
+        "romanized": "DAHNG-yuh",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Pardon",
+        "romanized": "par-DOHN",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Waar is het toilet?",
+        "romanized": "vahr is het toy-LET?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "De rekening, alstublieft",
+        "romanized": "duh REHK-ning, ahl-stoo-BLEEFT",
+        "category": "Dining"
+      }
+    ],
+    "tr": [
+      {
+        "label": "Hello",
+        "local": "Merhaba",
+        "romanized": "mer-HAH-bah",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Teşekkürler",
+        "romanized": "teshekkur-ler",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Affedersiniz",
+        "romanized": "ah-fed-er-see-niz",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Tuvalet nerede?",
+        "romanized": "tuh-vah-let neh-REH-deh?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "Hesap, lütfen",
+        "romanized": "heh-SAHP, lutfen",
+        "category": "Dining"
+      }
+    ],
+    "el": [
+      {
+        "label": "Hello",
+        "local": "Γεια σας",
+        "romanized": "yah sas",
+        "category": "Basics"
+      },
+      {
+        "label": "Thank you",
+        "local": "Ευχαριστώ",
+        "romanized": "efharisto",
+        "category": "Basics"
+      },
+      {
+        "label": "Excuse me",
+        "local": "Συγγνώμη",
+        "romanized": "signomi",
+        "category": "Basics"
+      },
+      {
+        "label": "Where is the restroom?",
+        "local": "Πού είναι η τουαλέτα;",
+        "romanized": "poo ee-nay ee too-ah-LEH-tah?",
+        "category": "Emergency"
+      },
+      {
+        "label": "The bill, please",
+        "local": "Το λογαριασμός, παρακαλώ",
+        "romanized": "to loh-gahr-ee-ahs-MOHS, pah-rah-kah-LOH",
+        "category": "Dining"
+      }
+    ]
+  }
+}

@@ -30,7 +30,7 @@ export function MessageButton({ friendId }: { friendId: string }) {
     <button
       onClick={handleMessageClick}
       disabled={isLoading}
-      className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+      className="px-4 py-2 bg-blue-500 text-inverse text-ui-sm rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
     >
       {isLoading ? "Loading..." : "Message"}
     </button>

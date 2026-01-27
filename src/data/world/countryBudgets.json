@@ -1,0 +1,328 @@
+{
+  "countryBudgets": {
+    "ISR": {
+      "budget": 50,
+      "moderate": 120,
+      "luxury": 300,
+      "tip": "Tipping 10-15% is customary in restaurants. Round up taxi fares."
+    },
+    "THA": {
+      "budget": 30,
+      "moderate": 75,
+      "luxury": 200,
+      "tip": "Tipping is not traditional but appreciated in tourist areas. 10% for good service."
+    },
+    "JPN": {
+      "budget": 80,
+      "moderate": 150,
+      "luxury": 400,
+      "tip": "Tipping is not customary and can be considered rude. Excellent service is standard."
+    },
+    "FRA": {
+      "budget": 70,
+      "moderate": 140,
+      "luxury": 350,
+      "tip": "Service charge is usually included. Round up or leave 5-10% for exceptional service."
+    },
+    "DEU": {
+      "budget": 60,
+      "moderate": 120,
+      "luxury": 300,
+      "tip": "Round up the bill or leave 5-10% for good service. Tipping is expected but not obligatory."
+    },
+    "ITA": {
+      "budget": 65,
+      "moderate": 130,
+      "luxury": 320,
+      "tip": "Service charge may be included. Leave 5-10% extra for good service."
+    },
+    "ESP": {
+      "budget": 55,
+      "moderate": 110,
+      "luxury": 280,
+      "tip": "Leave small change or 5-10% for good service. Tipping is more common in tourist areas."
+    },
+    "GBR": {
+      "budget": 70,
+      "moderate": 140,
+      "luxury": 350,
+      "tip": "10-15% is standard if service charge not included. Round up in pubs."
+    },
+    "USA": {
+      "budget": 80,
+      "moderate": 160,
+      "luxury": 400,
+      "tip": "15-20% is expected in restaurants. Tip bartenders, servers, and hotel staff."
+    },
+    "MEX": {
+      "budget": 40,
+      "moderate": 85,
+      "luxury": 220,
+      "tip": "10-15% is standard in restaurants. Round up for small services."
+    },
+    "BRA": {
+      "budget": 45,
+      "moderate": 90,
+      "luxury": 230,
+      "tip": "10% is standard for restaurant service. Round up for casual services."
+    },
+    "ARG": {
+      "budget": 35,
+      "moderate": 70,
+      "luxury": 180,
+      "tip": "10% tip is appreciated in restaurants. Tipping is not expected in cafes."
+    },
+    "CHL": {
+      "budget": 40,
+      "moderate": 80,
+      "luxury": 200,
+      "tip": "10% tip is standard in restaurants. Not expected for small purchases."
+    },
+    "PER": {
+      "budget": 30,
+      "moderate": 65,
+      "luxury": 170,
+      "tip": "10% tip is appreciated in tourist restaurants. Round up for casual service."
+    },
+    "COL": {
+      "budget": 25,
+      "moderate": 55,
+      "luxury": 140,
+      "tip": "10% tip is standard in restaurants. Round up for small services."
+    },
+    "CAN": {
+      "budget": 70,
+      "moderate": 140,
+      "luxury": 350,
+      "tip": "15-20% is standard in restaurants. Tip servers, bartenders, and delivery staff."
+    },
+    "AUS": {
+      "budget": 75,
+      "moderate": 150,
+      "luxury": 380,
+      "tip": "Tipping is not traditional but appreciated for exceptional service. 10% maximum."
+    },
+    "NZL": {
+      "budget": 65,
+      "moderate": 130,
+      "luxury": 320,
+      "tip": "Tipping is optional. Round up for excellent service, especially in tourist areas."
+    },
+    "IND": {
+      "budget": 20,
+      "moderate": 45,
+      "luxury": 120,
+      "tip": "10% tip is appreciated in upscale restaurants. Not expected in local eateries."
+    },
+    "VNM": {
+      "budget": 25,
+      "moderate": 50,
+      "luxury": 130,
+      "tip": "Tipping is not traditional but appreciated in tourist areas. Round up for good service."
+    },
+    "SGP": {
+      "budget": 60,
+      "moderate": 120,
+      "luxury": 300,
+      "tip": "Service charge is usually included. Tipping is not customary but appreciated."
+    },
+    "MYS": {
+      "budget": 30,
+      "moderate": 65,
+      "luxury": 160,
+      "tip": "Tipping is not customary. Round up for exceptional service in tourist areas."
+    },
+    "IDN": {
+      "budget": 20,
+      "moderate": 45,
+      "luxury": 110,
+      "tip": "Tipping is not traditional but appreciated in tourist establishments. Round up small amounts."
+    },
+    "PHL": {
+      "budget": 25,
+      "moderate": 55,
+      "luxury": 140,
+      "tip": "10% tip is appreciated in restaurants. Round up for casual services."
+    },
+    "KOR": {
+      "budget": 50,
+      "moderate": 100,
+      "luxury": 250,
+      "tip": "Tipping is not customary and can be refused. Excellent service is standard."
+    },
+    "CHN": {
+      "budget": 35,
+      "moderate": 70,
+      "luxury": 180,
+      "tip": "Tipping is not traditional. Round up for exceptional service in high-end establishments."
+    },
+    "TUR": {
+      "budget": 30,
+      "moderate": 65,
+      "luxury": 160,
+      "tip": "10% tip is standard in restaurants. Round up for small services like taxis."
+    },
+    "EGY": {
+      "budget": 20,
+      "moderate": 45,
+      "luxury": 120,
+      "tip": "Tipping (baksheesh) is expected for most services. 10-15% in restaurants."
+    },
+    "MAR": {
+      "budget": 25,
+      "moderate": 55,
+      "luxury": 140,
+      "tip": "10% tip is appreciated in restaurants. Round up for guides and small services."
+    },
+    "ZAF": {
+      "budget": 40,
+      "moderate": 80,
+      "luxury": 200,
+      "tip": "10-15% is standard in restaurants. Round up for casual services."
+    },
+    "NLD": {
+      "budget": 65,
+      "moderate": 130,
+      "luxury": 320,
+      "tip": "Round up the bill or leave 5-10% for good service. Tipping is appreciated but not obligatory."
+    },
+    "CHE": {
+      "budget": 80,
+      "moderate": 160,
+      "luxury": 400,
+      "tip": "Service is usually included. Round up for exceptional service."
+    },
+    "BEL": {
+      "budget": 65,
+      "moderate": 130,
+      "luxury": 320,
+      "tip": "Round up or leave 5-10% for good service. Service charge may be included."
+    },
+    "AUT": {
+      "budget": 60,
+      "moderate": 120,
+      "luxury": 300,
+      "tip": "Round up the bill or leave 5-10% for good service. Tipping is customary."
+    },
+    "SWE": {
+      "budget": 70,
+      "moderate": 140,
+      "luxury": 350,
+      "tip": "Service is usually included. Round up for exceptional service."
+    },
+    "NOR": {
+      "budget": 80,
+      "moderate": 160,
+      "luxury": 400,
+      "tip": "Service charge is usually included. Tipping is not expected but appreciated."
+    },
+    "DNK": {
+      "budget": 75,
+      "moderate": 150,
+      "luxury": 380,
+      "tip": "Service charge is usually included. Round up for exceptional service."
+    },
+    "FIN": {
+      "budget": 70,
+      "moderate": 140,
+      "luxury": 350,
+      "tip": "Service charge is usually included. Tipping is not customary."
+    },
+    "POL": {
+      "budget": 35,
+      "moderate": 70,
+      "luxury": 180,
+      "tip": "10% tip is appreciated in restaurants. Round up for casual services."
+    },
+    "CZE": {
+      "budget": 40,
+      "moderate": 80,
+      "luxury": 200,
+      "tip": "10% tip is standard in restaurants. Round up for small services."
+    },
+    "HUN": {
+      "budget": 35,
+      "moderate": 70,
+      "luxury": 180,
+      "tip": "10% tip is expected in restaurants. Round up for casual services."
+    },
+    "GRC": {
+      "budget": 45,
+      "moderate": 90,
+      "luxury": 220,
+      "tip": "10% tip is standard in restaurants. Round up for casual services."
+    },
+    "RUS": {
+      "budget": 40,
+      "moderate": 80,
+      "luxury": 200,
+      "tip": "10% tip is appreciated in restaurants. Round up for small services."
+    },
+    "PRT": {
+      "budget": 50,
+      "moderate": 100,
+      "luxury": 250,
+      "tip": "10% tip is standard in restaurants. Round up for casual services."
+    },
+    "IRN": {
+      "budget": 30,
+      "moderate": 60,
+      "luxury": 150,
+      "tip": "Tipping is not traditional but appreciated in tourist areas. Round up for good service."
+    },
+    "ARE": {
+      "budget": 60,
+      "moderate": 120,
+      "luxury": 300,
+      "tip": "Tipping is expected in restaurants and hotels. 10-15% is standard."
+    },
+    "SAU": {
+      "budget": 55,
+      "moderate": 110,
+      "luxury": 280,
+      "tip": "Tipping is appreciated but not obligatory. 10% in restaurants is common."
+    },
+    "JOR": {
+      "budget": 35,
+      "moderate": 70,
+      "luxury": 180,
+      "tip": "10% tip is standard in restaurants. Round up for casual services."
+    },
+    "LBN": {
+      "budget": 40,
+      "moderate": 80,
+      "luxury": 200,
+      "tip": "10% tip is standard in restaurants. Round up for small services."
+    },
+    "NGA": {
+      "budget": 25,
+      "moderate": 55,
+      "luxury": 140,
+      "tip": "10% tip is appreciated in restaurants. Round up for casual services."
+    },
+    "KEN": {
+      "budget": 30,
+      "moderate": 65,
+      "luxury": 160,
+      "tip": "10% tip is appreciated in tourist restaurants. Round up for guides and casual services."
+    },
+    "TUN": {
+      "budget": 30,
+      "moderate": 60,
+      "luxury": 150,
+      "tip": "10% tip is standard in restaurants. Round up for casual services."
+    },
+    "DZA": {
+      "budget": 35,
+      "moderate": 70,
+      "luxury": 180,
+      "tip": "10% tip is appreciated in restaurants. Round up for casual services."
+    }
+  },
+  "defaultBudget": {
+    "budget": 50,
+    "moderate": 100,
+    "luxury": 250,
+    "tip": "Tipping customs vary. 10% is generally safe for restaurants if service charge not included."
+  }
+}

@@ -41,7 +41,7 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
           </div>
           {data.languages.nativeName && (
             <div className="text-center py-2">
-              <span className="text-3xl font-bold font-sora text-brand">
+              <span className="text-display-md font-sora text-brand">
                 {data.languages.nativeName}
               </span>
             </div>
@@ -71,7 +71,7 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium text-brand text-right">
+                  <span className="text-ui-sm text-brand text-right">
                     {phrase.local}
                   </span>
                   <Volume2 className="w-4 h-4 text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />

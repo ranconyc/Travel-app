@@ -1,0 +1,96 @@
+{
+  "visaRequirements": {
+    "TH": {
+      "type": "EVisa",
+      "allowedStay": "60 Days",
+      "status": "warning",
+      "title": "General Entry Policy",
+      "description": "Most international visitors can apply for an e-visa or get an exemption for tourism.",
+      "cost": { "amount": 35, "currency": "USD" },
+      "processingTime": "3-5 Business Days",
+      "officialLink": "https://www.thaievisa.go.th/",
+      "documentsRequired": ["Valid Passport (6 months)", "Return Ticket", "Proof of Stay"],
+      "notes": "Rules vary based on your nationality. Check official e-visa portal."
+    },
+    "FR": {
+      "type": "VisaFree",
+      "allowedStay": "90 Days",
+      "status": "success",
+      "title": "Schengen Policy",
+      "description": "Travelers from visa-exempt countries can enter for up to 90 days for tourism.",
+      "documentsRequired": ["Valid Passport (6 months)", "Travel Insurance", "Proof of Funds"],
+      "notes": "Applies to the entire Schengen area."
+    },
+    "US": {
+      "type": "VisaRequired",
+      "allowedStay": "90 Days",
+      "status": "error",
+      "title": "Standard Visa Policy",
+      "description": "Many nationalities require a B1/B2 visa or an ESTA authorization before travel.",
+      "cost": { "amount": 185, "currency": "USD" },
+      "processingTime": "2-4 Weeks",
+      "officialLink": "https://esta.cbp.dhs.gov/",
+      "documentsRequired": ["Valid Passport", "DS-160 Form", "Interview (usually)"],
+      "notes": "Check if your country is part of the Visa Waiver Program (ESTA)."
+    },
+    "JP": {
+      "type": "VisaFree",
+      "allowedStay": "90 Days",
+      "status": "success",
+      "title": "General Tourism Policy",
+      "description": "Visa-free entry is available for many nationalities for short-term tourism.",
+      "documentsRequired": ["Valid Passport", "Return Flight Ticket"],
+      "notes": "Always check for the latest entry requirements before flying."
+    },
+    "TR": {
+      "type": "EVisa",
+      "allowedStay": "90 Days",
+      "status": "warning",
+      "title": "E-Visa System",
+      "description": "Most travelers need to obtain an e-Visa online before arrival.",
+      "cost": { "amount": 50, "currency": "USD" },
+      "processingTime": "48-72 Hours",
+      "officialLink": "https://www.evisa.gov.tr/",
+      "documentsRequired": ["Valid Passport", "Credit/Debit Card"],
+      "notes": "Ensure your passport is valid for at least 6 months."
+    },
+    "IL": {
+      "type": "VisaFree",
+      "allowedStay": "90 Days",
+      "status": "success",
+      "title": "Standard Entry",
+      "description": "Visa exemption is granted to many countries for tourism purposes.",
+      "documentsRequired": ["Valid Passport", "Entry Card (issued at airport)"],
+      "notes": "Israel does not stamp passports; an entry card is provided."
+    },
+    "AE": {
+      "type": "VisaOnArrival",
+      "allowedStay": "30-90 Days",
+      "status": "warning",
+      "title": "UAE Entry Policy",
+      "description": "Visa on arrival or pre-arranged e-visa is required for most visitors.",
+      "cost": { "amount": 100, "currency": "AED" },
+      "officialLink": "https://smartservices.icp.gov.ae/",
+      "documentsRequired": ["Passport (6 months validity)", "Photo"],
+      "notes": "Requirements depend on your port of entry (Dubai/Abu Dhabi)."
+    },
+    "ES": {
+      "type": "VisaFree",
+      "allowedStay": "90 Days",
+      "status": "success",
+      "title": "Schengen Area",
+      "description": "Spain follows the general Schengen visa-free policy for eligible nations.",
+      "documentsRequired": ["Passport", "Travel Insurance"],
+      "notes": "90/180 day rule applies."
+    }
+  },
+  "defaultRequirement": {
+    "type": "VisaCheckRequired",
+    "allowedStay": "Varies",
+    "status": "info",
+    "title": "Verify Entry Requirements",
+    "description": "Visa rules depend heavily on your citizenship. Please verify with the official embassy.",
+    "documentsRequired": ["Valid Passport (6 months)", "Proof of Return"],
+    "notes": "Policies change frequently due to international agreements."
+  }
+}

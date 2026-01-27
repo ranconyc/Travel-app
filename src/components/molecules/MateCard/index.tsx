@@ -31,11 +31,15 @@ const MateCard = memo(function MateCard({
   return (
     <BaseCard
       linkHref={`/profile/${userId}`}
-      image={{ src: mainImage ?? undefined, alt: name ?? undefined }}
+      image={{ 
+        src: mainImage ?? undefined, 
+        alt: name ?? "Profile image",
+        priority 
+      }}
       priority={priority}
-      className="aspect-3/4! group overflow-hidden"
+      gradient="bg-gradient-to-t from-black/70 via-black/40 to-transparent"
     >
-      <div className="p-2 h-full flex flex-col justify-between relative">
+      <div className="p-4 h-full flex flex-col justify-between relative">
         {showMatchScore && (
           <div className="w-full flex items-center justify-end">
             <div className="text-white border border-white/20 px-2 py-2 w-fit bg-black/30 backdrop-blur-md rounded-full shadow-lg">

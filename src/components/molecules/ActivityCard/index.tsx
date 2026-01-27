@@ -1,5 +1,6 @@
 import BaseCard from "@/components/molecules/BaseCard";
 import { AvatarList } from "@/components/molecules/AvatarList";
+
 type ActivityCardProps = {
   activity: {
     id: string;
@@ -13,18 +14,22 @@ type ActivityCardProps = {
 
 export default function ActivityCard({
   activity,
-
   index,
 }: ActivityCardProps) {
   const { id, name, image, mates, slug } = activity;
 
   return (
     <BaseCard
-      image={{ src: image, alt: name || "Activity image" }}
+      image={{ 
+        src: image, 
+        alt: name || "Activity image",
+        priority: index < 3
+      }}
       linkHref={`/place/${slug || id}`}
       priority={index < 3}
+      gradient="bg-gradient-to-t from-black/60 via-black/30 to-transparent"
     >
-      <div className="h-full flex items-end">
+      <div className="h-full flex items-end p-4">
         <div>
           <AvatarList list={mates} maxVisible={3} showExtra />
           <h3 className="text-white min-h-[45px] font-bold leading-tight text-[clamp(18px,2.8vw,24px)] line-clamp-2 mt-2">

@@ -87,17 +87,17 @@ export default function Button({
   };
 
   const variantStyles = {
-    primary: `${color ? `bg-${color}` : "bg-brand"} text-white hover:opacity-90 shadow-soft border-2 ${color ? `border-${color}` : "border-brand"} rounded-pill`,
+    primary: `${color ? `bg-${color}` : "bg-brand"} text-inverse hover:opacity-90 shadow-soft border-2 ${color ? `border-${color}` : "border-brand"} rounded-pill`,
     secondary: "bg-bg-sub text-txt-main hover:bg-bg-hover rounded-pill",
     outline: `border-2 ${color ? `border-${color} text-${color}` : "border-brand text-brand"} hover:bg-brand/5 bg-transparent rounded-pill`,
     ghost: "text-txt-sec hover:bg-bg-sub hover:text-txt-main rounded-pill",
-    teal: "bg-brand-success hover:opacity-90 text-white border-2 border-brand-success rounded-pill",
+    teal: "bg-brand-success hover:opacity-90 text-inverse border-2 border-brand-success rounded-pill",
     dark: "bg-txt-main text-bg-main hover:opacity-90 rounded-pill",
     "outline-white":
-      "bg-transparent border border-white/30 hover:bg-white/10 text-white rounded-pill",
+      "bg-transparent border border-white/30 hover:bg-white/10 text-inverse rounded-pill",
     icon: "w-11 h-11 rounded-full bg-bg-sub/50 backdrop-blur-md text-txt-main flex items-center justify-center hover:bg-bg-sub border border-stroke shadow-soft p-0 transition-colors",
     brand:
-      "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
+      "bg-brand text-inverse hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
   };
 
   const combinedClasses = [

@@ -67,9 +67,9 @@ export const CountrySchema = z.object({
         .optional(),
       electricity: z
         .object({
-          plugs: z.array(z.string()), // e.g. ["A", "B", "C"]
           voltage: z.number().int(), // e.g. 230
           frequency: z.number().int().optional(), // e.g. 50Hz
+          // Note: plugs data moved to countryPlugs.json
         })
         .optional(),
       timezones: z.array(z.string()).optional(),
@@ -116,6 +116,7 @@ export const CountrySchema = z.object({
         primaryPayment: z.string().optional(), // e.g. "Cash Preferred"
         tapToPay: z.boolean().optional(),
       }),
+      // Note: detailed budget data moved to countryBudgets.json
     })
     .optional()
     .nullable(),
@@ -137,22 +138,7 @@ export const CountrySchema = z.object({
     .optional()
     .nullable(),
 
-  visaInfo: z
-    .object({
-      requiresVisa: z.boolean(),
-      type: z.enum(["Visa Free", "e-Visa", "Visa on Arrival", "Embassy Visa"]),
-      durationDays: z.number(),
-      notes: z.string().optional(),
-      processingTime: z.string().optional(), // e.g. "Instant" | "3-5 days"
-      cost: z
-        .object({
-          amount: z.number(),
-          currency: z.string().default("USD"),
-        })
-        .optional(),
-    })
-    .optional()
-    .nullable(),
+  // Note: visaInfo data moved to visas.json
 
   safety: z
     .object({
@@ -200,16 +186,7 @@ export const CountrySchema = z.object({
     .optional()
     .nullable(),
 
-  commonPhrases: z
-    .array(
-      z.object({
-        label: z.string(),
-        local: z.string(),
-        romanized: z.string().optional(),
-        category: z.enum(["Basics", "Dining", "Emergency", "Transport"]),
-      }),
-    )
-    .default([]),
+  // Note: commonPhrases data moved to common_phrases.json
 
   // --- RELATIONS (optional, for when data is populated) ---
   cities: z.array(z.any()).optional(), // City[]

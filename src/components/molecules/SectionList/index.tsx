@@ -17,6 +17,7 @@ interface SectionListProps<T> {
   noScrollbar?: boolean;
   gap?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
+  isFloating?: boolean;
 }
 
 export default function SectionList<T>({
@@ -32,12 +33,13 @@ export default function SectionList<T>({
   noScrollbar = true,
   gap,
   className = "",
-}: SectionListProps<T>) {
+  isFloating = true,
+  }: SectionListProps<T>) {
   return (
     <div className={className}>
-      <SectionHeader title={title} href={href} linkText={linkText} />
+      <SectionHeader title={title} href={href} linkText={linkText} className={`${isFloating? "pl-md" :""}`} />
 
-      <HorizontalList noScrollbar={noScrollbar} gap={gap}>
+      <HorizontalList noScrollbar={noScrollbar} gap={gap} className={`${isFloating? "px-md" :""}`}>
         {isLoading ? (
           <>
             {Array.from({ length: skeletonCount }).map((_, i) => (

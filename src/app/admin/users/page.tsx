@@ -1,7 +1,21 @@
 import { getAllUsers } from "@/lib/db/user.repo";
+import { getSession } from "@/lib/auth/get-current-user";
+import { redirect } from "next/navigation";
 import UsersTable from "@/app/admin/users/UsersTable";
 
 export default async function AdminUsersPage() {
+  // Check admin role
+  const session = await getSession();
+  const user = session?.user;
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  if (user.role !== "ADMIN") {
+    redirect("/");
+  }
+
   const users = await getAllUsers();
 
   return (

@@ -1,11 +1,25 @@
 import { getAllCountriesAction } from "@/domain/country/country.actions";
 import { getAllCitiesAction } from "@/domain/city/city.actions";
 import { getAllPlacesAction } from "@/domain/place/place.actions";
+import { getSession } from "@/lib/auth/get-current-user";
+import { redirect } from "next/navigation";
 import DestinationsListClient from "./DestinationsListClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function DestinationsPage() {
+  // Check admin role
+  const session = await getSession();
+  const user = session?.user;
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  if (user.role !== "ADMIN") {
+    redirect("/");
+  }
+
   const [countriesRes, citiesRes, placesRes] = await Promise.all([
     getAllCountriesAction(undefined),
     getAllCitiesAction(undefined),

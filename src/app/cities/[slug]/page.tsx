@@ -12,15 +12,30 @@ import {
   MapPin,
   Clock,
   Calendar,
-  Users,
   FacebookIcon,
 } from "lucide-react";
 import { formatPopulation } from "@/domain/shared/utils/formatNumber";
-import { City } from "@/domain/city/city.schema";
 import { AiFillTikTok } from "react-icons/ai";
 import social from "@/data/social.json";
 import { AiFillRedditCircle } from "react-icons/ai";
 import HeroImage from "@/components/molecules/HeroImage";
+import { prisma } from "@/lib/db/prisma";
+import { filterAndSortPlaces } from "@/services/discovery/enhanced-matching.service";
+import PlaceCard from "@/components/molecules/PlaceCard";
+import Typography from "@/components/atoms/Typography";
+import Block from "@/components/atoms/Block";
+import Stats from "@/components/molecules/Stats";
+import { StatItem } from "@/domain/common.schema";
+import { Globe2, Users } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
+import { getDistanceMetadata } from "@/domain/shared/utils/geo";
+import SocialLinks from "@/app/countries/[slug]/components/SocialLinks";
+import PageInfo from "@/components/atoms/PageInfo";
+import LogisticsSection from "@/app/countries/[slug]/components/LogisticsSection";
+import CultureSection from "@/app/countries/[slug]/components/CultureSection";
+import HealthSection from "@/app/countries/[slug]/components/HealthSection";
+import LanguageSection from "@/components/organisms/LanguageSection";
+import FloatingCardList from "@/components/molecules/FloatingCardList";
 
 export default async function CityPage({
   params,
@@ -33,281 +48,223 @@ export default async function CityPage({
   }
 
   const { slug } = await params;
-  const city = (await getCitiesWithCountry(slug)) as unknown as City;
+  const city = (await getCitiesWithCountry(slug)) as any;
 
   if (!city) {
     return <div>City not found</div>;
   }
 
+  // Fetch places in this city with matching service
+  let topPlaces: any[] = [];
+  if (session?.user) {
+    try {
+      // Get all places in this city
+      const allPlaces = await prisma.place.findMany({
+        where: {
+          cityRefId: city.id,
+          isPermanentlyClosed: false
+        },
+        take: 20 // Limit to top 20 for performance
+      });
+
+      // Filter and sort based on user preferences
+      const userPersona = {
+        interests: (session.user as any).persona?.interests || [],
+        budget: (session.user as any).persona?.budget || 'moderate',
+        travelStyle: (session.user as any).persona?.travelStyle || []
+      };
+
+      const userLocation = city.coords as any;
+      const topPlaces = filterAndSortPlaces(
+        allPlaces as any,
+        userPersona,
+        { limit: 8 } // Show top 8
+      );
+    } catch (error) {
+      console.error("Error fetching top places:", error);
+    }
+  }
+
+  // Geography & Logistics Logic
+  const userWithCity = session.user as any;
+  const inThisCity = userWithCity?.currentCityId === city.id;
+  const userCoords = (userWithCity?.currentLocation as any)?.coordinates;
+  const cityCoords = (city.coords as any)?.coordinates;
+
+  const distanceMeta =
+    userCoords && cityCoords
+      ? getDistanceMetadata(
+          { lat: userCoords[1], lng: userCoords[0] },
+          { lat: cityCoords[1], lng: cityCoords[0] },
+        )
+      : null;
+
+  const distanceLabel = distanceMeta?.distanceStr || "N/A";
+
+  const stats: StatItem[] = [
+    {
+      value: distanceLabel,
+      label: "Away",
+      icon: Globe2,
+    },
+    {
+      value: formatPopulation(city.population || 0),
+      label: "Population",
+      icon: Users,
+    },
+    {
+      value: city.idealDuration || "3-4 days",
+      label: "Duration",
+      icon: Clock,
+    },
+    {
+      value: city.bestSeason || "Year-round",
+      label: "Season",
+      icon: Calendar,
+    },
+  ];
+
   // Helper to safely get country name
   const countryName = city.country?.name || "Unknown Country";
 
   return (
-    <div className="bg-bg-main min-h-screen font-sans selection:bg-brand selection:text-white pb-20">
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 p-md flex items-center justify-between">
-        <Button variant="back" />
-        <div className="flex items-center gap-3 border border-r-amber-400">
-          <Button
-            variant="icon"
-            icon={<Heart size={20} />}
-            aria-label="Add to favorites"
+    <div className="bg-main min-h-screen selection:bg-brand selection:text-white">
+      <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-12">
+        <div className="flex flex-col gap-8 mt-8 md:mt-12">
+          {/* Page Info */}
+          <PageInfo
+            title={city.name}
+            subtitle={countryName}
           />
-          <Button
-            variant="icon"
-            icon={<Shield size={20} />}
-            aria-label="Safety information"
-          />
-          <Button
-            variant="icon"
-            href={`${social.filter((s) => s.name === "tiktok")[0].groupsURL}${city.name}`}
-            target="_blank"
-            icon={<AiFillTikTok size={20} />}
-            aria-label="TikTok"
-          />
-          <Button
-            variant="icon"
-            href={`${social.filter((s) => s.name === "facebook")[0].groupsURL}${city.name}`}
-            target="_blank"
-            icon={<FacebookIcon size={20} />}
-            aria-label="Facebook"
-          />
-          <Button
-            variant="icon"
-            href={`${social.filter((s) => s.name === "reddit")[0].groupsURL}${city.name} travel`}
-            target="_blank"
-            icon={<AiFillRedditCircle size={20} />}
-            aria-label="Reddit"
-          />
-          <Button
-            variant="icon"
-            href={`${social.filter((s) => s.name === "instagram")[0].groupsURL}${city.name}`}
-            target="_blank"
-            icon={<Instagram size={20} />}
-            aria-label="Instagram"
-          />
-        </div>
-      </div>
 
-      {/* Main Content Container */}
-      <main className="p-4 flex flex-col gap-8">
-        {/* Identity & Hero */}
-        <div className="flex flex-col items-center gap-md mt-md">
-          <HeroImage
-            src={
-              city?.imageHeroUrl ||
-              (city.country?.flags as { svg?: string; png?: string })?.svg ||
-              (city.country?.flags as { svg?: string; png?: string })?.png
-            }
-            name={city.name}
-          />
-          <div className="text-center">
-            <Link
-              href={`/countries/${city.country?.cca3?.toLowerCase() || ""}`}
-              className="text-brand text-sm uppercase tracking-wider font-bold hover:underline mb-1 inline-block"
-            >
-              {countryName}
-            </Link>
-            <h1 className="text-h1 font-bold font-sora flex items-center justify-center gap-2">
-              {city.name}
-              {city.isCapital && (
-                <span className="text-yellow-400 text-2xl" title="Capital City">
-                  👑
-                </span>
-              )}
-            </h1>
-          </div>
-        </div>
-
-        {session?.user?.currentCityId === city.id && (
-          <div className="flex items-center justify-center gap-2 -mt-2 animate-fade-in">
-            <div className="flex items-center gap-2 bg-brand/10 text-brand px-4 py-1.5 rounded-full border border-brand/20 shadow-sm backdrop-blur-md">
+          {/* User Location Indicator */}
+          {inThisCity && (
+            <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
               <MapPin size={14} />
-              <span className="text-xs font-bold uppercase tracking-wider">
-                You are here
+              <span className="text-upheader font-bold uppercase tracking-wider">
+                You are in {city.name}
               </span>
-            </div>
-          </div>
-        )}
-
-        {/* Stats Row */}
-        <div className="flex items-center justify-between px-2 py-4 bg-surface/50 rounded-2xl backdrop-blur-sm border border-surface-secondary">
-          <div className="text-center flex-1">
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-lg font-bold font-sora">
-                {city.idealDuration || "3-4 days"}
-              </span>
-              <span className="text-micro text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
-                <Clock size={10} /> Duration
-              </span>
-            </div>
-          </div>
-          <div className="text-center flex-1 border-l border-r border-surface-secondary">
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-lg font-bold font-sora">
-                {city.population ? formatPopulation(city.population) : "N/A"}
-              </span>
-              <span className="text-micro text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
-                <Users size={10} /> People
-              </span>
-            </div>
-          </div>
-          <div className="text-center flex-1">
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-lg font-bold font-sora capitalize truncate w-full px-1">
-                {city.bestSeason || "Year-round"}
-              </span>
-              <span className="text-micro text-secondary font-bold uppercase tracking-widest flex items-center gap-1">
-                <Calendar size={10} /> Season
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-2 gap-2 h-48">
-          <div className="relative rounded-2xl overflow-hidden bg-surface shadow-sm group">
-            {city.media && city.media.length > 0 && city.media[0]?.url ? (
-              <Image
-                src={city.media[0].url}
-                alt={`${city.name} highlight 1`}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-secondary text-xs">
-                No Image
-              </div>
-            )}
-          </div>
-          <div className="grid grid-rows-2 gap-2">
-            <div className="relative rounded-2xl overflow-hidden bg-surface shadow-sm group">
-              {city.media && city.media.length > 1 && city.media[1]?.url ? (
-                <Image
-                  src={city.media[1].url}
-                  alt={`${city.name} highlight 2`}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-secondary text-xs">
-                  No Image
-                </div>
-              )}
-            </div>
-            <div className="relative rounded-2xl overflow-hidden bg-surface shadow-sm group">
-              {city.media && city.media.length > 2 && city.media[2]?.url ? (
-                <Image
-                  src={city.media[2].url}
-                  alt={`${city.name} highlight 3`}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-secondary text-xs">
-                  No Image
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Tabs / Navigation */}
-        <div className="flex items-center gap-6 overflow-x-auto pb-2 no-scrollbar text-sm font-bold tracking-wide border-b border-surface-secondary">
-          <span className="text-brand pb-2 border-b-2 border-brand cursor-pointer">
-            TOP PLACES
-          </span>
-          <span className="text-secondary pb-2 cursor-pointer hover:text-txt-main transition-colors whitespace-nowrap">
-            INFO
-          </span>
-          <span className="text-secondary pb-2 cursor-pointer hover:text-txt-main transition-colors whitespace-nowrap">
-            NEIGHBORHOODS
-          </span>
-        </div>
-
-        {/* Content Section */}
-        <div className="flex flex-col gap-6">
-          {/* Top Places (reusing logic from cities list in country page) */}
-          {city.places && city.places.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {city.places.slice(0, 4).map((place: any, i: number) => (
-                <div
-                  key={place.id || i}
-                  className="relative aspect-square rounded-2xl overflow-hidden bg-surface group shadow-md"
-                >
-                  {place.imageHeroUrl ? (
-                    <Image
-                      src={place.imageHeroUrl}
-                      alt={place.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-secondary bg-surface-secondary">
-                      <MapPin size={24} />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-                    <span className="font-bold text-white text-sm line-clamp-2">
-                      {place.name}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center bg-surface/50 rounded-2xl border border-dashed border-surface-secondary">
-              <MapPin className="w-8 h-8 mx-auto text-secondary mb-2 opacity-50" />
-              <p className="text-secondary italic text-sm">
-                Top places coming soon
-              </p>
             </div>
           )}
 
-          {/* Info List */}
-          <div className="flex flex-col gap-md bg-surface/30 p-md rounded-3xl">
-            {/* Safety */}
-            <div className="flex items-center justify-between py-2 border-b border-surface-secondary last:border-0">
-              <span className="text-secondary font-bold text-sm uppercase tracking-wide">
-                Safety
-              </span>
-              <span
-                className={`font-bold text-sm px-3 py-1 rounded-full ${
-                  !city.safety
-                    ? "bg-gray-100 text-secondary"
-                    : city.safety.toLowerCase().includes("safe")
-                      ? "bg-green-100 text-green-700"
-                      : city.safety.toLowerCase().includes("caution")
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                }`}
-              >
-                {city.safety || "Unknown"}
-              </span>
-            </div>
+          {/* Hero Image */}
+          <HeroImage
+            src={
+              city?.imageHeroUrl ||
+              (city.country?.flags as any)?.svg ||
+              (city.country?.flags as any)?.png
+            }
+            name={city.name}
+          />
 
-            {/* Budget/Payment */}
-            <div className="flex items-center justify-between py-2 border-b border-surface-secondary last:border-0">
-              <span className="text-secondary font-bold text-sm uppercase tracking-wide">
-                Daily Budget
-              </span>
-              <span className="text-txt-main font-bold text-sm">
-                {city.budget
-                  ? `${city.budget.currency || "$"} ${city.budget.perDayMin}-${city.budget.perDayMax}`
-                  : "N/A"}
-              </span>
-            </div>
+          {/* Social Links */}
+          <SocialLinks query={`${city.name}, ${countryName}`} />
+        </div>
 
-            {/* Timezone */}
-            <div className="flex items-center justify-between py-2 border-b border-surface-secondary last:border-0">
-              <span className="text-secondary font-bold text-sm uppercase tracking-wide">
-                Timezone
-              </span>
-              <span className="text-txt-main font-bold text-sm">
-                {city.timeZone || "N/A"}
-              </span>
-            </div>
+        {/* Stats */}
+        <Stats stats={stats} />
+
+        {/* Top Picks for You - Now Floating */}
+        {session?.user && topPlaces.length > 0 ? (
+          <div className="flex flex-col gap-8">
+            <FloatingCardList
+              title="Top Picks for You"
+              description={`Personalized recommendations in ${city.name}`}
+              items={topPlaces.map((place) => {
+                const userPersona = {
+                  interests: (session.user as any).persona?.interests || [],
+                  budget: (session.user as any).persona?.budget || 'moderate',
+                  travelStyle: (session.user as any).persona?.travelStyle || []
+                };
+                
+                // Calculate distance from city center
+                const distance = city.coords ? 
+                  Math.sqrt(
+                    Math.pow((place.place.coords as any).coordinates[0] - (city.coords as any).coordinates[0], 2) +
+                    Math.pow((place.place.coords as any).coordinates[1] - (city.coords as any).coordinates[1], 2)
+                  ) * 111 // Rough km conversion
+                  : undefined;
+
+                return {
+                  id: place.place.id,
+                  title: place.place.name,
+                  subtitle: distance ? `${distance.toFixed(1)} km away` : undefined,
+                  image: place.place.imageHeroUrl,
+                  href: `/place/${place.place.slug}`,
+                  badge: place.matchResult.finalScore >= 80 ? `${Math.round(place.matchResult.finalScore)}% Match` : undefined
+                };
+              })}
+              showViewAll={false}
+            />
           </div>
+        ) : (
+          <div className="flex flex-col gap-8">
+            <FloatingCardList
+              title="Popular Places"
+              description={`Discover the best spots in ${city.name}`}
+              items={city.places?.slice(0, 8).map((place: any) => ({
+                id: place.id,
+                title: place.name,
+                subtitle: place.address,
+                image: place.imageHeroUrl,
+                href: `/place/${place.slug}`,
+                icon: <MapPin size={20} />
+              })) || []}
+              showViewAll={false}
+            />
+          </div>
+        )}
+
+        <div className="flex flex-col gap-lg">
+          <div className="grid grid-cols-2 gap-md">
+            {city.isCapital && (
+              <Block>
+                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                  Capital City
+                </h3>
+                <p className="text-p font-bold text-txt-main">
+                  {city.name}
+                </p>
+              </Block>
+            )}
+
+            {city.safety && (
+              <Block>
+                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                  Safety
+                </h3>
+                <p className="text-p font-bold text-txt-main">
+                  {city.safety}
+                </p>
+              </Block>
+            )}
+          </div>
+
+          {city.budget && (
+            <Block>
+              <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                Daily Budget
+              </h3>
+              <p className="text-p font-bold text-txt-main">
+                {city.budget.currency || "$"} {city.budget.perDayMin}-{city.budget.perDayMax}
+              </p>
+            </Block>
+          )}
+
+          {city.timeZone && (
+            <Block>
+              <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                Timezone
+              </h3>
+              <p className="text-p font-bold text-txt-main">
+                {city.timeZone}
+              </p>
+            </Block>
+          )}
+
+          <LogisticsSection />
+          <CultureSection />
+          <HealthSection />
         </div>
       </main>
     </div>

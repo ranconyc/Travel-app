@@ -9,8 +9,8 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth");
-  const isPublicRoute = ["/signin", "/manifest.webmanifest"].includes(
-    nextUrl.pathname,
+  const isPublicRoute = ["/signin", "/manifest.webmanifest", "/place/"].some(route => 
+    nextUrl.pathname.startsWith(route)
   );
   const isOnboardingRoute = nextUrl.pathname.startsWith("/profile/persona");
 
@@ -32,6 +32,17 @@ export default auth((req) => {
   const isBanned = (req.auth?.user as any)?.isBanned;
   const isActive = (req.auth?.user as any)?.isActive;
 
+  // Debug logging for admin route access
+  if (nextUrl.pathname.startsWith("/admin")) {
+    console.log("Admin route access attempt:", {
+      pathname: nextUrl.pathname,
+      userId: (req.auth?.user as any)?.id,
+      role: role,
+      roleType: typeof role,
+      isLoggedIn: !!req.auth,
+    });
+  }
+
   // Global Safety Switch
   if (isLoggedIn && (isBanned || isActive === false)) {
     // If it's not the signin page, redirect to signin
@@ -41,8 +52,13 @@ export default auth((req) => {
   }
 
   // Protect Admin Routes
-  if (nextUrl.pathname.startsWith("/admin") && role !== "ADMIN") {
-    return NextResponse.redirect(new URL("/", nextUrl));
+  if (nextUrl.pathname.startsWith("/admin")) {
+    // Check role with case-insensitive comparison and fallback
+    const userRole = role?.toString().toUpperCase();
+    if (userRole !== "ADMIN") {
+      console.log("Admin access denied - insufficient role:", { role, userRole });
+      return NextResponse.redirect(new URL("/", nextUrl));
+    }
   }
 
   // Gated Onboarding Logic

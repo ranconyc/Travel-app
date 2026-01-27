@@ -7,7 +7,7 @@ type VisaProps = {
   passportValidityNote: string;
 };
 
-const subtitle = "text-sm font-medium capitalize mb-1";
+const subtitle = "text-ui-sm capitalize mb-1";
 
 export default function VisaSection({
   visaOnArrivalNote,

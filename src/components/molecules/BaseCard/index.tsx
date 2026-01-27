@@ -4,9 +4,15 @@ import Link from "next/link";
 
 type BaseCardProps = {
   children: React.ReactNode;
-  image?: { src?: string; alt?: string };
+  image?: { 
+    src?: string; 
+    alt: string;
+    priority?: boolean;
+  };
   linkHref?: string;
   className?: string;
+  aspectRatio?: string; // default: "aspect-[3.2/4]"
+  gradient?: boolean | string; // default gradient or custom class
   priority?: boolean;
 };
 
@@ -18,7 +24,6 @@ function CardImage({
 }: {
   src?: string;
   alt: string;
-  index?: number;
   priority?: boolean;
 }) {
   const fallback =
@@ -30,7 +35,7 @@ function CardImage({
       alt={alt || "Card image"}
       fill
       sizes="(max-width: 768px) 80vw, 240px"
-      className="object-cover"
+      className="object-cover transition-transform duration-500 group-hover:scale-110 group-hover:brightness-110"
       priority={priority}
     />
   );
@@ -40,25 +45,40 @@ export default function BaseCard({
   children,
   image,
   linkHref,
-  priority,
-  className,
+  className = "",
+  aspectRatio = "aspect-[3.2/4]",
+  gradient = true,
+  priority = false,
 }: BaseCardProps) {
+  // Determine gradient class
+  const gradientClass = gradient === false 
+    ? "" 
+    : typeof gradient === "string" 
+      ? gradient 
+      : "bg-gradient-to-t from-black/60 via-black/30 to-transparent";
+
   const card = (
     <div
-      className={
-        "bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] w-full relative aspect-[3.2/4] " +
-        (className ?? "")
-      }
+      className={`
+        bg-white dark:bg-surface rounded-2xl overflow-hidden 
+        shadow-lg hover:shadow-xl hover:shadow-2xl
+        w-full relative ${aspectRatio} group transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1
+        ${className}
+      `}
     >
       <div className="relative h-full">
-        <CardImage
-          src={image?.src}
-          alt={image?.alt || "Card image"}
-          priority={priority}
-        />
+        {image && (
+          <CardImage
+            src={image.src}
+            alt={image.alt}
+            priority={priority}
+          />
+        )}
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/55" />
+        {gradient && (
+          <div className={`absolute inset-0 ${gradientClass}`} />
+        )}
 
         {/* Content area */}
         <div className="absolute inset-0">{children}</div>

@@ -10,7 +10,7 @@ type EmergencyProps = {
   fire: string;
 };
 
-const subtitle = "text-sm font-medium capitalize mb-1";
+const subtitle = "text-ui-sm capitalize mb-1";
 const paragraph = "text-sm  text-gray-600";
 const flexBetween = "flex items-center justify-between";
 

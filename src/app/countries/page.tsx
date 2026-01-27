@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import HeaderWrapper from "@/components/molecules/Header";
 import { CONTINENTS } from "@/data/continents";
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
 import Title from "@/components/atoms/Title";
 import ContinentCard from "@/components/molecules/ContinentCard";
+import { Globe, List } from "lucide-react";
 
 export default function CountriesPage() {
   return (
@@ -25,6 +27,27 @@ export default function CountriesPage() {
       </HeaderWrapper>
 
       <Block as="main" className="p-md mt-md">
+        {/* Quick Actions */}
+        <Block className="mb-6">
+          <Link
+            href="/countries/index"
+            className="flex items-center gap-3 p-4 bg-surface rounded-2xl hover:bg-surface-secondary transition-colors"
+          >
+            <div className="w-10 h-10 bg-brand/10 rounded-xl flex items-center justify-center">
+              <List className="w-5 h-5 text-brand" />
+            </div>
+            <div className="flex-1">
+              <Typography variant="h3" className="font-semibold text-txt-main">
+                All Countries & Borders
+              </Typography>
+              <Typography variant="p" className="text-secondary text-sm">
+                View complete list with bordering countries
+              </Typography>
+            </div>
+          </Link>
+        </Block>
+
+        {/* Continents Grid */}
         <Block className="grid grid-cols-1 md:grid-cols-2 gap-md">
           {CONTINENTS.map((continent) => (
             <ContinentCard key={continent.slug} continent={continent} />

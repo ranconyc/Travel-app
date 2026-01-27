@@ -19,7 +19,7 @@ export default function CurrencySection({
     <Block>
       <Title icon={<CircleDollarSign size={16} />}>Currency</Title>
       <div className="flex items-center justify-between gap-md">
-        {/* <h1 className="text-sm font-medium capitalize mb-1">Currency Name</h1> */}
+        {/* <h1 className="text-ui-sm capitalize mb-1">Currency Name</h1> */}
         <p className="text-xs">
           {name} {symbol} {code && `(${code})`}
         </p>
@@ -27,7 +27,7 @@ export default function CurrencySection({
 
       {paymentMethodsNote && (
         <>
-          <h1 className="text-sm font-medium capitalize mb-1">
+          <h1 className="text-ui-sm capitalize mb-1">
             Payment Methods
           </h1>
           <p className="text-xs">{paymentMethodsNote}</p>
@@ -38,7 +38,7 @@ export default function CurrencySection({
 }
 
 // <div className="flex items-center justify-between gap-md">
-//   <h1 className="text-sm font-medium capitalize mb-1">Exchange Rate</h1>
+//   <h1 className="text-ui-sm capitalize mb-1">Exchange Rate</h1>
 //   {/* change this to be realtime || based on the user currency */}
 //   <p className="text-xs">{exchangeRateNote}</p>
 // </div>

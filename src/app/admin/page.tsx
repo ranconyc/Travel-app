@@ -1,4 +1,6 @@
 import React from "react";
+import { getSession } from "@/lib/auth/get-current-user";
+import { redirect } from "next/navigation";
 import {
   getDashboardStats,
   getTopCities,
@@ -9,6 +11,18 @@ import { Users, MapPin, Globe, Activity } from "lucide-react";
 import { Avatar } from "@/components/molecules/Avatar";
 
 export default async function AdminDashboardPage() {
+  // Check admin role
+  const session = await getSession();
+  const user = session?.user;
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  if (user.role !== "ADMIN") {
+    redirect("/");
+  }
+
   const [statsRes, topCitiesRes, latestUsersRes] = await Promise.all([
     getDashboardStats(undefined),
     getTopCities(undefined),

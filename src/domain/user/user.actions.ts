@@ -54,6 +54,37 @@ export const updateProfile = createSafeAction(
   },
 );
 
+export const completeOnboarding = createSafeAction(
+  z.object({
+    interests: z.array(z.string()),
+    budget: z.string(),
+    travelRhythm: z.string(),
+  }),
+  async (data, userId) => {
+    // Update user profile with onboarding data and set profileCompleted to true
+    const dbModel = mapUiToDb(data as unknown as PersonaFormValues);
+    const insights = InsightsEngine.generate(dbModel);
+    const insightCodes = insights.map((i) => i.code);
+
+    await saveUserInterests(userId, {
+      firstName: "", // Will be filled later in complete profile
+      hometown: "",
+      avatarUrl: undefined,
+      interests: dbModel.interests,
+      dailyRhythm: dbModel.dailyRhythm as any,
+      travelStyle: dbModel.travelStyle as any,
+      budget: dbModel.budget as any,
+      currency: dbModel.currency,
+      insights: insightCodes,
+    });
+
+    // Update profileCompleted flag directly in database
+    await updateUserRole(userId, "USER");
+    
+    return { success: true };
+  },
+);
+
 export const deleteAccountAction = createSafeAction(
   z.object({}),
   async (_, userId) => {

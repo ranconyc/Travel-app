@@ -82,7 +82,7 @@ export const MatchScoreCard = ({
           className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.languages.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold uppercase text-secondary">
+            <span className="text-label text-secondary">
               Speak
             </span>
             <span className="text-xs font-bold opacity-60">
@@ -112,14 +112,14 @@ export const MatchScoreCard = ({
           className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.places.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold uppercase text-secondary">
+            <span className="text-label text-secondary">
               Visited
             </span>
             <span className="text-xs font-bold opacity-60">
               {breakdown.places.shared.length} Common
             </span>
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-ui-sm">
             {breakdown.places.shared.length > 0 ? (
               <span className="line-clamp-2">
                 {breakdown.places.shared.length} countries
@@ -137,14 +137,14 @@ export const MatchScoreCard = ({
           className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.interests.shared.length > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold uppercase text-secondary">
+            <span className="text-label text-secondary">
               Interests
             </span>
             <span className="text-xs font-bold opacity-60">
               {breakdown.interests.shared.length} Shared
             </span>
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-ui-sm">
             {breakdown.interests.shared.length > 0 ? (
               <div className="flex flex-wrap gap-1">
                 {breakdown.interests.shared.slice(0, 3).map((i) => (
@@ -174,14 +174,14 @@ export const MatchScoreCard = ({
           className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.location.sameCountry ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold uppercase text-secondary">
+            <span className="text-label text-secondary">
               Location
             </span>
             {breakdown.location.sameCity && (
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
             )}
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-ui-sm">
             {breakdown.location.sameCity ? (
               "Same City!"
             ) : breakdown.location.sameCountry ? (
@@ -199,14 +199,14 @@ export const MatchScoreCard = ({
           className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.friends.count > 0 ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold uppercase text-secondary">
+            <span className="text-label text-secondary">
               Friends
             </span>
             <span className="text-xs font-bold opacity-60">
               {breakdown.friends.count} Mutual
             </span>
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-ui-sm">
             {breakdown.friends.count > 0 ? (
               <div className="flex -space-x-2">
                 {/* We don't have images for friends in the breakdown yet, assuming placeholder or names */}
@@ -233,11 +233,11 @@ export const MatchScoreCard = ({
           className={`bg-surface/50 rounded-xl p-md border border-surface-secondary ${breakdown.age.isWithinRange ? "opacity-100" : "opacity-50"}`}
         >
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-bold uppercase text-secondary">
+            <span className="text-label text-secondary">
               Age
             </span>
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-ui-sm">
             {breakdown.age.isWithinRange ? (
               "Close in Age"
             ) : (

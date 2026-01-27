@@ -6,6 +6,7 @@ import {
   getNearbyCitiesAction,
   getAllCitiesAction,
 } from "@/domain/city/city.actions";
+import { getAllPlacesAction } from "@/domain/place/place.actions";
 import HomeClient from "./HomeClient";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import {
@@ -20,6 +21,8 @@ export default async function Home() {
   const queryClient = new QueryClient();
   const user = await getCurrentUser();
   console.log("user", user);
+
+  
   // Use any cast because TS inference struggles with union return type of getUserById
   const location = (user as any)?.currentLocation as {
     type: string;
@@ -62,6 +65,15 @@ export default async function Home() {
       const result = coords
         ? await getNearbyCitiesAction({ ...coords, km: 500, limit: 20 })
         : await getAllCitiesAction({ limit: 20 });
+      return result.success ? result.data : [];
+    },
+  });
+
+  // Prefetch places
+  await queryClient.prefetchQuery({
+    queryKey: ["places", coords],
+    queryFn: async () => {
+      const result = await getAllPlacesAction({});
       return result.success ? result.data : [];
     },
   });

@@ -29,6 +29,8 @@ export const CitySchema = z.object({
   places: z.any().array().optional().default([]), // For inclusion
   autoCreated: z.boolean().default(false),
   needsReview: z.boolean().default(false),
+  aggregatedVibes: z.array(z.string()).default([]),
+  discoveryScore: z.number().default(0.0),
 });
 
 export type City = z.infer<typeof CitySchema>;
