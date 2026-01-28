@@ -223,7 +223,9 @@ export async function GET(req: Request) {
     //   return NextResponse.json(local);
     // }
 
-    console.log("LocationIQ API query:", q);
+    if (process.env.NODE_ENV !== "production") {
+      console.log("LocationIQ API query:", q);
+    }
 
     // 2) Fallback to LocationIQ
     const external = await findExternalCities(q);

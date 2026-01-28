@@ -3,11 +3,15 @@
 import AddSection from "@/components/molecules/AddSection";
 import InterestsList from "../InterestsList";
 import SectionHeader from "@/components/molecules/SectionHeader";
-import { useIsMyProfile } from "../../store/useProfileStore";
 import Block from "@/components/atoms/Block";
 
-export function InterestsSection({ interests }: { interests: string[] }) {
-  const isMyProfile = useIsMyProfile();
+export function InterestsSection({
+  interests,
+  isMyProfile,
+}: {
+  interests: string[];
+  isMyProfile: boolean;
+}) {
   if (!isMyProfile && interests.length === 0) return null;
   return (
     <Block>

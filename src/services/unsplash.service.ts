@@ -52,6 +52,8 @@ class UnsplashService {
       return null;
     }
 
+    const isDev = process.env.NODE_ENV !== 'production';
+
     try {
       const { query, orientation = 'landscape', category } = options;
       
@@ -82,12 +84,12 @@ class UnsplashService {
       const data: UnsplashResponse = await response.json();
       
       if (data.results.length === 0) {
-        console.log(`📷 No images found for query: "${searchQuery}"`);
+        if (isDev) console.log(`📷 No images found for query: "${searchQuery}"`);
         return null;
       }
 
       const photo = data.results[0];
-      console.log(`📷 Found Unsplash image for "${searchQuery}": ${photo.description}`);
+      if (isDev) console.log(`📷 Found Unsplash image for "${searchQuery}": ${photo.description}`);
       
       // Return regular size (good for backgrounds)
       return photo.urls.regular;
@@ -152,10 +154,11 @@ class UnsplashService {
     query: string
   ): Promise<boolean> {
     try {
+      const isDev = process.env.NODE_ENV !== 'production';
       // This would be implemented based on your database schema
       // For now, we'll just log the action
-      console.log(`💾 Saving image for ${entityType} ${entityId}:`, imageUrl);
-      console.log(`📝 Query used: "${query}"`);
+      if (isDev) console.log(`💾 Saving image for ${entityType} ${entityId}:`, imageUrl);
+      if (isDev) console.log(`📝 Query used: "${query}"`);
       
       // TODO: Implement actual database save
       // await prisma.city.update({

@@ -1,0 +1,40 @@
+// ============================================
+// MATCHING DOMAIN
+// ============================================
+
+// Match score caching for performance
+model MatchScore {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  targetType  String   // 'user' | 'place'
+  targetId    String   @db.ObjectId
+  score       Int      // 0-100
+  
+  // Detailed breakdown for UI display
+  breakdown   Json     // { interests: { score: 50, shared: ['hiking'] }, budget: { score: 30, match: true } }
+  reasoning   String[] // ["Same budget range", "Love hiking", "Similar travel style"]
+  
+  calculatedAt DateTime @default(now())
+  expiresAt   DateTime // TTL for cache invalidation
+  
+  // Indexing for performance
+  @@index([userId, targetType, score(sort: Desc)], map: "match_scores_composite")
+  @@index([expiresAt], map: "match_scores_ttl")
+  @@unique([userId, targetType, targetId], map: "match_scores_unique")
+}
+
+// Configurable weights for A/B testing and tuning
+model MatchWeight {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  targetType  String   // 'user' | 'place'
+  factorName  String   // 'interests', 'languages', 'budget', etc.
+  weight      Float    // 0.0 - 1.0
+  variant     String   @default("control") // for A/B testing
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([targetType, factorName, variant], map: "match_weights_unique")
+  @@index([targetType, variant, isActive], map: "match_weights_active")
+}

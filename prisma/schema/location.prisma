@@ -5,86 +5,56 @@
 
 model Country {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  cca3          String   @unique // "THA", "DEU" (Primary lookup key)
-  code          String   // "TH", "DE" (ISO 3166-1 alpha-2)
-  name          String
-  officialName  String?
+  cca3          String   @unique // "ISR"
+  code          String   // "IL"
+  name          String   // "Israel"
+  officialName  String?  // "State of Israel"
   imageHeroUrl  String?
-  isUnMember Boolean?
-  isIndependent Boolean?
 
-  population    Int?
-  areaKm2       Float?
-  flags         Json?    // { png, svg, alt }
-  borders       String[] // cca3 codes for "Nearby" features
-  idd Json?
-  tld Json?
-  translations Json?
-  altSpellings String[]
-  demonyms Json?
-  flag String? // Emoji flag
-  coatOfArms Json? // { png: string, svg: string }
-  gini Json? // { "2018": 32.1 }
-  landlocked Boolean?
-
-  // MongoDB Geospatial Standard
-  // Index this in DB: db.Country.createIndex({ "coords": "2dsphere" })
-  coords        Json?    // { type: "Point", coordinates: [lng, lat] }
+  // Demographics
+  population    Int?     // 10119400
+  areaKm2       Float?   // 21937
+  region        String?  // "Asia"
+  subRegion     String?  // "Western Asia"
+  
+  // Status Flags
+  isIndependent Boolean? // true
+  isUnMember    Boolean? // true
+  landlocked    Boolean? // false
+  
+  // Arrays & Objects
+  borders       String[] // ["EGY", "JOR", ...]
+  altSpellings  String[] // ["IL", "State of Israel", ...]
+  
+  // Complex Objects (Stored as JSON)
   maps          Json?    // { googleMaps, openStreetMaps }
-
-  // 1. LOGISTICS & UTILITIES
-  logistics     Json?    /* {
-      car: { side: "left", signs: ["T"] },
-      voltage: 220,
-      timezones: ["UTC+07:00"],
-      startOfWeek: "monday"
-      // Note: plugs data moved to countryPlugs.json
-  } */
-
-  // 2. FINANCE & BUDGET
-  finance       Json?    /* {
-      currency: { code: "THB", symbol: "฿", name: "Thai Baht" },
-      avgDailyCost: 45, // Numeric for filtering/sorting
-      cashCulture: { tipping: "10%", atmAvailability: "High" }
-      // Note: budget data moved to countryBudgets.json
-  } */
-
-  // 3. SAFETY & EMERGENCY
-  safety        Json?    /* {
-      overallScore: 4.5,
-      soloFemaleFriendly: 5, // 1-5 rating
-      crimeLevel: "Low",
-      scams: [{ type: "Tuk-Tuk", tip: "..." }]
-  } */
-
-  emergency     Json?    // { police: "191", touristPolice: "1155" }
-
-  // 4. HEALTH & MEDICAL
-  health        Json?    /* {
-      tapWaterSafe: false,
-      vaccines: ["Hepatitis A", "Typhoid"],
-      medicalStandard: "International (Cities)"
-  } */
-
-  // 5. SEASONS LOGIC (Improved)
-  seasons       Json?    /* {
-      peakMonths: [11, 12, 1, 2], // Nov to Feb
-      shoulderMonths: [3, 4, 10],
-      note: "Avoid monsoon in September"
-  } */
-
-  // 6. LANGUAGES & PHRASES
-  // Structure: { official: string[], spoken: string[], nativeName: string, codes: string[] }
+  flags         Json?    // { png, svg, alt }
+  coatOfArms    Json?    // { png, svg }
+  demonyms      Json?    // { eng: { f, m }, ... }
+  coords        Json?    // { type: "Point", coordinates: [lng, lat] }
+  
+  // Domain Data (JSON)
+  // 1. LOGISTICS: { idd: { root, suffixes }, timezones: [], car: { side, signs }, startOfWeek }
+  logistics     Json?    
+  
+  // 2. FINANCE: { currency: { code, name, symbol }, gini: { "2016": 39 } }
+  finance       Json?    
+  
+  // 3. LANGUAGES: { ara: "Arabic", heb: "Hebrew" } - Map of code -> name
   languages     Json?
-  // Note: commonPhrases data moved to common_phrases.json
 
-  // Note: visaInfo data moved to visas.json
-
+  // 4. Other JSON fields from previous schema (kept for safety if they exist in other records)
+  safety        Json?
+  emergency     Json?
+  health        Json?
+  seasons       Json?
+  tld           Json?
+  idd           Json?
+  translations  Json?
+  gini          Json?
 
   // Geography & Relations
-  region        String?
-  subRegion     String?
-  capitalName   String?
+  capitalName   String?  // "Jerusalem"
   capitalId     String?  @db.ObjectId
   capitalCity   City?    @relation("CountryCapital", fields: [capitalId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   
@@ -133,7 +103,7 @@ model State {
  */
 model City {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  cityId       String   @unique // "bangkok"
+  cityId       String   @unique // "bangkok-thailand"
   externalId   Int?     @unique // ID from countries+states+cities.json
   name         String
 
@@ -141,6 +111,12 @@ model City {
   country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
   isCapital Boolean @default(false)
+
+  // NEW FIELDS
+  googlePlaceId String? @unique
+  isVerified    Boolean @default(false)
+  slug          String  @unique // format: country-city-name
+  priority      Int     @default(0)
 
   // Geo
   coords      Json // GeoJSON Point
@@ -158,12 +134,8 @@ model City {
   state         State?   @relation(fields: [stateId], references: [id])
   district      String?
   population    Int?
-  bestSeason    String?
-  idealDuration String?
-  safety        String?
+  
   neighborhoods String[] @default([])
-  budget        Json?
-  gettingAround Json?
 
   places Place[]
 

@@ -22,6 +22,7 @@ interface UnsplashResponse {
 
 export async function GET(request: NextRequest) {
   try {
+    const isDev = process.env.NODE_ENV !== 'production';
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
     const orientation = searchParams.get('orientation') || 'landscape';
@@ -36,6 +37,9 @@ export async function GET(request: NextRequest) {
 
     const ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
     
+    if (isDev) console.log('Unsplash API key check:', ACCESS_KEY ? 'Key found' : 'No key found');
+    if (isDev) console.log('Query received:', query);
+    
     if (!ACCESS_KEY) {
       console.error('Unsplash API key not configured');
       return NextResponse.json(
@@ -46,29 +50,34 @@ export async function GET(request: NextRequest) {
 
     // Build search query with category for better results
     const searchQuery = category ? `${query} ${category}` : query;
-
-    const response = await fetch(
-      `https://api.unsplash.com/search/photos?` +
+    const unsplashUrl = `https://api.unsplash.com/search/photos?` +
       new URLSearchParams({
         query: searchQuery,
         per_page: '1',
         orientation,
         content_filter: 'high',
         order_by: 'relevant',
-      }),
-      {
-        headers: {
-          'Authorization': `Client-ID ${ACCESS_KEY}`,
-          'Accept-Version': 'v1',
-        },
-        next: { revalidate: 3600 } // Cache for 1 hour
-      }
-    );
+      });
+
+    if (isDev) console.log('Calling Unsplash API:', unsplashUrl);
+
+    const response = await fetch(unsplashUrl, {
+      headers: {
+        'Authorization': `Client-ID ${ACCESS_KEY}`,
+        'Accept-Version': 'v1',
+      },
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
+
+    if (isDev) console.log('Unsplash API response status:', response.status);
+    if (isDev) console.log('Unsplash API response headers:', Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
+      const errorText = await response.text();
       console.error('Unsplash API error:', response.status, response.statusText);
+      console.error('Unsplash API error body:', errorText);
       return NextResponse.json(
-        { error: 'Failed to fetch image' },
+        { error: `Unsplash API error: ${response.status} ${response.statusText}` },
         { status: 500 }
       );
     }
@@ -83,7 +92,7 @@ export async function GET(request: NextRequest) {
     }
 
     const photo = data.results[0];
-    console.log(`Found Unsplash image for "${searchQuery}": ${photo.description}`);
+    if (isDev) console.log(`Found Unsplash image for "${searchQuery}": ${photo.description}`);
 
     return NextResponse.json({
       imageUrl: photo.urls.regular,

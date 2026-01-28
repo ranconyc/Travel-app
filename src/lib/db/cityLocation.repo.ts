@@ -4,9 +4,10 @@ import { Prisma } from "@prisma/client";
 
 import { slugify } from "@/lib/utils/slugify";
 
+// Generate a base slug: "usa-new-york"
 export function makeCityId(cityName: string, countryCode2: string): string {
   const slug = slugify(cityName);
-  return `${slug}-${countryCode2.toLowerCase()}`;
+  return `${countryCode2.toLowerCase()}-${slug}`;
 }
 
 // get city by id
@@ -61,7 +62,6 @@ export async function findNearbyCities(
           _id: 1,
           cityId: 1,
           name: 1,
-          countryCode: 1,
           imageHeroUrl: 1,
           radiusKm: 1,
           distanceKm: { $divide: ["$dist_m", 1000] },
@@ -70,16 +70,29 @@ export async function findNearbyCities(
     ],
   });
 
-  return (res as unknown as any[]).map(
-    (row): NearestCityResult & { id: string } => ({
-      id: row._id?.["$oid"] || row._id,
-      cityId: row.cityId ?? null,
-      name: row.name ?? null,
-      countryCode: row.countryCode ?? null,
-      imageHeroUrl: row.imageHeroUrl ?? null,
-      radiusKm: typeof row.radiusKm === "number" ? row.radiusKm : null,
-      distanceKm: typeof row.distanceKm === "number" ? row.distanceKm : null,
-    }),
+  const nearbyCities = res as unknown as any[];
+  const citiesWithCountry = await prisma.city.findMany({
+    where: { cityId: { in: nearbyCities.map((city) => city.cityId) } },
+    include: { country: true },
+  });
+
+  // Merge the data
+  return (nearbyCities as unknown as any[]).map(
+    (row): NearestCityResult & { id: string; country?: any } => {
+      const cityId = row._id?.["$oid"] || row._id;
+      const fullCity = citiesWithCountry.find((c) => c.id === cityId);
+
+      return {
+        id: cityId,
+        cityId: row.cityId ?? null,
+        name: row.name ?? null,
+        countryCode: fullCity?.country?.code || fullCity?.country?.cca3 || null,
+        imageHeroUrl: row.imageHeroUrl ?? null,
+        radiusKm: typeof row.radiusKm === "number" ? row.radiusKm : null,
+        distanceKm: typeof row.distanceKm === "number" ? row.distanceKm : null,
+        country: fullCity?.country || null,
+      };
+    },
   );
 }
 

@@ -3,6 +3,7 @@ import { apiLockService } from "@/services/api-lock.service";
 
 export async function GET(req: NextRequest) {
   try {
+    const isDev = process.env.NODE_ENV !== "production";
     const { searchParams } = new URL(req.url);
     const name = searchParams.get("q");
 
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
     // Check if we have a cached result (1 hour TTL)
     const cachedResult = apiLockService.getCachedResult(cacheKey);
     if (cachedResult) {
-      console.log(`🔒 Using cached result for query: ${name}`);
+      if (isDev) console.log(`🔒 Using cached result for query: ${name}`);
       return NextResponse.json(cachedResult);
     }
 

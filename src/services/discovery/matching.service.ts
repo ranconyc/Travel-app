@@ -1,5 +1,10 @@
-import { Place } from "@/domain/place/place.schema";
 import { UserPersona } from "@/domain/persona/persona.schema";
+
+export interface PlaceForMatching {
+  tags: string[];
+  priceLevel?: number | null;
+  vibeScores?: unknown;
+}
 
 export interface MatchScoreResult {
   score: number;
@@ -32,7 +37,7 @@ export interface UserPersonaForMatching {
  */
 export function calculateMatchScore(
   userPersona: UserPersonaForMatching,
-  place: Place
+  place: PlaceForMatching
 ): MatchScoreResult {
   const breakdown = {
     interests: 0,
@@ -94,13 +99,13 @@ export function calculateMatchScore(
   // 3. Vibe Score (25% weight)
   if (place.vibeScores && typeof place.vibeScores === 'object') {
     // Extract vibe score from the JSON field
-    const vibeData = place.vibeScores as any;
+    const vibeData = place.vibeScores as Record<string, unknown>;
     
     // Look for common vibe indicators
     let totalVibeScore = 0;
     let vibeCount = 0;
     
-    if (vibeData.overall) {
+    if (typeof vibeData.overall === "number") {
       totalVibeScore += vibeData.overall;
       vibeCount++;
     }
@@ -109,8 +114,9 @@ export function calculateMatchScore(
     if (vibeCount === 0) {
       const vibeKeys = ['quiet', 'crowded', 'touristy', 'local', 'modern', 'traditional'];
       for (const key of vibeKeys) {
-        if (typeof vibeData[key] === 'number') {
-          totalVibeScore += vibeData[key];
+        const value = vibeData[key];
+        if (typeof value === "number") {
+          totalVibeScore += value;
           vibeCount++;
         }
       }

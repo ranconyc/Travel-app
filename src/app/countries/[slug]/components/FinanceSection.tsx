@@ -7,24 +7,26 @@ import { FinanceData, CountryBudgetData } from "@/types/finance.types";
 
 export const FinanceSection = () => {
   const country = useCountry();
-  
+
   if (!country) return null;
 
   // Extract data from country store with proper typing
   const finance = (country.finance as FinanceData) || {};
   const currency = finance.currency;
-  
+
   if (!currency?.symbol) return null;
 
-  // Get country code from country data
-  const countryCode = country.code || "DEFAULT";
-  
+  // Get country code from country data (use cca3 for 3-letter code matching)
+  const countryCode = country.cca3 || "DEFAULT";
+
   // Get budget data from countryBudgets JSON with proper typing
-  const budgetData: CountryBudgetData = (countryBudgets as Record<string, CountryBudgetData>)[countryCode] || {
+  const budgetData: CountryBudgetData = (
+    countryBudgets as Record<string, CountryBudgetData>
+  )[countryCode] || {
     budget: 50,
     moderate: 100,
     luxury: 250,
-    tip: "Tipping customs vary. 10% is generally safe for restaurants if service charge not included."
+    tip: "Tipping customs vary. 10% is generally safe for restaurants if service charge not included.",
   };
 
   return (
@@ -62,7 +64,7 @@ export const FinanceSection = () => {
         <h3 className="text-sm font-bold text-secondary uppercase tracking-wider">
           Daily Budget (Per Person)
         </h3>
-        
+
         <div className="grid grid-cols-1 gap-3">
           {/* Budget Card */}
           <div className="bg-white dark:bg-surface-secondary/50 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">

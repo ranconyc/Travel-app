@@ -1,4 +1,6 @@
 import { getUserById } from "@/lib/db/user.repo";
+import { getUnifiedTravelHistory } from "@/domain/user/travel-history.service";
+import { auth } from "@/auth";
 import TravelSection from "./components/Travel/TravelSection";
 import { Users, Globe2, LanguagesIcon } from "lucide-react";
 import { StatItem } from "@/domain/common.schema";
@@ -8,6 +10,7 @@ import { InterestsSection } from "./components/sections/InterestsSection";
 import { personaService } from "@/domain/persona/persona.service";
 import { User } from "@/domain/user/user.schema";
 import Block from "@/components/atoms/Block";
+import { getInterestLabel } from "@/domain/interests/interests.service";
 
 export default async function ProfilePage({
   params,
@@ -22,6 +25,9 @@ export default async function ProfilePage({
   const friends = await getFriends(id);
   const fullProfileUser = profileUser as User;
   const persona = personaService.fromUser(fullProfileUser);
+
+  // Format interests on the server
+  const formattedInterests = persona.interests.map(getInterestLabel);
 
   // Calculate stats
   const visitedCountriesCodes = fullProfileUser.visitedCountries || [];
@@ -48,11 +54,25 @@ export default async function ProfilePage({
     },
   ];
 
+  // Fetch travel history on the server
+  // We pass the already fetched user to avoid a double DB call
+  const travelHistory = await getUnifiedTravelHistory(
+    id,
+    fullProfileUser as any,
+  );
+
+  // Check if viewing own profile
+  const session = await auth();
+  const isMyProfile = session?.user?.id === id;
+
   return (
     <Block className="max-w-2xl mx-auto px-lg flex flex-col gap-xxl mt-xl">
       <Stats stats={stats} />
-      <TravelSection />
-      <InterestsSection interests={persona.interests} />
+      <TravelSection travelHistory={travelHistory} isMyProfile={isMyProfile} />
+      <InterestsSection
+        interests={formattedInterests}
+        isMyProfile={isMyProfile}
+      />
     </Block>
   );
 }

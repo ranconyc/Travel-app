@@ -33,6 +33,7 @@ class ServerImageService {
    */
   async getImage(options: ServerImageOptions): Promise<ServerImageResult> {
     const { query, orientation = 'landscape', category = 'travel', fallback = true } = options;
+    const isDev = process.env.NODE_ENV !== 'production';
 
     try {
       // Try Unsplash first
@@ -52,7 +53,7 @@ class ServerImageService {
       if (unsplashResponse.ok) {
         const data = await unsplashResponse.json();
         if (data.imageUrl) {
-          console.log(`✅ Found image via Unsplash: "${query}"`);
+          if (isDev) console.log(`✅ Found image via Unsplash: "${query}"`);
           return {
             ...data,
             source: 'unsplash'
@@ -62,7 +63,7 @@ class ServerImageService {
 
       // Fallback to Pexels if enabled
       if (fallback) {
-        console.log(`🔄 Trying Pexels fallback for: "${query}"`);
+        if (isDev) console.log(`🔄 Trying Pexels fallback for: "${query}"`);
         const pexelsResponse = await fetch(
           `${this.baseUrl}/api/images/pexels?` +
           new URLSearchParams({
@@ -78,7 +79,7 @@ class ServerImageService {
         if (pexelsResponse.ok) {
           const data = await pexelsResponse.json();
           if (data.imageUrl) {
-            console.log(`✅ Found image via Pexels fallback: "${query}"`);
+            if (isDev) console.log(`✅ Found image via Pexels fallback: "${query}"`);
             return {
               ...data,
               source: 'pexels'
@@ -87,7 +88,7 @@ class ServerImageService {
         }
       }
 
-      console.log(`❌ No image found for: "${query}"`);
+      if (isDev) console.log(`❌ No image found for: "${query}"`);
       return {
         imageUrl: null,
         error: 'No images found'

@@ -31,6 +31,7 @@ interface PexelsResponse {
 
 export async function GET(request: NextRequest) {
   try {
+    const isDev = process.env.NODE_ENV !== 'production';
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
     const orientation = searchParams.get('orientation') || 'landscape';
@@ -86,7 +87,7 @@ export async function GET(request: NextRequest) {
     }
 
     const photo = data.photos[0];
-    console.log(`Found Pexels image for "${query}": ${photo.alt}`);
+    if (isDev) console.log(`Found Pexels image for "${query}": ${photo.alt}`);
 
     return NextResponse.json({
       imageUrl: photo.src.large,

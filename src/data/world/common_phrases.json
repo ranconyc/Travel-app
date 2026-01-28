@@ -1,6 +1,6 @@
 {
   "commonPhrases": {
-    "en": [
+    "eng": [
       {
         "label": "Hello",
         "local": "Hello",
@@ -32,7 +32,7 @@
         "category": "Dining"
       }
     ],
-    "es": [
+    "spa": [
       {
         "label": "Hello",
         "local": "Hola",
@@ -64,7 +64,7 @@
         "category": "Dining"
       }
     ],
-    "fr": [
+    "fra": [
       {
         "label": "Hello",
         "local": "Bonjour",
@@ -96,7 +96,7 @@
         "category": "Dining"
       }
     ],
-    "th": [
+    "tha": [
       {
         "label": "Hello",
         "local": "สวัสดี",
@@ -128,7 +128,7 @@
         "category": "Dining"
       }
     ],
-    "ja": [
+    "jpn": [
       {
         "label": "Hello",
         "local": "こんにちは",
@@ -160,7 +160,7 @@
         "category": "Dining"
       }
     ],
-    "he": [
+    "heb": [
       {
         "label": "Hello",
         "local": "שלום",
@@ -192,7 +192,7 @@
         "category": "Dining"
       }
     ],
-    "de": [
+    "deu": [
       {
         "label": "Hello",
         "local": "Hallo",
@@ -224,7 +224,7 @@
         "category": "Dining"
       }
     ],
-    "it": [
+    "ita": [
       {
         "label": "Hello",
         "local": "Ciao",
@@ -256,7 +256,7 @@
         "category": "Dining"
       }
     ],
-    "pt": [
+    "por": [
       {
         "label": "Hello",
         "local": "Olá",
@@ -288,7 +288,7 @@
         "category": "Dining"
       }
     ],
-    "ru": [
+    "rus": [
       {
         "label": "Hello",
         "local": "Здравствуйте",
@@ -320,7 +320,7 @@
         "category": "Dining"
       }
     ],
-    "ar": [
+    "ara": [
       {
         "label": "Hello",
         "local": "مرحبا",
@@ -352,7 +352,7 @@
         "category": "Dining"
       }
     ],
-    "hi": [
+    "hin": [
       {
         "label": "Hello",
         "local": "नमस्ते",
@@ -384,7 +384,7 @@
         "category": "Dining"
       }
     ],
-    "zh": [
+    "zho": [
       {
         "label": "Hello",
         "local": "你好",
@@ -416,7 +416,7 @@
         "category": "Dining"
       }
     ],
-    "ko": [
+    "kor": [
       {
         "label": "Hello",
         "local": "안녕하세요",
@@ -448,7 +448,7 @@
         "category": "Dining"
       }
     ],
-    "nl": [
+    "nld": [
       {
         "label": "Hello",
         "local": "Hallo",
@@ -480,7 +480,7 @@
         "category": "Dining"
       }
     ],
-    "tr": [
+    "tur": [
       {
         "label": "Hello",
         "local": "Merhaba",
@@ -512,7 +512,7 @@
         "category": "Dining"
       }
     ],
-    "el": [
+    "ell": [
       {
         "label": "Hello",
         "local": "Γεια σας",

@@ -18,12 +18,8 @@ export const CitySchema = z.object({
   state: z.string().optional().nullable(),
   district: z.string().optional().nullable(),
   population: z.number().int().optional().nullable(),
-  bestSeason: z.string().optional().nullable(),
-  idealDuration: z.string().optional().nullable(),
-  safety: z.string().optional().nullable(),
+
   neighborhoods: z.array(z.string()).default([]),
-  budget: z.any().optional().nullable(),
-  gettingAround: z.any().optional().nullable(),
   media: z.any().array().optional().default([]), // For UI displays
   country: z.any().optional().nullable(), // For inclusion
   places: z.any().array().optional().default([]), // For inclusion

@@ -26,7 +26,7 @@ export async function handleSearchDestinations(
       name: true,
       cca3: true,
       imageHeroUrl: true,
-      flag: true,
+      flags: true,
       region: true,
     },
   });
@@ -42,7 +42,7 @@ export async function handleSearchDestinations(
         select: {
           name: true,
           cca3: true,
-          flag: true,
+          flags: true,
         },
       },
     },
@@ -56,7 +56,7 @@ export async function handleSearchDestinations(
     slug: c.cityId ?? c.name.toLowerCase().replace(/\s+/g, "-"),
     image: c.imageHeroUrl,
     subText: c.country?.name,
-    flag: c.country?.flag,
+    flag: (c.country?.flags as any)?.svg || (c.country?.flags as any)?.png,
   }));
 
   const countryResults: SearchResult[] = countries.map((c) => ({
@@ -66,7 +66,7 @@ export async function handleSearchDestinations(
     slug: c.cca3,
     image: c.imageHeroUrl,
     subText: c.region || "Country",
-    flag: c.flag,
+    flag: (c.flags as any)?.svg || (c.flags as any)?.png,
   }));
 
   return [...countryResults, ...cityResults];
@@ -171,6 +171,7 @@ export async function handleSaveExternalDestination(
         name: cityName,
         countryRefId: country!.id,
         coords: { type: "Point", coordinates: [lon, lat] },
+        slug: generatedCityId + "-" + Math.floor(Math.random() * 1000),
         autoCreated: true,
       },
     });

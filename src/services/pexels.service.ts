@@ -58,6 +58,8 @@ class PexelsService {
       return null;
     }
 
+    const isDev = process.env.NODE_ENV !== 'production';
+
     try {
       const { query, orientation = 'landscape', per_page = 1 } = options;
       
@@ -83,12 +85,12 @@ class PexelsService {
       const data: PexelsResponse = await response.json();
       
       if (data.photos.length === 0) {
-        console.log(`📷 No Pexels images found for query: "${query}"`);
+        if (isDev) console.log(`📷 No Pexels images found for query: "${query}"`);
         return null;
       }
 
       const photo = data.photos[0];
-      console.log(`📷 Found Pexels image for "${query}": ${photo.alt}`);
+      if (isDev) console.log(`📷 Found Pexels image for "${query}": ${photo.alt}`);
       
       // Use large size for backgrounds
       return photo.src.large;

@@ -365,7 +365,48 @@ export async function ensureCountryAndCityFromLocation(
       throw new Error("City name must be at least 2 characters long");
     }
 
-    const cityId = makeCityId(cityName, countryCode2);
+    // --- ID GENERATION WITH COLLISION HANDLING ---
+    // 1. Base: "usa-new-york"
+    const countrySlug = country.cca3.toLowerCase();
+    let cityId = makeCityId(cityName, countrySlug);
+
+    const { isCityExists } = await import("@/lib/db/cityLocation.repo");
+    let exists = await isCityExists(cityId);
+
+    // 2. Collision Strategy
+    if (exists) {
+      // Strategy A: Append State/Province Code "usa-springfield-il"
+      if (meta.stateCode) {
+        const stateSuffix = meta.stateCode.toLowerCase();
+        const candidateId = `${cityId}-${stateSuffix}`;
+        if (!(await isCityExists(candidateId))) {
+          cityId = candidateId;
+          exists = false;
+        }
+      } else if (meta.state) {
+        // Strategy B: Append State Name "usa-springfield-illinois"
+        const { slugify } = await import("@/lib/utils/slugify");
+        const stateSlug = slugify(meta.state);
+        const candidateId = `${cityId}-${stateSlug}`;
+        if (!(await isCityExists(candidateId))) {
+          cityId = candidateId;
+          exists = false;
+        }
+      }
+
+      // Strategy C: Append Numeric Counter "usa-springfield-1"
+      if (exists) {
+        let counter = 1;
+        while (exists) {
+          const candidateId = `${cityId}-${counter}`;
+          if (!(await isCityExists(candidateId))) {
+            cityId = candidateId;
+            exists = false;
+          }
+          counter++;
+        }
+      }
+    }
     const radiusKm = estimateRadiusKmFromBBox(
       meta.boundingBox as [number, number, number, number] | undefined,
     );

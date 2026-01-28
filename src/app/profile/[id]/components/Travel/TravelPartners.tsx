@@ -7,7 +7,7 @@ import Typography from "@/components/atoms/Typography";
 
 export default function TravelPartners({ partner }: { partner: User | null }) {
   return (
-    <Block className="flex flex-col gap-md">
+    <div className="flex flex-col gap-md">
       <SectionHeader title="Travel Partners" />
 
       {!partner ? (
@@ -22,16 +22,16 @@ export default function TravelPartners({ partner }: { partner: User | null }) {
             alt={partner.name || ""}
             size={40}
           />
-          <Block>
+          <div>
             <Typography variant="p" className="text-sm font-bold">
               {partner.name}
             </Typography>
             <Typography variant="p" className="text-xs text-secondary">
               Frequent travel partner
             </Typography>
-          </Block>
+          </div>
         </Block>
       )}
-    </Block>
+    </div>
   );
 }

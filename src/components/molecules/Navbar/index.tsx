@@ -8,7 +8,7 @@ import {
   TowerControl,
 } from "lucide-react";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
-import { NotificationBadge } from "@/components/molecules/Navbar/NotificationBadge";
+import { default as NotificationBadge } from "@/components/molecules/NotificationBadge";
 import { Avatar } from "@/components/molecules/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
 import NotificationBell from "@/components/organisms/NotificationBell";

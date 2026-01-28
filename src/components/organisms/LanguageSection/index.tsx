@@ -30,14 +30,11 @@ export function SpokenLanguages({
 }
 
 type CommonPhrasesProps = {
-  languageCode: string;
-  data: any;
+  phrases: CommonPhrase[];
 };
 
-const CommonPhrases = ({ languageCode, data }: CommonPhrasesProps) => {
-  const phrases = commonPhrasesService.getPhrasesForLanguage(languageCode);
-
-  if (!phrases.length) {
+const CommonPhrases = ({ phrases }: CommonPhrasesProps) => {
+  if (!phrases || phrases.length === 0) {
     return (
       <div>
         <h2 className={subtitle}>Common Phrases</h2>
@@ -58,37 +55,31 @@ const CommonPhrases = ({ languageCode, data }: CommonPhrasesProps) => {
     <div>
       <h2 className={subtitle}>Common Phrases</h2>
       <div className="grid gap-2">
-        {Array.isArray(data?.commonPhrases)
-          ? data.commonPhrases.slice(0, 5).map((phrase: CommonPhrase, idx: number) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-3 bg-main/50 rounded-xl group cursor-pointer hover:bg-main transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-brand/10 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-brand">
-                      {phrase?.label?.charAt(0) || '?'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-ui-sm text-txt-main">
-                      {phrase?.label || 'Unknown phrase'}
-                    </p>
-                    <p className="text-xs text-secondary">
-                      {phrase?.local || phrase?.romanized || ''}
-                    </p>
-                  </div>
-                </div>
-                <div className="w-4 h-4 text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
-                  →
-                </div>
+        {phrases.slice(0, 5).map((phrase: CommonPhrase, idx: number) => (
+          <div
+            key={idx}
+            className="flex items-center justify-between p-3 bg-main/50 rounded-xl group cursor-pointer hover:bg-main transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-brand/10 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-brand">
+                  {phrase?.label?.charAt(0) || "?"}
+                </span>
               </div>
-            ))
-          : (
-            <div className="text-sm text-secondary p-3">
-              No phrases available
+              <div>
+                <p className="text-ui-sm text-txt-main">
+                  {phrase?.label || "Unknown phrase"}
+                </p>
+                <p className="text-xs text-secondary">
+                  {phrase?.local || phrase?.romanized || ""}
+                </p>
+              </div>
             </div>
-          )}
+            <div className="w-4 h-4 text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
+              →
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -109,6 +100,7 @@ const EnglishProficiency = ({
 
 type LanguageProps = {
   usefulPhrases?: { en: string; local: string }[];
+  commonPhrases?: CommonPhrase[];
   englishProficiencyNote?: string;
   languageNative?: string;
   languagesEnglish?: string;
@@ -117,12 +109,12 @@ type LanguageProps = {
 
 export default function LanguageSection({
   usefulPhrases,
+  commonPhrases,
   englishProficiencyNote,
   languagesEnglish,
   languageNative,
   primaryLanguageCode,
 }: LanguageProps) {
-  
   return (
     <Block>
       <Title icon={<Languages size={16} />}>Language & Communication</Title>
@@ -132,12 +124,12 @@ export default function LanguageSection({
           languageNative={languageNative}
         />
       )}
-      
+
       {/* New Common Phrases Section */}
-      {primaryLanguageCode && (
-        <CommonPhrases languageCode={primaryLanguageCode} data={usefulPhrases} />
+      {commonPhrases && commonPhrases.length > 0 && (
+        <CommonPhrases phrases={commonPhrases} />
       )}
-      
+
       {/* Legacy Useful Phrases (fallback) */}
       {usefulPhrases && !primaryLanguageCode && (
         <div>
@@ -152,7 +144,7 @@ export default function LanguageSection({
           </div>
         </div>
       )}
-      
+
       {englishProficiencyNote && (
         <EnglishProficiency englishProficiencyNote={englishProficiencyNote} />
       )}

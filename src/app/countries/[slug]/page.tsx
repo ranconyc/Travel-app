@@ -22,7 +22,8 @@ import FloatingCardList from "@/components/molecules/FloatingCardList";
 import VisaRequirement from "@/components/molecules/VisaRequirement";
 import { type VisaRequirement as VisaRequirementType } from "@/types/visa.types";
 import { visaService } from "@/services/visa.service";
-import { countryLanguageMappingService } from "@/services/country-language-mapping.service";
+
+import commonPhrasesData from "@/data/world/common_phrases.json";
 
 // Business Logic: Gini Insights move to a helper or could be in the Mapper/Service
 export const getGiniInsight = (giniValue: number): string => {
@@ -46,12 +47,11 @@ export default async function CountryPage({
   // Get visa requirements for this country using the visa service
   const visaRequirements = visaService.getVisaRequirement(country.code);
 
-  // Get primary language for common phrases using the country mapping service
-  // This maps ISO3 country codes (like "ISR") to language codes (like "he")
-  const primaryLanguageCode = countryLanguageMappingService.getPrimaryLanguageForCountry(country.code) ||
-                              // Fallback to existing language detection logic
-                              country.languages?.codes?.[0] || 
-                              country.languages?.official?.[0]?.toLowerCase();
+  // Get primary language for common phrases using the country data
+  // The DB stores languages as { "heb": "Hebrew" }, so we take the first key ("heb")
+  const primaryLanguageCode = Object.keys(country.languages || {})[0];
+
+  console.log("primaryLanguageCode", primaryLanguageCode);
 
   // Geography & Logistics Logic
   // Cast to any for Alpha speed - type definition mismatch fix scheduled for Beta
@@ -143,14 +143,16 @@ export default async function CountryPage({
             <FloatingCardList
               title="Popular Cities"
               description={`Discover the most visited destinations in ${country.name}`}
-              items={country.cities?.map((city: any) => ({
-                id: city.cityId,
-                title: city.name,
-                subtitle: city.isCapital ? "Capital" : undefined,
-                image: city.media?.[0]?.url || city.imageHeroUrl,
-                href: `/cities/${city.cityId}`,
-                badge: city.isCapital ? "Capital" : undefined
-              })) || []}
+              items={
+                country.cities?.map((city: any) => ({
+                  id: city.cityId,
+                  title: city.name,
+                  subtitle: city.isCapital ? "Capital" : undefined,
+                  image: city.media?.[0]?.url || city.imageHeroUrl,
+                  href: `/cities/${city.cityId}`,
+                  badge: city.isCapital ? "Capital" : undefined,
+                })) || []
+              }
               showViewAll={(country.cities?.length || 0) > 5}
               viewAllHref="/countries"
             />
@@ -185,18 +187,24 @@ export default async function CountryPage({
           <FinanceSection />
 
           {country.languages && (
-            <LanguageSection 
-              {...(country.languages as any)} 
+            <LanguageSection
+              {...(country.languages as any)}
               primaryLanguageCode={primaryLanguageCode}
+              commonPhrases={
+                primaryLanguageCode &&
+                (commonPhrasesData.commonPhrases as any)[primaryLanguageCode]
+                  ? (commonPhrasesData.commonPhrases as any)[
+                      primaryLanguageCode
+                    ]
+                  : []
+              }
             />
           )}
 
           <LogisticsSection />
 
           {/* Visa Requirements */}
-          {visaRequirements && (
-            <VisaRequirement visa={visaRequirements} />
-          )}
+          {visaRequirements && <VisaRequirement visa={visaRequirements} />}
 
           <CultureSection />
           <HealthSection />

@@ -4,16 +4,43 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import {
   searchCities,
   searchCountries,
   searchActivities,
 } from "@/lib/db/search.repo";
 import { SearchResponse, SearchResult } from "@/types/search";
-import { filterAndSortPlaces } from "@/services/discovery/enhanced-matching.service";
+import {
+  filterAndSortPlaces,
+  type EnhancedMatchResult,
+} from "@/services/discovery/enhanced-matching.service";
 import { prisma } from "@/lib/db/prisma";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
+
+const GeoPointSchema = z.object({
+  type: z.string(),
+  coordinates: z.tuple([z.number(), z.number()]),
+});
+
+type GeoPoint = z.infer<typeof GeoPointSchema>;
+
+const PersonaForMatchingSchema = z
+  .object({
+    interests: z.array(z.string()).default([]),
+    budget: z.string().nullable().optional(),
+    travelStyle: z.array(z.string()).default([]),
+  })
+  .passthrough();
+
+function toLatLng(point: GeoPoint | null): { lat: number; lng: number } | null {
+  if (!point) return null;
+  return {
+    lng: point.coordinates[0],
+    lat: point.coordinates[1],
+  };
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -40,8 +67,26 @@ export async function GET(req: NextRequest) {
 
     // If user is logged in, enhance place search with match scores
     let enhancedActivities = activities;
-    if (user && (user as any).persona) {
+    const personaRaw = user?.profile?.persona;
+    if (user && personaRaw) {
       try {
+        const parsedPersona = PersonaForMatchingSchema.safeParse(personaRaw);
+        if (!parsedPersona.success) {
+          throw new Error("Invalid persona payload");
+        }
+
+        const userPersona = {
+          interests: parsedPersona.data.interests,
+          budget: parsedPersona.data.budget ?? undefined,
+          travelStyle: parsedPersona.data.travelStyle,
+        };
+
+        const userLocationPoint = GeoPointSchema.safeParse(user.currentLocation).success
+          ? (GeoPointSchema.parse(user.currentLocation) as GeoPoint)
+          : null;
+
+        const userLatLng = toLatLng(userLocationPoint);
+
         // Get all places that match the search
         const allPlaces = await prisma.place.findMany({
           where: {
@@ -52,43 +97,58 @@ export async function GET(req: NextRequest) {
               { address: { contains: query, mode: 'insensitive' } },
             ]
           },
-          take: 50 // Get more places for better matching
+          select: {
+            id: true,
+            name: true,
+            address: true,
+            rating: true,
+            priceLevel: true,
+            tags: true,
+            coords: true,
+            vibeScores: true,
+          },
+          take: 50, // Get more places for better matching
         });
 
-        // Filter and sort based on user preferences
-        const userPersona = {
-          interests: (user as any).persona.interests || [],
-          budget: (user as any).persona.budget || 'moderate',
-          travelStyle: (user as any).persona.travelStyle || []
-        };
-
-        // Use user's current location or default to first place's location
-        const userLocation = (user as any).currentLocation || 
-          (allPlaces.length > 0 ? allPlaces[0].coords : null);
-
-        const matchedPlaces = filterAndSortPlaces(
-          allPlaces as any[],
-          userPersona,
-          { limit: 50 }
-        );
-
-        // Convert enhanced places back to SearchResult format
-        enhancedActivities = matchedPlaces.map((item, index) => ({
-          id: `place-${item.place.id}`,
-          label: item.place.name,
-          subtitle: item.place.address || '',
-          type: 'activity' as const,
-          entityId: item.place.id || '',
-          meta: {
-            activityType: 'place',
-            matchScore: index < 5 ? 100 - index * 10 : undefined, // Top 5 get high scores
-            rating: item.place.rating,
-            priceLevel: item.place.priceLevel,
-            tags: item.place.tags,
-            distance: userLocation && item.place.coords ? 
-              getDistanceMetadata(userLocation, item.place.coords)?.distanceStr : undefined,
-          },
+        const normalizedPlaces = allPlaces.map((p) => ({
+          ...p,
+          tags: Array.isArray(p.tags) ? p.tags : [],
         }));
+
+        const matchedPlaces = filterAndSortPlaces(normalizedPlaces, userPersona, {
+          limit: 50,
+        });
+
+        enhancedActivities = matchedPlaces.map((item: {
+          place: (typeof normalizedPlaces)[number];
+          matchResult: EnhancedMatchResult;
+        }) => {
+          const { place, matchResult } = item;
+          const placePoint = GeoPointSchema.safeParse(place.coords).success
+            ? (GeoPointSchema.parse(place.coords) as GeoPoint)
+            : null;
+
+          const placeLatLng = toLatLng(placePoint);
+          const distanceMeta = userLatLng && placeLatLng
+            ? getDistanceMetadata(userLatLng, placeLatLng)
+            : null;
+
+          return {
+            id: `place-${place.id}`,
+            label: place.name,
+            subtitle: place.address || "",
+            type: "activity" as const,
+            entityId: place.id,
+            meta: {
+              activityType: "place",
+              matchScore: matchResult.finalScore,
+              rating: place.rating,
+              priceLevel: place.priceLevel,
+              tags: place.tags,
+              distance: distanceMeta?.distanceStr,
+            },
+          };
+        });
       } catch (error) {
         console.error("Error enhancing search with match scores:", error);
         // Fall back to original activities if enhancement fails

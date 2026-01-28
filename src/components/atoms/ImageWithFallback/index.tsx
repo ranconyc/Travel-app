@@ -51,9 +51,14 @@ export default function ImageWithFallback({
     );
   }
 
+  // If no valid src and no fallback, don't render anything
+  if (!src && !fallbackSrc) {
+    return null;
+  }
+
   return (
     <Image
-      src={error && fallbackSrc ? fallbackSrc : src || ""}
+      src={error && fallbackSrc ? fallbackSrc : src || fallbackSrc || ""}
       alt={alt}
       fill={fill}
       className={className}

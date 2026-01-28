@@ -20,8 +20,9 @@ class ImageProviderService {
    */
   async getImage(options: ImageOptions): Promise<string | null> {
     const { query, orientation = 'landscape', category, entityType = 'place' } = options;
+    const isDev = process.env.NODE_ENV !== 'production';
 
-    console.log(`🔍 Searching for image: "${query}" (${entityType})`);
+    if (isDev) console.log(`🔍 Searching for image: "${query}" (${entityType})`);
 
     // Try Unsplash first (primary provider)
     try {
@@ -32,7 +33,7 @@ class ImageProviderService {
       });
 
       if (unsplashImage) {
-        console.log(`✅ Found image via Unsplash: "${query}"`);
+        if (isDev) console.log(`✅ Found image via Unsplash: "${query}"`);
         return unsplashImage;
       }
     } catch (error) {
@@ -41,21 +42,21 @@ class ImageProviderService {
 
     // Fallback to Pexels
     try {
-      console.log(`🔄 Trying Pexels fallback for: "${query}"`);
+      if (isDev) console.log(`🔄 Trying Pexels fallback for: "${query}"`);
       const pexelsImage = await pexelsService.getPexelsImage({
         query,
         orientation: orientation === 'square' ? 'square' : orientation,
       });
 
       if (pexelsImage) {
-        console.log(`✅ Found image via Pexels fallback: "${query}"`);
+        if (isDev) console.log(`✅ Found image via Pexels fallback: "${query}"`);
         return pexelsImage;
       }
     } catch (error) {
       console.warn(`⚠️ Pexels fallback failed for "${query}":`, error);
     }
 
-    console.log(`❌ No image found for: "${query}"`);
+    if (isDev) console.log(`❌ No image found for: "${query}"`);
     return null;
   }
 
@@ -64,6 +65,7 @@ class ImageProviderService {
    */
   async getImages(options: ImageOptions & { count?: number }): Promise<string[]> {
     const { query, count = 5, orientation = 'landscape', category } = options;
+    const isDev = process.env.NODE_ENV !== 'production';
 
     // Try Unsplash first
     try {
@@ -75,7 +77,7 @@ class ImageProviderService {
       });
 
       if (unsplashImages.length > 0) {
-        console.log(`✅ Found ${unsplashImages.length} images via Unsplash: "${query}"`);
+        if (isDev) console.log(`✅ Found ${unsplashImages.length} images via Unsplash: "${query}"`);
         return unsplashImages;
       }
     } catch (error) {
@@ -84,7 +86,7 @@ class ImageProviderService {
 
     // Fallback to Pexels
     try {
-      console.log(`🔄 Trying Pexels batch fallback for: "${query}"`);
+      if (isDev) console.log(`🔄 Trying Pexels batch fallback for: "${query}"`);
       const pexelsImages = await pexelsService.getPexelsImages({
         query,
         per_page: count,
@@ -92,14 +94,14 @@ class ImageProviderService {
       });
 
       if (pexelsImages.length > 0) {
-        console.log(`✅ Found ${pexelsImages.length} images via Pexels fallback: "${query}"`);
+        if (isDev) console.log(`✅ Found ${pexelsImages.length} images via Pexels fallback: "${query}"`);
         return pexelsImages;
       }
     } catch (error) {
       console.warn(`⚠️ Pexels batch fallback failed for "${query}":`, error);
     }
 
-    console.log(`❌ No images found for: "${query}"`);
+    if (isDev) console.log(`❌ No images found for: "${query}"`);
     return [];
   }
 
@@ -151,8 +153,9 @@ class ImageProviderService {
     query: string
   ): Promise<boolean> {
     try {
-      console.log(`💾 Saving image for ${entityType} ${entityId}:`, imageUrl);
-      console.log(`📝 Query used: "${query}"`);
+      const isDev = process.env.NODE_ENV !== 'production';
+      if (isDev) console.log(`💾 Saving image for ${entityType} ${entityId}:`, imageUrl);
+      if (isDev) console.log(`📝 Query used: "${query}"`);
       
       // TODO: Implement actual database save based on your schema
       // if (entityType === 'city') {

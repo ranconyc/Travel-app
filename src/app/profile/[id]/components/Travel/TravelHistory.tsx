@@ -1,90 +1,27 @@
 "use client";
 
 import "@/components/molecules/CityStamp/styles.css";
-import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import Block from "@/components/atoms/Block";
-import Loader from "@/components/atoms/Loader";
 import Badge from "@/components/atoms/Badge";
-
-export type TravelHistoryItem = {
-  id: string;
-  type: "city" | "country";
-  cityId: string | null;
-  cityName: string;
-  countryName: string;
-  countryCode: string;
-  date: Date | null;
-  isCurrent: boolean;
-};
-
 import SectionHeader from "@/components/molecules/SectionHeader";
 import HorizontalList from "@/components/molecules/HorizontalList";
 import PassportStamp from "@/components/molecules/PassportStamp";
 import Link from "next/link";
-import { useProfileUser, useIsMyProfile } from "../../store/useProfileStore";
 import AddSection from "@/components/molecules/AddSection";
+import { TravelHistoryItem } from "@/domain/user/travel-history.service";
 
 export default function TravelHistory({
-  travelHistory,
+  travelHistory = [],
+  isMyProfile,
 }: {
   travelHistory?: TravelHistoryItem[];
+  isMyProfile: boolean;
 }) {
-  const profileUser = useProfileUser();
-  const isMyProfile = useIsMyProfile();
-  const userId = profileUser?.id;
-  const [visits, setVisits] = useState<TravelHistoryItem[]>(
-    travelHistory || [],
-  );
-  const [loading, setLoading] = useState(!travelHistory);
-
-  useEffect(() => {
-    if (travelHistory || !userId) return;
-    async function fetchHistory() {
-      try {
-        const res = await fetch(`/api/users/${userId}/travel-history`);
-        if (res.ok) {
-          const data = await res.json();
-          const rawVisits: TravelHistoryItem[] = data.visits || [];
-
-          // Filter out duplicates: show a city only once per year
-          const seen = new Set<string>();
-          const filtered = rawVisits.filter((visit) => {
-            const year = visit.date
-              ? new Date(visit.date).getFullYear()
-              : "no-date";
-            const cityKey = visit.cityId || visit.cityName;
-            const key = `${cityKey}-${year}`;
-
-            if (seen.has(key)) {
-              return false;
-            }
-            seen.add(key);
-            return true;
-          });
-
-          setVisits(filtered);
-        }
-      } catch (error) {
-        console.error("Failed to fetch travel history:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchHistory();
-  }, [userId, travelHistory]);
-
-  if (loading) {
-    return (
-      <Block className="flex items-center justify-center py-8">
-        <Loader />
-      </Block>
-    );
-  }
+  const visits = travelHistory;
 
   return (
-    <Block className="flex flex-col gap-md">
+    <div className="flex flex-col gap-md">
       <SectionHeader
         title="Travel History"
         linkText={`${visits.length} places`}
@@ -100,9 +37,9 @@ export default function TravelHistory({
             }}
           />
         ) : visits.length === 0 && !isMyProfile ? (
-          <Block className="w-full text-center py-4 opacity-40">
+          <div className="w-full text-center py-4 opacity-40">
             No travel history yet
-          </Block>
+          </div>
         ) : (
           visits.map((item, index) => {
             const displayDate = item.date
@@ -141,6 +78,6 @@ export default function TravelHistory({
           </Link>
         )}
       </HorizontalList>
-    </Block>
+    </div>
   );
 }

@@ -34,67 +34,82 @@ function logSlowQuery(
 }
 
 /**
- * Setup Prisma middleware for query logging
- * This intercepts all Prisma queries and logs slow ones
+ * Setup Prisma query extension for logging
+ * This uses $extends for Prisma 6+ compatibility instead of deprecated $use
  * 
- * Note: Prisma 6 uses $extends instead of $use for middleware
- * This implementation uses $use for compatibility, but may need
- * to be updated to $extends in future Prisma versions
+ * Note: Prisma 6+ uses $extends for query extensions and middleware
  */
 export function setupPrismaLogging(prismaInstance: any) {
-  // Check if middleware is already set up
+  // Check if extension is already set up
   if ((prismaInstance as any)._loggingSetup) {
     return;
   }
 
-  // Check if $use method is available
-  if (typeof prismaInstance.$use !== 'function') {
-    console.warn('[Prisma] $use method not available. Skipping slow query logging.');
+  // Check if $extends method is available
+  if (typeof prismaInstance.$extends !== 'function') {
+    console.warn('[Prisma] $extends method not available. Skipping slow query logging.');
     console.warn('[Prisma] This might be due to Prisma version compatibility.');
     return;
   }
 
   try {
-    // Use Prisma middleware (available in Prisma 2.26+)
-    prismaInstance.$use(async (params: any, next: any) => {
-      const startTime = Date.now();
+    // Use Prisma query extension (Prisma 6+)
+    const prismaWithLogging = prismaInstance.$extends({
+      query: {
+        async $allOperations({ 
+          operation, 
+          model, 
+          args, 
+          query 
+        }: { 
+          operation: any; 
+          model: any; 
+          args: any; 
+          query: any; 
+        }) {
+          const startTime = Date.now();
 
-      try {
-        const result = await next(params);
-        const duration = Date.now() - startTime;
+          try {
+            const result = await query(args);
+            const duration = Date.now() - startTime;
 
-        if (duration > SLOW_QUERY_THRESHOLD_MS) {
-          logSlowQuery(
-            params.model || "unknown",
-            params.action,
-            duration,
-            params.args,
-          );
-        }
+            if (duration > SLOW_QUERY_THRESHOLD_MS) {
+              logSlowQuery(
+                model || "unknown",
+                operation,
+                duration,
+                args,
+              );
+            }
 
-        return result;
-      } catch (error) {
-        const duration = Date.now() - startTime;
+            return result;
+          } catch (error) {
+            const duration = Date.now() - startTime;
 
-        // Log slow queries even if they fail
-        if (duration > SLOW_QUERY_THRESHOLD_MS) {
-          logSlowQuery(
-            params.model || "unknown",
-            params.action,
-            duration,
-            params.args,
-          );
-        }
+            // Log slow queries even if they fail
+            if (duration > SLOW_QUERY_THRESHOLD_MS) {
+              logSlowQuery(
+                model || "unknown",
+                operation,
+                duration,
+                args,
+              );
+            }
 
-        throw error;
-      }
+            throw error;
+          }
+        },
+      },
     });
 
-    // Mark as set up to prevent duplicate middleware
+    // Replace the original instance with the extended one
+    Object.assign(prismaInstance, prismaWithLogging);
+
+    // Mark as set up to prevent duplicate extensions
     (prismaInstance as any)._loggingSetup = true;
     
     if (process.env.NODE_ENV === "development") {
-      console.log("[Prisma] Slow query logging middleware installed (>500ms)");
+      console.log("[Prisma] Slow query logging extension installed (>500ms)");
     }
   } catch (error) {
     console.warn('[Prisma] Failed to setup slow query logging:', error);

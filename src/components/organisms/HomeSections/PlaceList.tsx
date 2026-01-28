@@ -15,12 +15,12 @@ import SectionList from "@/components/molecules/SectionList";
 const DEMO_USER_PERSONA: UserPersonaEnhanced = {
   interests: ["rooftop_bars", "street_food_markets", "coworking_spaces"],
   budget: "moderate",
-  travelStyle: ["solo", "remote"]
+  travelStyle: ["solo", "remote"],
 };
 
 export default function PlaceList() {
   const user = useUser();
-  
+
   const { data: places, isLoading } = useQuery({
     queryKey: ["places"],
     queryFn: async () => {
@@ -33,14 +33,15 @@ export default function PlaceList() {
   // Get user location for distance calculation (mock Bangkok coords for demo)
   const userLocation = {
     type: "Point" as const,
-    coordinates: [100.5018, 13.7563] as [number, number]
+    coordinates: [100.5018, 13.7563] as [number, number],
   };
 
   // Filter and sort places (show top rated places)
-  const filteredPlaces = places
-    ?.filter(place => place.rating && place.rating > 0)
-    ?.sort((a, b) => (b.rating || 0) - (a.rating || 0))
-    ?.slice(0, 12) || [];
+  const filteredPlaces =
+    places
+      ?.filter((place) => place.rating && place.rating > 0)
+      ?.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+      ?.slice(0, 12) || [];
 
   const getPlaceImage = (place: Place) => {
     return place.imageHeroUrl || "/images/placeholder-place.jpg";
@@ -48,7 +49,7 @@ export default function PlaceList() {
 
   const calculatePlaceDistance = (place: any): number | undefined => {
     if (!place.coords) return undefined;
-    
+
     try {
       return calculateDistance(userLocation, place.coords);
     } catch (error) {
@@ -70,19 +71,27 @@ export default function PlaceList() {
       emptyText="No places found."
       renderItem={(place) => {
         const distance = calculatePlaceDistance(place);
-        
+
         return (
           <div key={place.id} className="min-w-[320px] max-w-[380px]">
             <PlaceCard
               place={place as any} // Type cast to handle schema differences
-              userPersona={user ? {
-                interests: (user as any).persona?.interests || DEMO_USER_PERSONA.interests,
-                budget: (user as any).persona?.budget || DEMO_USER_PERSONA.budget,
-                travelStyle: (user as any).persona?.travelStyle || DEMO_USER_PERSONA.travelStyle
-              } : DEMO_USER_PERSONA}
+              userPersona={
+                user
+                  ? {
+                      interests:
+                        (user as any).persona?.interests ||
+                        DEMO_USER_PERSONA.interests,
+                      budget:
+                        (user as any).persona?.budget ||
+                        DEMO_USER_PERSONA.budget,
+                      travelStyle:
+                        (user as any).persona?.travelStyle ||
+                        DEMO_USER_PERSONA.travelStyle,
+                    }
+                  : DEMO_USER_PERSONA
+              }
               distance={distance}
-              priority={!!place.rating && place.rating >= 4.5}
-              className="aspect-[4/3]"
             />
           </div>
         );

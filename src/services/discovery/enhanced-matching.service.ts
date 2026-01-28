@@ -1,5 +1,9 @@
-import { Place } from "@/domain/place/place.schema";
-import { calculateMatchScore, MatchScoreResult, UserPersonaForMatching } from "./matching.service";
+import {
+  calculateMatchScore,
+  MatchScoreResult,
+  PlaceForMatching,
+  UserPersonaForMatching,
+} from "./matching.service";
 import { Mood, getMoodRelatedInterests } from "@/components/molecules/MoodSelector";
 
 /**
@@ -22,7 +26,7 @@ export interface UserPersonaEnhanced extends UserPersonaForMatching {
  */
 export function calculateEnhancedMatchScore(
   userPersona: UserPersonaEnhanced,
-  place: Place
+  place: PlaceForMatching
 ): EnhancedMatchResult {
   // Get base match score
   const baseResult = calculateMatchScore(userPersona, place);
@@ -63,49 +67,45 @@ export function calculateEnhancedMatchScore(
 /**
  * Filter and sort places based on enhanced matching
  */
-export function filterAndSortPlaces(
-  places: Place[],
+export function filterAndSortPlaces<TPlace extends PlaceForMatching>(
+  places: TPlace[],
   userPersona: UserPersonaEnhanced,
   options: {
     maxDistance?: number; // in km
     minScore?: number;
     limit?: number;
-  } = {}
-): Array<{ place: Place; matchResult: EnhancedMatchResult }> {
+  } = {},
+): Array<{ place: TPlace; matchResult: EnhancedMatchResult }> {
   const { maxDistance, minScore = 0, limit = 50 } = options;
-  
-  // Calculate enhanced scores for all places
-  const placesWithScores = places.map(place => ({
+  void maxDistance;
+
+  const placesWithScores = places.map((place) => ({
     place,
-    matchResult: calculateEnhancedMatchScore(userPersona, place)
+    matchResult: calculateEnhancedMatchScore(userPersona, place),
   }));
-  
-  // Filter by minimum score
-  const filtered = placesWithScores.filter(({ matchResult }) => 
-    matchResult.finalScore >= minScore
+
+  const filtered = placesWithScores.filter(
+    ({ matchResult }) => matchResult.finalScore >= minScore,
   );
-  
-  // Sort by final score (descending)
-  const sorted = filtered.sort((a, b) => b.matchResult.finalScore - a.matchResult.finalScore);
-  
-  // Apply limit
+
+  const sorted = filtered.sort(
+    (a, b) => b.matchResult.finalScore - a.matchResult.finalScore,
+  );
+
   return sorted.slice(0, limit);
 }
 
-/**
- * Get places by mood with enhanced scoring
- */
-export function getPlacesByMood(
-  places: Place[],
+export function getPlacesByMood<TPlace extends PlaceForMatching>(
+  places: TPlace[],
   mood: Mood,
   userPersona: UserPersonaForMatching,
-  limit: number = 20
-): Array<{ place: Place; matchResult: EnhancedMatchResult }> {
+  limit: number = 20,
+): Array<{ place: TPlace; matchResult: EnhancedMatchResult }> {
   const enhancedPersona: UserPersonaEnhanced = {
     ...userPersona,
-    mood
+    mood,
   };
-  
+
   return filterAndSortPlaces(places, enhancedPersona, { limit });
 }
 

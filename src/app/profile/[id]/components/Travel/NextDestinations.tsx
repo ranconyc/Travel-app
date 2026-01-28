@@ -17,30 +17,30 @@ export default function NextDestinations({
   nextDestinations: NextDestination[];
 }) {
   return (
-    <Block className="flex flex-col gap-md">
+    <div className="flex flex-col gap-md">
       <SectionHeader title="Next Destinations" />
 
       {nextDestinations.length > 0 ? (
-        <Block className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           {nextDestinations.map((dest) => (
             <Block
               key={dest.id}
               className="bg-surface/50 p-md rounded-xl border border-surface flex items-center gap-3"
             >
-              <Block className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center">
                 <MapPin className="text-brand w-5 h-5" />
-              </Block>
-              <Block>
+              </div>
+              <div>
                 <Typography variant="p" className="text-sm font-bold">
                   {dest.name}
                 </Typography>
                 <Typography variant="p" className="text-xs text-secondary">
                   {dest.countryName}
                 </Typography>
-              </Block>
+              </div>
             </Block>
           ))}
-        </Block>
+        </div>
       ) : (
         <AddSection
           title="Have upcoming trips planned?"
@@ -50,6 +50,6 @@ export default function NextDestinations({
           }}
         />
       )}
-    </Block>
+    </div>
   );
 }

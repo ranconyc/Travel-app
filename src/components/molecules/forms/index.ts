@@ -1,5 +1,5 @@
 // Form Primitives - Reusable form components
-export { CategoryRow } from "./CategoryRow";
-export { SelectedItemList } from "./SelectedItemList";
-export { FormHeader } from "./FormHeader";
-export { ProgressIndicator } from "./ProgressIndicator";
+export { default as CategoryRow } from "../CategoryRow";
+export { default as SelectedItemList } from "../SelectedItemList";
+export { default as FormHeader } from "../FormHeader";
+export { default as ProgressIndicator } from "../ProgressIndicator";

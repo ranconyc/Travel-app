@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { CategoryRow } from "./CategoryRow";
-import { fn } from "@storybook/test";
 
 const meta: Meta<typeof CategoryRow> = {
   title: "Forms/CategoryRow",
@@ -25,7 +24,7 @@ const meta: Meta<typeof CategoryRow> = {
     },
   },
   args: {
-    onClick: fn(),
+    onClick: () => {},
   },
 };
 

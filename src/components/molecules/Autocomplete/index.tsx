@@ -4,7 +4,7 @@ import React, { useRef, forwardRef } from "react";
 import ErrorMessage from "@/components/atoms/ErrorMessage";
 import { useAutocomplete } from "./hooks/useAutocomplete";
 import { AutocompleteInput } from "@/components/atoms/AutocompleteInput";
-import { AutocompleteResults } from "./AutocompleteResults";
+import AutocompleteResults from "../AutocompleteResults";
 import { useClickOutside } from "@/hooks/ui/useClickOutside";
 
 export type AutoOption = {
