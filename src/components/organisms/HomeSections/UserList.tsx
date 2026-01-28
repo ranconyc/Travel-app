@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useTravelPartners } from "@/domain/friendship/friendship.hooks";
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import Typography from "@/components/atoms/Typography";
 
 import { useAppStore } from "@/store/appStore";

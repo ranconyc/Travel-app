@@ -3,8 +3,8 @@
 import React from "react";
 import Button from "@/components/atoms/Button";
 import Logo from "@/components/atoms/Logo";
-import { Avatar } from "@/components/molecules/Avatar";
-import DistanceBadge from "@/components/atoms/DistanceBadge";
+import { Avatar } from "@/components/atoms/Avatar";
+import Badge from "@/components/atoms/Badge";
 import Input from "@/components/atoms/Input";
 
 /**
@@ -21,7 +21,7 @@ export const COMPONENT_PREVIEWS: Record<string, React.ReactNode> = {
       size={48}
     />
   ),
-  DistanceBadge: <DistanceBadge distanceLabel="12 km" />,
+  Badge: <Badge variant="default">New</Badge>,
   Input: (
     <Input
       label="Example Input"

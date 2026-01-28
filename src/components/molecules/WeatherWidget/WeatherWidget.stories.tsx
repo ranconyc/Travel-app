@@ -6,7 +6,7 @@ import React from "react";
 const queryClient = new QueryClient();
 
 const meta: Meta<typeof WeatherWidget> = {
-  title: "Components/WeatherWidget",
+  title: "Molecules/WeatherWidget",
   component: WeatherWidget,
   parameters: {
     layout: "centered",

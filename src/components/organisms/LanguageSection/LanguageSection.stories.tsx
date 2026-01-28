@@ -3,7 +3,7 @@ import LanguageSection from "./index";
 import React from "react";
 
 const meta: Meta<typeof LanguageSection> = {
-  title: "Sections/Language",
+  title: "Organisms/LanguageSection",
   component: LanguageSection,
   parameters: {
     layout: "padded",

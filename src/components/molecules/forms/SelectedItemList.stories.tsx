@@ -3,7 +3,7 @@ import { SelectedItemList } from "./SelectedItemList";
 import { fn } from "@storybook/test";
 
 const meta: Meta<typeof SelectedItemList> = {
-  title: "Forms/SelectedItemList",
+  title: "Molecules/Forms/SelectedItemList",
   component: SelectedItemList,
   parameters: {
     layout: "padded",

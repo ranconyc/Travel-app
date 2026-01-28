@@ -3,7 +3,7 @@ import VisaSection from "./index";
 import React from "react";
 
 const meta: Meta<typeof VisaSection> = {
-  title: "Sections/Visa",
+  title: "Organisms/VisaSection",
   component: VisaSection,
   parameters: {
     layout: "padded",

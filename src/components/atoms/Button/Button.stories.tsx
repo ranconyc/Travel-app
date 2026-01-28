@@ -4,7 +4,7 @@ import { Heart, Send, Plus } from "lucide-react";
 import React from "react";
 
 const meta: Meta<typeof Button> = {
-  title: "Components/Button",
+  title: "Atoms/Button",
   component: Button,
   parameters: {
     layout: "centered",
@@ -23,6 +23,7 @@ const meta: Meta<typeof Button> = {
         "dark",
         "outline-white",
         "icon",
+        "link",
       ],
     },
     size: {
@@ -99,5 +100,12 @@ export const Loading: Story = {
     children: "Loading...",
     loading: true,
     variant: "primary",
+  },
+};
+
+export const Link: Story = {
+  args: {
+    children: "Link Button",
+    variant: "link",
   },
 };

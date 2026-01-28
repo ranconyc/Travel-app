@@ -4,7 +4,7 @@ import CultureSection from "./components/CultureSection";
 import HealthSection from "./components/HealthSection";
 import { getCountryWithCities } from "@/lib/db/country.repo";
 import SocialLinks from "./components/SocialLinks";
-import PageInfo from "@/components/atoms/PageInfo";
+import PageInfo from "@/components/molecules/PageInfo";
 import CitiesSection from "./components/CitiesSection";
 import HeroImage from "@/components/molecules/HeroImage";
 import Stats from "@/components/molecules/Stats";

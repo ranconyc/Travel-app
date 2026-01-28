@@ -4,7 +4,7 @@ import React from "react";
 import Typography from "@/components/atoms/Typography";
 
 const meta: Meta<typeof Card> = {
-  title: "Components/Card",
+  title: "Molecules/Card",
   component: Card,
   parameters: {
     layout: "centered",
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: (
-      <div className="p-8 w-64 h-64 flex flex-col justify-end bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 rounded-3xl">
+      <div className="p-8 w-64 h-64 flex flex-col justify-end bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 rounded-3xl">
         <Typography variant="h3">Amsterdam</Typography>
         <Typography variant="p">Netherlands</Typography>
       </div>

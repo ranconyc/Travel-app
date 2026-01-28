@@ -22,7 +22,6 @@ export default async function Home() {
   const user = await getCurrentUser();
   console.log("user", user);
 
-  
   // Use any cast because TS inference struggles with union return type of getUserById
   const location = (user as any)?.currentLocation as {
     type: string;
@@ -69,19 +68,15 @@ export default async function Home() {
     },
   });
 
-  // Prefetch places
-  await queryClient.prefetchQuery({
-    queryKey: ["places", coords],
-    queryFn: async () => {
-      const result = await getAllPlacesAction({});
-      return result.success ? result.data : [];
-    },
-  });
+  // Fetch places server-side
+  const placesResult = await getAllPlacesAction({});
+  const initialPlaces = placesResult.success ? placesResult.data : [];
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <HomeClient
         dbLocation={coords ? { lat: coords.lat, lng: coords.lng } : undefined}
+        initialPlaces={initialPlaces as any}
       />
     </HydrationBoundary>
   );

@@ -33,27 +33,25 @@ export const FinanceSection = () => {
     <div className="px-4 py-6 flex flex-col gap-6 bg-surface rounded-3xl border border-surface-secondary">
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="bg-green-500/10 p-2 rounded-full">
-          <Wallet className="w-6 h-6 text-green-500" />
+        <div className="bg-success/10 p-2 rounded-full">
+          <Wallet className="w-6 h-6 text-success" />
         </div>
         <h2 className="text-xl font-bold font-sora">Money</h2>
       </div>
 
       {/* Currency Hero Card */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-2xl border border-green-200 dark:border-green-700">
+      <div className="bg-gradient-to-r from-success/5 to-brand/5 dark:from-success/20 dark:to-brand/20 p-6 rounded-2xl border border-success/20 dark:border-success/30">
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-xs text-green-600 dark:text-green-400 uppercase font-bold tracking-wider mb-2">
+            <p className="text-xs text-success uppercase font-bold tracking-wider mb-2">
               Local Currency
             </p>
-            <h3 className="font-bold text-2xl text-green-800 dark:text-green-200">
+            <h3 className="font-bold text-2xl text-txt-main">
               {currency.name}
             </h3>
-            <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-              {currency.code}
-            </p>
+            <p className="text-sm text-secondary mt-1">{currency.code}</p>
           </div>
-          <div className="w-16 h-16 rounded-full bg-white dark:bg-surface shadow-lg border-2 border-green-200 dark:border-green-700 flex items-center justify-center font-sora font-bold text-2xl text-green-700 dark:text-green-300">
+          <div className="w-16 h-16 rounded-full bg-surface shadow-lg border-2 border-success/20 flex items-center justify-center font-sora font-bold text-2xl text-success">
             {currency.symbol}
           </div>
         </div>
@@ -67,11 +65,11 @@ export const FinanceSection = () => {
 
         <div className="grid grid-cols-1 gap-3">
           {/* Budget Card */}
-          <div className="bg-white dark:bg-surface-secondary/50 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+          <div className="bg-surface p-4 rounded-2xl border border-border hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                  <Wallet className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-success" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-txt-main">Budget</h4>
@@ -88,11 +86,11 @@ export const FinanceSection = () => {
           </div>
 
           {/* Moderate Card */}
-          <div className="bg-white dark:bg-surface-secondary/50 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+          <div className="bg-surface p-4 rounded-2xl border border-border hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                  <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center">
+                  <CreditCard className="w-5 h-5 text-brand" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-txt-main">Moderate</h4>
@@ -109,11 +107,11 @@ export const FinanceSection = () => {
           </div>
 
           {/* Luxury Card */}
-          <div className="bg-white dark:bg-surface-secondary/50 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+          <div className="bg-surface p-4 rounded-2xl border border-border hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                  <Crown className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <div className="w-10 h-10 rounded-full bg-brand-alt/10 flex items-center justify-center">
+                  <Crown className="w-5 h-5 text-brand-alt" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-txt-main">Luxury</h4>
@@ -132,16 +130,16 @@ export const FinanceSection = () => {
       </div>
 
       {/* Tipping Culture Card */}
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-2xl border border-yellow-200 dark:border-yellow-700">
+      <div className="bg-warning/5 p-4 rounded-2xl border border-warning/20">
         <div className="flex gap-3">
-          <div className="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-800/40 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <Lightbulb className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+          <div className="w-8 h-8 rounded-full bg-warning/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <Lightbulb className="w-4 h-4 text-warning" />
           </div>
           <div>
-            <h4 className="font-semibold text-sm text-yellow-800 dark:text-yellow-200 mb-1">
+            <h4 className="font-semibold text-sm text-txt-main mb-1">
               Tipping Culture
             </h4>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300 leading-relaxed">
+            <p className="text-sm text-secondary leading-relaxed">
               {budgetData.tip}
             </p>
           </div>
@@ -150,16 +148,16 @@ export const FinanceSection = () => {
 
       {/* Cash Culture */}
       {finance.cashCulture && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-2xl border border-blue-200 dark:border-blue-700">
+        <div className="bg-brand/5 p-4 rounded-2xl border border-brand/20">
           <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-800/40 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <DollarSign className="w-4 h-4 text-brand" />
             </div>
             <div>
-              <h4 className="font-semibold text-sm text-blue-800 dark:text-blue-200 mb-1">
+              <h4 className="font-semibold text-sm text-txt-main mb-1">
                 Payment Culture
               </h4>
-              <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
+              <p className="text-sm text-secondary leading-relaxed">
                 {finance.cashCulture.primaryPayment === "Cash"
                   ? "Cash is preferred here. Always carry small bills for easier transactions."
                   : "Cards are widely accepted. Digital payments are common."}

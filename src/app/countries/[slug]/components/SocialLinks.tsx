@@ -1,4 +1,4 @@
-import MediaLinks from "@/components/atoms/MediaLinks";
+import MediaLinks from "@/components/molecules/MediaLinks";
 import social from "@/data/social.json";
 
 // Active platforms for country discovery

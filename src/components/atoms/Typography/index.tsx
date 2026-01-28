@@ -15,7 +15,7 @@ interface TypographyProps {
   children: React.ReactNode;
   className?: string;
   as?: React.ElementType;
-  color?: "main" | "sec" | "brand";
+  color?: "main" | "sec" | "brand" | "error";
 }
 
 export default function Typography({
@@ -40,14 +40,14 @@ export default function Typography({
 
   // Map variant to Tailwind typography classes (defined in globals.css @theme)
   const variantStyles = {
-    h1: "text-h1 font-sora",
-    h2: "text-h2 font-sora",
-    h3: "text-h3 font-sora",
-    h4: "text-h4 font-sora",
+    h1: "text-display-lg",
+    h2: "text-display-md",
+    h3: "text-display-sm",
+    h4: "text-display-sm" /* Consolidated to SM per 2026 std */,
     p: "text-p font-sans",
     sm: "text-sm font-sans",
-    tiny: "text-tiny font-sans uppercase",
-    micro: "text-micro font-sans uppercase",
+    tiny: "text-caption font-sans uppercase",
+    micro: "text-micro font-sans uppercase tracking-[0.05em]",
   };
 
   // Handle semantic coloring with Design System v2 tokens
@@ -55,6 +55,7 @@ export default function Typography({
     main: "text-txt-main",
     sec: "text-txt-sec",
     brand: "text-brand",
+    error: "text-error",
   };
 
   // Determine default color based on variant if not explicitly provided

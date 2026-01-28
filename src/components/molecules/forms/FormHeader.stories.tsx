@@ -4,7 +4,7 @@ import { ProgressIndicator } from "./ProgressIndicator";
 import { fn } from "@storybook/test";
 
 const meta: Meta<typeof FormHeader> = {
-  title: "Forms/FormHeader",
+  title: "Molecules/Forms/FormHeader",
   component: FormHeader,
   parameters: {
     layout: "fullscreen",

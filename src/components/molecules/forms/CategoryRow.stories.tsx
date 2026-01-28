@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CategoryRow } from "./CategoryRow";
 
 const meta: Meta<typeof CategoryRow> = {
-  title: "Forms/CategoryRow",
+  title: "Molecules/Forms/CategoryRow",
   component: CategoryRow,
   parameters: {
     layout: "padded",

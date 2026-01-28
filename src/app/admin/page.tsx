@@ -8,7 +8,7 @@ import {
 } from "@/domain/admin/admin.actions";
 import { StatsCard } from "@/app/admin/_components/StatsCard";
 import { Users, MapPin, Globe, Activity } from "lucide-react";
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 
 export default async function AdminDashboardPage() {
   // Check admin role

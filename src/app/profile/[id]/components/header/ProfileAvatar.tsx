@@ -1,4 +1,4 @@
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import { useProfileUser } from "../../store/useProfileStore";
 
 const Badge = ({ title }: { title: string }) => (

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { findBorderCountries } from "@/lib/db/country.repo";
 
 type Country = {
@@ -59,7 +59,9 @@ export default function BorderedCountriesList({
 
   return (
     <Block>
-      <Title>Bordered Countries</Title>
+      <Typography variant="h1" className="font-bold w-fit capitalize">
+        Bordered Countries
+      </Typography>
 
       {loading && <div>Loading countries...</div>}
 

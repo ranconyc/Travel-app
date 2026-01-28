@@ -9,9 +9,9 @@ interface BadgeProps {
 const variantClasses = {
   default: "bg-brand text-inverse",
   secondary: "bg-surface-secondary text-secondary",
-  success: "bg-green-500 text-inverse",
-  warning: "bg-yellow-500 text-inverse",
-  danger: "bg-red-500 text-inverse",
+  success: "bg-success text-inverse",
+  warning: "bg-warning text-inverse",
+  danger: "bg-error text-inverse",
 };
 
 export default function Badge({

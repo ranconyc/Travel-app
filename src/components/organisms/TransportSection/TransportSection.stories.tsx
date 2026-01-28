@@ -3,7 +3,7 @@ import TransportSection from "./index";
 import React from "react";
 
 const meta: Meta<typeof TransportSection> = {
-  title: "Sections/Transport",
+  title: "Organisms/TransportSection",
   component: TransportSection,
   parameters: {
     layout: "padded",

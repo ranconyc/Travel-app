@@ -10,7 +10,7 @@ const MOCK_USERS = [
 ];
 
 const meta: Meta<typeof AvatarList> = {
-  title: "Components/AvatarList",
+  title: "Molecules/AvatarList",
   component: AvatarList,
   parameters: {
     layout: "centered",

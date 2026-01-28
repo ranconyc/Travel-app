@@ -8,15 +8,15 @@ export default function HeroImage({
   name: string;
 }) {
   return (
-    <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-xl animate-scale-in">
+    <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-card animate-scale-in">
       {src ? (
         <div className="relative w-full h-full group">
-          <Image 
-            src={src} 
-            alt={name} 
-            fill 
-            className="object-cover transition-transform duration-700 group-hover:scale-105" 
-            priority 
+          <Image
+            src={src}
+            alt={name}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            priority
           />
           {/* Subtle overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
@@ -34,9 +34,7 @@ export default function HeroImage({
               <span className="text-6xl font-bold text-white drop-shadow-2xl mb-2">
                 {name.substring(0, 2).toUpperCase()}
               </span>
-              <span className="text-sm text-white/80 font-medium">
-                {name}
-              </span>
+              <span className="text-sm text-white/80 font-medium">{name}</span>
             </div>
           </div>
         </div>
@@ -47,7 +45,10 @@ export default function HeroImage({
         <div className="w-2 h-2 bg-brand/50 rounded-full animate-pulse" />
       </div>
       <div className="absolute bottom-4 left-4">
-        <div className="w-2 h-2 bg-brand-alt/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+        <div
+          className="w-2 h-2 bg-brand-alt/50 rounded-full animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
       </div>
     </div>
   );

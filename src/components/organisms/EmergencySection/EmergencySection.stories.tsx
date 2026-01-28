@@ -3,7 +3,7 @@ import EmergencySection from "./index";
 import React from "react";
 
 const meta: Meta<typeof EmergencySection> = {
-  title: "Sections/Emergency",
+  title: "Organisms/EmergencySection",
   component: EmergencySection,
   parameters: {
     layout: "padded",

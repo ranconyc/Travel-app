@@ -26,7 +26,7 @@ export function StatsCard({
         {trend && (
           <div
             className={`flex items-center text-sm font-medium ${
-              trendUp ? "text-green-600" : "text-red-600"
+              trendUp ? "text-success" : "text-error"
             }`}
           >
             {trend}

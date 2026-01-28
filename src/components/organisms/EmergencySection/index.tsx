@@ -1,5 +1,5 @@
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 
 import { ShieldAlert } from "lucide-react";
 
@@ -25,7 +25,12 @@ export default function EmergencySection({
   }
   return (
     <Block>
-      <Title icon={<ShieldAlert size={16} />}>Emergency Contact</Title>
+      <div className="flex items-center gap-2 mb-2">
+        <ShieldAlert size={16} />
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          Emergency Contact
+        </Typography>
+      </div>
       {touristPolice && (
         <div className={flexBetween}>
           <h1 className={subtitle}>Police</h1>

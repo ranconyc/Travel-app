@@ -5,7 +5,7 @@ import { getAllCountriesAction } from "@/domain/country/country.actions";
 import HeaderWrapper from "@/components/molecules/Header";
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
-import Title from "@/components/atoms/Title";
+
 import { Globe, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 
@@ -60,35 +60,47 @@ export default function CountriesIndexPage() {
   const getCountriesWithBorders = (): any[] => {
     return countries.map((country: any) => ({
       ...country,
-      borderedCountries: country.borders?.map((borderCca3: string) => 
-        countries.find((c: any) => c.cca3 === borderCca3)
-      ).filter(Boolean) || []
+      borderedCountries:
+        country.borders
+          ?.map((borderCca3: string) =>
+            countries.find((c: any) => c.cca3 === borderCca3),
+          )
+          .filter(Boolean) || [],
     }));
   };
 
   // Filter countries based on search and region
-  const filteredCountries = getCountriesWithBorders().filter(country => {
-    const matchesSearch = country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         country.officialName?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRegion = selectedRegion === "all" || country.region === selectedRegion;
+  const filteredCountries = getCountriesWithBorders().filter((country) => {
+    const matchesSearch =
+      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      country.officialName?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRegion =
+      selectedRegion === "all" || country.region === selectedRegion;
     return matchesSearch && matchesRegion;
   });
 
   // Get unique regions for filter
-  const regions = Array.from(new Set(countries.map(c => c.region).filter(Boolean)));
+  const regions = Array.from(
+    new Set(countries.map((c) => c.region).filter(Boolean)),
+  );
 
   if (loading) {
     return (
       <Block className="min-h-screen bg-main pb-20">
         <HeaderWrapper backButton className="sticky top-0 z-50">
           <Block className="mt-md">
-            <Title className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6">
+            <Typography
+              variant="h1"
+              className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6 w-fit capitalize"
+            >
               Countries & Borders
-            </Title>
+            </Typography>
           </Block>
         </HeaderWrapper>
         <Block className="p-md mt-md">
-          <Typography className="text-center text-secondary">Loading countries...</Typography>
+          <Typography className="text-center text-secondary">
+            Loading countries...
+          </Typography>
         </Block>
       </Block>
     );
@@ -101,12 +113,12 @@ export default function CountriesIndexPage() {
           <Typography className="text-sm text-secondary uppercase tracking-wider font-medium">
             World Geography
           </Typography>
-          <Title
-            as="h1"
-            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6"
+          <Typography
+            variant="h1"
+            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6 w-fit capitalize"
           >
             Countries & Borders
-          </Title>
+          </Typography>
         </Block>
       </HeaderWrapper>
 
@@ -134,7 +146,7 @@ export default function CountriesIndexPage() {
             >
               All Regions
             </button>
-            {regions.map(region => (
+            {regions.map((region) => (
               <button
                 key={region}
                 onClick={() => setSelectedRegion(region)}
@@ -176,15 +188,21 @@ export default function CountriesIndexPage() {
 
                 {/* Country Info */}
                 <div className="flex-1">
-                  <Typography variant="h3" className="font-bold text-txt-main mb-1">
+                  <Typography
+                    variant="h3"
+                    className="font-bold text-txt-main mb-1"
+                  >
                     {country.name}
                   </Typography>
                   {country.officialName && (
-                    <Typography variant="p" className="text-secondary mb-2 text-sm">
+                    <Typography
+                      variant="p"
+                      className="text-secondary mb-2 text-sm"
+                    >
                       {country.officialName}
                     </Typography>
                   )}
-                  
+
                   <div className="flex flex-wrap gap-4 text-sm text-secondary">
                     {country.capitalName && (
                       <div className="flex items-center gap-1">
@@ -201,7 +219,9 @@ export default function CountriesIndexPage() {
                     {country.population && (
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        <span>{(country.population / 1000000).toFixed(1)}M</span>
+                        <span>
+                          {(country.population / 1000000).toFixed(1)}M
+                        </span>
                       </div>
                     )}
                   </div>
@@ -209,36 +229,43 @@ export default function CountriesIndexPage() {
               </div>
 
               {/* Borders Section */}
-              {country.borderedCountries && country.borderedCountries.length > 0 && (
-                <div className="border-t border-stroke pt-4">
-                  <Typography variant="p" className="font-medium text-txt-main mb-3">
-                    🗺️ Borders {country.borderedCountries.length} countries:
-                  </Typography>
-                  <div className="flex flex-wrap gap-2">
-                    {country.borderedCountries.map((borderedCountry: any) => (
-                      <div
-                        key={borderedCountry.cca3}
-                        className="flex items-center gap-2 px-3 py-2 bg-surface-secondary rounded-lg"
-                      >
-                        {borderedCountry.flags?.svg ? (
-                          <Image
-                            src={borderedCountry.flags.svg}
-                            alt={`${borderedCountry.name} flag`}
-                            width={20}
-                            height={15}
-                            className="w-5 h-4 object-cover rounded-sm"
-                          />
-                        ) : (
-                          <div className="w-5 h-4 bg-surface rounded-sm" />
-                        )}
-                        <Typography variant="p" className="font-medium text-sm">
-                          {borderedCountry.name}
-                        </Typography>
-                      </div>
-                    ))}
+              {country.borderedCountries &&
+                country.borderedCountries.length > 0 && (
+                  <div className="border-t border-stroke pt-4">
+                    <Typography
+                      variant="p"
+                      className="font-medium text-txt-main mb-3"
+                    >
+                      🗺️ Borders {country.borderedCountries.length} countries:
+                    </Typography>
+                    <div className="flex flex-wrap gap-2">
+                      {country.borderedCountries.map((borderedCountry: any) => (
+                        <div
+                          key={borderedCountry.cca3}
+                          className="flex items-center gap-2 px-3 py-2 bg-surface-secondary rounded-lg"
+                        >
+                          {borderedCountry.flags?.svg ? (
+                            <Image
+                              src={borderedCountry.flags.svg}
+                              alt={`${borderedCountry.name} flag`}
+                              width={20}
+                              height={15}
+                              className="w-5 h-4 object-cover rounded-sm"
+                            />
+                          ) : (
+                            <div className="w-5 h-4 bg-surface rounded-sm" />
+                          )}
+                          <Typography
+                            variant="p"
+                            className="font-medium text-sm"
+                          >
+                            {borderedCountry.name}
+                          </Typography>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* No Borders */}
               {(!country.borders || country.borders.length === 0) && (

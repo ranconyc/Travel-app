@@ -3,7 +3,7 @@ import CurrencySection from "./index";
 import React from "react";
 
 const meta: Meta<typeof CurrencySection> = {
-  title: "Sections/Currency",
+  title: "Organisms/CurrencySection",
   component: CurrencySection,
   parameters: {
     layout: "padded",

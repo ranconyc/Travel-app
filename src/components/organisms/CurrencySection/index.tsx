@@ -1,5 +1,5 @@
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { CircleDollarSign } from "lucide-react";
 
 type CurrencyProps = {
@@ -17,7 +17,12 @@ export default function CurrencySection({
 }: CurrencyProps) {
   return (
     <Block>
-      <Title icon={<CircleDollarSign size={16} />}>Currency</Title>
+      <div className="flex items-center gap-2 mb-2">
+        <CircleDollarSign size={16} />
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          Currency
+        </Typography>
+      </div>
       <div className="flex items-center justify-between gap-md">
         {/* <h1 className="text-ui-sm capitalize mb-1">Currency Name</h1> */}
         <p className="text-xs">
@@ -27,9 +32,7 @@ export default function CurrencySection({
 
       {paymentMethodsNote && (
         <>
-          <h1 className="text-ui-sm capitalize mb-1">
-            Payment Methods
-          </h1>
+          <h1 className="text-ui-sm capitalize mb-1">Payment Methods</h1>
           <p className="text-xs">{paymentMethodsNote}</p>
         </>
       )}

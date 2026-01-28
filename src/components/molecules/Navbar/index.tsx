@@ -8,20 +8,28 @@ import {
   TowerControl,
 } from "lucide-react";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
-import { default as NotificationBadge } from "@/components/molecules/NotificationBadge";
-import { Avatar } from "@/components/molecules/Avatar";
+import Badge from "@/components/atoms/Badge";
+import { Avatar } from "@/components/atoms/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
-import NotificationBell from "@/components/organisms/NotificationBell";
+import NotificationBell from "@/components/molecules/NotificationBell";
+
+import { Notification } from "@prisma/client";
 
 const iconsSize = 32;
 
-export default function Navbar({ pathname }: { pathname: string }) {
+export default function Navbar({
+  pathname,
+  notifications = [],
+}: {
+  pathname: string;
+  notifications?: Notification[];
+}) {
   const user = useUser();
   const unreadCount = useUnreadCount();
 
   return (
-    <nav className="fixed bottom-xs left-12 right-12 z-50">
-      <ul className="p-md bg-surface/80 backdrop-blur-sm text-secondary flex items-center justify-around rounded-full shadow-xl">
+    <nav className="fixed bottom-xs left-12 right-12 z-sticky">
+      <ul className="p-md bg-surface/80 backdrop-blur-sm text-secondary flex items-center justify-around rounded-full shadow-lg">
         <li className={pathname === "/" ? "text-brand" : ""}>
           <Link href="/">
             <Binoculars size={iconsSize} />
@@ -35,11 +43,19 @@ export default function Navbar({ pathname }: { pathname: string }) {
         <li className={pathname === "/chats" ? "text-brand" : ""}>
           <Link href="/chats">
             <MessageCircle size={iconsSize} />
-            <NotificationBadge count={unreadCount} />
+            <Badge
+              variant="danger"
+              className="absolute top-1 right-1 px-1 py-0 min-w-[20px] h-5 flex items-center justify-center text-[10px] leading-none ring-2 ring-surface rounded-full"
+            >
+              {unreadCount}
+            </Badge>
           </Link>
         </li>
         <li>
-          <NotificationBell userId={user?.id || ""} />
+          <NotificationBell
+            userId={user?.id || ""}
+            initialNotifications={notifications}
+          />
         </li>
         <li
           className={

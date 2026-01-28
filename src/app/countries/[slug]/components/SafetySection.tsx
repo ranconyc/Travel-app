@@ -19,14 +19,14 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
   return (
     <div className="flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
       <div className="w-64 flex items-center gap-3 mb-2">
-        <div className="bg-blue-500/10 p-2 rounded-full">
+        <div className="bg-brand/10 p-2 rounded-full">
           <Shield className="w-6 h-6 text-brand" />
         </div>
         <h2 className="text-xl font-bold font-sora">Safety</h2>
       </div>
 
       {/* Main Score & Level */}
-      <div className="flex justify-between items-center bg-main p-md rounded-2xl">
+      <div className="flex justify-between items-center bg-surface-secondary p-md rounded-2xl">
         <div>
           <p className="text-xs text-secondary uppercase font-bold tracking-wider mb-1">
             Safety Score
@@ -35,10 +35,10 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
             <span
               className={`text-3xl font-black ${
                 (data.rating || 0) >= 7
-                  ? "text-green-500"
+                  ? "text-success"
                   : (data.rating || 0) >= 5
-                    ? "text-yellow-500"
-                    : "text-red-500"
+                    ? "text-warning"
+                    : "text-error"
               }`}
             >
               {data.rating || "?"}
@@ -66,7 +66,7 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
             {data.scamsCommon.map((scam, idx) => (
               <div
                 key={idx}
-                className="p-3 bg-main/50 rounded-xl border border-surface-secondary/50"
+                className="p-3 bg-surface-secondary/50 rounded-xl border border-surface-secondary"
               >
                 <div className="flex justify-between items-start mb-1">
                   <span className="font-bold text-txt-main capitalize">
@@ -75,10 +75,10 @@ export const SafetySection = ({ data }: { data: SafetyData }) => {
                   <span
                     className={`text-micro uppercase font-bold px-2 py-0.5 rounded-full ${
                       scam.severity === "high"
-                        ? "bg-red-500/10 text-red-500"
+                        ? "bg-error/10 text-error"
                         : scam.severity === "medium"
-                          ? "bg-yellow-500/10 text-yellow-500"
-                          : "bg-green-500/10 text-green-500"
+                          ? "bg-warning/10 text-warning"
+                          : "bg-success/10 text-success"
                     }`}
                   >
                     {scam.severity} Risk

@@ -1,4 +1,4 @@
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 
 function OtherCountBadge({
   otherCount,
@@ -36,7 +36,7 @@ function AvatarMatchBadge({ percentage = 56 }: { percentage?: number }) {
 
 // Define a simpler interface for the avatar list item
 // We don't need the full User object (which requires createdAt, etc.)
-interface AvatarUser {
+export interface AvatarUser {
   id?: string;
   image?: string | null;
   name?: string | null;

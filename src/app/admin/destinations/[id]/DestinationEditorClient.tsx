@@ -274,7 +274,7 @@ export default function DestinationEditorClient({
           <Button
             onClick={handleDelete}
             disabled={loading}
-            className="!bg-red-500 hover:!bg-red-600 text-white flex items-center gap-2 px-3 border-transparent"
+            className="!bg-error hover:!bg-error/90 text-white flex items-center gap-2 px-3 border-transparent"
           >
             <Trash2 size={16} />
             <span className="hidden md:inline">Delete</span>
@@ -488,7 +488,7 @@ export default function DestinationEditorClient({
                                 );
                                 setData({ ...data, [field]: newArray });
                               }}
-                              className="px-3 py-2 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded transition-colors text-sm"
+                              className="px-3 py-2 bg-error/10 text-error hover:bg-error/20 rounded transition-colors text-sm"
                             >
                               Remove
                             </button>
@@ -576,7 +576,7 @@ export default function DestinationEditorClient({
             <h3 className="font-bold text-lg mb-md flex items-center gap-2">
               Data Health
               {missingFields.length === 0 && (
-                <CheckCircle className="text-green-500" size={18} />
+                <CheckCircle className="text-success" size={18} />
               )}
             </h3>
 
@@ -587,7 +587,7 @@ export default function DestinationEditorClient({
               </div>
               <div className="h-2 w-full bg-surface-secondary rounded-full overflow-hidden">
                 <div
-                  className={`h-full ${completeness > 80 ? "bg-green-500" : completeness > 50 ? "bg-yellow-500" : "bg-red-500"}`}
+                  className={`h-full ${completeness > 80 ? "bg-success" : completeness > 50 ? "bg-warning" : "bg-error"}`}
                   style={{ width: `${completeness}%` }}
                 />
               </div>
@@ -607,40 +607,40 @@ export default function DestinationEditorClient({
                     <div className="space-y-1 text-xs">
                       <div className="flex items-center gap-2">
                         {data.cca3 ? (
-                          <CheckCircle size={12} className="text-green-500" />
+                          <CheckCircle size={12} className="text-success" />
                         ) : (
-                          <AlertTriangle size={12} className="text-red-400" />
+                          <AlertTriangle size={12} className="text-error" />
                         )}
                         <span>
                           cca3:{" "}
                           {data.cca3 || (
-                            <span className="text-red-400">missing</span>
+                            <span className="text-error">missing</span>
                           )}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         {data.code ? (
-                          <CheckCircle size={12} className="text-green-500" />
+                          <CheckCircle size={12} className="text-success" />
                         ) : (
-                          <AlertTriangle size={12} className="text-red-400" />
+                          <AlertTriangle size={12} className="text-error" />
                         )}
                         <span>
                           code:{" "}
                           {data.code || (
-                            <span className="text-red-400">missing</span>
+                            <span className="text-error">missing</span>
                           )}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         {data.name ? (
-                          <CheckCircle size={12} className="text-green-500" />
+                          <CheckCircle size={12} className="text-success" />
                         ) : (
-                          <AlertTriangle size={12} className="text-red-400" />
+                          <AlertTriangle size={12} className="text-error" />
                         )}
                         <span>
                           name:{" "}
                           {data.name || (
-                            <span className="text-red-400">missing</span>
+                            <span className="text-error">missing</span>
                           )}
                         </span>
                       </div>

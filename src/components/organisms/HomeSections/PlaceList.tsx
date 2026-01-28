@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getAllPlacesAction } from "@/domain/place/place.actions";
 import { Place } from "@/domain/place/place.schema";
 import PlaceCard from "@/components/molecules/PlaceCard";
 import { useUser } from "@/app/providers/UserProvider";
 import { UserPersonaEnhanced } from "@/services/discovery/enhanced-matching.service";
-import Typography from "@/components/atoms/Typography";
 import { calculateDistance } from "@/services/discovery/enhanced-matching.service";
 import SectionList from "@/components/molecules/SectionList";
 
@@ -18,17 +15,9 @@ const DEMO_USER_PERSONA: UserPersonaEnhanced = {
   travelStyle: ["solo", "remote"],
 };
 
-export default function PlaceList() {
+export default function PlaceList({ places = [] }: { places?: Place[] }) {
   const user = useUser();
-
-  const { data: places, isLoading } = useQuery({
-    queryKey: ["places"],
-    queryFn: async () => {
-      const result = await getAllPlacesAction({});
-      return result.success ? result.data : [];
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+  const isLoading = false; // SSR loaded
 
   // Get user location for distance calculation (mock Bangkok coords for demo)
   const userLocation = {
@@ -43,11 +32,7 @@ export default function PlaceList() {
       ?.sort((a, b) => (b.rating || 0) - (a.rating || 0))
       ?.slice(0, 12) || [];
 
-  const getPlaceImage = (place: Place) => {
-    return place.imageHeroUrl || "/images/placeholder-place.jpg";
-  };
-
-  const calculatePlaceDistance = (place: any): number | undefined => {
+  const calculatePlaceDistance = (place: Place): number | undefined => {
     if (!place.coords) return undefined;
 
     try {

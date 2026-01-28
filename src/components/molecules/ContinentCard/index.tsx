@@ -16,7 +16,7 @@ export default function ContinentCard({ continent }: ContinentCardProps) {
   return (
     <Link
       href={`/continents/${continent.slug}`}
-      className="group relative h-40 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all block"
+      className="group relative h-40 rounded-3xl overflow-hidden shadow-card hover:shadow-xl transition-all block"
     >
       <Block
         className={`absolute inset-0 bg-gradient-to-br ${continent.color} opacity-80 group-hover:opacity-100 transition-opacity duration-500`}

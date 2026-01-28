@@ -13,7 +13,7 @@ export default function Block({
 }: BlockProps) {
   return (
     <Component
-      className={`bg-surface text-txt-main p-6 rounded-2xl shadow-sm border border-surface-secondary/50 backdrop-blur-sm animate-scale-in ${
+      className={`bg-surface text-txt-main p-lg rounded-card shadow-card border border-surface-secondary/50 backdrop-blur-sm animate-scale-in ${
         className.includes("w-fit") ? "w-fit" : "w-full"
       } ${className}`}
     >

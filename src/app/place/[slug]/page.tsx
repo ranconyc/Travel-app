@@ -11,7 +11,7 @@ import { Globe2, Users, Clock, Calendar, Star, MapPin } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
 import SocialLinks from "@/app/countries/[slug]/components/SocialLinks";
-import PageInfo from "@/components/atoms/PageInfo";
+import PageInfo from "@/components/molecules/PageInfo";
 import LogisticsSection from "@/app/countries/[slug]/components/LogisticsSection";
 import CultureSection from "@/app/countries/[slug]/components/CultureSection";
 import HealthSection from "@/app/countries/[slug]/components/HealthSection";
@@ -19,7 +19,7 @@ import { getSession } from "@/lib/auth/get-current-user";
 import { getPlaceBySlug } from "@/lib/db/place.repo";
 import Link from "next/link";
 import { CalendarPlus } from "lucide-react";
-import Title from "@/components/atoms/Title";
+
 import PageHeader from "@/components/molecules/PageHeader";
 import Typography from "@/components/atoms/Typography";
 import HeroImage from "@/components/molecules/HeroImage";
@@ -37,9 +37,16 @@ export default async function ActivityPage({
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Place Not Found</h1>
-          <p className="text-gray-600">The place with slug "{slug}" could not be found.</p>
-          <a href="/" className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            Place Not Found
+          </h1>
+          <p className="text-gray-600">
+            The place with slug "{slug}" could not be found.
+          </p>
+          <a
+            href="/"
+            className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded"
+          >
             Go Home
           </a>
         </div>
@@ -56,23 +63,26 @@ export default async function ActivityPage({
   let matchScore: number | undefined;
   let distance: number | undefined;
   const user = session?.user as any;
-  
+
   if (user) {
     const matchResult = calculateMatchScore(
       {
         interests: user.persona?.interests || [],
-        budget: user.persona?.budget || 'moderate',
-        travelStyle: user.persona?.travelStyle || []
+        budget: user.persona?.budget || "moderate",
+        travelStyle: user.persona?.travelStyle || [],
       },
-      activity
+      activity,
     );
     matchScore = matchResult.score;
 
     // Calculate distance from user's current city
     if (user.currentLocation && activity.coords) {
-      const distanceMeta = getDistanceMetadata(user.currentLocation, activity.coords);
+      const distanceMeta = getDistanceMetadata(
+        user.currentLocation,
+        activity.coords,
+      );
       if (distanceMeta?.distanceStr) {
-        distance = parseFloat(distanceMeta.distanceStr.replace(/[^0-9.]/g, ''));
+        distance = parseFloat(distanceMeta.distanceStr.replace(/[^0-9.]/g, ""));
       }
     }
   }
@@ -121,10 +131,7 @@ export default async function ActivityPage({
           )}
 
           {/* Hero Image */}
-          <HeroImage
-            src={activity.imageHeroUrl}
-            name={activity.name}
-          />
+          <HeroImage src={activity.imageHeroUrl} name={activity.name} />
 
           {/* Social Links */}
           <SocialLinks query={`${activity.name}, ${activity.city.name}`} />
@@ -141,14 +148,16 @@ export default async function ActivityPage({
                   Tags
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {activity.tags.slice(0, 3).map((tag: string, index: number) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-surface-secondary rounded-full text-sm text-secondary hover:bg-surface-hover transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {activity.tags
+                    .slice(0, 3)
+                    .map((tag: string, index: number) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-surface-secondary rounded-full text-sm text-secondary hover:bg-surface-hover transition-colors"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                 </div>
               </Block>
             )}
@@ -164,8 +173,8 @@ export default async function ActivityPage({
                       key={i}
                       className={`text-lg ${
                         i < (activity.priceLevel || 0)
-                          ? 'text-green-600 dark:text-green-400'
-                          : 'text-gray-300 dark:text-gray-600'
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-gray-300 dark:text-gray-600"
                       }`}
                     >
                       $

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import { formatDate } from "@/domain/shared/utils/date";
 
@@ -27,7 +27,9 @@ export default function ReviewItemsList({
   if (items.length === 0) {
     return (
       <Block>
-        <Title>{title}</Title>
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          {title}
+        </Typography>
         <div className="flex flex-col items-center justify-center p-8 text-secondary">
           <CheckCircle className="w-12 h-12 mb-2 text-green-500" />
           <p>All caught up! No items to review.</p>
@@ -39,7 +41,9 @@ export default function ReviewItemsList({
   return (
     <Block>
       <div className="flex items-center justify-between mb-md">
-        <Title>{title}</Title>
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          {title}
+        </Typography>
         <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
           {items.length} pending
         </span>

@@ -3,7 +3,7 @@ import { TravelHistoryItem } from "@/domain/user/travel-history.service";
 import { User } from "@/domain/user/user.schema";
 import TravelHistory from "./TravelHistory";
 import TravelPartners from "./TravelPartners";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 
 export default function TravelSection({
   travelHistory,
@@ -27,9 +27,9 @@ export default function TravelSection({
 
   return (
     <div className="mb-md flex flex-col gap-md">
-      <Title as="h2" className="header-1">
+      <Typography variant="h2" className="header-1 w-fit capitalize font-bold">
         Travel
-      </Title>
+      </Typography>
       <TravelHistory travelHistory={travelHistory} isMyProfile={isMyProfile} />
       <TravelPartners partner={travelPartners?.[0] || null} />
       <NextDestinations nextDestinations={nextDestinations || []} />

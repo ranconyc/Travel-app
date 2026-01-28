@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useUser } from "@/app/providers/UserProvider";
 import HomeHeader from "@/components/organisms/HomeHeader";
 import CountryList from "@/components/organisms/HomeSections/CountryList";
@@ -11,13 +11,18 @@ import { useLocation } from "@/app/providers/LocationProvider";
 
 import { useAppStore } from "@/store/appStore";
 import { useLocationStore } from "@/store/locationStore";
-import PersonaEditor from "@/features/persona/components/PersonaEditor";
+
+import { Place } from "@/domain/place/place.schema";
 
 interface HomeClientProps {
   dbLocation?: { lat: number; lng: number };
+  initialPlaces: Place[];
 }
 
-export default function HomeClient({ dbLocation }: HomeClientProps) {
+export default function HomeClient({
+  dbLocation,
+  initialPlaces,
+}: HomeClientProps) {
   const loggedUser = useUser();
   const { location: browserLocation } = useLocation();
   const { setUser } = useAppStore();
@@ -48,12 +53,9 @@ export default function HomeClient({ dbLocation }: HomeClientProps) {
   return (
     <div className="flex flex-col min-h-screen bg-bg-main">
       <HomeHeader />
-      <main
-        className="flex-1 overflow-y-auto"
-        id="home-main"
-      >
-        <div className="flex flex-col gap-xl">      
-          <PlaceList />
+      <main className="flex-1 overflow-y-auto" id="home-main">
+        <div className="flex flex-col gap-xl">
+          <PlaceList places={initialPlaces} />
           <CountryList />
           <CityList />
         </div>

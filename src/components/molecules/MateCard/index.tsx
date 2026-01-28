@@ -1,10 +1,13 @@
 "use client";
 
 import { memo } from "react";
-import BaseCard from "@/components/molecules/BaseCard";
+import Card from "@/components/molecules/Card";
 import { User } from "@/domain/user/user.schema";
 import Typography from "@/components/atoms/Typography";
-import ResidentOrVisitorBadge from "@/components/atoms/ResidentOrVisitorBadge";
+import Badge from "@/components/atoms/Badge";
+
+// ... in main component ...
+
 import { useMateCard } from "./useMateCard";
 
 interface MateCardProps {
@@ -29,12 +32,13 @@ const MateCard = memo(function MateCard({
   } = useMateCard({ mate, loggedUser });
 
   return (
-    <BaseCard
+    <Card
+      variant="image"
       linkHref={`/profile/${userId}`}
-      image={{ 
-        src: mainImage ?? undefined, 
+      image={{
+        src: mainImage ?? undefined,
         alt: name ?? "Profile image",
-        priority 
+        priority,
       }}
       priority={priority}
       gradient="bg-gradient-to-t from-black/70 via-black/40 to-transparent"
@@ -62,7 +66,14 @@ const MateCard = memo(function MateCard({
         )}
 
         <div className="pb-2 px-1 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-          <ResidentOrVisitorBadge isResident={isResident} />
+          <Badge
+            variant="default"
+            className={`${
+              isResident ? "bg-brand-warm" : "bg-brand-success"
+            } text-image text-micro font-bold`}
+          >
+            {isResident ? "Local" : "Visitor"}
+          </Badge>
 
           <Typography variant="h3" className="text-white font-bold truncate">
             {name}
@@ -82,7 +93,7 @@ const MateCard = memo(function MateCard({
           )}
         </div>
       </div>
-    </BaseCard>
+    </Card>
   );
 });
 

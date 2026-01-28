@@ -4,7 +4,7 @@ import { Plane, Compass, Heart } from "lucide-react";
 import React from "react";
 
 const meta: Meta<typeof SelectionCard> = {
-  title: "Form/SelectionCard",
+  title: "Atoms/SelectionCard",
   component: SelectionCard,
   parameters: {
     layout: "centered",

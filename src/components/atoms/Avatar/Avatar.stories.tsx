@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Avatar } from "./index";
 
 const meta: Meta<typeof Avatar> = {
-  title: "Components/Avatar",
+  title: "Atoms/Avatar",
   component: Avatar,
   parameters: {
     layout: "centered",
@@ -26,7 +26,8 @@ export const Default: Story = {
   args: {
     alt: "Ran Cohen",
     size: 60,
-    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200"
+    image:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200",
   },
 };
 
@@ -35,7 +36,8 @@ export const Square: Story = {
     alt: "Ran Cohen",
     size: 60,
     variant: "square",
-    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200"
+    image:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200",
   },
 };
 

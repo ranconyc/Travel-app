@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import Link from "next/link";
 import {
   getChatDisplayName,

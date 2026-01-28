@@ -41,6 +41,7 @@ export const metadata: Metadata = {
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { UserProvider } from "@/app/providers/UserProvider";
 import { PersonaProvider } from "@/providers/PersonaProvider";
+import { prisma } from "@/lib/db/prisma";
 import React from "react";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
@@ -53,6 +54,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getCurrentUser();
+
+  const notifications = user
+    ? await prisma.notification.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+      })
+    : [];
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -71,7 +79,7 @@ export default async function RootLayout({
                       {children}
                     </LocationProvider>
                   </SessionProviderWrapper>
-                  <ConditionalNavbar />
+                  <ConditionalNavbar notifications={notifications} />
                   <Toaster position="top-center" richColors />
                   <PusherHealthIndicator />
                   <OnboardingWrapper />

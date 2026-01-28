@@ -1,5 +1,5 @@
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { Plug } from "lucide-react";
 
 const flexBetween = "flex items-center justify-between";
@@ -19,7 +19,12 @@ export default function ElectricitySection({
 }: ElectricityProps) {
   return (
     <Block>
-      <Title icon={<Plug size={16} />}>Electricity</Title>
+      <div className="flex items-center gap-2 mb-2">
+        <Plug size={16} />
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          Electricity
+        </Typography>
+      </div>
       <div className={flexBetween}>
         <h1 className="text-ui-sm capitalize mb-1">Voltage</h1>
         <p className="text-xs">{voltage}</p>

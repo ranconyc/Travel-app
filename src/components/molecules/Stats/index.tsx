@@ -13,7 +13,7 @@ export default function Stats({
 }: StatsProps) {
   return (
     <div
-      className={`flex items-center justify-between px-6 py-4 bg-surface rounded-2xl shadow-lg border border-surface-secondary/50 backdrop-blur-sm ${className}`}
+      className={`flex items-center justify-between px-6 py-4 bg-surface rounded-2xl shadow-card border border-surface-secondary/50 backdrop-blur-sm ${className}`}
     >
       {stats.map((stat, index) => {
         const Icon = stat.icon;

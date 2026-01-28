@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import { updateUserRoleAction } from "@/domain/user/user.actions";
 import { Loader2, Shield, User as UserIcon, Search } from "lucide-react";
 import Button from "@/components/atoms/Button";
@@ -96,12 +96,12 @@ export default function UsersTable({ initialUsers }: { initialUsers: any[] }) {
                   </td>
                   <td className="px-6 py-4">
                     {user.role === "ADMIN" ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-brand/10 text-brand border border-brand/20">
                         <Shield size={12} fill="currentColor" />
                         Admin
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-secondary text-secondary border border-border">
                         <UserIcon size={12} />
                         User
                       </span>

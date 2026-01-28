@@ -5,36 +5,25 @@ import { useClickOutside } from "@/hooks/ui/useClickOutside";
 import { Notification } from "@prisma/client";
 import Typography from "@/components/atoms/Typography";
 import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
 import { formatDistanceToNow } from "date-fns";
 
-export default function NotificationBell({ userId }: { userId: string }) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+export default function NotificationBell({
+  userId,
+  initialNotifications = [],
+}: {
+  userId: string;
+  initialNotifications?: Notification[];
+}) {
+  const [notifications, setNotifications] =
+    useState<Notification[]>(initialNotifications);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   useEffect(() => {
     if (!userId) return;
-
-    // 1. Fetch initial notifications
-    const fetchNotifications = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/notifications?userId=${userId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setNotifications(data.notifications || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
 
     // 2. Subscribe to real-time events
     const channel = pusherClient.subscribe(`user-${userId}`);
@@ -70,14 +59,19 @@ export default function NotificationBell({ userId }: { userId: string }) {
       >
         <Bell size={24} />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand text-[10px] font-bold text-white ring-2 ring-surface">
-            {unreadCount > 99 ? "99+" : unreadCount}
-          </span>
+          <div className="absolute top-1 right-1 pointer-events-none">
+            <Badge
+              variant="danger"
+              className="px-0.5 py-0 min-w-4 h-4 flex items-center justify-center text-[10px] leading-none ring-2 ring-surface rounded-full"
+            >
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </Badge>
+          </div>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 z-50 w-72 max-h-[400px] flex flex-col rounded-2xl border border-surface-secondary bg-surface shadow-2xl animate-in fade-in slide-in-from-top-2">
+        <div className="absolute right-0 top-12 z-dropdown w-80 max-h-96 flex flex-col rounded-2xl border border-surface-secondary bg-surface shadow-lg animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center justify-between p-4 border-b border-surface-secondary">
             <Typography variant="h4" className="font-bold">
               Notifications
@@ -95,11 +89,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
           </div>
 
           <div className="flex-1 overflow-y-auto py-2">
-            {loading ? (
-              <div className="p-8 text-center text-secondary text-sm">
-                Loading...
-              </div>
-            ) : notifications.length === 0 ? (
+            {notifications.length === 0 ? (
               <div className="p-10 text-center flex flex-col items-center gap-2">
                 <Bell size={32} className="text-secondary opacity-20" />
                 <Typography variant="p" className="text-secondary font-medium">

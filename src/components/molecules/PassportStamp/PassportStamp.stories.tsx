@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import PassportStamp from "./index";
 
 const meta: Meta<typeof PassportStamp> = {
-  title: "Components/PassportStamp",
+  title: "Molecules/PassportStamp",
   component: PassportStamp,
   parameters: {
     layout: "centered",

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import TimeZoneSection from "./index";
 
 const meta: Meta<typeof TimeZoneSection> = {
-  title: "Sections/TimeZone",
+  title: "Organisms/TimeZoneSection",
   component: TimeZoneSection,
   parameters: {
     layout: "padded",

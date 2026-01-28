@@ -3,7 +3,13 @@
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/molecules/Navbar";
 
-export default function ConditionalNavbar() {
+import { Notification } from "@prisma/client";
+
+export default function ConditionalNavbar({
+  notifications = [],
+}: {
+  notifications?: Notification[];
+}) {
   const pathname = usePathname();
 
   // Hide navbar on individual chat pages (/chat/[id])
@@ -24,5 +30,5 @@ export default function ConditionalNavbar() {
     return null;
   }
 
-  return <Navbar pathname={pathname} />;
+  return <Navbar pathname={pathname} notifications={notifications} />;
 }

@@ -1,5 +1,5 @@
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { Languages, BookOpen, ChevronRight } from "lucide-react";
 import PhraseCard from "@/components/molecules/PhraseCard";
 import { commonPhrasesService } from "@/services/common-phrases.service";
@@ -117,7 +117,12 @@ export default function LanguageSection({
 }: LanguageProps) {
   return (
     <Block>
-      <Title icon={<Languages size={16} />}>Language & Communication</Title>
+      <div className="flex items-center gap-2 mb-2">
+        <Languages size={16} />
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          Language & Communication
+        </Typography>
+      </div>
       {languagesEnglish && (
         <SpokenLanguages
           languagesEnglish={languagesEnglish}

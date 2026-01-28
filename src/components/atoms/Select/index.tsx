@@ -54,7 +54,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
             "w-full text-txt-main px-4 h-11 rounded-3xl font-medium border-2 bg-surface appearance-none transition-all",
             "focus:outline-none focus:border-brand",
             "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-            error ? "border-red-500" : "border-stroke",
+            error ? "border-error" : "border-stroke",
             className,
           ].join(" ")}
           {...rest}

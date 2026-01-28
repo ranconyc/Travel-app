@@ -1,5 +1,5 @@
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { BookOpenCheck } from "lucide-react";
 
 type VisaProps = {
@@ -15,7 +15,12 @@ export default function VisaSection({
 }: VisaProps) {
   return (
     <Block>
-      <Title icon={<BookOpenCheck size={16} />}>Visa Entry</Title>
+      <div className="flex items-center gap-2 mb-2">
+        <BookOpenCheck size={16} />
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          Visa Entry
+        </Typography>
+      </div>
       {/* i will want to know the nationally of the user */}
       <div>
         <h2 className={subtitle}>Visa on Arrival</h2>

@@ -105,7 +105,7 @@ export default function HomeHeroSearch() {
       </div>
 
       {isOpen && (results.length > 0 || showExternalOption) && (
-        <div className="absolute top-16 left-0 right-0 bg-surface/90 backdrop-blur-xl border border-border rounded-3xl shadow-xl overflow-hidden z-50 max-h-[60vh] overflow-y-auto">
+        <div className="absolute top-16 left-0 right-0 bg-surface/90 backdrop-blur-xl border border-border rounded-3xl shadow-lg overflow-hidden z-dropdown max-h-[60vh] overflow-y-auto">
           {results.length > 0 && (
             <div className="py-2">
               <span className="px-4 py-2 text-xs font-bold text-secondary uppercase tracking-wider block">

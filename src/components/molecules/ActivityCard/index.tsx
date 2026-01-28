@@ -1,29 +1,28 @@
-import BaseCard from "@/components/molecules/BaseCard";
-import { AvatarList } from "@/components/molecules/AvatarList";
+import Card from "@/components/molecules/Card";
+import { Avatar } from "@/components/atoms/Avatar";
+import { AvatarList, type AvatarUser } from "@/components/molecules/AvatarList";
 
 type ActivityCardProps = {
   activity: {
     id: string;
     name: string;
     image: string;
-    mates: any[];
+    mates: AvatarUser[];
     slug?: string;
   };
   index: number;
 };
 
-export default function ActivityCard({
-  activity,
-  index,
-}: ActivityCardProps) {
+export default function ActivityCard({ activity, index }: ActivityCardProps) {
   const { id, name, image, mates, slug } = activity;
 
   return (
-    <BaseCard
-      image={{ 
-        src: image, 
+    <Card
+      variant="image"
+      image={{
+        src: image,
         alt: name || "Activity image",
-        priority: index < 3
+        priority: index < 3,
       }}
       linkHref={`/place/${slug || id}`}
       priority={index < 3}
@@ -37,6 +36,6 @@ export default function ActivityCard({
           </h3>
         </div>
       </div>
-    </BaseCard>
+    </Card>
   );
 }

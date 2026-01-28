@@ -4,7 +4,7 @@ import { Globe2, Users, MapPin } from "lucide-react";
 import React from "react";
 
 const meta: Meta<typeof Stats> = {
-  title: "Components/Stats",
+  title: "Molecules/Stats",
   component: Stats,
   parameters: {
     layout: "padded",

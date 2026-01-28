@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import PageNavigation from "./index";
 
 const meta: Meta<typeof PageNavigation> = {
-  title: "Atoms/PageNavigation",
+  title: "Molecules/PageNavigation",
   component: PageNavigation,
   parameters: {
     layout: "fullscreen",

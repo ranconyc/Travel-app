@@ -60,7 +60,9 @@ export async function getUserTravelHistory(
     });
   } catch (error) {
     console.error("getUserTravelHistory error:", error);
-    throw new Error("Failed to get travel history");
+    throw new Error(
+      `Failed to get travel history: ${(error as Error).message}`,
+    );
   }
 }
 

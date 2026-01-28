@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import PageInfo from "./index";
 
 const meta: Meta<typeof PageInfo> = {
-  title: "Atoms/PageInfo",
+  title: "Molecules/PageInfo",
   component: PageInfo,
   parameters: {
     layout: "padded",
@@ -42,7 +42,8 @@ export const TitleOnly: Story = {
 
 export const LongTitle: Story = {
   args: {
-    title: "Explore the World's Most Beautiful Destinations and Create Unforgettable Memories",
+    title:
+      "Explore the World's Most Beautiful Destinations and Create Unforgettable Memories",
     subtitle: "Adventure Awaits",
   },
 };

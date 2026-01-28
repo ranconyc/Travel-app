@@ -1,5 +1,5 @@
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 
 import { Clock } from "lucide-react";
 
@@ -18,7 +18,12 @@ export default function TimeZoneSection({ timeZone }: TimeZoneProps) {
     }
     return (
       <Block>
-        <Title icon={<Clock size={16} />}>Time Zone</Title>
+        <div className="flex items-center gap-2 mb-2">
+          <Clock size={16} />
+          <Typography variant="h1" className="font-bold w-fit capitalize">
+            Time Zone
+          </Typography>
+        </div>
         <p className={paragraph + " font-bold"}>3:00 AM</p>
         <p className={paragraph + " text-gray-600"}>{timeZone}</p>
       </Block>

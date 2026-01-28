@@ -10,10 +10,10 @@ import {
 import { getInterestLabel } from "@/domain/interests/interests.service";
 import MatchScoreBadge from "@/components/molecules/MatchScoreBadge";
 import Typography from "@/components/atoms/Typography/enhanced";
-import BaseCard from "@/components/molecules/BaseCard";
+import Card from "@/components/molecules/Card";
 import ImageWithFallback from "@/components/atoms/ImageWithFallback";
 import { useState, useEffect } from "react";
-import { getPlaceImage, getFallbackImage } from "@/utils/image-helpers";
+import { getPlaceImage } from "@/utils/image-helpers";
 
 interface PlaceCardProps {
   place: Place;
@@ -75,7 +75,7 @@ function PlaceCard({
   }, [place.name, useUnsplash, imageUrl]);
 
   return (
-    <BaseCard className="group relative overflow-hidden cursor-pointer rounded-3xl h-full shadow-sm hover:shadow-xl transition-all duration-300 border-0">
+    <Card className="group relative overflow-hidden cursor-pointer rounded-3xl h-full shadow-card hover:shadow-xl transition-all duration-300 border-0">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <ImageWithFallback
@@ -184,7 +184,7 @@ function PlaceCard({
           </div>
         </div>
       </div>
-    </BaseCard>
+    </Card>
   );
 }
 

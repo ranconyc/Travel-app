@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import Typography from "@/components/atoms/Typography";
 import {
   getMessageSenderName,

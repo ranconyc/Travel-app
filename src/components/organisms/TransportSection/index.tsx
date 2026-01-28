@@ -1,11 +1,16 @@
 import { BusFront } from "lucide-react";
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 
 export default function TransportSection({ city }: { city: any }) {
   return (
     <Block>
-      <Title icon={<BusFront size={16} />}>Transportation options</Title>
+      <div className="flex items-center gap-2 mb-2">
+        <BusFront size={16} />
+        <Typography variant="h1" className="font-bold w-fit capitalize">
+          Transportation options
+        </Typography>
+      </div>
       <div className="grid gap-2 w-full">
         {city?.info.gettingAround.map(
           (o: { name: string; note: string; badge: any }) => (
@@ -19,7 +24,7 @@ export default function TransportSection({ city }: { city: any }) {
               </div>
               {o.badge && <div className="text-xs">{o.badge.text}</div>}
             </div>
-          )
+          ),
         )}
       </div>
     </Block>

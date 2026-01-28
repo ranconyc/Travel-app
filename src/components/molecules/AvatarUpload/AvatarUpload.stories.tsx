@@ -3,7 +3,7 @@ import AvatarUpload from "./index";
 import { fn } from "@storybook/test";
 
 const meta: Meta<typeof AvatarUpload> = {
-  title: "Form/AvatarUpload",
+  title: "Molecules/AvatarUpload",
   component: AvatarUpload,
   parameters: {
     layout: "centered",

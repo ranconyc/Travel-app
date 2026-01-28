@@ -59,19 +59,19 @@ export default async function AdminDashboardPage({
           label="Total Users"
           value={stats.totalUsers}
           icon={Users}
-          color="text-blue-500"
+          color="text-info"
         />
         <StatCard
           label="Total Countries"
           value={stats.totalCountries}
           icon={Globe}
-          color="text-green-500"
+          color="text-success"
         />
         <StatCard
           label="Total Cities"
           value={stats.totalCities}
           icon={Building2}
-          color="text-purple-500"
+          color="text-brand-alt"
         />
       </div>
 

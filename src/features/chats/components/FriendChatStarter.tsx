@@ -3,7 +3,7 @@
 import { createOrGetChat } from "@/domain/chat/chat.actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 
 interface FriendChatStarterProps {
   friendId: string;

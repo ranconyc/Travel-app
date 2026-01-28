@@ -6,19 +6,13 @@ import { useCities } from "@/domain/city/city.hooks";
 import { Search } from "lucide-react";
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
-import Title from "@/components/atoms/Title";
 import Loader from "@/components/atoms/Loader";
 import CityCard from "@/components/molecules/CityCard";
 import { City } from "@/domain/city/city.schema";
 
 export default function CitiesPage() {
-  const {
-    filteredCities,
-    isLoading,
-    isSuccess,
-    search,
-    setSearch,
-  } = useCities();
+  const { filteredCities, isLoading, isSuccess, search, setSearch } =
+    useCities();
 
   return (
     <Block className="min-h-screen bg-main pb-20">
@@ -27,12 +21,12 @@ export default function CitiesPage() {
           <Typography className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore the
           </Typography>
-          <Title
-            as="h1"
-            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6"
+          <Typography
+            variant="h1"
+            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6 w-fit capitalize"
           >
             Cities
-          </Title>
+          </Typography>
           <Block className="relative">
             <Input
               placeholder="Search cities..."
@@ -64,9 +58,12 @@ export default function CitiesPage() {
             <Block className="bg-surface p-6 rounded-full mb-md shadow-sm border border-surface-secondary">
               <Search className="w-10 h-10 text-secondary opacity-20" />
             </Block>
-            <Title as="h3" className="text-lg font-bold text-txt-main">
+            <Typography
+              variant="h3"
+              className="text-lg font-bold text-txt-main w-fit capitalize"
+            >
               No cities found
-            </Title>
+            </Typography>
             <Typography className="text-secondary max-w-[240px] mt-2">
               {search
                 ? `We couldn't find any results for "${search}". Try a different city?`

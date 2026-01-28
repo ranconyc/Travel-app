@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Typography from "@/components/atoms/Typography";
 
 interface SectionHeaderProps {
   title: string;
@@ -16,7 +17,9 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className={`my-2 flex items-center justify-between ${className}`}>
-      <h2 className="text-xl font-bold">{title}</h2>
+      <Typography variant="h2" className="text-xl font-bold">
+        {title}
+      </Typography>
       {href && (
         <Link href={href} className="text-xs text-secondary hover:underline">
           {linkText}

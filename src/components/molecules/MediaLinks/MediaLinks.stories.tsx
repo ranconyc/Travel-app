@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import MediaLinks from "./index";
 
 const meta: Meta<typeof MediaLinks> = {
-  title: "Atoms/MediaLinks",
+  title: "Molecules/MediaLinks",
   component: MediaLinks,
   tags: ["autodocs"],
   parameters: {

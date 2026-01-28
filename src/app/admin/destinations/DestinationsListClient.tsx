@@ -126,11 +126,11 @@ export default function DestinationsListClient({
                   </span>
                   <div>
                     {item.needsReview ? (
-                      <span className="inline-flex items-center px-2 py-1 rounded text-micro font-bold bg-yellow-100 text-yellow-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded text-micro font-bold bg-warning/10 text-warning">
                         NEEDS REVIEW
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2 py-1 rounded text-micro font-bold bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded text-micro font-bold bg-success/10 text-success">
                         ACTIVE
                       </span>
                     )}

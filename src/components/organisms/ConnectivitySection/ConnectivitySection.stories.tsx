@@ -3,7 +3,7 @@ import ConnectivitySection from "./index";
 import React from "react";
 
 const meta: Meta<typeof ConnectivitySection> = {
-  title: "Sections/Connectivity",
+  title: "Organisms/ConnectivitySection",
   component: ConnectivitySection,
   parameters: {
     layout: "padded",

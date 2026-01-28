@@ -16,7 +16,8 @@ type ButtonVariant =
   | "dark"
   | "outline-white"
   | "icon"
-  | "brand";
+  | "brand"
+  | "link";
 
 type ButtonSize = "sm" | "md" | "lg";
 
@@ -98,11 +99,12 @@ export default function Button({
     icon: "w-11 h-11 rounded-full bg-bg-sub/50 backdrop-blur-md text-txt-main flex items-center justify-center hover:bg-bg-sub border border-stroke shadow-soft p-0 transition-colors",
     brand:
       "bg-brand text-inverse hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
+    link: "text-brand underline-offset-4 hover:underline bg-transparent p-0 h-auto",
   };
 
   const combinedClasses = [
     baseStyles,
-    sizeStyles[size],
+    variant === "icon" || variant === "link" ? "" : sizeStyles[size],
     variantStyles[variant as keyof typeof variantStyles],
     fullWidth ? "w-full" : "",
     className,

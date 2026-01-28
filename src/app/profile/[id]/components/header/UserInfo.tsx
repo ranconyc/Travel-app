@@ -1,7 +1,7 @@
 "use client";
 import { memo } from "react";
 import { useProfileUser } from "../../store/useProfileStore";
-import MediaLinks from "@/components/atoms/MediaLinks";
+import MediaLinks from "@/components/molecules/MediaLinks";
 import { Briefcase, Home as HomeIcon } from "lucide-react";
 
 function UserInfo() {

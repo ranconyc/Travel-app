@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import SectionHeader from "./index";
 
 const meta: Meta<typeof SectionHeader> = {
-  title: "Components/SectionHeader",
+  title: "Molecules/SectionHeader",
   component: SectionHeader,
   parameters: {
     layout: "padded",

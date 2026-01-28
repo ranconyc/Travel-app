@@ -20,8 +20,8 @@ export default function CategoryCard({
       className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-black transition
         ${
           isActive
-            ? "border-black bg-gray-100"
-            : "border-gray-300 bg-white hover:border-gray-400"
+            ? "border-brand bg-surface-secondary"
+            : "border-border bg-surface hover:border-brand/50"
         }`}
     >
       <span className="text-xl">{emoji}</span>

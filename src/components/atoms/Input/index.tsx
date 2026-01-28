@@ -70,7 +70,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             "placeholder:text-secondary/60",
             "focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand",
             "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-            error ? "border-red-500 ring-1 ring-red-500" : "border-border",
+            error ? "border-error ring-1 ring-error" : "border-border",
             leftIcon ? "pl-11" : "px-4", // Adjust padding for icon
             rightIcon ? "pr-11" : "px-4",
             className,

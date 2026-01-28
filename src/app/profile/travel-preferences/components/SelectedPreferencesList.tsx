@@ -21,7 +21,7 @@ export default function SelectedPreferencesList({
             key={`${item.categoryId}-${item.interestId}`}
             type="button"
             onClick={() => onRemove(item.categoryId, item.interestId)}
-            className="inline-flex items-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white shadow-sm"
+            className="inline-flex items-center rounded-full bg-brand px-4 py-2 text-sm font-medium text-white shadow-sm"
           >
             <span>{item.label}</span>
             <span className="ml-2 text-xs opacity-70">

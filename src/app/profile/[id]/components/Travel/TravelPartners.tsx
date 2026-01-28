@@ -1,5 +1,5 @@
 import AddSection from "@/components/molecules/AddSection";
-import { Avatar } from "@/components/molecules/Avatar";
+import { Avatar } from "@/components/atoms/Avatar";
 import { User } from "@/domain/user/user.schema";
 import SectionHeader from "@/components/molecules/SectionHeader";
 import Block from "@/components/atoms/Block";

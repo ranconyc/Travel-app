@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/atoms/Button";
-import Title from "@/components/atoms/Title";
+
 import Typography from "@/components/atoms/Typography";
 import { upsertUserProfile } from "@/domain/user/user.actions";
 import { toast } from "sonner";
@@ -78,9 +78,12 @@ export default function PersonaEditor({
     <FormProvider {...methods}>
       <Block className="bg-surface border border-stroke rounded-card p-lg shadow-soft">
         <Block className="mb-lg">
-          <Title as="h3" className="text-xl font-bold mb-1">
+          <Typography
+            variant="h3"
+            className="text-xl font-bold mb-1 w-fit capitalize"
+          >
             {title || "Discovery Optimization"}
-          </Title>
+          </Typography>
           <Typography variant="p" color="sec">
             {description ||
               "Fine-tune your travel preferences for better matches."}

@@ -5,7 +5,7 @@ import HeaderWrapper from "@/components/molecules/Header";
 import { CONTINENTS } from "@/data/continents";
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
-import Title from "@/components/atoms/Title";
+
 import ContinentCard from "@/components/molecules/ContinentCard";
 import { Globe, List } from "lucide-react";
 
@@ -17,12 +17,12 @@ export default function CountriesPage() {
           <Typography className="text-sm text-secondary uppercase tracking-wider font-medium">
             Explore by
           </Typography>
-          <Title
-            as="h1"
-            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6"
+          <Typography
+            variant="h1"
+            className="text-h1 font-bold font-sora text-txt-main mt-1 mb-6 w-fit capitalize"
           >
             Continent
-          </Title>
+          </Typography>
         </Block>
       </HeaderWrapper>
 

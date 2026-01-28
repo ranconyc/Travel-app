@@ -30,7 +30,7 @@ import { Globe2, Users } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
 import SocialLinks from "@/app/countries/[slug]/components/SocialLinks";
-import PageInfo from "@/components/atoms/PageInfo";
+import PageInfo from "@/components/molecules/PageInfo";
 import LogisticsSection from "@/app/countries/[slug]/components/LogisticsSection";
 import CultureSection from "@/app/countries/[slug]/components/CultureSection";
 import HealthSection from "@/app/countries/[slug]/components/HealthSection";
@@ -62,23 +62,23 @@ export default async function CityPage({
       const allPlaces = await prisma.place.findMany({
         where: {
           cityRefId: city.id,
-          isPermanentlyClosed: false
+          isPermanentlyClosed: false,
         },
-        take: 20 // Limit to top 20 for performance
+        take: 20, // Limit to top 20 for performance
       });
 
       // Filter and sort based on user preferences
       const userPersona = {
         interests: (session.user as any).persona?.interests || [],
-        budget: (session.user as any).persona?.budget || 'moderate',
-        travelStyle: (session.user as any).persona?.travelStyle || []
+        budget: (session.user as any).persona?.budget || "moderate",
+        travelStyle: (session.user as any).persona?.travelStyle || [],
       };
 
       const userLocation = city.coords as any;
       const topPlaces = filterAndSortPlaces(
         allPlaces as any,
         userPersona,
-        { limit: 8 } // Show top 8
+        { limit: 8 }, // Show top 8
       );
     } catch (error) {
       console.error("Error fetching top places:", error);
@@ -132,10 +132,7 @@ export default async function CityPage({
       <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-12">
         <div className="flex flex-col gap-8 mt-8 md:mt-12">
           {/* Page Info */}
-          <PageInfo
-            title={city.name}
-            subtitle={countryName}
-          />
+          <PageInfo title={city.name} subtitle={countryName} />
 
           {/* User Location Indicator */}
           {inThisCity && (
@@ -173,25 +170,38 @@ export default async function CityPage({
               items={topPlaces.map((place) => {
                 const userPersona = {
                   interests: (session.user as any).persona?.interests || [],
-                  budget: (session.user as any).persona?.budget || 'moderate',
-                  travelStyle: (session.user as any).persona?.travelStyle || []
+                  budget: (session.user as any).persona?.budget || "moderate",
+                  travelStyle: (session.user as any).persona?.travelStyle || [],
                 };
-                
+
                 // Calculate distance from city center
-                const distance = city.coords ? 
-                  Math.sqrt(
-                    Math.pow((place.place.coords as any).coordinates[0] - (city.coords as any).coordinates[0], 2) +
-                    Math.pow((place.place.coords as any).coordinates[1] - (city.coords as any).coordinates[1], 2)
-                  ) * 111 // Rough km conversion
+                const distance = city.coords
+                  ? Math.sqrt(
+                      Math.pow(
+                        (place.place.coords as any).coordinates[0] -
+                          (city.coords as any).coordinates[0],
+                        2,
+                      ) +
+                        Math.pow(
+                          (place.place.coords as any).coordinates[1] -
+                            (city.coords as any).coordinates[1],
+                          2,
+                        ),
+                    ) * 111 // Rough km conversion
                   : undefined;
 
                 return {
                   id: place.place.id,
                   title: place.place.name,
-                  subtitle: distance ? `${distance.toFixed(1)} km away` : undefined,
+                  subtitle: distance
+                    ? `${distance.toFixed(1)} km away`
+                    : undefined,
                   image: place.place.imageHeroUrl,
                   href: `/place/${place.place.slug}`,
-                  badge: place.matchResult.finalScore >= 80 ? `${Math.round(place.matchResult.finalScore)}% Match` : undefined
+                  badge:
+                    place.matchResult.finalScore >= 80
+                      ? `${Math.round(place.matchResult.finalScore)}% Match`
+                      : undefined,
                 };
               })}
               showViewAll={false}
@@ -202,14 +212,16 @@ export default async function CityPage({
             <FloatingCardList
               title="Popular Places"
               description={`Discover the best spots in ${city.name}`}
-              items={city.places?.slice(0, 8).map((place: any) => ({
-                id: place.id,
-                title: place.name,
-                subtitle: place.address,
-                image: place.imageHeroUrl,
-                href: `/place/${place.slug}`,
-                icon: <MapPin size={20} />
-              })) || []}
+              items={
+                city.places?.slice(0, 8).map((place: any) => ({
+                  id: place.id,
+                  title: place.name,
+                  subtitle: place.address,
+                  image: place.imageHeroUrl,
+                  href: `/place/${place.slug}`,
+                  icon: <MapPin size={20} />,
+                })) || []
+              }
               showViewAll={false}
             />
           </div>
@@ -222,9 +234,7 @@ export default async function CityPage({
                 <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
                   Capital City
                 </h3>
-                <p className="text-p font-bold text-txt-main">
-                  {city.name}
-                </p>
+                <p className="text-p font-bold text-txt-main">{city.name}</p>
               </Block>
             )}
 
@@ -233,9 +243,7 @@ export default async function CityPage({
                 <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
                   Safety
                 </h3>
-                <p className="text-p font-bold text-txt-main">
-                  {city.safety}
-                </p>
+                <p className="text-p font-bold text-txt-main">{city.safety}</p>
               </Block>
             )}
           </div>
@@ -246,7 +254,8 @@ export default async function CityPage({
                 Daily Budget
               </h3>
               <p className="text-p font-bold text-txt-main">
-                {city.budget.currency || "$"} {city.budget.perDayMin}-{city.budget.perDayMax}
+                {city.budget.currency || "$"} {city.budget.perDayMin}-
+                {city.budget.perDayMax}
               </p>
             </Block>
           )}
@@ -256,9 +265,7 @@ export default async function CityPage({
               <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
                 Timezone
               </h3>
-              <p className="text-p font-bold text-txt-main">
-                {city.timeZone}
-              </p>
+              <p className="text-p font-bold text-txt-main">{city.timeZone}</p>
             </Block>
           )}
 

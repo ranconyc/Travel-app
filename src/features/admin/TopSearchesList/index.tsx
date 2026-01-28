@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Block from "@/components/atoms/Block";
-import Title from "@/components/atoms/Title";
+import Typography from "@/components/atoms/Typography";
 import { Search, TrendingUp } from "lucide-react";
 import { Timeframe } from "@/lib/db/admin.repo";
 
@@ -28,7 +28,12 @@ export default function TopSearchesList({
   return (
     <Block>
       <div className="flex flex-col gap-md mb-md">
-        <Title icon={<TrendingUp size={20} />}>Top Searches</Title>
+        <div className="flex items-center gap-2 mb-2">
+          <TrendingUp size={20} />
+          <Typography variant="h1" className="font-bold w-fit capitalize">
+            Top Searches
+          </Typography>
+        </div>
 
         {/* Filter Tabs */}
         <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg w-fit">
