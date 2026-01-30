@@ -9,48 +9,43 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils/cn";
 
 // Define button variants with CVA
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-sm font-medium transition-colors cursor-pointer focus:outline-none focus:ring-sm focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none",
-  {
-    variants: {
-      variant: {
-        primary:
-          "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
-        secondary: "bg-bg-sub text-txt-main hover:bg-bg-hover rounded-pill",
-        outline:
-          "border-2 border-brand text-brand hover:bg-brand/5 bg-transparent rounded-pill",
-        ghost: "text-txt-sec hover:bg-bg-sub hover:text-txt-main rounded-pill",
-        teal: "bg-brand-success hover:opacity-90 text-inverse border-2 border-brand-success rounded-pill",
-        dark: "bg-txt-main text-bg-main hover:opacity-90 rounded-pill",
-        "outline-white":
-          "bg-transparent border border-white/30 hover:bg-white/10 text-inverse rounded-pill",
-        // Special case: icon variant has specific dimensions and rounded-full
-        icon: "border border-surface-secondary rounded-full",
-        brand:
-          "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
-        link: "text-brand underline-offset-4 hover:underline bg-transparent p-0 h-auto rounded-none",
-        back: "flex items-center justify-center transition-all disabled:opacity-50 hover:bg-surface-hover rounded-full",
-      },
-      size: {
-        sm: "px-lg h-9 text-upheader",
-        md: "px-xl h-11 text-p",
-        lg: "px-xxl h-14 text-h4 font-bold",
-        icon: "w-11 h-11", // Specific size for icon variant
-      },
-      fullWidth: {
-        true: "w-full",
-      },
+const buttonVariants = cva("button-base focus:ring-2 focus:ring-brand/50", {
+  variants: {
+    variant: {
+      primary:
+        "bg-brand text-white hover:bg-brand-hover active:bg-brand-active shadow-soft border border-transparent",
+      secondary:
+        "bg-surface text-txt-main hover:bg-surface-hover border border-border",
+      outline:
+        "bg-transparent text-brand border-2 border-brand hover:bg-brand/5 active:bg-brand/10",
+      ghost: "text-txt-sec hover:bg-surface-hover hover:text-txt-main",
+      teal: "bg-success text-white hover:opacity-90 border border-transparent",
+      dark: "bg-txt-main text-surface hover:opacity-90",
+      "outline-white":
+        "bg-transparent text-white border border-white/30 hover:bg-white/10",
+      // Special case: icon variant overrides radius
+      icon: "rounded-full border border-border hover:bg-surface-hover p-0 aspect-square",
+      brand:
+        "bg-brand text-white hover:bg-brand-hover active:bg-brand-active shadow-soft border border-transparent",
+      link: "text-brand underline-offset-4 hover:underline bg-transparent p-0 h-auto rounded-none",
+      back: "rounded-full flex items-center justify-center transition-all disabled:opacity-50 hover:bg-surface-hover aspect-square p-0",
     },
-    // Compounds for explicit color overrides handled via style/classes or additional variants
-    // The previous implementation had dynamic color injection (bg-${color}).
-    // CVA typically prefers static classes, but we can keep passing className for dynamic colors or add specific color variants if needed.
-    defaultVariants: {
-      variant: "primary",
-      size: "md",
-      fullWidth: false,
+    size: {
+      sm: "px-lg h-9 text-sm",
+      md: "px-xl h-11 text-base",
+      lg: "px-xxl h-14 text-lg font-bold",
+      icon: "w-11 h-11", // Specific size for icon variant
+    },
+    fullWidth: {
+      true: "w-full",
     },
   },
-);
+  defaultVariants: {
+    variant: "primary",
+    size: "md",
+    fullWidth: false,
+  },
+});
 
 type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 

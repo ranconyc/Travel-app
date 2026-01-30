@@ -34,6 +34,14 @@ function GlobalListeners() {
   useEffect(() => {
     if (typeof window === "undefined" || !user) return; // Only run on client and if logged in
 
+    // Pusher Beams requires a secure context (HTTPS or localhost)
+    if (!window.isSecureContext) {
+      console.warn(
+        "[Pusher Beams] Skipping - requires secure context (HTTPS or localhost)",
+      );
+      return;
+    }
+
     const instanceId = process.env.NEXT_PUBLIC_PUSHER_BEAMS_INSTANCE_ID;
     if (!instanceId) {
       console.warn("[Pusher Beams] Missing Instance ID");

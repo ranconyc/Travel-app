@@ -2,118 +2,104 @@
 
 @theme {
   /* =========================================
-     COLOR SYSTEM (OKLCH 2026)
+     1. STATUS COLORS (From Design Spec)
      ========================================= */
-
-  /* Brand Identity */
-  --color-action-primary: oklch(60% 0.22 250); /* Buttons (Vibrant) */
-  --color-brand-light: oklch(50% 0.2 250); /* Text (Readable) */
-  --color-brand-dark: oklch(70% 0.18 250); /* Text Dark Mode (Readable) */
-
-  /* Semantic State Colors */
-  --color-success: oklch(68% 0.18 150);
-  --color-warning: oklch(75% 0.18 85);
-  --color-error: oklch(63% 0.22 29);
-  --color-info: oklch(60% 0.18 250);
-
-  /* Neutral Surfaces */
-  --color-surface-light: oklch(98.4% 0.003 247.86);
-  --color-surface-dark: oklch(12% 0.03 260);
-  --color-surface-secondary: oklch(95% 0.02 250);
-
-  /* Semantic Map (Default to Light Mode) */
-  --color-brand: var(--color-action-primary); /* Compat alias */
-  --color-text-brand: var(--color-brand-light);
-  --color-surface: var(--color-surface-light);
-
-  /* Legacy Color Compat (Mapping new to old vars for components) */
-  --color-brand-alt: oklch(52% 0.25 275);
-  --color-txt-main: oklch(20% 0.05 260);
-  --color-txt-sec: oklch(45% 0.02 250);
-  --color-txt-muted: oklch(65% 0.02 250);
-  --color-bg-main: var(--color-surface-light);
-  --color-bg-card: var(--color-surface);
+  --color-error: oklch(55% 0.25 25); /* #FF1644 */
+  --color-success: oklch(70% 0.18 165); /* #00C88C */
+  --color-warning: oklch(80% 0.18 85); /* #FFAE00 */
+  --color-info: oklch(60% 0.2 245); /* #0099FF */
 
   /* =========================================
-     TYPOGRAPHY SYSTEM (FLUID SCALE)
+     2. ACTION COLORS (From Design Spec)
      ========================================= */
+  --color-brand: oklch(60% 0.2 245); /* #0099FF - Primary Action */
+  --color-brand-hover: oklch(55% 0.18 245); /* #007ACC - Action Hover */
+  --color-brand-active: oklch(45% 0.22 260); /* #1D4ED8 - Action Active */
+  --color-brand-alt: oklch(55% 0.25 264); /* Purple for gradients */
 
-  --text-display-lg: clamp(2rem, 1.5vw + 1.6rem, 3rem); /* H1 */
-  --text-display-md: clamp(1.625rem, 1.1vw + 1.3rem, 2.25rem); /* H2 */
-  --text-display-sm: clamp(1.375rem, 0.6vw + 1.2rem, 1.75rem); /* H3 */
-  --text-lead: clamp(1.125rem, 0.3vw + 1.05rem, 1.25rem); /* Lead */
+  /* =========================================
+     3. LIGHT MODE SURFACES (From Design Spec)
+     ========================================= */
+  --color-bg: oklch(98% 0.005 250); /* #F8FAFC - Background */
+  --color-surface: oklch(100% 0 0); /* #FFFFFF - Surface */
+  --color-surface-secondary: oklch(97% 0.005 250); /* #F1F5F9 - Secondary */
+  --color-surface-hover: oklch(92% 0.01 250); /* #E2E8F0 - Surface Hover */
+  --color-overlay: oklch(15% 0.03 250 / 70%); /* #0F172A at 70% */
 
-  --text-body: 1rem;
-  --text-caption: 0.875rem;
+  /* Border */
+  --color-border: oklch(92% 0.01 250); /* #E2E8F0 */
+  --color-border-action: oklch(60% 0.2 245); /* #0099FF */
 
+  /* =========================================
+     4. LIGHT MODE TYPOGRAPHY (From Design Spec)
+     ========================================= */
+  --color-txt-main: oklch(15% 0.03 250); /* #0F172A - Primary */
+  --color-txt-sec: oklch(50% 0.02 250); /* #64748B - Secondary */
+  --color-txt-muted: oklch(65% 0.02 250); /* #94A3B8 - Third */
+  --color-txt-disabled: oklch(82% 0.01 250); /* #CBD5E1 - Action Disabled */
+
+  /* =========================================
+     3. FLUID TYPOGRAPHY
+     ========================================= */
+  --font-sora: "Sora", sans-serif;
   --font-inter: "Inter", sans-serif;
 
-  /* =========================================
-     PRESERVED STRUCTURAL TOKENS
-     ========================================= */
+  --text-display-xl: clamp(2.5rem, 5vw, 4rem);
+  --text-display-lg: clamp(2rem, 1.5vw + 1.6rem, 3rem);
+  --text-display-md: clamp(1.625rem, 1.1vw + 1.3rem, 2.25rem);
+  --text-display-sm: clamp(1.375rem, 0.6vw + 1.2rem, 1.75rem);
+  --text-lead: clamp(1.125rem, 0.3vw + 1.05rem, 1.25rem);
 
-  /* Typography Scale - Standardized per UX Audit (Hybrid Mapping) */
+  /* Static sizes */
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-tiny: 0.75rem;
+  --text-micro: 0.625rem;
+
+  /* Heading aliases (for Tailwind classes) */
   --text-h1: var(--text-display-lg);
-  --text-h1--line-height: 1.2;
-  --text-h1--font-weight: 700;
-
   --text-h2: var(--text-display-md);
-  --text-h2--line-height: 1.3;
-  --text-h2--font-weight: 700;
-
   --text-h3: var(--text-display-sm);
-  --text-h3--line-height: 1.4;
-  --text-h3--font-weight: 600;
-
-  --text-h4: var(--text-display-sm); /* Consolidated to SM per 2026 std */
-  --text-h4--line-height: 1.4;
-  --text-h4--font-weight: 600;
-
+  --text-h4: var(--text-display-sm);
   --text-p: var(--text-body);
-  --text-p--line-height: 1.5;
-  --text-p--font-weight: 400;
-
   --text-sm: var(--text-caption);
-  --text-sm--line-height: 1.5;
-  --text-sm--font-weight: 400;
 
-  --text-tiny: 0.75rem; /* 12px maintained */
-  --text-tiny--line-height: 1.4;
-  --text-tiny--font-weight: 500;
-
-  --text-micro: 0.625rem; /* 10px maintained */
-  --text-micro--line-height: 1;
-  --text-micro--font-weight: 700;
-  --text-micro--letter-spacing: 0.05em;
-
-  /* Border Tokens */
-  --border-1: 1px;
-  --border-2: 2px;
-
-  /* Radius Tokens */
-  --radius-card: 16px;
-  --radius-pill: 12px;
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-lg: 24px;
-
-  /* Layout Tokens */
-  --max-width-default: 1280px;
-  --max-width-narrow: 576px;
-  --navbar-height: 64px;
-  --page-padding: 16px;
-
-  /* Spacing Scale */
+  /* =========================================
+     4. SYSTEMATIC SPACING & RADIUS
+     ========================================= */
   --spacing-xxs: 4px;
-  --spacing-xs: 8px;
-  --spacing-sm: 12px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-xxl: 48px;
+  --spacing-xs: 4px;
+  --spacing-sm: 6px;
+  --spacing-md: 8px;
+  --spacing-lg: 12px;
+  --spacing-xl: 16px;
+  --spacing-xxl: 32px;
   --spacing-xll: 64px;
 
-  /* Z-Index Stack */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 32px;
+  --radius-full: 48px;
+  --radius-card: 16px;
+  --radius-pill: 12px;
+
+  /* =========================================
+     5. SHADOWS (OKLCH color-mix)
+     ========================================= */
+  --shadow-sm: 0 1px 2px 0
+    color-mix(in oklch, var(--color-txt-main), transparent 95%);
+  --shadow-md: 0 4px 10px -2px
+    color-mix(in oklch, var(--color-txt-main), transparent 90%);
+  --shadow-lg: 0 12px 40px -8px
+    color-mix(in oklch, var(--color-txt-main), transparent 85%);
+  --shadow-xl: 0 20px 50px -12px
+    color-mix(in oklch, var(--color-txt-main), transparent 80%);
+
+  /* =========================================
+     6. Z-INDEX STACK
+     ========================================= */
   --z-negative: -1;
   --z-elevate: 1;
   --z-dropdown: 50;
@@ -123,36 +109,50 @@
   --z-popover: 400;
   --z-tooltip: 600;
 
-  --font-sora: "Sora", sans-serif;
-  --font-inter: "Inter", sans-serif;
+  /* =========================================
+     7. TRANSITIONS
+     ========================================= */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Standard Transitions */
-  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* =========================================
+     8. LAYOUT
+     ========================================= */
+  --max-width-default: 1280px;
+  --max-width-narrow: 576px;
+  --navbar-height: 64px;
+  --page-padding: 16px;
 }
 
-/* Base Variable Definitions */
-/* Base Variable Definitions - Now handled by @theme defaults, kept for legacy scripts if needed */
-:root {
-  --background: var(--color-surface-light);
-  --foreground: var(--color-txt-main);
-  --secondary: var(--color-txt-sec);
-  --surface: var(--color-surface);
+/* =========================================
+   DARK MODE (From Design Spec)
+   ========================================= */
+.dark {
+  /* Surfaces */
+  --color-bg: oklch(12% 0.02 250); /* #0B111D - Background */
+  --color-surface: oklch(28% 0.03 250); /* #334155 - Surface */
+  --color-surface-secondary: oklch(18% 0.03 250); /* #161F30 - Secondary */
+  --color-surface-hover: oklch(22% 0.03 250); /* #1E293B - Surface Hover */
+  --color-overlay: oklch(100% 0 0 / 70%); /* #FFFFFF at 70% */
+
+  /* Border */
+  --color-border: oklch(28% 0.03 250); /* Matches surface */
+
+  /* Typography */
+  --color-txt-main: oklch(100% 0 0); /* #FFFFFF - Primary */
+  --color-txt-sec: oklch(85% 0.01 250); /* #CBD5E1 - Secondary */
+  --color-txt-muted: oklch(70% 0.02 250); /* #94A3B8 - Third */
 }
 
-/* Global Styles */
+/* =========================================
+   GLOBAL STYLES
+   ========================================= */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Inter", system-ui, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-txt-main);
+  font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
-}
-
-/* Fix for dark mode image artifacts - ensures no unintentional blend filters */
-.dark img {
-  filter: none !important;
-  mix-blend-mode: normal !important;
 }
 
 h1,
@@ -160,33 +160,63 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Sora", sans-serif;
+  font-family: var(--font-sora);
   margin: 0;
 }
 
 p {
-  line-height: 150%;
+  line-height: 1.5;
 }
 
-/* Custom Utilities */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-text-brand: var(--color-brand-dark); /* Swaps to L=70% */
-    --color-surface: var(--color-surface-dark);
-    --color-txt-main: oklch(98% 0 0);
-    --color-txt-sec: oklch(80% 0.02 250);
-    --color-txt-muted: oklch(65% 0.02 250);
-  }
+/* Fix for dark mode image artifacts */
+.dark img {
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }
 
 /* =========================================
-   UTILITY COMPOSITION (2026 Standards)
+   HEADLESS UTILITIES (2026 Pattern)
+   
+   These are "primitive" utilities that components
+   compose. No specificity traps, no @apply chains.
    ========================================= */
+
+/* --- Typography Primitives --- */
+@utility text-display-xl {
+  font-size: var(--text-display-xl);
+  line-height: 1.1;
+  font-weight: 900;
+  font-family: var(--font-sora);
+  letter-spacing: -0.02em;
+}
+
+@utility text-display-lg {
+  font-size: var(--text-display-lg);
+  line-height: 1.2;
+  font-weight: 700;
+  font-family: var(--font-sora);
+  letter-spacing: -0.02em;
+}
+
+@utility text-display-md {
+  font-size: var(--text-display-md);
+  line-height: 1.3;
+  font-weight: 700;
+  font-family: var(--font-sora);
+  letter-spacing: -0.01em;
+}
+
+@utility text-display-sm {
+  font-size: var(--text-display-sm);
+  line-height: 1.4;
+  font-weight: 600;
+  font-family: var(--font-sora);
+  letter-spacing: -0.01em;
+}
 
 @utility text-overline {
   font-family: var(--font-inter);
   font-size: var(--text-caption);
-  color: var(--color-text-brand);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 700;
@@ -195,127 +225,108 @@ p {
 @utility text-lead {
   font-size: var(--text-lead);
   line-height: 1.6;
-  color: var(--color-txt-sec);
   font-weight: 400;
 }
 
-@utility card-glass {
-  background-color: color-mix(in oklch, var(--color-surface), transparent 40%);
-  backdrop-filter: blur(12px);
-  border: 1px solid oklch(80% 0.02 250 / 0.2);
-}
-
-@utility button-primary {
-  background-color: var(--color-action-primary);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: oklch(from var(--color-action-primary) l c h / 0.9);
-    box-shadow: 0 4px 6px -1px oklch(0% 0 0 / 0.1);
-  }
-}
-
+/* --- Shadow Primitives --- */
 @utility shadow-soft {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 @utility shadow-card {
-  @apply shadow-soft;
+  box-shadow: var(--shadow-md);
 }
 
 @utility shadow-lg {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-lg);
 }
 
 @utility shadow-xl {
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-xl);
 }
 
-@utility z-dropdown {
-  z-index: var(--z-dropdown);
+/* --- Surface Primitives --- */
+@utility card-glass {
+  background-color: color-mix(in oklch, var(--color-surface), transparent 40%);
+  backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in oklch, var(--color-txt-muted), transparent 80%);
 }
 
-@utility z-sticky {
-  z-index: var(--z-sticky);
-}
-
-@utility z-drawer {
-  z-index: var(--z-drawer);
-}
-
-@utility z-modal {
-  z-index: var(--z-modal);
-}
-
-@utility z-popover {
-  z-index: var(--z-popover);
-}
-
-@utility z-tooltip {
-  z-index: var(--z-tooltip);
-}
-
-@utility header-1 {
-  @apply text-h1;
-}
-
-@utility subheader {
-  @apply text-tiny text-txt-sec capitalize;
-}
-
-/* Better spacing utilities */
-@utility spacing-tight {
-  letter-spacing: -0.025em;
-}
-
-@utility spacing-wide {
-  letter-spacing: 0.05em;
-}
-
-/* Better card utilities */
 @utility card-elevated {
-  @apply shadow-soft border border-surface-secondary/50 bg-surface;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border: 1px solid
+    color-mix(in oklch, var(--color-surface-secondary), transparent 50%);
+  transition: all var(--transition-normal);
 }
 
-@utility card-elevated-hover {
-  @apply shadow-lg border-brand/20 transform -translate-y-1;
+/* --- Input Primitives (Headless) --- */
+@utility input-base {
+  width: 100%;
+  height: 3rem;
+  padding-inline: 1rem;
+  background-color: var(--color-surface);
+  color: var(--color-txt-main);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-surface-secondary);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+
+  &::placeholder {
+    color: color-mix(in oklch, var(--color-txt-sec), transparent 40%);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px
+      color-mix(in oklch, var(--color-brand), transparent 70%);
+    border-color: var(--color-brand);
+  }
+
+  &:disabled {
+    background-color: var(--color-surface-secondary);
+    cursor: not-allowed;
+  }
 }
 
-/* Better text utilities */
-@utility text-gradient {
-  background: linear-gradient(
-    135deg,
-    var(--color-brand),
-    var(--color-brand-alt)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+@utility input-error {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 1px var(--color-error);
 }
 
-@utility text-balance {
-  text-wrap: balance;
-}
-
-/* Better layout utilities */
+/* --- Layout Primitives --- */
 @utility container-narrow {
   max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 }
 
 @utility container-medium {
   max-width: 1024px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 }
 
-/* Better animation utilities */
+/* --- Z-Index Primitives --- */
+@utility z-dropdown {
+  z-index: var(--z-dropdown);
+}
+@utility z-sticky {
+  z-index: var(--z-sticky);
+}
+@utility z-drawer {
+  z-index: var(--z-drawer);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-popover {
+  z-index: var(--z-popover);
+}
+@utility z-tooltip {
+  z-index: var(--z-tooltip);
+}
+
+/* --- Animation Primitives --- */
 @utility animate-fade-in {
   animation: fadeIn 0.6s ease-out;
 }
@@ -328,7 +339,6 @@ p {
   animation: scaleIn 0.4s ease-out;
 }
 
-/* Keyframe animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -360,285 +370,211 @@ p {
   }
 }
 
-/* Better button utilities */
-@utility button-primary {
-  @apply bg-brand text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-brand/90 hover:shadow-lg active:scale-95;
+/* --- Color Utility Primitives (OKLCH) --- */
+@utility text-success {
+  color: var(--color-success);
+}
+@utility text-warning {
+  color: var(--color-warning);
+}
+@utility text-error {
+  color: var(--color-error);
+}
+@utility text-info {
+  color: var(--color-info);
 }
 
-@utility button-secondary {
-  @apply bg-surface text-txt-main px-6 py-3 rounded-xl font-semibold border border-surface-secondary transition-all duration-200 hover:bg-surface-hover hover:border-brand/30 active:scale-95;
+@utility bg-success {
+  background-color: color-mix(in oklch, var(--color-success), transparent 90%);
+}
+@utility bg-warning {
+  background-color: color-mix(in oklch, var(--color-warning), transparent 90%);
+}
+@utility bg-error {
+  background-color: color-mix(in oklch, var(--color-error), transparent 90%);
+}
+@utility bg-info {
+  background-color: color-mix(in oklch, var(--color-info), transparent 90%);
 }
 
-/* Better input utilities */
-@utility input-base {
-  width: 100%;
-  height: 3rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  background-color: var(--color-surface);
-  color: var(--color-txt-main);
+@utility border-success {
+  border-color: var(--color-success);
+}
+@utility border-warning {
+  border-color: var(--color-warning);
+}
+@utility border-error {
+  border-color: var(--color-error);
+}
+@utility border-info {
+  border-color: var(--color-info);
+}
+
+@utility bg-surface-hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* --- Interactive State Primitives --- */
+@utility bg-hover {
+  background-color: color-mix(in oklch, var(--color-brand), transparent 92%);
+}
+@utility bg-active {
+  background-color: color-mix(in oklch, var(--color-brand), transparent 88%);
+}
+@utility bg-focus {
+  background-color: color-mix(in oklch, var(--color-brand), transparent 80%);
+}
+
+@utility text-disabled {
+  color: color-mix(in oklch, var(--color-txt-muted), transparent 70%);
+}
+@utility bg-disabled {
+  background-color: color-mix(
+    in oklch,
+    var(--color-surface-secondary),
+    transparent 50%
+  );
+}
+
+/* --- Component Utilities --- */
+@utility link-base {
+  color: var(--color-brand);
+  text-decoration: none;
   font-weight: 500;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-surface-secondary);
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 
-  &::placeholder {
-    color: color-mix(in oklch, var(--color-txt-sec), transparent 40%);
+  &:hover {
+    color: var(--color-brand-hover);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
+}
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px
-      color-mix(in oklch, var(--color-brand), transparent 70%);
-    border-color: var(--color-brand);
-  }
+@utility button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  white-space: nowrap;
 
   &:disabled {
-    background-color: var(--color-surface-secondary);
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }
 
-@utility input-error {
-  border-color: var(--color-error);
-  box-shadow: 0 0 0 1px var(--color-error);
-}
-
-/* Legacy alias for backwards compatibility */
-@utility input-field {
-  @apply input-base;
-}
-
-/* Typography System Utilities (Fluid Updates) */
-@utility text-display-xl {
-  font-size: 4rem; /* Fallback/Static maximum */
-  line-height: 1.1;
-  font-weight: 900;
-  font-family: var(--font-sora);
-  letter-spacing: -0.02em;
-}
-
-@utility text-display-lg {
-  font-size: var(--text-display-lg);
-  line-height: 1.2;
-  font-weight: 700;
-  font-family: var(--font-sora);
-  letter-spacing: -0.02em;
-}
-
-@utility text-display-md {
-  font-size: var(--text-display-md);
-  line-height: 1.3;
-  font-weight: 700;
-  font-family: var(--font-sora);
-  letter-spacing: -0.01em;
-}
-
-@utility text-display-sm {
-  font-size: var(--text-display-sm);
-  line-height: 1.4;
-  font-weight: 600;
-  font-family: var(--font-sora);
-  letter-spacing: -0.01em;
-}
-
-/* Enhanced Heading Typography */
-@utility text-h1-enhanced {
-  @apply text-h1 font-bold font-sora leading-tight;
-}
-
-@utility text-h2-enhanced {
-  @apply text-h2 font-bold font-sora leading-tight;
-}
-
-@utility text-h3-enhanced {
-  @apply text-h3 font-semibold font-sora leading-snug;
-}
-
-@utility text-h4-enhanced {
-  @apply text-h4 font-semibold font-sora leading-snug;
-}
-
-/* Body Typography */
-@utility text-body-lg {
-  @apply text-lg font-normal font-inter leading-relaxed;
-}
-
-@utility text-body {
-  @apply text-base font-normal font-inter leading-relaxed;
-}
-
-@utility text-body-sm {
-  @apply text-sm font-normal font-inter leading-relaxed;
-}
-
-/* UI Typography */
-@utility text-ui-lg {
-  @apply text-lg font-medium font-inter leading-normal;
-}
-
-@utility text-ui {
-  @apply text-base font-medium font-inter leading-normal;
-}
-
-@utility text-ui-sm {
-  @apply text-sm font-medium font-inter leading-normal;
-}
-
-/* Label Typography */
-@utility text-label {
-  @apply text-sm font-semibold font-inter leading-tight tracking-wide uppercase;
-}
-
-@utility text-label-sm {
-  @apply text-xs font-semibold font-inter leading-tight tracking-wide uppercase;
-}
-
-/* Caption Typography */
-@utility text-caption {
-  @apply text-sm font-normal font-inter leading-relaxed text-txt-sec;
-}
-
-@utility text-caption-sm {
-  @apply text-xs font-normal font-inter leading-relaxed text-txt-sec;
-}
-
-/* Enhanced Micro Typography */
-@utility text-micro-enhanced {
-  @apply text-xs font-bold font-inter leading-none tracking-wider uppercase;
-}
-
-@utility text-micro-sm {
-  @apply text-micro font-bold font-inter leading-none tracking-wider uppercase;
-}
-
-/* Color Utilities */
-@utility text-primary {
-  @apply text-txt-main;
-}
-
-@utility text-secondary {
-  @apply text-txt-sec;
-}
-
-@utility text-muted {
-  @apply text-txt-muted;
-}
-
-@utility text-inverse {
-  @apply text-white dark:text-txt-main;
-}
-
-/* Color Utilities - Direct CSS to avoid circular dependency */
-@utility text-success {
-  color: #10b981;
-}
-@utility text-warning {
-  color: #f59e0b;
-}
-@utility text-error {
-  color: #ef4444;
-}
-@utility text-info {
-  color: #3b82f6;
-}
-
-@utility bg-success {
-  background-color: #ecfdf5;
-}
-@utility bg-warning {
-  background-color: #fffbeb;
-}
-@utility bg-error {
-  background-color: #fef2f2;
-}
-@utility bg-info {
-  background-color: #eff6ff;
-}
-
-@utility bg-surface-hover {
-  background-color: var(--color-surface-secondary);
-}
-
-@utility border-success {
-  border-color: #10b981;
-}
-@utility border-warning {
-  border-color: #f59e0b;
-}
-@utility border-error {
-  border-color: #ef4444;
-}
-@utility border-info {
-  border-color: #3b82f6;
-}
-
-@utility bg-hover {
-  background-color: rgba(0, 153, 255, 0.08);
-}
-@utility bg-active {
-  background-color: rgba(0, 153, 255, 0.12);
-}
-@utility bg-focus {
-  background-color: rgba(0, 153, 255, 0.2);
-}
-
-@utility text-disabled {
-  color: rgba(148, 163, 184, 0.3);
-}
-@utility bg-disabled {
-  background-color: rgba(148, 163, 184, 0.1);
-}
-
-/* Gradient Utilities */
+/* --- Gradient Primitives --- */
 @utility bg-gradient-brand {
-  background: linear-gradient(135deg, #0099ff, #3f53ff);
+  background: linear-gradient(135deg, var(--color-blue), var(--color-purple));
 }
+
 @utility bg-gradient-warm {
-  background: linear-gradient(135deg, #ffae00, #ff7fb3);
+  background: linear-gradient(135deg, var(--color-yellow), var(--color-pink));
 }
+
 @utility bg-gradient-success {
-  background: linear-gradient(135deg, #00c88c, #10b981);
-}
-@utility bg-gradient-surface {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  background: linear-gradient(135deg, var(--color-green), oklch(65% 0.15 150));
 }
 
 @utility text-gradient {
-  background: linear-gradient(135deg, #0099ff, #3f53ff);
+  background: linear-gradient(135deg, var(--color-blue), var(--color-purple));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Weight Utilities */
-@utility text-light {
-  @apply font-light;
+/* --- Text Utility Shorthands --- */
+@utility text-balance {
+  text-wrap: balance;
 }
-@utility text-normal {
-  @apply font-normal;
+@utility spacing-tight {
+  letter-spacing: -0.025em;
 }
-@utility text-medium {
-  @apply font-medium;
-}
-@utility text-semibold {
-  @apply font-semibold;
-}
-@utility text-bold {
-  @apply font-bold;
+@utility spacing-wide {
+  letter-spacing: 0.05em;
 }
 
-/* Utility classes for scrollbar */
+/* =========================================
+   SCROLLBAR STYLES
+   ========================================= */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
 }
 
-/* Global Custom Scrollbar */
+/* =========================================
+   CONTAINER QUERIES (2026 Modern Layout)
+   
+   Use these to create component-scoped 
+   responsiveness instead of global breakpoints.
+   ========================================= */
+
+/* Container context utilities */
+.container-query {
+  container-type: inline-size;
+}
+
+.container-card {
+  container-type: inline-size;
+  container-name: card;
+}
+
+.container-section {
+  container-type: inline-size;
+  container-name: section;
+}
+
+/* Responsive container breakpoints */
+@container (min-width: 320px) {
+  .cq-sm\:flex-row {
+    flex-direction: row;
+  }
+  .cq-sm\:gap-md {
+    gap: var(--spacing-md);
+  }
+  .cq-sm\:text-base {
+    font-size: 1rem;
+  }
+}
+
+@container (min-width: 480px) {
+  .cq-md\:flex-row {
+    flex-direction: row;
+  }
+  .cq-md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cq-md\:gap-lg {
+    gap: var(--spacing-lg);
+  }
+  .cq-md\:p-lg {
+    padding: var(--spacing-lg);
+  }
+}
+
+@container (min-width: 640px) {
+  .cq-lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .cq-lg\:gap-xl {
+    gap: var(--spacing-xl);
+  }
+  .cq-lg\:text-lg {
+    font-size: 1.125rem;
+  }
+}
+
+/* =========================================
+   SCROLLBAR STYLES
+   ========================================= */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
