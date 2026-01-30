@@ -80,3 +80,28 @@ export type Coords = {
   lat: number;
   lng: number;
 };
+/**
+ * Common result format for city search (DB or external)
+ */
+export type CitySearchResult = {
+  id: string; // uuid or ext_placeId
+  cityId: string; // "country-city" slug
+  label: string; // "City, Country"
+  subtitle?: string | null;
+  lat: number | null;
+  lng: number | null;
+  source: "db" | "external";
+  dbCityId?: string;
+  meta?: {
+    name: string;
+    countryName: string;
+    countryCode: string;
+    lat: number;
+    lng: number;
+    placeId?: string;
+    osmId?: string;
+    display_name?: string;
+    address?: Record<string, unknown>;
+    boundingbox?: [number, number, number, number];
+  } | null;
+};

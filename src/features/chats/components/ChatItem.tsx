@@ -7,15 +7,17 @@ import {
   getChatDisplayImage,
 } from "@/domain/chat/chat.utils";
 
+import { ChatWithDetails } from "@/domain/chat/chat.types";
+
 export default function ChatItem({
   chat,
   loggedUserId,
 }: {
-  chat: any;
+  chat: ChatWithDetails;
   loggedUserId: string;
 }) {
   const otherMember = chat.members.find(
-    (member: any) => member.userId !== loggedUserId,
+    (member) => member.userId !== loggedUserId,
   );
 
   const otherUser = otherMember?.user;

@@ -2,6 +2,7 @@ import React from "react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Typography from "@/components/atoms/Typography";
+import { cn } from "@/lib/utils";
 
 interface FloatingCardListProps {
   title: string;
@@ -26,18 +27,23 @@ export default function FloatingCardList({
   items,
   showViewAll = false,
   viewAllHref,
-  className = "",
+  className,
 }: FloatingCardListProps) {
   return (
-    <section className={`flex flex-col gap-8 animate-fade-in ${className}`}>
+    <section className={cn("flex flex-col gap-8 animate-fade-in", className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <Typography variant="h2" className="text-3xl md:text-4xl font-bold text-txt-main tracking-tight">
+          <Typography
+            variant="h2"
+            weight="bold"
+            color="main"
+            className="text-3xl md:text-4xl"
+          >
             {title}
           </Typography>
           {description && (
-            <Typography variant="p" className="text-secondary text-balance">
+            <Typography variant="body" color="sec" wrap="balance">
               {description}
             </Typography>
           )}
@@ -69,32 +75,48 @@ export default function FloatingCardList({
                   style={{ backgroundImage: `url(${item.image})` }}
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-surface to-surface-secondary flex items-center justify-center">
-                  {item.icon || <div className="w-8 h-8 rounded-full bg-surface-tertiary flex items-center justify-center text-secondary/40" />}
+                <div className="w-full h-full bg-linear-to-br from-surface to-surface-secondary flex items-center justify-center">
+                  {item.icon || (
+                    <div className="w-8 h-8 rounded-full bg-surface-tertiary flex items-center justify-center text-secondary/40" />
+                  )}
                 </div>
               )}
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-end p-4">
+              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent flex items-end p-4">
                 <div className="flex flex-col gap-2 transform transition-transform duration-500 group-hover:-translate-y-1">
-                  <span className="font-bold text-white text-sm leading-tight line-clamp-2">
+                  <Typography
+                    variant="ui-sm"
+                    weight="bold"
+                    color="inverse"
+                    className="line-clamp-2"
+                  >
                     {item.title}
-                  </span>
+                  </Typography>
                   {item.subtitle && (
-                    <span className="text-xs text-white/80 line-clamp-1">
+                    <Typography
+                      variant="micro"
+                      color="inverse"
+                      className="opacity-80 line-clamp-1"
+                    >
                       {item.subtitle}
-                    </span>
+                    </Typography>
                   )}
                   {item.badge && (
-                    <span className="text-xs uppercase tracking-wider text-brand font-bold bg-brand/20 px-2 py-1 rounded-full inline-block">
+                    <Typography
+                      variant="micro"
+                      weight="bold"
+                      color="brand"
+                      className="bg-brand/20 px-2 py-1 rounded-full inline-block"
+                    >
                       {item.badge}
-                    </span>
+                    </Typography>
                   )}
                 </div>
               </div>
 
               {/* Hover Glow */}
-              <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-brand to-brand-alt transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
+              <div className="absolute inset-x-0 bottom-0 h-1 bg-linear-to-r from-brand to-brand-alt transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-full" />
             </Link>
           ))
         ) : (
@@ -102,10 +124,20 @@ export default function FloatingCardList({
             <div className="bg-surface-secondary/50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
               <div className="w-10 h-10 rounded-full bg-surface-tertiary flex items-center justify-center text-secondary/40" />
             </div>
-            <Typography variant="h4" className="text-secondary font-medium mb-2">
+            <Typography
+              variant="h4"
+              weight="medium"
+              color="sec"
+              className="mb-2"
+            >
               No items found
             </Typography>
-            <Typography variant="p" className="text-secondary/60 text-sm max-w-[250px] mx-auto text-balance">
+            <Typography
+              variant="body-sm"
+              color="sec"
+              className="opacity-60 max-w-[250px] mx-auto"
+              wrap="balance"
+            >
               Check back soon for more content
             </Typography>
           </div>

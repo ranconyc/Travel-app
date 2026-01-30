@@ -18,9 +18,14 @@ export const createPlaceAction = createAdminAction(
 );
 
 export const getAllPlacesAction = createPublicAction(
-  z.object({}).optional(),
-  async () => {
-    return await handleGetAllPlaces();
+  z
+    .object({
+      limit: z.number().optional(),
+      offset: z.number().optional(),
+    })
+    .optional(),
+  async (input) => {
+    return await handleGetAllPlaces(input?.limit, input?.offset);
   },
 );
 

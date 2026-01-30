@@ -19,10 +19,10 @@ export const AutocompleteInput = forwardRef<
       <input
         ref={ref}
         className={[
-          "bg-surface text-txt-main px-4 h-11 rounded-md font-medium border-2 border-surface transition-all w-full",
-          "focus:outline-none focus:ring-2 focus:ring-brand/50",
+          "bg-surface text-txt-main px-4 h-12 rounded-[8px] font-medium border-1 border-surface-secondary transition-all w-full shadow-sm placeholder:text-secondary/60",
+          "focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand",
           "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-          error ? "border-red-500 ring-1 ring-red-500" : "border-surface",
+          error ? "border-error ring-1 ring-error" : "",
           className,
           showClear ? "pr-10" : "pr-4",
         ].join(" ")}

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ProfileErrorBoundary } from "@/app/profile/edit/ProfileErrorBoundary";
+import { ProfileErrorBoundary } from "@/app/(public)/profile/edit/ProfileErrorBoundary";
 import { motion } from "framer-motion";
 
 export type AppShellVariant = "default" | "narrow" | "full" | "screen";

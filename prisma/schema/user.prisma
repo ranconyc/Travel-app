@@ -44,6 +44,9 @@ model User {
   /* ---- NOTIFICATIONS ---- */
   notifications Notification[]
 
+  /* ---- FAVORITES ---- */
+  favorites Favorite[]
+
   /* ---- AUTH ---- */
   accounts Account[]
   sessions Session[]

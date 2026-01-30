@@ -19,21 +19,23 @@ export default function CurrencySection({
     <Block>
       <div className="flex items-center gap-2 mb-2">
         <CircleDollarSign size={16} />
-        <Typography variant="h1" className="font-bold w-fit capitalize">
+        <Typography variant="h3" weight="bold" className="w-fit capitalize">
           Currency
         </Typography>
       </div>
       <div className="flex items-center justify-between gap-md">
         {/* <h1 className="text-ui-sm capitalize mb-1">Currency Name</h1> */}
-        <p className="text-xs">
+        <Typography variant="body-sm">
           {name} {symbol} {code && `(${code})`}
-        </p>
+        </Typography>
       </div>
 
       {paymentMethodsNote && (
         <>
-          <h1 className="text-ui-sm capitalize mb-1">Payment Methods</h1>
-          <p className="text-xs">{paymentMethodsNote}</p>
+          <Typography variant="ui-sm" className="capitalize mb-1">
+            Payment Methods
+          </Typography>
+          <Typography variant="body-sm">{paymentMethodsNote}</Typography>
         </>
       )}
     </Block>

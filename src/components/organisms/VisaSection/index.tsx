@@ -7,8 +7,6 @@ type VisaProps = {
   passportValidityNote: string;
 };
 
-const subtitle = "text-ui-sm capitalize mb-1";
-
 export default function VisaSection({
   visaOnArrivalNote,
   passportValidityNote,
@@ -17,18 +15,22 @@ export default function VisaSection({
     <Block>
       <div className="flex items-center gap-2 mb-2">
         <BookOpenCheck size={16} />
-        <Typography variant="h1" className="font-bold w-fit capitalize">
+        <Typography variant="h3" weight="bold" className="w-fit capitalize">
           Visa Entry
         </Typography>
       </div>
       {/* i will want to know the nationally of the user */}
       <div>
-        <h2 className={subtitle}>Visa on Arrival</h2>
-        <p className="text-sm">{visaOnArrivalNote}</p>
+        <Typography variant="ui-sm" className="capitalize mb-1">
+          Visa on Arrival
+        </Typography>
+        <Typography variant="body-sm">{visaOnArrivalNote}</Typography>
       </div>
       <div>
-        <h2 className={subtitle}>Passport Validity</h2>
-        <p className="text-sm">{passportValidityNote}</p>
+        <Typography variant="ui-sm" className="capitalize mb-1">
+          Passport Validity
+        </Typography>
+        <Typography variant="body-sm">{passportValidityNote}</Typography>
       </div>
     </Block>
   );

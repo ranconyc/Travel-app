@@ -2,17 +2,52 @@
 
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { useClickOutside } from "@/hooks/ui/useClickOutside";
-import { bg } from "zod/v4/locales";
+import { useClickOutside } from "@/lib/hooks/ui/useClickOutside";
+import Button from "@/components/atoms/Button";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+import Portal from "@/components/atoms/Portal";
 
-interface ModalProps {
+const modalOverlayVariants = cva(
+  "fixed inset-0 z-50 flex justify-center bg-black/40 backdrop-blur-sm animate-fade-in",
+  {
+    variants: {
+      variant: {
+        popup: "items-center",
+        "slide-up": "items-end",
+      },
+    },
+    defaultVariants: {
+      variant: "popup",
+    },
+  },
+);
+
+const modalContentVariants = cva(
+  "w-full bg-white shadow-2xl flex flex-col overflow-hidden transition-all duration-300",
+  {
+    variants: {
+      variant: {
+        popup: "mx-lg animate-scale-in rounded-3xl",
+        "slide-up":
+          "mx-xs animate-slide-up rounded-t-4xl md:rounded-4xl md:mb-8",
+      },
+    },
+    defaultVariants: {
+      variant: "popup",
+    },
+  },
+);
+
+export interface ModalProps
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
+    VariantProps<typeof modalContentVariants> {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   title?: React.ReactNode;
   showCloseButton?: boolean;
-  className?: string;
-  variant?: "popup" | "slide-up";
 }
 
 export default function Modal({
@@ -23,6 +58,7 @@ export default function Modal({
   showCloseButton = true,
   className = "",
   variant = "popup",
+  ...props
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -48,47 +84,42 @@ export default function Modal({
 
   if (!isOpen) return null;
 
-  const isSlideUp = variant === "slide-up";
-
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className={`fixed inset-0 z-50 flex justify-center bg-black/40 backdrop-blur-sm animate-fade-in ${
-        isSlideUp ? "items-end" : "items-center"
-      }`}
-    >
+    <Portal>
       <div
-        ref={modalRef}
-        /* Removed h-fit to let content define height, added overflow-hidden for rounded corners */
-        className={`w-full bg-white shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
-          isSlideUp
-            ? "mx-xs animate-slide-up rounded-t-4xl md:rounded-4xl md:mb-8"
-            : "mx-lg animate-scale-in rounded-3xl"
-        } ${className}`}
+        role="dialog"
+        aria-modal="true"
+        className={cn(modalOverlayVariants({ variant }))}
       >
-        {/* Header Section */}
-        {(title || showCloseButton) && (
-          <div className="flex items-center justify-between p-6 pb-2">
-            {title && (
-              <div className="text-xl font-bold text-gray-900">{title}</div>
-            )}
-            {showCloseButton && (
-              <button
-                type="button"
-                onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Close modal"
-              >
-                <X size={20} />
-              </button>
-            )}
-          </div>
-        )}
+        <div
+          ref={modalRef}
+          className={cn(modalContentVariants({ variant }), className)}
+          {...props}
+        >
+          {/* Header Section */}
+          {(title || showCloseButton) && (
+            <div className="flex items-center justify-between p-6 pb-2">
+              {title && (
+                <div className="text-xl font-bold text-gray-900">{title}</div>
+              )}
+              {showCloseButton && (
+                <Button
+                  variant="icon"
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close modal"
+                  icon={<X size={20} />}
+                />
+              )}
+            </div>
+          )}
 
-        {/* Content Section - Added padding and scrolling fix */}
-        <div className="p-6 pt-2 overflow-y-auto max-h-[80vh]">{children}</div>
+          {/* Content Section */}
+          <div className="p-6 pt-2 overflow-y-auto max-h-[80vh]">
+            {children}
+          </div>
+        </div>
       </div>
-    </div>
+    </Portal>
   );
 }

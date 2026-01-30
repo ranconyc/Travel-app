@@ -124,7 +124,6 @@ export async function findNearbyCountries(
   limit = 20,
 ): Promise<Country[]> {
   try {
-    console.log("findNearbyCountries", lng, lat);
     const res = await prisma.country.aggregateRaw({
       pipeline: [
         {
@@ -138,7 +137,6 @@ export async function findNearbyCountries(
         { $limit: limit },
       ],
     });
-    console.log("findNearbyCountries res", res);
 
     return (res as unknown as any[]).map((row) => ({
       ...row,

@@ -1,13 +1,44 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-interface CardProps {
+const cardVariants = cva(
+  "rounded-card overflow-hidden transition-all duration-300 relative group w-full",
+  {
+    variants: {
+      variant: {
+        surface: "bg-surface shadow-card",
+        "surface-secondary": "bg-surface-secondary",
+        image: "bg-surface-secondary", // Fallback if image fails
+      },
+      hover: {
+        true: "hover:shadow-xl hover:-translate-y-1",
+        false: "",
+      },
+      aspectRatio: {
+        "aspect-[3.2/4]": "aspect-[3.2/4]",
+        auto: "",
+        square: "aspect-square",
+        video: "aspect-video",
+      },
+    },
+    defaultVariants: {
+      variant: "surface",
+      hover: true,
+      aspectRatio: "auto",
+    },
+  },
+);
+
+interface CardProps extends Omit<
+  VariantProps<typeof cardVariants>,
+  "aspectRatio"
+> {
+  aspectRatio?: VariantProps<typeof cardVariants>["aspectRatio"] | string;
   children: React.ReactNode;
-  variant?: "surface" | "surface-secondary" | "image";
   className?: string;
-  hover?: boolean;
   // Image Card Props
   image?: {
     src?: string;
@@ -15,7 +46,6 @@ interface CardProps {
     priority?: boolean;
   };
   linkHref?: string;
-  aspectRatio?: string; // e.g. "aspect-[3.2/4]"
   gradient?: boolean | string;
   priority?: boolean;
 }
@@ -46,27 +76,16 @@ function CardImage({
 
 export default function Card({
   children,
-  variant = "surface",
+  variant,
   className = "",
-  hover = true,
+  hover,
   image,
   linkHref,
-  aspectRatio = "aspect-[3.2/4]",
+  aspectRatio, // Let CVA handle this if passed as a known class, or fallback
   gradient = true,
   priority = false,
 }: CardProps) {
   const isImageCard = variant === "image" || !!image;
-  const baseStyles =
-    "rounded-card overflow-hidden transition-all duration-300 relative group w-full";
-
-  const variantStyles = {
-    surface: "bg-surface shadow-card",
-    "surface-secondary": "bg-surface-secondary",
-    image: "bg-surface-secondary", // Fallback if image fails
-  };
-
-  const hoverStyles = hover ? "hover:shadow-xl hover:-translate-y-1" : "";
-  const ratioStyles = isImageCard ? aspectRatio : "";
 
   // Determine gradient class
   const gradientClass =
@@ -76,13 +95,31 @@ export default function Card({
         ? gradient
         : "bg-gradient-to-t from-black/60 via-black/30 to-transparent";
 
+  // If provided, aspectRatio prop might be a direct class string in legacy code,
+  // or one of our keys. We'll try to use it as a variant if it matches,
+  // otherwise explicit class merge.
+  const ratioVariant =
+    aspectRatio === "aspect-[3.2/4]"
+      ? "aspect-[3.2/4]"
+      : aspectRatio === "aspect-square"
+        ? "square"
+        : aspectRatio === "aspect-video"
+          ? "video"
+          : "auto";
+
+  // Legacy aspect ratio support: if it was a raw string not in variants, append it to className
+  const extraClasses =
+    ratioVariant === "auto" && aspectRatio ? aspectRatio : "";
+
   const content = (
     <div
       className={cn(
-        baseStyles,
-        !isImageCard && variantStyles[variant],
-        hoverStyles,
-        ratioStyles,
+        cardVariants({
+          variant: isImageCard ? "image" : variant,
+          hover,
+          aspectRatio: isImageCard ? ratioVariant : undefined,
+        }),
+        isImageCard && extraClasses,
         className,
       )}
     >

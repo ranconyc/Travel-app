@@ -1,11 +1,8 @@
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
-import { Languages, BookOpen, ChevronRight } from "lucide-react";
-import PhraseCard from "@/components/molecules/PhraseCard";
-import { commonPhrasesService } from "@/services/common-phrases.service";
-import { CommonPhrase, LanguageData } from "@/types/language.types";
+import { Languages, BookOpen } from "lucide-react";
+import { CommonPhrase } from "@/types/language.types";
 
-const subtitle = "text-ui-sm capitalize mb-1";
 const flexBetween = "flex items-center justify-between";
 
 type SpokenLanguagesProps = {
@@ -23,8 +20,10 @@ export function SpokenLanguages({
 
   return (
     <div className={flexBetween}>
-      <h2 className={subtitle}>Spoken Language</h2>
-      <p className="text-sm">{lang}</p>
+      <Typography variant="ui-sm" className="capitalize">
+        Spoken Language
+      </Typography>
+      <Typography variant="body-sm">{lang}</Typography>
     </div>
   );
 }
@@ -37,7 +36,9 @@ const CommonPhrases = ({ phrases }: CommonPhrasesProps) => {
   if (!phrases || phrases.length === 0) {
     return (
       <div>
-        <h2 className={subtitle}>Common Phrases</h2>
+        <Typography variant="ui-sm" className="mb-2">
+          Common Phrases
+        </Typography>
         <div className="flex items-center gap-3 p-4 bg-surface-secondary/30 rounded-lg">
           <BookOpen className="w-5 h-5 text-secondary" />
           <div>
@@ -53,7 +54,9 @@ const CommonPhrases = ({ phrases }: CommonPhrasesProps) => {
 
   return (
     <div>
-      <h2 className={subtitle}>Common Phrases</h2>
+      <Typography variant="ui-sm" className="mb-2">
+        Common Phrases
+      </Typography>
       <div className="grid gap-2">
         {phrases.slice(0, 5).map((phrase: CommonPhrase, idx: number) => (
           <div
@@ -67,12 +70,12 @@ const CommonPhrases = ({ phrases }: CommonPhrasesProps) => {
                 </span>
               </div>
               <div>
-                <p className="text-ui-sm text-txt-main">
+                <Typography variant="ui-sm" color="main">
                   {phrase?.label || "Unknown phrase"}
-                </p>
-                <p className="text-xs text-secondary">
+                </Typography>
+                <Typography variant="caption-sm" color="sec">
                   {phrase?.local || phrase?.romanized || ""}
-                </p>
+                </Typography>
               </div>
             </div>
             <div className="w-4 h-4 text-secondary opacity-0 group-hover:opacity-100 transition-opacity">
@@ -93,8 +96,10 @@ const EnglishProficiency = ({
   englishProficiencyNote,
 }: EnglishProficiencyProps) => (
   <div>
-    <h2 className={subtitle}>English Proficiency</h2>
-    <p className=" text-sm">{englishProficiencyNote}</p>
+    <Typography variant="ui-sm" className="mb-1">
+      English Proficiency
+    </Typography>
+    <Typography variant="body-sm">{englishProficiencyNote}</Typography>
   </div>
 );
 
@@ -119,7 +124,7 @@ export default function LanguageSection({
     <Block>
       <div className="flex items-center gap-2 mb-2">
         <Languages size={16} />
-        <Typography variant="h1" className="font-bold w-fit capitalize">
+        <Typography variant="h3" weight="bold" className="w-fit capitalize">
           Language & Communication
         </Typography>
       </div>
@@ -138,7 +143,9 @@ export default function LanguageSection({
       {/* Legacy Useful Phrases (fallback) */}
       {usefulPhrases && !primaryLanguageCode && (
         <div>
-          <h2 className={subtitle}>useful phrases</h2>
+          <Typography variant="ui-sm" className="mb-2 uppercase">
+            useful phrases
+          </Typography>
           <div className="grid gap-2">
             {usefulPhrases.map((p) => (
               <div className={flexBetween} key={p.en}>

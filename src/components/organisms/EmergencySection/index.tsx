@@ -10,8 +10,6 @@ type EmergencyProps = {
   fire: string;
 };
 
-const subtitle = "text-ui-sm capitalize mb-1";
-const paragraph = "text-sm  text-gray-600";
 const flexBetween = "flex items-center justify-between";
 
 export default function EmergencySection({
@@ -27,32 +25,48 @@ export default function EmergencySection({
     <Block>
       <div className="flex items-center gap-2 mb-2">
         <ShieldAlert size={16} />
-        <Typography variant="h1" className="font-bold w-fit capitalize">
+        <Typography variant="h3" weight="bold" className="w-fit capitalize">
           Emergency Contact
         </Typography>
       </div>
       {touristPolice && (
         <div className={flexBetween}>
-          <h1 className={subtitle}>Police</h1>
-          <p className={paragraph}>{touristPolice}</p>
+          <Typography variant="ui-sm" className="capitalize">
+            Police
+          </Typography>
+          <Typography variant="body-sm" color="sec">
+            {touristPolice}
+          </Typography>
         </div>
       )}
       {emergency && (
         <div className={flexBetween}>
-          <h1 className={subtitle}>Emergency</h1>
-          <p className={paragraph}>{emergency}</p>
+          <Typography variant="ui-sm" className="capitalize">
+            Emergency
+          </Typography>
+          <Typography variant="body-sm" color="sec">
+            {emergency}
+          </Typography>
         </div>
       )}
       {ambulance && (
         <div className={flexBetween}>
-          <h1 className={subtitle}>Ambulance</h1>
-          <p className={paragraph}>{ambulance}</p>
+          <Typography variant="ui-sm" className="capitalize">
+            Ambulance
+          </Typography>
+          <Typography variant="body-sm" color="sec">
+            {ambulance}
+          </Typography>
         </div>
       )}
       {fire && (
         <div className={flexBetween}>
-          <h1 className={subtitle}>Fire</h1>
-          <p className={paragraph}>{fire}</p>
+          <Typography variant="ui-sm" className="capitalize">
+            Fire
+          </Typography>
+          <Typography variant="body-sm" color="sec">
+            {fire}
+          </Typography>
         </div>
       )}
     </Block>

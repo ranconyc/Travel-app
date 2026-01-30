@@ -3,7 +3,7 @@ import { getUserById } from "@/lib/db/user.repo";
 import { redirect } from "next/navigation";
 import NearbyMatesClient from "./components/NearbyMatesClient";
 import { getMatesPageData } from "@/domain/mates/mates.service";
-import Block from "@/components/atoms/Block";
+
 import { User } from "@/domain/user/user.schema";
 
 export default async function NearbyMatesPage({
@@ -29,12 +29,12 @@ export default async function NearbyMatesPage({
   );
 
   return (
-    <Block>
+    <div className="bg-main min-h-screen">
       <NearbyMatesClient
         mates={matesWithMatch}
         loggedUser={loggedUser}
         pagination={pagination}
       />
-    </Block>
+    </div>
   );
 }

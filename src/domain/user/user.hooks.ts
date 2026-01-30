@@ -11,6 +11,7 @@ import {
   getAllUsersAction,
   getAuthenticatedUserAction,
   completeOnboarding,
+  completeIdentityOnboarding,
 } from "@/domain/user/user.actions";
 import { useEffect, useRef } from "react";
 import type { UseFormReturn, FieldValues } from "react-hook-form";
@@ -22,6 +23,7 @@ import { useLocationStore } from "@/store/locationStore";
 import { useAppStore } from "@/store/appStore";
 import { User } from "@/domain/user/user.schema";
 import { PersonaFormValues } from "@/domain/persona/persona.schema";
+import { OnboardingIdentityFormValues } from "@/domain/user/onboarding.schema";
 import {
   SaveInterestsFormValues,
   SaveTravelFormValues,
@@ -177,11 +179,15 @@ export function useUpdateUserRole() {
 export function useCompleteOnboarding() {
   const queryClient = useQueryClient();
 
-  return useMutation<{ success: boolean }, Error, {
-    interests: string[];
-    budget: string;
-    travelRhythm: string;
-  }>({
+  return useMutation<
+    { success: boolean },
+    Error,
+    {
+      interests: string[];
+      budget: string;
+      travelRhythm: string;
+    }
+  >({
     mutationFn: async (values) => {
       const res = await completeOnboarding(values);
       if (!res.success) {
@@ -195,6 +201,26 @@ export function useCompleteOnboarding() {
       queryClient.invalidateQueries({ queryKey: ["user", "interests"] });
     },
   });
+}
+
+export function useCompleteIdentityOnboarding() {
+  const queryClient = useQueryClient();
+
+  return useMutation<{ success: boolean }, Error, OnboardingIdentityFormValues>(
+    {
+      mutationFn: async (values) => {
+        const res = await completeIdentityOnboarding(values);
+        if (!res.success) {
+          throw new Error(res.error);
+        }
+        return res.data;
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["user", "me"] });
+        queryClient.invalidateQueries({ queryKey: ["user", "profile"] });
+      },
+    },
+  );
 }
 
 export function useUsers() {

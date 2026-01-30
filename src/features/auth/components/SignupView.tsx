@@ -108,7 +108,7 @@ export const SignupView = ({ onSwitch }: SignupViewProps) => {
           </Button>
         </div>
         <div className="flex items-center justify-center gap-xs">
-          <Typography variant="sm" className="text-txt-sec">
+          <Typography variant="body-sm" className="text-txt-sec">
             Already a member?
           </Typography>
           <button

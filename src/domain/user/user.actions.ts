@@ -80,7 +80,70 @@ export const completeOnboarding = createSafeAction(
 
     // Update profileCompleted flag directly in database
     await updateUserRole(userId, "USER");
-    
+
+    return { success: true };
+  },
+);
+
+import { onboardingIdentitySchema } from "@/domain/user/onboarding.schema";
+
+export const completeIdentityOnboarding = createSafeAction(
+  onboardingIdentitySchema,
+  async (data, userId) => {
+    // 1. Parse Birthday
+    const { day, month, year } = data.birthday;
+    // UserUpdateSchema expects date string or Date object?
+    // user.service.ts handleUpsertUserProfile converts string to Date.
+    // UserUpdateSchema defines birthday is string | null.
+    const birthdayString = `${year}-${month}-${day}`;
+
+    // 2. Parse Name
+    const [firstName, ...lastNameParts] = data.fullName.split(" ");
+    const lastName = lastNameParts.join(" ");
+
+    // 3. Update User Profile
+    const { ensureCountryAndCityFromLocation } =
+      await import("@/domain/city/city.service");
+
+    let homeBaseCityId = undefined;
+    if (data.location.coords) {
+      type CityMeta = Parameters<typeof ensureCountryAndCityFromLocation>[0];
+      const meta: CityMeta = {
+        city: data.location.name,
+        displayName: data.location.name,
+        countryCode: "US", // Placeholder - we really need this from autocomplete
+        country: undefined,
+        lat: data.location.coords.coordinates[1],
+        lon: data.location.coords.coordinates[0],
+        provider: "onboarding",
+        placeId: data.location.placeId || "unknown",
+        boundingBox: undefined,
+      };
+
+      try {
+        // Try resolving city if we have enough info
+        // For now, let's use a simpler heuristic or just bypass strict city creation if country is missing?
+        // Actually, if we use findNearestCityFromCoords it handles strictness better.
+        const { findNearestCityFromCoords } =
+          await import("@/domain/city/city.service");
+        const detected = await findNearestCityFromCoords(meta.lat, meta.lon, {
+          createIfMissing: true,
+        });
+        if (detected.id) homeBaseCityId = detected.id;
+      } catch (e) {
+        console.error("City resolution failed", e);
+      }
+    }
+
+    await handleUpsertUserProfile(userId, {
+      firstName,
+      lastName,
+      gender: data.gender,
+      birthday: birthdayString,
+      homeBaseCityId,
+      avatarUrl: data.avatarUrl,
+    });
+
     return { success: true };
   },
 );

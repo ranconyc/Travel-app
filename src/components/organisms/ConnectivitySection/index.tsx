@@ -17,15 +17,22 @@ export default function ConnectivitySection({
     <Block>
       <div className="flex items-center gap-2 mb-2">
         <Wifi size={16} />
-        <Typography variant="h1" className="font-bold w-fit capitalize">
+        <Typography variant="h3" weight="bold" className="w-fit capitalize">
           Internet & Connectivity
         </Typography>
       </div>
-      <h2>SIM Cards</h2>
-      <p className="text-sm">{simNote}</p>
-      <p className="text-sm">Price: {simePrice}</p>
-      <h2>WiFi Availability</h2>
-      <p className="text-sm">{wifiNote}</p>
+      <Typography variant="ui-sm" className="mt-2 mb-1">
+        SIM Cards
+      </Typography>
+      <Typography variant="body-sm">{simNote}</Typography>
+      <Typography variant="body-sm" color="sec" className="mt-1">
+        Price: {simePrice}
+      </Typography>
+
+      <Typography variant="ui-sm" className="mt-3 mb-1">
+        WiFi Availability
+      </Typography>
+      <Typography variant="body-sm">{wifiNote}</Typography>
     </Block>
   );
 }

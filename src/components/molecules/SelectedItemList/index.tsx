@@ -1,6 +1,7 @@
 "use client";
 
 import SelectedItem from "@/components/molecules/SelectedItem";
+import { cn } from "@/lib/utils";
 
 interface SelectedItemListProps<T = string> {
   items: T[];
@@ -8,6 +9,7 @@ interface SelectedItemListProps<T = string> {
   getLabel?: (item: T) => string;
   title?: string;
   emptyText?: string;
+  className?: string;
 }
 
 /**
@@ -20,11 +22,12 @@ export default function SelectedItemList<T = string>({
   getLabel,
   title = "Selected:",
   emptyText,
+  className,
 }: SelectedItemListProps<T>) {
   if (items.length === 0 && !emptyText) return null;
 
   return (
-    <div className="mb-8">
+    <div className={cn("mb-8", className)}>
       {title && <h1 className="text-xl font-bold mb-md">{title}</h1>}
       {items.length === 0 ? (
         emptyText && <p className="text-sm text-secondary">{emptyText}</p>

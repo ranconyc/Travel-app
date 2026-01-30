@@ -244,3 +244,19 @@ export async function upsertCity(
     create: { ...data, cityId } as Prisma.CityUpsertArgs["create"],
   });
 }
+
+// Search for cities by name
+export async function searchCities(query: string, limit = 10) {
+  try {
+    return await prisma.city.findMany({
+      where: {
+        name: { contains: query, mode: "insensitive" },
+      },
+      include: { country: true },
+      take: limit,
+    });
+  } catch (error) {
+    console.error("searchCities error:", error);
+    return [];
+  }
+}

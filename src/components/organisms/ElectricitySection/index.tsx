@@ -3,8 +3,6 @@ import Typography from "@/components/atoms/Typography";
 import { Plug } from "lucide-react";
 
 const flexBetween = "flex items-center justify-between";
-const subtitle = "text-ui-sm capitalize mb-1";
-const paragraph = "text-xs";
 
 type ElectricityProps = {
   voltage: string;
@@ -21,21 +19,27 @@ export default function ElectricitySection({
     <Block>
       <div className="flex items-center gap-2 mb-2">
         <Plug size={16} />
-        <Typography variant="h1" className="font-bold w-fit capitalize">
+        <Typography variant="h3" weight="bold" className="w-fit capitalize">
           Electricity
         </Typography>
       </div>
       <div className={flexBetween}>
-        <h1 className="text-ui-sm capitalize mb-1">Voltage</h1>
-        <p className="text-xs">{voltage}</p>
+        <Typography variant="ui-sm" className="capitalize">
+          Voltage
+        </Typography>
+        <Typography variant="body-sm">{voltage}</Typography>
       </div>
       <div className={flexBetween}>
-        <h1 className="text-ui-sm capitalize mb-1">Frequency</h1>
-        <p className="text-xs">{frequencyHz}HZ</p>
+        <Typography variant="ui-sm" className="capitalize">
+          Frequency
+        </Typography>
+        <Typography variant="body-sm">{frequencyHz}HZ</Typography>
       </div>
       <div className={flexBetween}>
-        <h1 className="text-ui-sm capitalize mb-1">Plugs</h1>
-        <p className="text-xs">{plugs.join(", ")}</p>
+        <Typography variant="ui-sm" className="capitalize">
+          Plugs
+        </Typography>
+        <Typography variant="body-sm">{plugs.join(", ")}</Typography>
       </div>
     </Block>
   );

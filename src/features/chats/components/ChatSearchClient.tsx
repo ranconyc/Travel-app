@@ -6,10 +6,14 @@ import { FriendChatStarter } from "./FriendChatStarter";
 import ChatItem from "./ChatItem";
 
 import PageHeader from "@/components/molecules/PageHeader";
+import Input from "@/components/atoms/Input";
+
+import { ChatWithDetails } from "@/domain/chat/chat.types";
+import { User } from "@/domain/user/user.schema";
 
 interface ChatSearchClientProps {
-  initialChats: any[];
-  initialFriends: any[];
+  initialChats: ChatWithDetails[];
+  initialFriends: User[];
   loggedUserId: string;
 }
 
@@ -37,7 +41,7 @@ export function ChatSearchClient({
     // Current logic: only show friends not already in a chat
     const friendsNotInChat = initialFriends.filter((friend) => {
       return !initialChats.some((chat) =>
-        chat.members.some((member: any) => member.userId === friend.id),
+        chat.members.some((member) => member.userId === friend.id),
       );
     });
 
@@ -45,8 +49,12 @@ export function ChatSearchClient({
 
     const query = searchQuery.toLowerCase();
     return friendsNotInChat.filter((friend) => {
-      const fullName = `${friend.firstName} ${friend.lastName}`.toLowerCase();
-      return fullName.includes(query);
+      const fullName = `${friend.profile?.firstName || ""} ${
+        friend.profile?.lastName || ""
+      }`.toLowerCase();
+      // Fallback to searching by name if profile name is empty (though rare for friends)
+      const displayName = friend.name?.toLowerCase() || "";
+      return fullName.includes(query) || displayName.includes(query);
     });
   }, [initialFriends, initialChats, searchQuery]);
 
@@ -57,12 +65,12 @@ export function ChatSearchClient({
         title="Chats"
         bottomContent={
           <div className="relative">
-            <input
+            <Input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search chats..."
-              className="w-full h-12 px-4 rounded-xl bg-surface/5 border border-surface focus:outline-none focus:ring-2 focus:ring-brand/50 transition-all duration-200"
+              className="h-12 bg-surface/5 border-surface focus:ring-brand/50"
             />
           </div>
         }
@@ -114,8 +122,12 @@ export function ChatSearchClient({
                 <FriendChatStarter
                   key={friend.id}
                   friendId={friend.id}
-                  friendName={`${friend.firstName} ${friend.lastName}`}
-                  friendImage={friend.profilePicture}
+                  friendName={
+                    friend.profile?.firstName
+                      ? `${friend.profile.firstName} ${friend.profile.lastName || ""}`
+                      : friend.name || "Unknown"
+                  }
+                  friendImage={friend.avatarUrl}
                 />
               ))}
             </div>

@@ -3,6 +3,7 @@ import React from "react";
 import SectionHeader from "@/components/molecules/SectionHeader";
 import HorizontalList from "@/components/molecules/HorizontalList";
 import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface SectionListProps<T> {
   title: string;
@@ -16,8 +17,8 @@ interface SectionListProps<T> {
   emptyText?: string;
   noScrollbar?: boolean;
   gap?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
-  className?: string;
-  isFloating?: boolean;
+  className?: string; // Container class
+  isFloating?: boolean; // If true, adds padding to header/list to compensate for full-bleed
 }
 
 export default function SectionList<T>({
@@ -32,20 +33,29 @@ export default function SectionList<T>({
   emptyText = "Nothing found.",
   noScrollbar = true,
   gap,
-  className = "",
+  className,
   isFloating = true,
-  }: SectionListProps<T>) {
+}: SectionListProps<T>) {
   return (
     <div className={className}>
-      <SectionHeader title={title} href={href} linkText={linkText} className={`${isFloating? "pl-md" :""}`} />
+      <SectionHeader
+        title={title}
+        href={href}
+        linkText={linkText}
+        className={cn(isFloating ? "pl-md" : "")}
+      />
 
-      <HorizontalList noScrollbar={noScrollbar} gap={gap} className={`${isFloating? "px-md" :""}`}>
+      <HorizontalList
+        noScrollbar={noScrollbar}
+        gap={gap}
+        className={cn(isFloating ? "px-md" : "")}
+      >
         {isLoading ? (
           <>
             {Array.from({ length: skeletonCount }).map((_, i) => (
               <div key={`skeleton-${i}`}>
                 {skeleton || (
-                  <div className="min-w-[200px] aspect-[4/3] animate-pulse bg-surface-secondary rounded-3xl" />
+                  <div className="min-w-[200px] aspect-4/3 animate-pulse bg-surface-secondary rounded-3xl" />
                 )}
               </div>
             ))}

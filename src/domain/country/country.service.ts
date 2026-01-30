@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import world from "@/data/world.json";
+import continentsData from "@/data/continents.json";
 import { updateCountry, deleteCountry } from "@/lib/db/country.repo";
 import { CountryMapper } from "./country.mapper";
 
@@ -146,12 +147,32 @@ export async function createCountryFromName(countryName: string) {
     throw new Error("Country name is required");
   }
 
-  const countryRef = world.find(
-    (c) => c.name.common.toLowerCase() === nameTrimmed.toLowerCase(),
-  );
-  console.log("Country ref", countryRef);
+  const countryRef = (world as unknown as RestCountry[]).find((c) => {
+    const lowerInput = nameTrimmed.toLowerCase();
+    const common = c.name.common.toLowerCase();
+    const official = c.name.official.toLowerCase();
+    const cca2 = c.cca2.toLowerCase();
+    const cca3 = c.cca3?.toLowerCase() || "";
+    const alt = c.altSpellings?.map((s) => s.toLowerCase()) || [];
+
+    return (
+      common === lowerInput ||
+      official === lowerInput ||
+      cca2 === lowerInput ||
+      cca3 === lowerInput ||
+      alt.includes(lowerInput)
+    );
+  });
+  console.log("Country ref found:", countryRef?.name.common);
+
   if (!countryRef) {
-    throw new Error("Country not found in the world");
+    console.error(`Country not found for input: "${nameTrimmed}"`);
+    // Fallback: Try REST API regardless if local lookup failed?
+    // Actually, createCountryFromName relies on local world.json for initial validation/ref.
+    // But REST countries API might find it even if local JSON doesn't.
+    // However, the error "Country not found in the world" specifically comes from THIS check.
+    // Let's rely on the robust check above.
+    throw new Error(`Country "${nameTrimmed}" not found in the world data`);
   }
 
   // 1) Fetch from REST Countries
@@ -227,9 +248,6 @@ export async function handleGetAllCountries(limit?: number, offset?: number) {
 
 // --- Travel Form Country Selection Functions ---
 
-import worldData from "@/data/world.json";
-import continentsData from "@/data/continents.json";
-
 export interface SortedCountry {
   code: string;
   name: string;
@@ -259,7 +277,9 @@ export function getContinents(): string[] {
  * Get country by code (cca2)
  */
 export function getCountryByCode(code: string): RestCountry | undefined {
-  return (worldData as RestCountry[]).find((country) => country.cca2 === code);
+  return (world as unknown as RestCountry[]).find(
+    (country) => country.cca2 === code,
+  );
 }
 
 /**
@@ -272,7 +292,7 @@ export function getCountryByCode(code: string): RestCountry | undefined {
 export function getSortedCountriesByContinent(
   continentId: string,
 ): SortedCountry[] {
-  const countries = (worldData as RestCountry[]).filter(
+  const countries = (world as unknown as RestCountry[]).filter(
     (country) => country.region === continentId,
   );
 

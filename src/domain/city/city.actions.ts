@@ -10,6 +10,7 @@ import {
   handleUpdateCity,
   handleDeleteCity,
   handleGetAllCities,
+  searchCitiesWithFallback,
 } from "@/domain/city/city.service";
 import { homeBaseLocationMetaSchema } from "@/domain/user/completeProfile.schema";
 import { CityUpdateSchema } from "@/domain/city/city.schema";
@@ -95,6 +96,13 @@ export const updateCityAction = createAdminAction(
   }),
   async ({ id, data }) => {
     return await handleUpdateCity(id, data);
+  },
+);
+
+export const searchCityAction = createPublicAction(
+  z.object({ query: z.string().min(2), limit: z.number().optional() }),
+  async ({ query, limit }) => {
+    return await searchCitiesWithFallback(query, limit || 10);
   },
 );
 

@@ -3,9 +3,19 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import ImageWithFallback from "@/components/atoms/ImageWithFallback";
-import Typography from "@/components/atoms/Typography/enhanced";
+import Typography from "@/components/atoms/Typography";
 import { useState, useEffect } from "react";
-import { getCityImage, getFallbackImage } from "@/utils/image-helpers";
+import { getCityImage } from "@/utils/image-helpers";
+import { cva } from "class-variance-authority";
+
+// CVA for overlay gradients and container
+const cardOverlayVariants = cva(
+  "absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none",
+);
+
+const cardContainerVariants = cva(
+  "group relative flex flex-col rounded-2xl overflow-hidden bg-surface border border-surface-secondary shadow-sm hover:shadow-md transition-all active:scale-[0.98]",
+);
 
 interface CityCardProps {
   city: {
@@ -59,7 +69,7 @@ export default function CityCard({ city, useUnsplash = true }: CityCardProps) {
     <Link
       key={city.id}
       href={`/cities/${city.cityId}`}
-      className="group relative flex flex-col rounded-2xl overflow-hidden bg-surface border border-surface-secondary shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+      className={cardContainerVariants()}
     >
       <div className="aspect-[3/4] relative overflow-hidden">
         <ImageWithFallback
@@ -78,7 +88,7 @@ export default function CityCard({ city, useUnsplash = true }: CityCardProps) {
             </div>
           }
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className={cardOverlayVariants()} />
 
         <div className="absolute bottom-0 left-0 p-3 w-full">
           <Typography

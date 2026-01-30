@@ -1,4 +1,5 @@
 import React from "react";
+import Typography from "@/components/atoms/Typography";
 
 export type StampStyle =
   | "circle"
@@ -159,11 +160,11 @@ const stampVariants: Record<StampStyle, string> = {
 
   // Retro
   "retro-ticket-1":
-    "ticket-shape rounded border-[2px] border-dashed border-rose-700 w-28 h-20 flex items-center justify-center relative text-rose-700",
+    "ticket-shape rounded border-2 border-dashed border-rose-700 w-28 h-20 flex items-center justify-center relative text-rose-700",
   "retro-ticket-2":
     "ticket-shape rounded border-[3px] border-dotted border-teal-700 w-28 h-20 flex items-center justify-center relative text-teal-700",
   "retro-badge-1":
-    "badge-shape rounded border-[2px] border-solid border-indigo-700 w-24 h-24 flex items-center justify-center relative text-indigo-700",
+    "badge-shape rounded border-2 border-solid border-indigo-700 w-24 h-24 flex items-center justify-center relative text-indigo-700",
   "retro-badge-2":
     "badge-shape rounded border-[4px] border-double border-amber-700 w-24 h-24 flex items-center justify-center relative text-amber-700",
 
@@ -219,14 +220,28 @@ export const CityStamp: React.FC<CityStampProps> = ({
         } flex flex-col items-center justify-center text-center gap-0.5 px-2 z-10`}
       >
         {icon && <div className="mb-0.5 opacity-80">{icon}</div>}
-        <div className="text-micro font-black uppercase leading-tight tracking-wide">
+        <Typography
+          variant="micro"
+          weight="black"
+          className="uppercase leading-tight tracking-wide"
+        >
           {cityName}
-        </div>
-        <div className="text-p font-semibold uppercase opacity-70 leading-tight tracking-wider">
+        </Typography>
+        <Typography
+          variant="body"
+          weight="semibold"
+          className="uppercase opacity-70 leading-tight tracking-wider"
+        >
           {countryName}
-        </div>
+        </Typography>
         {date && (
-          <div className="text-p font-medium opacity-60 mt-0.5">{date}</div>
+          <Typography
+            variant="caption"
+            weight="medium"
+            className="opacity-60 mt-0.5"
+          >
+            {date}
+          </Typography>
         )}
       </div>
     );

@@ -2,16 +2,34 @@
 
 import React, { forwardRef, useId } from "react";
 import ErrorMessage from "@/components/atoms/ErrorMessage";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label?: string;
-  error?: string;
-  hintId?: string;
-  hintText?: string;
-  className?: string;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-};
+const inputVariants = cva(
+  "w-full bg-surface text-txt-main font-medium transition-all shadow-sm h-12 rounded-[8px] border-1 placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand disabled:bg-surface-secondary disabled:cursor-not-allowed",
+  {
+    variants: {
+      variant: {
+        default: "border-surface-secondary",
+        error: "border-error ring-1 ring-error",
+      },
+      // We could add size variants here if needed in future
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
+
+type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> &
+  VariantProps<typeof inputVariants> & {
+    label?: string;
+    error?: string;
+    hintId?: string;
+    hintText?: string;
+    leftIcon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
+  };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
@@ -24,6 +42,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     hintText,
     leftIcon,
     rightIcon,
+    variant,
     ...rest
   },
   ref,
@@ -62,19 +81,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           id={inputId}
           name={name}
           ref={ref}
-          aria-invalid={Boolean(error) || undefined}
+          aria-invalid={Boolean(error) || variant === "error"}
           aria-describedby={describedBy}
-          className={[
-            "w-full bg-surface text-txt-main font-medium transition-all shadow-sm",
-            "h-12 rounded-xl border border-border", // Updated sizing/border
-            "placeholder:text-secondary/60",
-            "focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand",
-            "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-            error ? "border-error ring-1 ring-error" : "border-border",
-            leftIcon ? "pl-11" : "px-4", // Adjust padding for icon
-            rightIcon ? "pr-11" : "px-4",
+          className={cn(
+            inputVariants({
+              variant: variant ?? (error ? "error" : "default"),
+            }),
+            leftIcon ? "pl-11" : "pl-4",
+            rightIcon ? "pr-11" : "pr-4",
             className,
-          ].join(" ")}
+          )}
           {...rest}
         />
 

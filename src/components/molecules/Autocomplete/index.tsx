@@ -5,7 +5,8 @@ import ErrorMessage from "@/components/atoms/ErrorMessage";
 import { useAutocomplete } from "./hooks/useAutocomplete";
 import { AutocompleteInput } from "@/components/atoms/AutocompleteInput";
 import AutocompleteResults from "../AutocompleteResults";
-import { useClickOutside } from "@/hooks/ui/useClickOutside";
+import { useClickOutside } from "@/lib/hooks/ui/useClickOutside";
+import { cn } from "@/lib/utils";
 
 export type AutoOption = {
   id: string;
@@ -56,9 +57,9 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       openOnFocus = true,
       noResultsText = "No results found",
       highlight = true,
-      className = "",
-      inputClassName = "",
-      listClassName = "",
+      className,
+      inputClassName,
+      listClassName,
       clearOnSelect,
       value,
       defaultValue,
@@ -115,7 +116,10 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
     return (
       <div
         ref={containerRef}
-        className={`flex flex-col gap-2 w-full text-left relative ${className}`}
+        className={cn(
+          "flex flex-col gap-2 w-full text-left relative",
+          className,
+        )}
       >
         {label && (
           <label

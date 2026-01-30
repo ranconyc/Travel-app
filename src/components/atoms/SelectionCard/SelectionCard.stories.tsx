@@ -21,7 +21,7 @@ export const Radio: Story = {
     type: "radio",
     label: "Adventure",
     description: "Seeking thrills and outdoors.",
-    icon: Compass,
+    icon: <Compass size={24} />,
     isSelected: false,
   },
 };
@@ -32,7 +32,7 @@ export const SelectedCheckbox: Story = {
     type: "checkbox",
     label: "Direct Flights Only",
     description: "Only show non-stop routes.",
-    icon: Plane,
+    icon: <Plane size={24} />,
     isSelected: true,
   },
 };
@@ -43,7 +43,27 @@ export const MultiLine: Story = {
     label: "Social Hubs",
     description:
       "Connect with other travelers in the same city and share experiences together.",
-    icon: Heart,
+    icon: <Heart size={24} />,
     isSelected: false,
+  },
+};
+
+export const RadioNoIcon: Story = {
+  args: {
+    id: "radio-no-icon",
+    type: "radio",
+    label: "Radio Option",
+    description: "Standard radio selection without icon.",
+    isSelected: false,
+  },
+};
+
+export const CheckboxNoIcon: Story = {
+  args: {
+    id: "checkbox-no-icon",
+    type: "checkbox",
+    label: "Checkbox Option",
+    description: "Standard checkbox selection without icon.",
+    isSelected: true,
   },
 };

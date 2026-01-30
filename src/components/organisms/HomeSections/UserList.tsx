@@ -50,8 +50,10 @@ export default function UserList() {
               className="group-hover:ring-2 ring-brand ring-offset-2 transition-all"
             />
             <Typography
-              variant="tiny"
-              className="text-micro normal-case text-center text-txt-sec truncate max-w-full"
+              variant="micro"
+              weight="medium"
+              color="sec"
+              className="normal-case text-center truncate max-w-full"
             >
               {friend?.name?.split(" ")[0] || friend?.firstName}
             </Typography>

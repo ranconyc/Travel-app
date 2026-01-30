@@ -1,11 +1,30 @@
 import React from "react";
 import Typography from "@/components/atoms/Typography";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-interface EmptyStateProps {
+const emptyStateVariants = cva(
+  "flex flex-col items-center justify-center py-20 px-md text-center",
+  {
+    variants: {
+      variant: {
+        default: "",
+        compact: "py-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
+
+export interface EmptyStateProps
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof emptyStateVariants> {
   title: string;
   description?: string;
   icon?: React.ReactNode;
-  className?: string;
 }
 
 export default function EmptyState({
@@ -13,11 +32,11 @@ export default function EmptyState({
   description,
   icon,
   className = "",
+  variant,
+  ...props
 }: EmptyStateProps) {
   return (
-    <div
-      className={`flex flex-col items-center justify-center py-20 px-md text-center ${className}`}
-    >
+    <div className={cn(emptyStateVariants({ variant }), className)} {...props}>
       {icon && (
         <div className="w-16 h-16 bg-bg-sub rounded-full flex items-center justify-center text-txt-sec mb-md">
           {icon}

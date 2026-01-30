@@ -15,9 +15,11 @@ export async function getPlaceBySlug(slug: string) {
   }
 }
 
-export async function getAllPlaces() {
+export async function getAllPlaces(limit?: number, offset?: number) {
   try {
     return await prisma.place.findMany({
+      take: limit,
+      skip: offset,
       include: {
         media: true,
       },

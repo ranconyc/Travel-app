@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 type UseAutocompleteValueArgs = {
   value?: string;
@@ -8,12 +8,16 @@ type UseAutocompleteValueArgs = {
 type UseAutocompleteValueResult = {
   qVal: string; // effective query value
   isControlled: boolean;
-  setInnerValue: (next: string) => void; // update internal state if uncontrolled
+  setInnerValue: (next: string) => void; // update internal state
   reset: () => void; // clear internal value (for clear button)
 };
 
 /**
  * Manages controlled vs uncontrolled value for the autocomplete input.
+ *
+ * Key insight: Even in "controlled" mode, we need to allow the user to type
+ * freely. The `inner` state holds the current query text. When the external
+ * controlled `value` changes (e.g., after selection), we sync `inner` to it.
  */
 export function useAutocompleteValue({
   value,
@@ -21,27 +25,30 @@ export function useAutocompleteValue({
 }: UseAutocompleteValueArgs): UseAutocompleteValueResult {
   const isControlled = value !== undefined;
 
-  // internal state only used when uncontrolled
-  const [inner, setInner] = useState(defaultValue ?? "");
+  // Internal state for the query - used for BOTH controlled and uncontrolled
+  const [inner, setInner] = useState(value ?? defaultValue ?? "");
 
-  // keep internal state in sync when in controlled mode
+  // Track the previous controlled value to detect external changes
+  const prevValueRef = useRef(value);
+
+  // Sync internal state when controlled value changes from outside
+  // (e.g., after a selection is made or parent resets the value)
   useEffect(() => {
-    if (isControlled) {
+    if (isControlled && value !== prevValueRef.current) {
       setInner(value ?? "");
+      prevValueRef.current = value;
     }
   }, [isControlled, value]);
 
-  // "real" value used by the input
-  const qVal = isControlled ? value ?? "" : inner;
+  // The query value is always the internal state (allows typing)
+  const qVal = inner;
 
   const setInnerValue = (next: string) => {
-    if (!isControlled) {
-      setInner(next);
-    }
+    setInner(next);
   };
 
   const reset = () => {
-    setInnerValue("");
+    setInner("");
   };
 
   return { qVal, isControlled, setInnerValue, reset };

@@ -11,6 +11,7 @@ import MoodSelector, {
 } from "@/components/molecules/MoodSelector";
 import PlaceCard from "@/components/molecules/PlaceCard";
 import Typography from "@/components/atoms/Typography";
+import Input from "@/components/atoms/Input";
 import {
   filterAndSortPlaces,
   EnhancedMatchResult,
@@ -156,19 +157,14 @@ export default function DiscoveryHome() {
           </Typography>
 
           {/* Search Bar */}
-          <div className="relative max-w-2xl mx-auto mb-6">
-            <Search
-              size={20}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            />
-            <input
-              type="text"
-              placeholder="Search places, interests..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+          <Input
+            type="text"
+            placeholder="Search places, interests..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-4 pr-4 py-3 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-blue-500 rounded-full"
+            leftIcon={<Search size={20} className="text-gray-400" />}
+          />
 
           {/* Mood Selector */}
           <MoodSelector

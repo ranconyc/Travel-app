@@ -43,7 +43,7 @@ export default function AutocompleteResults({
       role="listbox"
       className={`absolute left-0 right-0 z-20 mt-1 max-h-50 overflow-auto rounded-md border border-surface-secondary bg-surface shadow-xl ${listClassName}`}
     >
-      {!loading && (
+      {loading && (
         <div className="px-3 py-2 text-sm text-secondary">Loading…</div>
       )}
       {!loading && err && (

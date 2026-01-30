@@ -294,6 +294,8 @@ export async function handleUpdateUserLocation(
     searchRadiusKm: 120,
   });
 
+  console.log("detected", detected);
+
   if (!detected || !detected.id) {
     throw new Error("Could not identify city");
   }
@@ -301,6 +303,7 @@ export async function handleUpdateUserLocation(
   const { getActiveVisit, createCityVisit, closeCityVisit } =
     await import("@/lib/db/cityVisit.repo");
   const activeVisit = await getActiveVisit(userId);
+  console.log("activeVisit", activeVisit);
 
   if (!activeVisit) {
     await createCityVisit(

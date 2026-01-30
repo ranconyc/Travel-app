@@ -119,7 +119,7 @@ export default function AvatarCropModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-md">
-      <div className="bg-surface rounded-2xl w-full max-w-sm flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="bg-surface rounded-2xl w-full flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="p-md flex justify-between items-center bg-surface-secondary/20">
           <h3 className="font-bold text-lg">Crop Photo</h3>
           <button

@@ -1,4 +1,22 @@
 import { Avatar } from "@/components/atoms/Avatar";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const avatarListContainerVariants = cva(
+  "flex items-center gap-2 justify-center w-fit backdrop-blur-sm rounded-full px-2 py-1 transition-colors",
+  {
+    variants: {
+      variant: {
+        default: "bg-gray-800/30",
+        light: "bg-white/30 border border-white/20",
+        dark: "bg-black/50 border border-white/10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
 
 function OtherCountBadge({
   otherCount,
@@ -47,7 +65,9 @@ export interface AvatarUser {
   images?: Array<{ url: string; isMain: boolean }>;
 }
 
-type AvatarListProps = {
+interface AvatarListProps extends VariantProps<
+  typeof avatarListContainerVariants
+> {
   list: AvatarUser[];
   maxVisible?: number; // how many avatars to show before "+N"
   size?: number; // avatar + badge size in px
@@ -56,7 +76,7 @@ type AvatarListProps = {
   showExtra?: boolean; // show or hide the +N badge
   showMatch?: boolean; // show or hide the match badge
   matchPercentage?: number;
-};
+}
 
 export function AvatarList({
   list,
@@ -67,6 +87,7 @@ export function AvatarList({
   showExtra = list.length > 2,
   showMatch,
   matchPercentage,
+  variant,
 }: AvatarListProps) {
   // nothing to show
   if (!list || list.length === 0) return null;
@@ -76,9 +97,7 @@ export function AvatarList({
   const badgeFontSize = Math.max(10, size * 0.45); // keep text readable
 
   return (
-    <div
-      className={`flex items-center gap-2 justify-center w-fit bg-gray-800/30 backdrop-blur-sm  rounded-full px-2 py-1 ${className}`}
-    >
+    <div className={cn(avatarListContainerVariants({ variant }), className)}>
       {/* avatar stack */}
       <div className="flex items-center ">
         {visibleUsers.map((user, index) => {

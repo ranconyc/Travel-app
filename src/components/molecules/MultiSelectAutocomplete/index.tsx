@@ -3,6 +3,24 @@
 import React, { useMemo, useCallback } from "react";
 import { Autocomplete } from "@/components/molecules/Autocomplete";
 import SelectedItem from "@/components/molecules/SelectedItem";
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+// Internal Chip variants using CVA
+const chipVariants = cva(
+  "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors",
+  {
+    variants: {
+      variant: {
+        default: "bg-gray-200 text-black hover:bg-gray-300",
+        outline: "border border-gray-300 text-gray-700 hover:bg-gray-50",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
 
 type MultiSelectAutocompleteProps<T> = {
   label?: string;
@@ -32,12 +50,13 @@ type MultiSelectAutocompleteProps<T> = {
   maxSelected?: number;
 };
 
+// Internal Chip component
 function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
     <button
       type="button"
       onClick={onRemove}
-      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm bg-gray-200 text-black"
+      className={chipVariants()}
       aria-label={`Remove ${label}`}
     >
       {label}
@@ -57,9 +76,9 @@ export function MultiSelectAutocomplete<T>({
   name,
   placeholder = "Type to search…",
   error,
-  className = "",
-  inputClassName = "",
-  listClassName = "",
+  className,
+  inputClassName,
+  listClassName,
   items,
   selected,
   onChange,
@@ -71,15 +90,6 @@ export function MultiSelectAutocomplete<T>({
   const optionLabels = useMemo(
     () => items.map((item) => getLabel(item)),
     [items, getLabel],
-  );
-
-  // Helper to check if an item is selected
-  const isSelected = useCallback(
-    (item: T) => {
-      const v = getValue(item);
-      return selected.some((s) => getValue(s) === v);
-    },
-    [selected, getValue],
   );
 
   // Handle selection from the Autocomplete
@@ -121,7 +131,7 @@ export function MultiSelectAutocomplete<T>({
   );
 
   return (
-    <div className={className}>
+    <div className={cn("w-full", className)}>
       <Autocomplete
         label={label}
         id={name}

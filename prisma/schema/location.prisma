@@ -170,7 +170,7 @@ model Place {
 
   // Relations
   cityRefId String @db.ObjectId
-  city      City   @relation(fields: [cityRefId], references: [id], onDelete: Cascade)
+  city      City?  @relation(fields: [cityRefId], references: [id], onDelete: Cascade)
 
   countryRefId String?  @db.ObjectId
   country      Country? @relation(fields: [countryRefId], references: [id], onDelete: Cascade)

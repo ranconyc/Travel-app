@@ -6,15 +6,29 @@ interface PageInfoProps {
   className?: string;
 }
 
-export default function PageInfo({ title, subtitle, className = "" }: PageInfoProps) {
+export default function PageInfo({
+  title,
+  subtitle,
+  className = "",
+}: PageInfoProps) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {subtitle && (
-        <Typography variant="h3" className="text-brand font-medium text-sm uppercase tracking-wider animate-fade-in">
+        <Typography
+          variant="label"
+          weight="medium"
+          color="brand"
+          className="text-sm animate-fade-in"
+        >
           {subtitle}
         </Typography>
       )}
-      <Typography variant="h1" className="text-txt-main font-bold text-4xl md:text-5xl leading-tight animate-slide-up">
+      <Typography
+        variant="display-md"
+        weight="bold"
+        color="main"
+        className="animate-slide-up"
+      >
         {title}
       </Typography>
     </div>

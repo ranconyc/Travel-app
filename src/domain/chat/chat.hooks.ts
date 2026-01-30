@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { useRealTime } from "@/hooks/useRealTime";
+import { useRealTime } from "@/lib/hooks/useRealTime";
 import type { Message } from "@/types/chat.d";
 import { useUser } from "@/app/providers/UserProvider";
 import { useMutation } from "@tanstack/react-query";

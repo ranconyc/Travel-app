@@ -339,7 +339,7 @@ export default async function AdminApisPage() {
                       {api.baseUrl}
                     </code>
                   </td>
-                  <td className="px-6 py-4 text-secondary max-w-sm">
+                  <td className="px-6 py-4 text-secondary">
                     {api.description}
                   </td>
                 </tr>

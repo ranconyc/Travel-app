@@ -23,29 +23,32 @@ const categoryColors = {
     bg: "bg-blue-50 dark:bg-blue-900/20",
     border: "border-blue-200 dark:border-blue-800",
     text: "text-blue-800 dark:text-blue-200",
-    icon: "text-blue-600 dark:text-blue-400"
+    icon: "text-blue-600 dark:text-blue-400",
   },
   Dining: {
     bg: "bg-orange-50 dark:bg-orange-900/20",
     border: "border-orange-200 dark:border-orange-800",
     text: "text-orange-800 dark:text-orange-200",
-    icon: "text-orange-600 dark:text-orange-400"
+    icon: "text-orange-600 dark:text-orange-400",
   },
   Emergency: {
     bg: "bg-red-50 dark:bg-red-900/20",
     border: "border-red-200 dark:border-red-800",
     text: "text-red-800 dark:text-red-200",
-    icon: "text-red-600 dark:text-red-400"
+    icon: "text-red-600 dark:text-red-400",
   },
   Transport: {
     bg: "bg-green-50 dark:bg-green-900/20",
     border: "border-green-200 dark:border-green-800",
     text: "text-green-800 dark:text-green-200",
-    icon: "text-green-600 dark:text-green-400"
-  }
+    icon: "text-green-600 dark:text-green-400",
+  },
 };
 
-export default function PhraseCard({ phrase, className = "" }: PhraseCardProps) {
+export default function PhraseCard({
+  phrase,
+  className = "",
+}: PhraseCardProps) {
   const [copied, setCopied] = useState(false);
   const colors = categoryColors[phrase.category];
 
@@ -55,21 +58,25 @@ export default function PhraseCard({ phrase, className = "" }: PhraseCardProps) 
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy text:', err);
+      console.error("Failed to copy text:", err);
     }
   };
 
   const handlePlay = () => {
     // Visual only for now - would integrate with text-to-speech API
-    console.log('Play audio for:', phrase.local);
+    console.log("Play audio for:", phrase.local);
   };
 
   return (
-    <Block className={`rounded-xl border ${colors.border} ${colors.bg} ${className}`}>
+    <Block
+      className={`rounded-xl border ${colors.border} ${colors.bg} ${className}`}
+    >
       <div className="p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text}`}>
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text}`}
+          >
             {phrase.category}
           </span>
           <div className="flex items-center gap-2">
@@ -93,18 +100,23 @@ export default function PhraseCard({ phrase, className = "" }: PhraseCardProps) 
         </div>
 
         {/* English Label */}
-        <Typography variant="p" className="text-secondary text-sm mb-2">
+        <Typography variant="body-sm" color="sec" className="mb-2">
           {phrase.label}
         </Typography>
 
         {/* Native Script */}
-        <Typography variant="h3" className="text-txt-main font-bold text-lg mb-2 leading-tight">
+        <Typography
+          variant="h3"
+          weight="bold"
+          color="main"
+          className="mb-2 leading-tight"
+        >
           {phrase.local}
         </Typography>
 
         {/* Romanized */}
         {phrase.romanized && (
-          <Typography variant="p" className={`${colors.text} text-sm italic`}>
+          <Typography variant="body-sm" className={`${colors.text} italic`}>
             {phrase.romanized}
           </Typography>
         )}

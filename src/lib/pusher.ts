@@ -47,9 +47,7 @@ export const pusherClient =
     : (null as unknown as PusherClient);
 
 if (pusherClient) {
-  pusherClient.connection.bind("state_change", (states: any) => {
-    console.log("[Pusher] Connection State:", states.current);
-  });
+  pusherClient.connection.bind("state_change", (states: any) => {});
   pusherClient.connection.bind("error", (err: any) => {
     console.error("[Pusher] Connection Error:", err);
   });
@@ -72,9 +70,7 @@ export async function triggerRealTimeEvent<T = unknown>(
 
   try {
     await pusherServer.trigger(channel, event, data);
-    console.log(
-      `[RealTime] Event "${event}" triggered on channel "${channel}"`,
-    );
+
     return { success: true };
   } catch (error) {
     console.error(`[RealTime] Failed to trigger event "${event}":`, error);

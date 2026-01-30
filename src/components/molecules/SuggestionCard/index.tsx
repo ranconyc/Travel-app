@@ -20,13 +20,14 @@ const SuggestionCard = memo(
         title={title || label}
       >
         <Typography
-          variant="tiny"
+          variant="label-sm"
+          weight="bold"
           color="sec"
-          className="font-bold group-hover:text-brand transition-colors"
+          className="group-hover:text-brand transition-colors"
         >
           {label}
         </Typography>
-        <Typography variant="sm" className="mt-xs line-clamp-2">
+        <Typography variant="body-sm" className="mt-xs line-clamp-2">
           {text}
         </Typography>
       </button>

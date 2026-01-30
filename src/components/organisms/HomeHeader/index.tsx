@@ -7,11 +7,11 @@ import WeatherWidget from "@/components/molecules/WeatherWidget";
 
 import PageHeader from "@/components/molecules/PageHeader";
 
-import { useAppStore } from "@/store/appStore";
+import { useUser } from "@/app/providers/UserProvider";
 import { useLocationStore } from "@/store/locationStore";
 
 export default function HomeHeader() {
-  const { user } = useAppStore();
+  const user = useUser();
   const { getFinalLocation } = useLocationStore();
   const coords = getFinalLocation();
   const isUserAtHome = user?.currentCity?.id === user?.profile?.homeBaseCityId;
@@ -32,7 +32,7 @@ export default function HomeHeader() {
         ) : (
           <SplitFlapText
             text={user?.currentCity?.name ?? "World"}
-            className="text-h1 font-bold font-sora text-txt-main"
+            className="text-display-md font-bold text-txt-main"
           />
         )
       }

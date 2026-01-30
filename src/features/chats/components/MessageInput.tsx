@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Send } from "lucide-react";
 import Button from "@/components/atoms/Button";
+import TextArea from "@/components/atoms/TextArea";
 import ChatInputWrapper from "./ChatInputWrapper";
 
 export function MessageInput({ chatId }: { chatId: string }) {
@@ -48,14 +49,14 @@ export function MessageInput({ chatId }: { chatId: string }) {
         onSubmit={handleSubmit}
         className="flex gap-xs items-end bg-bg-sub rounded-2xl p-xs border-2 border-transparent focus-within:border-brand/40 focus-within:bg-bg-main transition-all duration-300 shadow-soft"
       >
-        <textarea
+        <TextArea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Message..."
-          className="flex-1 resize-none bg-transparent px-md py-xs  focus:outline-none text-txt-main placeholder:text-txt-sec/50 font-medium"
           rows={1}
           disabled={isSending}
+          className="flex-1 !rounded-xl !border-0 !p-0 px-md py-xs bg-transparent focus:!ring-0 text-txt-main placeholder:text-txt-sec/50 font-medium min-h-[40px]"
         />
         <Button
           type="submit"

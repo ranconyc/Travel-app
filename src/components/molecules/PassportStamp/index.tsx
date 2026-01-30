@@ -22,6 +22,7 @@ import {
   Castle,
   Check,
 } from "lucide-react";
+import Typography from "@/components/atoms/Typography";
 
 const BORDER_STYLES = [
   "solid",
@@ -180,30 +181,30 @@ function PassportStamp({
         return {
           padding: "p-1",
           innerPadding: "p-2",
-          text: "text-micro",
-          cityText: "text-sm",
+          textVariant: "micro" as const,
+          cityVariant: "ui-sm" as const,
         };
       case "lg":
         return {
           padding: "p-1.5",
           innerPadding: "p-5",
-          text: "text-xs",
-          cityText: "text-2xl",
+          textVariant: "caption" as const,
+          cityVariant: "h2" as const,
         };
       case "xl":
         return {
           padding: "p-2",
           innerPadding: "p-6",
-          text: "text-sm",
-          cityText: "text-3xl",
+          textVariant: "body-sm" as const,
+          cityVariant: "h1" as const,
         };
       case "md":
       default:
         return {
           padding: "p-1",
           innerPadding: "p-md",
-          text: "text-micro",
-          cityText: "text-xl",
+          textVariant: "micro" as const,
+          cityVariant: "h3" as const,
         };
     }
   };
@@ -243,25 +244,46 @@ function PassportStamp({
             <Check size={size === "sm" ? 8 : 10} strokeWidth={3} />
           </div>
         )}
-        <span
-          className={`${sizeClasses.text} font-black uppercase tracking-[0.2em] opacity-90`}
+        {IconComponent && (
+          <div className="mb-0.5 opacity-80" style={{ color: stampColor }}>
+            <IconComponent
+              size={
+                size === "sm"
+                  ? 12
+                  : size === "lg"
+                    ? 20
+                    : size === "xl"
+                      ? 24
+                      : 16
+              }
+            />
+          </div>
+        )}
+        <Typography
+          variant={sizeClasses.textVariant}
+          weight="black"
+          className="uppercase tracking-[0.2em] opacity-90"
         >
           {country}
-        </span>
+        </Typography>
 
-        <h1
-          className={`${sizeClasses.cityText} font-black uppercase leading-none tracking-tighter `}
+        <Typography
+          variant={sizeClasses.cityVariant}
+          weight="black"
+          className="uppercase leading-none tracking-tighter"
         >
           {city}
-        </h1>
+        </Typography>
 
         {date && (
-          <p
-            className={`${sizeClasses.text} font-mono font-bold border-t mt-1 pt-1`}
+          <Typography
+            variant={sizeClasses.textVariant}
+            weight="bold"
+            className="font-mono border-t mt-1 pt-1"
             style={{ borderTopColor: stampColor }}
           >
             {date}
-          </p>
+          </Typography>
         )}
       </div>
     </div>

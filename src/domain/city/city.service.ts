@@ -1,5 +1,9 @@
 import type { HomeBaseLocationMeta } from "@/domain/user/completeProfile.schema";
-import { DetectedCity, ReverseGeocodeResult } from "@/domain/city/city.schema";
+import {
+  DetectedCity,
+  ReverseGeocodeResult,
+  CitySearchResult,
+} from "@/domain/city/city.schema";
 import {
   findCityByBBox,
   findNearestCity,
@@ -481,4 +485,129 @@ export async function handleDeleteCity(id: string) {
 export async function handleGetAllCities(limit?: number, offset?: number) {
   const { getAllCities } = await import("@/lib/db/cityLocation.repo");
   return await getAllCities(limit, offset);
+}
+
+/**
+ * Searches for cities in DB first, then falls back to LocationIQ
+ */
+export async function searchCitiesWithFallback(
+  query: string,
+  limit = 10,
+): Promise<CitySearchResult[]> {
+  const trimmed = query.trim();
+  if (!trimmed || trimmed.length < 2) return [];
+
+  // 1. Try DB first
+  const { searchCities } = await import("@/lib/db/cityLocation.repo");
+  const localCities = await searchCities(trimmed, limit);
+
+  if (localCities.length > 0) {
+    return localCities.map((c) => ({
+      id: c.id,
+      cityId: c.cityId,
+      label: c.country ? `${c.name}, ${c.country.name}` : c.name,
+      subtitle: c.country?.code ?? null,
+      lat:
+        (c.coords as { coordinates: [number, number] })?.coordinates?.[1] ??
+        null,
+      lng:
+        (c.coords as { coordinates: [number, number] })?.coordinates?.[0] ??
+        null,
+      source: "db" as const,
+      dbCityId: c.id,
+      meta: null,
+    }));
+  }
+
+  // 2. Fallback to LocationIQ if DB has zero results
+  try {
+    const key = process.env.LOCATIONIQ_API_KEY;
+    if (!key) {
+      console.warn("LOCATIONIQ_API_KEY not set, skipping external search");
+      return [];
+    }
+
+    const url = new URL("https://api.locationiq.com/v1/autocomplete");
+    url.searchParams.set("key", key);
+    url.searchParams.set("q", trimmed);
+    url.searchParams.set("limit", String(limit));
+    url.searchParams.set("normalizeaddress", "1");
+    url.searchParams.set("dedupe", "1");
+    url.searchParams.set("accept-language", "en");
+
+    const res = await fetch(url.toString(), { cache: "no-store" });
+    if (!res.ok) {
+      console.error("LocationIQ search failed", res.status);
+      return [];
+    }
+
+    const data = (await res.json()) as Array<{
+      place_id: number;
+      class: string;
+      type: string;
+      lat: string;
+      lon: string;
+      display_name: string;
+      name: string;
+      display_place?: string;
+      address: {
+        city?: string;
+        town?: string;
+        village?: string;
+        country?: string;
+        country_code?: string;
+      };
+      boundingbox?: string[];
+      osm_id?: number;
+      osm_type?: string;
+    }>;
+
+    // Filter to place/city types and normalize
+    return data
+      .filter((item) => item.class === "place" || item.type === "city")
+      .map((item) => {
+        const lat = item.lat ? parseFloat(item.lat) : NaN;
+        const lng = item.lon ? parseFloat(item.lon) : NaN;
+        const cityName =
+          item.address?.city ||
+          item.address?.town ||
+          item.address?.village ||
+          item.display_place ||
+          item.name;
+        const countryName = item.address?.country || "";
+        const countryCode = (item.address?.country_code || "").toUpperCase();
+
+        return {
+          id: `ext_${item.place_id}`,
+          cityId: `${(cityName || "city").toLowerCase().replace(/\s+/g, "-")}-${countryCode.toLowerCase()}`,
+          label: `${cityName}, ${countryName}`,
+          subtitle: countryCode || null,
+          lat,
+          lng,
+          source: "external" as const,
+          meta: {
+            name: cityName,
+            countryName,
+            countryCode,
+            lat,
+            lng,
+            placeId: item.place_id?.toString(),
+            osmId: item.osm_id?.toString(),
+            display_name: item.name,
+            address: item.address as Record<string, unknown>,
+            boundingbox: item.boundingbox?.map(Number) as [
+              number,
+              number,
+              number,
+              number,
+            ],
+          },
+        };
+      })
+      .filter((c) => !Number.isNaN(c.lat) && !Number.isNaN(c.lng))
+      .slice(0, limit);
+  } catch (error) {
+    console.error("searchCitiesWithFallback error:", error);
+    return [];
+  }
 }

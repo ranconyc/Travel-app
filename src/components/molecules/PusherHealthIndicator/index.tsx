@@ -3,8 +3,27 @@
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 import { Wifi, WifiOff, AlertCircle } from "lucide-react";
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 type ConnectionState = "connected" | "disconnected" | "connecting" | "error";
+
+const indicatorVariants = cva(
+  "fixed bottom-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium backdrop-blur-sm shadow-lg transition-all",
+  {
+    variants: {
+      state: {
+        connected: "bg-green-500/10 border-green-500/20",
+        connecting: "bg-yellow-500/10 border-yellow-500/20",
+        error: "bg-red-500/10 border-red-500/20",
+        disconnected: "bg-gray-500/10 border-gray-500/20",
+      },
+    },
+    defaultVariants: {
+      state: "disconnected",
+    },
+  },
+);
 
 /**
  * Pusher Health Check Indicator
@@ -43,7 +62,10 @@ export default function PusherHealthIndicator() {
     }
 
     // Listen to connection state changes
-    const handleStateChange = (states: { current: string; previous: string }) => {
+    const handleStateChange = (states: {
+      current: string;
+      previous: string;
+    }) => {
       if (process.env.NODE_ENV === "development") {
         console.log("[Pusher Health] State change:", states);
       }
@@ -69,8 +91,7 @@ export default function PusherHealthIndicator() {
     };
 
     const handleError = (err: { error?: { data?: { message?: string } } }) => {
-      const errorMessage =
-        err.error?.data?.message || "Connection error";
+      const errorMessage = err.error?.data?.message || "Connection error";
       updateState("error", errorMessage);
       if (process.env.NODE_ENV === "development") {
         console.error("[Pusher Health] Error:", err);
@@ -116,22 +137,9 @@ export default function PusherHealthIndicator() {
     }
   };
 
-  const getBgColor = () => {
-    switch (connectionState) {
-      case "connected":
-        return "bg-green-500/10 border-green-500/20";
-      case "connecting":
-        return "bg-yellow-500/10 border-yellow-500/20";
-      case "error":
-        return "bg-red-500/10 border-red-500/20";
-      default:
-        return "bg-gray-500/10 border-gray-500/20";
-    }
-  };
-
   return (
     <div
-      className={`fixed bottom-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium ${getBgColor()} backdrop-blur-sm shadow-lg`}
+      className={cn(indicatorVariants({ state: connectionState }))}
       title={lastError || connectionState}
     >
       {getIcon()}

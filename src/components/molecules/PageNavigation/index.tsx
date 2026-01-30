@@ -1,15 +1,16 @@
 "use client";
 
-import { Shield, Heart, Instagram, MapPin, Clock, Calendar, Users, FacebookIcon } from "lucide-react";
-import { AiFillTikTok } from "react-icons/ai";
-import { AiFillRedditCircle } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import { Shield, Heart, Instagram, FacebookIcon } from "lucide-react";
+import { AiFillTikTok, AiFillRedditCircle } from "react-icons/ai";
 import Button from "@/components/atoms/Button";
+import Typography from "@/components/atoms/Typography";
 import social from "@/data/social.json";
-import { useState } from "react";
 
 interface PageNavigationProps {
   showBack?: boolean;
-  showActions?: boolean;
+  /** Pass custom content for the right side. Defaults to action buttons if not provided. */
+  rightContent?: React.ReactNode;
   showSocial?: boolean;
   title?: string;
   locationName?: string;
@@ -18,7 +19,7 @@ interface PageNavigationProps {
 
 export default function PageNavigation({
   showBack = true,
-  showActions = true,
+  rightContent,
   showSocial = false,
   title,
   locationName,
@@ -26,12 +27,15 @@ export default function PageNavigation({
 }: PageNavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Handle scroll effect for backdrop
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
+  // Fix: Use useEffect for scroll listener to avoid memory leak
+  useEffect(() => {
+    const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-    });
-  }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const actionButtons = [
     { Icon: Shield, label: "Safety" },
@@ -39,70 +43,86 @@ export default function PageNavigation({
   ];
 
   const socialButtons = [
-    { Icon: AiFillTikTok, label: "TikTok", url: (name: string) => `${social.filter((s) => s.name === "tiktok")[0].groupsURL}${name}` },
-    { Icon: FacebookIcon, label: "Facebook", url: (name: string) => `${social.filter((s) => s.name === "facebook")[0].groupsURL}${name}` },
-    { Icon: AiFillRedditCircle, label: "Reddit", url: (name: string) => `${social.filter((s) => s.name === "reddit")[0].groupsURL}${name} travel` },
-    { Icon: Instagram, label: "Instagram", url: (name: string) => `${social.filter((s) => s.name === "instagram")[0].groupsURL}${name}` },
+    {
+      Icon: AiFillTikTok,
+      label: "TikTok",
+      url: (name: string) =>
+        `${social.find((s) => s.name === "tiktok")?.groupsURL}${name}`,
+    },
+    {
+      Icon: FacebookIcon,
+      label: "Facebook",
+      url: (name: string) =>
+        `${social.find((s) => s.name === "facebook")?.groupsURL}${name}`,
+    },
+    {
+      Icon: AiFillRedditCircle,
+      label: "Reddit",
+      url: (name: string) =>
+        `${social.find((s) => s.name === "reddit")?.groupsURL}${name} travel`,
+    },
+    {
+      Icon: Instagram,
+      label: "Instagram",
+      url: (name: string) =>
+        `${social.find((s) => s.name === "instagram")?.groupsURL}${name}`,
+    },
   ];
 
   return (
     <nav
-      className={`sticky top-0 bg-main fixed top-0 left-0 right-0 z-50 p-md flex items-center justify-between transition-all duration-300 ${
-        isScrolled ? "bg-main/95 backdrop-blur-md shadow-lg" : ""
+      className={`sticky top-0 left-0 right-0 z-sticky p-md flex items-center justify-between transition-all duration-300 ${
+        isScrolled
+          ? "bg-surface/95 backdrop-blur-md shadow-soft"
+          : "bg-transparent"
       } ${className}`}
     >
       {/* Back Button */}
-      {showBack && (
-        <Button
-          variant="back"
-          className="bg-gray-800/50 backdrop-blur-md hover:bg-gray-800"
-        />
-      )}
+      {showBack && <Button variant="back" />}
 
       {/* Title/Location */}
       {(title || locationName) && (
         <div className="flex flex-col items-center">
           {locationName && (
-            <span className="text-xs text-txt-sec uppercase tracking-wider">
+            <Typography variant="micro" color="sec">
               {locationName}
-            </span>
+            </Typography>
           )}
           {title && (
-            <span className="text-sm font-medium text-txt-main">
+            <Typography variant="ui" weight="medium" color="main">
               {title}
-            </span>
+            </Typography>
           )}
         </div>
       )}
 
-      {/* Action Buttons */}
-      {showActions && (
-        <div className="flex items-center gap-3">
-          {actionButtons.map(({ Icon, label }, idx) => (
-            <button
-              key={idx}
+      {/* Right Content - Custom or Default Action Buttons */}
+      {rightContent ?? (
+        <div className="flex items-center gap-sm">
+          {actionButtons.map(({ Icon, label }) => (
+            <Button
+              key={label}
+              variant="icon"
               aria-label={label}
-              className="w-10 h-10 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
-            >
-              <Icon size={20} className="text-white" />
-            </button>
+              icon={<Icon size={20} />}
+            />
           ))}
         </div>
       )}
 
       {/* Social Buttons */}
       {showSocial && locationName && (
-        <div className="flex items-center gap-2">
-          {socialButtons.map(({ Icon, label, url }, idx) => (
-            <a
-              key={idx}
+        <div className="flex items-center gap-xs">
+          {socialButtons.map(({ Icon, label, url }) => (
+            <Button
+              key={label}
+              variant="icon"
+              aria-label={label}
               href={url(locationName)}
               target="_blank"
-              aria-label={label}
-              className="w-8 h-8 rounded-full bg-gray-800/50 backdrop-blur-md flex items-center justify-center hover:bg-gray-800 transition-colors"
-            >
-              <Icon size={16} className="text-white" />
-            </a>
+              className="w-8 h-8"
+              icon={<Icon size={16} />}
+            />
           ))}
         </div>
       )}

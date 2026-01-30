@@ -1,4 +1,27 @@
 import React from "react";
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const horizontalListVariants = cva("flex overflow-x-scroll pb-md", {
+  variants: {
+    gap: {
+      xxs: "gap-xxs",
+      xs: "gap-xs",
+      sm: "gap-sm",
+      md: "gap-md",
+      lg: "gap-lg",
+      xl: "gap-xl",
+    },
+    noScrollbar: {
+      true: "scrollbar-hide",
+      false: "",
+    },
+  },
+  defaultVariants: {
+    gap: "sm",
+    noScrollbar: true,
+  },
+});
 
 interface HorizontalListProps {
   children: React.ReactNode;
@@ -15,9 +38,7 @@ export default function HorizontalList({
 }: HorizontalListProps) {
   return (
     <div
-      className={`flex gap-${gap} overflow-x-scroll pb-md ${
-        noScrollbar ? "no-scrollbar" : ""
-      } ${className}`}
+      className={cn(horizontalListVariants({ gap, noScrollbar }), className)}
     >
       {children}
     </div>

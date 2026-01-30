@@ -2,9 +2,43 @@
 
 import React, { useState, useEffect, useRef, memo } from "react";
 import { Search, MapPin, Loader2, Globe, ArrowRight } from "lucide-react";
+import Typography from "@/components/atoms/Typography";
+import { cva } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 import { useCitySearch } from "@/domain/search/search.hooks";
 import { SearchResult } from "@/domain/search/search.schema";
-import { useClickOutside } from "@/hooks/ui/useClickOutside";
+import { useClickOutside } from "@/lib/hooks/ui/useClickOutside";
+
+const searchResultItemVariants = cva(
+  "w-full px-4 py-3 flex items-center gap-md transition-colors text-left group cursor-pointer",
+  {
+    variants: {
+      variant: {
+        default: "hover:bg-surface-hover",
+        active: "bg-surface-active",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
+
+const searchIconVariants = cva(
+  "w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-xl overflow-hidden border border-border transition-colors",
+  {
+    variants: {
+      type: {
+        default: "bg-surface-secondary text-brand",
+        globe: "bg-surface-secondary text-blue-400",
+        flag: "bg-surface-secondary border-transparent",
+      },
+    },
+    defaultVariants: {
+      type: "default",
+    },
+  },
+);
 
 /**
  * Memoized search result item component to prevent unnecessary re-renders
@@ -22,27 +56,49 @@ const SearchResultItem = memo(
     <button
       key={item.id}
       onClick={() => onClick(item, index)}
-      className="w-full px-4 py-3 flex items-center gap-md hover:bg-surface-hover transition-colors text-left group"
+      className={cn(searchResultItemVariants())}
     >
-      <div className="w-10 h-10 rounded-full bg-surface-secondary flex items-center justify-center shrink-0 text-xl overflow-hidden border border-border">
+      <div
+        className={cn(
+          searchIconVariants({
+            type: item.flag
+              ? "flag"
+              : item.type === "CITY"
+                ? "default"
+                : "globe",
+          }),
+        )}
+      >
         {item.flag ? (
           <span className="text-2xl">{item.flag}</span>
         ) : item.type === "CITY" ? (
-          <MapPin className="w-5 h-5 text-brand" />
+          <MapPin className="w-5 h-5" />
         ) : (
-          <Globe className="w-5 h-5 text-blue-400" />
+          <Globe className="w-5 h-5" />
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-txt-main truncate group-hover:text-brand transition-colors">
+        <Typography
+          variant="ui"
+          weight="bold"
+          color="main"
+          className="truncate group-hover:text-brand transition-colors"
+        >
           {item.name}
-        </p>
-        <p className="text-sm text-secondary truncate">{item.subText}</p>
+        </Typography>
+        <Typography variant="body-sm" color="sec" className="truncate">
+          {item.subText}
+        </Typography>
       </div>
       {item.type === "EXTERNAL" && (
-        <span className="text-xs bg-brand/20 text-brand px-2 py-1 rounded-full">
+        <Typography
+          variant="micro"
+          weight="medium"
+          color="brand"
+          className="bg-brand/20 px-2 py-1 rounded-full"
+        >
           New
-        </span>
+        </Typography>
       )}
     </button>
   ),
@@ -95,7 +151,11 @@ export default function HomeHeroSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search destination..."
-          className="w-full h-14 pl-11 pr-xl bg-surface border border-border rounded-xl text-p text-txt-main placeholder:text-secondary/60 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand shadow-sm transition-all"
+          className={cn(
+            "w-full h-14 pl-11 pr-xl bg-surface border border-border rounded-xl text-p text-txt-main",
+            "placeholder:text-secondary/60 shadow-sm transition-all",
+            "focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand",
+          )}
         />
         {isLoading && (
           <div className="absolute inset-y-0 right-xl flex items-center">
@@ -105,12 +165,23 @@ export default function HomeHeroSearch() {
       </div>
 
       {isOpen && (results.length > 0 || showExternalOption) && (
-        <div className="absolute top-16 left-0 right-0 bg-surface/90 backdrop-blur-xl border border-border rounded-3xl shadow-lg overflow-hidden z-dropdown max-h-[60vh] overflow-y-auto">
+        <div
+          className={cn(
+            "absolute top-16 left-0 right-0 bg-surface/90 backdrop-blur-xl border border-border",
+            "rounded-3xl shadow-lg overflow-hidden z-dropdown max-h-[60vh] overflow-y-auto",
+            "animate-in fade-in zoom-in-95 duration-200",
+          )}
+        >
           {results.length > 0 && (
             <div className="py-2">
-              <span className="px-4 py-2 text-xs font-bold text-secondary uppercase tracking-wider block">
+              <Typography
+                variant="label-sm"
+                weight="bold"
+                color="sec"
+                className="px-4 py-2 block"
+              >
                 Destinations
-              </span>
+              </Typography>
               {results.map((item, index) => (
                 <SearchResultItem
                   key={item.id}
@@ -126,29 +197,34 @@ export default function HomeHeroSearch() {
             <div className="border-t border-white/5 p-2">
               <button
                 onClick={handleExternalSearch}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-brand/10 rounded-xl transition-colors text-left text-brand"
+                className={cn(
+                  "w-full px-4 py-3 flex items-center justify-between",
+                  "hover:bg-brand/10 rounded-xl transition-colors text-left text-brand",
+                )}
               >
-                <span className="font-medium">
+                <Typography variant="ui-sm" weight="medium">
                   Search globally for &quot;{query}&quot;
-                </span>
+                </Typography>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           )}
 
-          {isExternalLoading && (
-            <div className="p-md flex items-center justify-center gap-2 text-secondary text-sm">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Searching the globe...</span>
-            </div>
-          )}
+          <div className="p-md flex items-center justify-center gap-2 text-secondary">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <Typography variant="body-sm" color="sec">
+              Searching the globe...
+            </Typography>
+          </div>
 
           {results.length === 0 &&
             !showExternalOption &&
             !isLoading &&
             !isExternalLoading && (
-              <div className="p-8 text-center text-secondary">
-                No results found
+              <div className="p-8 text-center">
+                <Typography variant="body" color="sec">
+                  No results found
+                </Typography>
               </div>
             )}
         </div>

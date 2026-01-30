@@ -24,6 +24,7 @@ export default function ConditionalNavbar({
     pathname !== "/profile/travel-persona" &&
     pathname !== "/profile/travel-preferences" &&
     pathname !== "/style" &&
+    pathname !== "/profile/onboarding" &&
     !pathname?.startsWith("/admin");
 
   if (!showNavbar) {

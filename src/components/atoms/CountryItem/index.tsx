@@ -1,7 +1,26 @@
 import React, { memo } from "react";
 import Typography from "@/components/atoms/Typography";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-export interface CountryItemProps {
+const countryItemVariants = cva(
+  "relative flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all hover:border-surface-secondary/60",
+  {
+    variants: {
+      selected: {
+        true: "border-brand bg-brand/10 hover:border-brand",
+        false: "border-surface-secondary bg-surface/30",
+      },
+    },
+    defaultVariants: {
+      selected: false,
+    },
+  },
+);
+
+export interface CountryItemProps extends VariantProps<
+  typeof countryItemVariants
+> {
   code: string;
   label: string;
   flag: string;
@@ -31,15 +50,7 @@ function CountryItemComponent({
     <button
       type="button"
       onClick={() => onChange(code)}
-      className={`
-        relative flex flex-col items-center justify-center
-        p-3 rounded-xl border-2 transition-all
-        ${
-          isSelected
-            ? "border-brand bg-brand/10"
-            : "border-surface-secondary bg-surface/30 hover:border-surface-secondary/60"
-        }
-      `}
+      className={cn(countryItemVariants({ selected: isSelected }))}
       aria-label={`${isSelected ? "Deselect" : "Select"} ${label}`}
       aria-pressed={isSelected}
     >

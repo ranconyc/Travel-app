@@ -1,14 +1,86 @@
 "use client";
 
 import React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-interface SelectionCardProps extends React.InputHTMLAttributes<HTMLInputElement> {
+const selectionCardVariants = cva(
+  "group flex items-center rounded-card px-sm py-xs cursor-pointer border-1 transition-all duration-200 outline-none",
+  {
+    variants: {
+      isSelected: {
+        true: "border-brand bg-brand/10 shadow-sm",
+        false: "border-bg-card hover:border-brand/30 shadow-secondary",
+      },
+    },
+    defaultVariants: {
+      isSelected: false,
+    },
+  },
+);
+
+const Indicator = ({
+  isSelected,
+  type,
+  icon,
+}: {
+  isSelected?: boolean;
+  type: "checkbox" | "radio";
+  icon?: React.ReactNode;
+}) => {
+  // 1. Icon Mode: Wraps the icon in a container that responds to selection
+  if (icon) {
+    return (
+      <div
+        className={cn(
+          "p-sm rounded-sm transition-colors duration-200 flex items-center justify-center",
+          isSelected
+            ? "bg-brand text-white border-2 border-brand"
+            : "bg-surface-secondary text-txt-sec border-1 border-transparent",
+        )}
+      >
+        {icon}
+      </div>
+    );
+  }
+
+  // 2. Standard Mode: Custom Radio/Checkbox UI
+  const isRadio = type === "radio";
+  const shape = isRadio ? "rounded-full" : "rounded-sm";
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "relative h-5 w-5 flex shrink-0 items-center justify-center transition-all duration-200 border-1",
+        shape,
+        isSelected
+          ? "bg-bg-card border-brand" // Selected: Brand border, White bg (to show inner dot)
+          : "bg-bg-card border-surface-secondary group-hover:border-brand/50", // Unselected: Neutral border
+      )}
+    >
+      {/* Animated Inner Indicator */}
+      {isSelected && (
+        <span
+          className={cn(
+            "h-3 w-3 bg-brand transition-transform duration-200",
+            isRadio ? "rounded-full" : "rounded-xs",
+            isSelected ? "scale-100 opacity-100" : "scale-50 opacity-0",
+          )}
+        />
+      )}
+    </div>
+  );
+};
+
+interface SelectionCardProps
+  extends
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">,
+    VariantProps<typeof selectionCardVariants> {
   label: string;
   description?: string;
   icon?: React.ReactNode;
-  isSelected: boolean;
   type?: "checkbox" | "radio";
-  className?: string;
 }
 
 export const SelectionCard = ({
@@ -17,45 +89,45 @@ export const SelectionCard = ({
   icon,
   isSelected,
   type = "checkbox",
-  className = "",
+  className,
   ...props
-}: SelectionCardProps) => (
-  <label
-    className={`flex items-center gap-md rounded-card p-sm cursor-pointer border-2 shadow-secondary transition-all ${
-      isSelected
-        ? "border-brand bg-brand/5 shadow-sm"
-        : "border-2 border-bg-card hover:border-brand/30"
-    } ${className}`}
-  >
-    <input type={type} className="sr-only" checked={isSelected} {...props} />
-
-    {icon && (
-      <div
-        className={`p-sm rounded-pill transition-colors flex outline-none ${
-          isSelected
-            ? "bg-brand text-white"
-            : "bg-bg-card text-txt-sec border border-stroke"
-        }`}
-      >
-        {icon}
-      </div>
-    )}
-
-    {!icon && (
-      <div
-        className={`p-sm rounded-full transition-colors flex-shrink-0 ${
-          isSelected ? "bg-brand" : "bg-bg-card border border-stroke"
-        }`}
-      />
-    )}
-
-    <div className="text-left">
-      <h4 className="text-txt-main font-bold leading-tight">{label}</h4>
-      {description && (
-        <p className="text-p text-txt-sec mt-xs">{description}</p>
+}: SelectionCardProps) => {
+  return (
+    <label
+      className={cn(
+        selectionCardVariants({ isSelected }),
+        icon ? "gap-md" : "gap-sm justify-center",
+        "focus-within:ring-2 focus-within:ring-brand focus-within:ring-offset-2 focus-within:ring-offset-bg-main", // A11y Focus Ring
+        "active:scale-[0.98]", // Micro-interaction press effect
+        className,
       )}
-    </div>
-  </label>
-);
+    >
+      <Indicator isSelected={!!isSelected} type={type} icon={icon} />
+
+      <input
+        type={type}
+        className="sr-only"
+        checked={!!isSelected}
+        {...props}
+      />
+
+      <div className="flex flex-col text-left select-none">
+        <h4
+          className={cn(
+            "text-body font-semibold leading-tight transition-colors",
+            isSelected ? "text-brand-dark" : "text-txt-main",
+          )}
+        >
+          {label}
+        </h4>
+        {description && (
+          <p className="text-sm text-txt-sec mt-xxs leading-snug">
+            {description}
+          </p>
+        )}
+      </div>
+    </label>
+  );
+};
 
 export default SelectionCard;

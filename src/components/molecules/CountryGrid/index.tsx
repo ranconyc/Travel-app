@@ -1,11 +1,13 @@
 import React, { useMemo } from "react";
 import { CountryItem } from "@/components/atoms/CountryItem";
 import { SortedCountry } from "@/domain/country/country.service";
+import { cn } from "@/lib/utils";
 
 export interface CountryGridProps {
   countries: SortedCountry[];
   selectedCodes: string[];
   onToggleCountry: (code: string) => void;
+  className?: string;
 }
 
 /**
@@ -20,12 +22,13 @@ export default function CountryGrid({
   countries,
   selectedCodes,
   onToggleCountry,
+  className,
 }: CountryGridProps) {
   // Memoize selected set for O(1) lookup
   const selectedSet = useMemo(() => new Set(selectedCodes), [selectedCodes]);
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className={cn("grid grid-cols-2 gap-2", className)}>
       {countries.map((country) => (
         <CountryItem
           key={country.code}

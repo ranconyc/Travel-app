@@ -48,7 +48,7 @@ export const LoginView = ({
         </div>
 
         <div className="flex items-center justify-center gap-xs">
-          <Typography variant="sm" className="text-txt-sec">
+          <Typography variant="body-sm" className="text-txt-sec">
             New here?
           </Typography>
           <button

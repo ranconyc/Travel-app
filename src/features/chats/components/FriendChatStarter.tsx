@@ -4,6 +4,7 @@ import { createOrGetChat } from "@/domain/chat/chat.actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar } from "@/components/atoms/Avatar";
+import Button from "@/components/atoms/Button";
 
 interface FriendChatStarterProps {
   friendId: string;
@@ -29,7 +30,6 @@ export function FriendChatStarter({
         router.push(`/chats/${result.data}`);
       } else {
         console.error("Failed to create or get chat:", result.error);
-        // Maybe show a toast here if available
       }
     } catch (error) {
       console.error("Error starting chat:", error);
@@ -39,13 +39,12 @@ export function FriendChatStarter({
   };
 
   return (
-    <button
+    <Button
+      variant="ghost"
       onClick={handleClick}
       disabled={loading}
-      className={`transition-opacity hover:opacity-80 active:scale-95 duration-200 ${
-        loading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-      }`}
       aria-label={`Start chat with ${friendName}`}
+      className="p-0"
     >
       <Avatar
         image={friendImage || undefined}
@@ -53,6 +52,6 @@ export function FriendChatStarter({
         size={48}
         variant="square"
       />
-    </button>
+    </Button>
   );
 }

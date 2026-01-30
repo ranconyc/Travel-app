@@ -2,16 +2,32 @@
 
 import React, { forwardRef, useId } from "react";
 import ErrorMessage from "@/components/atoms/ErrorMessage";
-import Typography from "@/components/atoms/Typography";
 import { ChevronDown } from "lucide-react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
-  label?: string;
-  error?: string;
-  className?: string;
-  containerClassName?: string;
-  options: { value: string; label: string }[];
-};
+const selectVariants = cva(
+  "w-full text-txt-main px-4 h-11 rounded-3xl font-medium border-2 bg-surface appearance-none transition-all focus:outline-none focus:border-brand disabled:bg-surface-secondary disabled:cursor-not-allowed",
+  {
+    variants: {
+      variant: {
+        default: "border-stroke",
+        error: "border-error",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
+
+type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> &
+  VariantProps<typeof selectVariants> & {
+    label?: string;
+    error?: string;
+    containerClassName?: string;
+    options: { value: string; label: string }[];
+  };
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
   {
@@ -22,6 +38,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
     id,
     name,
     options,
+    variant, // Keep it to satisfy VerifyProps but strictly ignored in logic below
     ...rest
   },
   ref,
@@ -32,7 +49,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
 
   return (
     <div
-      className={`flex flex-col gap-2 w-full text-left ${containerClassName}`}
+      className={cn("flex flex-col gap-2 w-full text-left", containerClassName)}
     >
       {label && (
         <label
@@ -50,13 +67,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
           ref={ref}
           aria-invalid={Boolean(error) || undefined}
           aria-describedby={error ? errorId : undefined}
-          className={[
-            "w-full text-txt-main px-4 h-11 rounded-3xl font-medium border-2 bg-surface appearance-none transition-all",
-            "focus:outline-none focus:border-brand",
-            "disabled:bg-surface-secondary disabled:cursor-not-allowed",
-            error ? "border-error" : "border-stroke",
+          className={cn(
+            selectVariants({ variant: error ? "error" : "default" }),
             className,
-          ].join(" ")}
+          )}
           {...rest}
         >
           {options.map((opt) => (

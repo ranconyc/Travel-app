@@ -12,6 +12,7 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+  weight: ["400", "500", "600", "700"], // pick what you need
 });
 
 const sora = Sora({
@@ -46,7 +47,6 @@ import React from "react";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
 import PusherHealthIndicator from "@/components/molecules/PusherHealthIndicator";
-import OnboardingWrapper from "./components/OnboardingWrapper";
 
 export default async function RootLayout({
   children,
@@ -82,7 +82,6 @@ export default async function RootLayout({
                   <ConditionalNavbar notifications={notifications} />
                   <Toaster position="top-center" richColors />
                   <PusherHealthIndicator />
-                  <OnboardingWrapper />
                 </PersonaProvider>
               </UserProvider>
             </ErrorBoundary>

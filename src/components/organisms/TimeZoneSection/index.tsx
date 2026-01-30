@@ -7,10 +7,6 @@ type TimeZoneProps = {
   timeZone?: string;
 };
 
-const subtitle = "text-ui-sm capitalize mb-1";
-const paragraph = "text-p";
-const flexBetween = "flex items-center justify-between";
-
 export default function TimeZoneSection({ timeZone }: TimeZoneProps) {
   {
     if (!timeZone) {
@@ -20,12 +16,16 @@ export default function TimeZoneSection({ timeZone }: TimeZoneProps) {
       <Block>
         <div className="flex items-center gap-2 mb-2">
           <Clock size={16} />
-          <Typography variant="h1" className="font-bold w-fit capitalize">
+          <Typography variant="h3" weight="bold" className="w-fit capitalize">
             Time Zone
           </Typography>
         </div>
-        <p className={paragraph + " font-bold"}>3:00 AM</p>
-        <p className={paragraph + " text-gray-600"}>{timeZone}</p>
+        <Typography variant="h2" weight="bold" className="mt-2">
+          3:00 AM
+        </Typography>
+        <Typography variant="body-sm" color="sec">
+          {timeZone}
+        </Typography>
       </Block>
     );
   }

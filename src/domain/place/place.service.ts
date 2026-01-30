@@ -22,6 +22,6 @@ export async function handleDeletePlace(id: string) {
   return await deletePlace(id);
 }
 
-export async function handleGetAllPlaces() {
-  return await getAllPlaces();
+export async function handleGetAllPlaces(limit?: number, offset?: number) {
+  return await getAllPlaces(limit, offset);
 }

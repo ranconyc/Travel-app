@@ -3,7 +3,7 @@
 import { User } from "@/domain/user/user.schema";
 import { createContext, useContext, useEffect } from "react";
 import { useAuthenticatedUser } from "@/domain/user/user.hooks";
-import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { useUnreadCount } from "@/lib/hooks/useUnreadCount";
 import { Client } from "@pusher/push-notifications-web";
 
 const UserContext = createContext<User | null>(null);

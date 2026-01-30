@@ -13,13 +13,12 @@ export type GeoError = {
   message: string;
 };
 
-export type LocationSource = "manual" | "browser" | "db" | null;
+export type LocationSource = "browser" | "db" | null;
 
 interface LocationState {
-  // 1. Raw Sources (Priority: Manual > Browser > DB)
+  // 1. Raw Sources (Priority: Browser > DB)
   dbCoords: Coords | null; // From User Profile
   browserCoords: Coords | null; // From Navigator API
-  manualCoords: Coords | null; // From Search/Selection
 
   // 2. Metadata
   currentCity: string | null; // City ID or name
@@ -39,12 +38,11 @@ interface LocationState {
   // 5. Actions - Source-specific setters
   setDbLocation: (coords: Coords, city?: string) => void;
   setBrowserLocation: (coords: Coords) => void;
-  setManualLocation: (coords: Coords, city: string) => void;
 
   // 6. Legacy actions (for backward compatibility during migration)
   setDbCoords: (coords: Coords | null) => void;
   setBrowserCoords: (coords: Coords | null) => void;
-  setCoords: (coords: Coords | null) => void;
+  setCoords: (coords: Coords | null) => void; // Now behaves as generic setter or reset
   setLastSavedCoords: (coords: Coords | null) => void;
   setCurrentCity: (cityId: string | null) => void;
 
@@ -66,7 +64,6 @@ const initialState: Omit<
   LocationState,
   | "setDbLocation"
   | "setBrowserLocation"
-  | "setManualLocation"
   | "setDbCoords"
   | "setBrowserCoords"
   | "setCoords"
@@ -83,7 +80,6 @@ const initialState: Omit<
   // Raw sources
   dbCoords: null,
   browserCoords: null,
-  manualCoords: null,
 
   // Metadata
   currentCity: null,
@@ -102,17 +98,40 @@ const initialState: Omit<
 };
 
 /**
- * Computes the final location based on priority: Manual > Browser > DB
+ * Calculates distance between two points in km (Haversine formula)
+ */
+function getDistance(c1: Coords, c2: Coords): number {
+  const R = 6371; // Radius of the earth in km
+  const dLat = (c2.lat - c1.lat) * (Math.PI / 180);
+  const dLng = (c2.lng - c1.lng) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(c1.lat * (Math.PI / 180)) *
+      Math.cos(c2.lat * (Math.PI / 180)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in km
+}
+
+/**
+ * Computes the final location based on priority: Browser > DB
+ * Implements "Sticky Location": If Browser is very close to DB (< 10km),
+ * prefer DB coords to prevent cache misses/refetches.
  */
 function computeFinalLocation(
-  manualCoords: Coords | null,
   browserCoords: Coords | null,
   dbCoords: Coords | null,
 ): { coords: Coords | null; source: LocationSource } {
-  if (manualCoords) {
-    return { coords: manualCoords, source: "manual" };
-  }
   if (browserCoords) {
+    if (dbCoords) {
+      const dist = getDistance(browserCoords, dbCoords);
+      // If GPS is within 10km of DB location, stick to DB location
+      // to avoid React Query cache misses (different keys).
+      if (dist < 10) {
+        return { coords: dbCoords, source: "db" };
+      }
+    }
     return { coords: browserCoords, source: "browser" };
   }
   if (dbCoords) {
@@ -130,7 +149,6 @@ export const useLocationStore = create<LocationState>()(
       setDbLocation: (coords: Coords, city?: string) => {
         const state = get();
         const { coords: finalCoords, source } = computeFinalLocation(
-          state.manualCoords,
           state.browserCoords,
           coords,
         );
@@ -145,7 +163,6 @@ export const useLocationStore = create<LocationState>()(
       setBrowserLocation: (coords: Coords) => {
         const state = get();
         const { coords: finalCoords, source } = computeFinalLocation(
-          state.manualCoords,
           coords,
           state.dbCoords,
         );
@@ -156,37 +173,15 @@ export const useLocationStore = create<LocationState>()(
         });
       },
 
-      setManualLocation: (coords: Coords, city: string) => {
-        const { coords: finalCoords, source } = computeFinalLocation(
-          coords,
-          get().browserCoords,
-          get().dbCoords,
-        );
-        set({
-          manualCoords: coords,
-          currentCity: city,
-          coords: finalCoords,
-          locationSource: source,
-        });
-      },
-
       // Computed selectors
       getFinalLocation: () => {
         const state = get();
-        return computeFinalLocation(
-          state.manualCoords,
-          state.browserCoords,
-          state.dbCoords,
-        ).coords;
+        return computeFinalLocation(state.browserCoords, state.dbCoords).coords;
       },
 
       getLocationSource: () => {
         const state = get();
-        return computeFinalLocation(
-          state.manualCoords,
-          state.browserCoords,
-          state.dbCoords,
-        ).source;
+        return computeFinalLocation(state.browserCoords, state.dbCoords).source;
       },
 
       // Legacy actions (for backward compatibility)
@@ -196,7 +191,6 @@ export const useLocationStore = create<LocationState>()(
         } else {
           const state = get();
           const { coords: finalCoords, source } = computeFinalLocation(
-            state.manualCoords,
             state.browserCoords,
             null,
           );
@@ -214,7 +208,6 @@ export const useLocationStore = create<LocationState>()(
         } else {
           const state = get();
           const { coords: finalCoords, source } = computeFinalLocation(
-            state.manualCoords,
             null,
             state.dbCoords,
           );
@@ -227,23 +220,25 @@ export const useLocationStore = create<LocationState>()(
       },
 
       setCoords: (coords: Coords | null) => {
-        // Legacy: Direct setter - treat as manual if provided
-        if (coords) {
-          get().setManualLocation(coords, get().currentCity || "");
-        } else {
-          // Clear manual, recompute from other sources
+        // Legacy: setCoords usually implied manual override.
+        // With manual override removed, this might be ambiguous.
+        // We will assume it's attempting to set DB location or just ignored.
+        // For safety, let's treat it as a reset if null, or ignore if provided (as we enforce GPS).
+        // Alternatively, it could update DB location if we consider that "manual" update.
+        // BUT user said "100% relay on GPS".
+        // Let's just recompute.
+        if (!coords) {
           const state = get();
           const { coords: finalCoords, source } = computeFinalLocation(
-            null,
             state.browserCoords,
             state.dbCoords,
           );
           set({
-            manualCoords: null,
             coords: finalCoords,
             locationSource: source,
           });
         }
+        // If coords provided, we do nothing as we don't support manual override anymore.
       },
 
       setLastSavedCoords: (coords: Coords | null) =>
@@ -261,14 +256,11 @@ export const useLocationStore = create<LocationState>()(
     }),
     {
       name: "location-storage",
-      // Persist manual preference only (coords is computed, don't persist)
       partialize: (state) => ({
-        manualCoords: state.manualCoords, // Persist user's manual selection
+        // Manual coords removed
         currentCity: state.currentCity,
         currentCityId: state.currentCityId,
         lastSavedCoords: state.lastSavedCoords,
-        // Don't persist coords - it's computed and should be recalculated on hydration
-        // Don't persist browser/db coords - they should be fetched fresh
       }),
     },
   ),

@@ -3,7 +3,7 @@
 import SelectionCard from "@/components/atoms/SelectionCard";
 import Button from "@/components/atoms/Button";
 import interests from "@/data/interests.json";
-import { InterestsData } from "@/app/profile/travel-preferences/_hooks/useTravelPreferencesForm";
+import { InterestsData } from "@/app/(public)/profile/travel-preferences/_hooks/useTravelPreferencesForm";
 import Modal from "@/components/molecules/Modal";
 
 const interestsData: InterestsData = interests as unknown as InterestsData;

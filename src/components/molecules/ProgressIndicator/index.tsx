@@ -1,9 +1,38 @@
 "use client";
 
-interface ProgressIndicatorProps {
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const progressIndicatorVariants = cva("flex items-center", {
+  variants: {
+    variant: {
+      bar: "gap-3",
+      dots: "gap-2",
+    },
+  },
+  defaultVariants: {
+    variant: "bar",
+  },
+});
+
+const dotVariants = cva("h-2 w-2 rounded-full transition-colors", {
+  variants: {
+    active: {
+      true: "bg-brand",
+      false: "bg-surface",
+    },
+  },
+  defaultVariants: {
+    active: false,
+  },
+});
+
+interface ProgressIndicatorProps
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof progressIndicatorVariants> {
   currentStep: number;
   totalSteps: number;
-  variant?: "bar" | "dots";
   showLabel?: boolean;
 }
 
@@ -16,18 +45,21 @@ export default function ProgressIndicator({
   totalSteps,
   variant = "bar",
   showLabel = false,
+  className,
+  ...props
 }: ProgressIndicatorProps) {
   const percentage = (currentStep / totalSteps) * 100;
 
   if (variant === "dots") {
     return (
-      <div className="flex items-center gap-2">
+      <div
+        className={cn(progressIndicatorVariants({ variant }), className)}
+        {...props}
+      >
         {Array.from({ length: totalSteps }).map((_, index) => (
           <div
             key={index}
-            className={`h-2 w-2 rounded-full transition-colors ${
-              index < currentStep ? "bg-brand" : "bg-surface"
-            }`}
+            className={dotVariants({ active: index < currentStep })}
           />
         ))}
         {showLabel && (
@@ -40,7 +72,10 @@ export default function ProgressIndicator({
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div
+      className={cn(progressIndicatorVariants({ variant }), className)}
+      {...props}
+    >
       <div className="flex-1 h-1.5 bg-surface rounded-full overflow-hidden">
         <div
           className="h-full bg-brand transition-all duration-300"

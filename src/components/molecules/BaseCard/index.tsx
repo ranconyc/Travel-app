@@ -34,7 +34,7 @@ export default function BaseCard({
       image={image}
       linkHref={linkHref}
       className={className}
-      aspectRatio={aspectRatio}
+      aspectRatio={aspectRatio as any}
       gradient={gradient}
       priority={priority}
     >

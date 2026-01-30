@@ -1,14 +1,37 @@
+"use client";
+
+import { useState } from "react";
+
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-type AvatarProps = {
+const avatarVariants = cva("relative inline-block overflow-hidden bg-surface", {
+  variants: {
+    variant: {
+      circle: "rounded-full",
+      square: "rounded-xl",
+    },
+    border: {
+      true: "border-2 border-surface shadow-sm",
+      false: "",
+    },
+  },
+  defaultVariants: {
+    variant: "circle",
+    border: false,
+  },
+});
+
+export interface AvatarProps
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, "variant">,
+    VariantProps<typeof avatarVariants> {
   image?: string;
   alt: string;
   size?: number; // size in pixels
-  className?: string;
-  style?: React.CSSProperties;
-  variant?: "circle" | "square";
-  border?: boolean;
-};
+  initials?: string;
+}
 
 // cleaner, more flexible avatar component
 export function Avatar({
@@ -17,36 +40,55 @@ export function Avatar({
   size = 40, // default size
   className = "",
   style,
-  variant = "circle",
-  border = false,
+  variant,
+  border,
+  initials,
   ...props
 }: AvatarProps) {
-  const borderRadius = variant === "circle" ? "9999px" : "12px";
-  const borderStyles = border ? "border-2 border-surface shadow-sm" : "";
+  const [hasError, setHasError] = useState(false);
+
+  // Fallback hierarchy:
+  // 1. Provided image (if not failed)
+  // 2. Initials (if provided)
+  // 3. Default placeholder
+  const showImage = !!image && !hasError;
+  const showInitials = !showImage && !!initials;
 
   return (
     <div
-      // inline size keeps flexibility (Tailwind can't generate dynamic px classes)
       style={{
         width: size,
         height: size,
-        borderRadius,
         ...style,
       }}
-      className={`relative inline-block overflow-hidden bg-surface ${borderStyles} ${className}`}
+      className={cn(avatarVariants({ variant, border }), className)}
       {...props}
     >
-      <Image
-        // if no image was provided, use fallback
-        src={
-          image ||
-          "https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1577909/"
-        }
-        alt={alt}
-        fill
-        className="object-cover"
-        sizes={`${size}px`}
-      />
+      {showImage ? (
+        <Image
+          src={image!}
+          alt={alt}
+          fill
+          className="object-cover"
+          sizes={`${size}px`}
+          onError={() => setHasError(true)}
+        />
+      ) : showInitials ? (
+        <div
+          className="flex h-full w-full items-center justify-center bg-brand text-white font-bold"
+          style={{ fontSize: size * 0.4 }}
+        >
+          {initials!.toUpperCase().slice(0, 2)}
+        </div>
+      ) : (
+        <Image
+          src="/placeholder-avatar.png"
+          alt={alt}
+          fill
+          className="object-cover opacity-50"
+          sizes={`${size}px`}
+        />
+      )}
     </div>
   );
 }

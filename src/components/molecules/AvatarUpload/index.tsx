@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { CameraIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Avatar } from "@/components/atoms/Avatar";
+import Typography from "@/components/atoms/Typography";
 
 type Props = {
   src: string | null; // allow null to avoid crashes if empty
@@ -10,6 +12,8 @@ type Props = {
   size?: number;
   disabled?: boolean;
   inputId?: string; // optional for multiple instances
+  className?: string; // Additional class name for container
+  initials?: string;
 };
 
 export default function AvatarUpload({
@@ -18,6 +22,8 @@ export default function AvatarUpload({
   size = 96,
   disabled = false,
   inputId = "avatar-file",
+  className,
+  initials,
 }: Props) {
   const previewRef = useRef<string | null>(null);
 
@@ -39,51 +45,37 @@ export default function AvatarUpload({
 
   return (
     <div
-      className="grid place-items-center gap-2 border-b border-surface pb-2"
+      className={cn("flex flex-col items-center gap-4 py-2", className)}
       aria-disabled={disabled}
     >
       <div className="relative inline-block" aria-disabled={disabled}>
-        {/* Avatar circle */}
-        <div
-          className={`rounded-full overflow-hidden border bg-gray-200 ${
-            disabled ? "opacity-60" : ""
-          }`}
-          style={{ width: size, height: size }}
-        >
-          {src ? (
-            <Image
-              src={src}
-              alt="Avatar"
-              fill
-              className="object-cover h-full w-full rounded-2xl"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority // detected as LCP in profile forms
-            />
-          ) : (
-            <Image
-              src="/placeholder-avatar.png"
-              alt="avatar"
-              width={size}
-              height={size}
-              className="h-full w-full object-cover rounded-2xl"
-              sizes="(max-width: 768px) 80px, 120px"
-              priority={size > 100}
-              loading={size > 100 ? "eager" : "lazy"}
-            />
-          )}
-        </div>
+        {/* Avatar Display */}
+        <Avatar
+          image={src || undefined}
+          variant="square"
+          alt="Profile Avatar"
+          size={size}
+          initials={initials}
+          border
+          className={cn(disabled ? "opacity-60" : "")}
+        />
 
-        {/* Edit button */}
+        {/* Edit Action Overlay */}
         {!disabled && (
           <label
             htmlFor={inputId}
-            className="absolute -bottom-4 left-0 right-0 z-10 grid place-items-center
-                      hover:bg-amber-400 cursor-pointer"
+            className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-10 
+                       cursor-pointer group"
             aria-label="Change profile picture"
           >
-            <div className="flex items-center gap-2 px-3 py-2 max-w-[100px] bg-amber-300 rounded-full">
-              <CameraIcon size={18} />
-              <span className="text-xs">Edit</span>
+            <div
+              className="bg-brand text-white flex items-center gap-2 px-4 py-1.5 
+                          rounded-full shadow-lg transition-transform group-hover:scale-105"
+            >
+              <CameraIcon size={14} />
+              <Typography variant="label-sm" color="white" weight="bold">
+                Edit
+              </Typography>
             </div>
           </label>
         )}
@@ -102,11 +94,14 @@ export default function AvatarUpload({
           }}
         />
       </div>
-      <div className="text-center pt-md">
-        <p className="text-xs">
+
+      <div className="text-center space-y-1 mt-2">
+        <Typography variant="caption" color="main" weight="medium">
           {src ? "Change profile picture" : "Upload profile picture"}
-        </p>
-        <p className="text-xs text-secondary">JPG, PNG or GIF (max. 5MB)</p>
+        </Typography>
+        <Typography variant="caption-sm" color="sec">
+          JPG, PNG or GIF (max. 5MB)
+        </Typography>
       </div>
     </div>
   );

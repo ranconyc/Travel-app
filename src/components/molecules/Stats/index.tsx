@@ -1,3 +1,4 @@
+import Typography from "@/components/atoms/Typography";
 import { StatItem } from "@/domain/common.schema";
 
 interface StatsProps {
@@ -26,14 +27,24 @@ export default function Stats({
             style={{ animationDelay: `${index * 50}ms` }}
           >
             <div className="flex flex-col items-center gap-1">
-              <span className="text-2xl md:text-3xl font-bold font-sora text-txt-main leading-tight">
+              <Typography
+                variant="display-sm"
+                weight="bold"
+                color="main"
+                className="leading-tight text-2xl md:text-3xl"
+              >
                 {stat.value}
-              </span>
+              </Typography>
 
-              <span className="text-xs text-secondary font-bold uppercase tracking-wider flex items-center gap-1">
+              <Typography
+                variant="micro"
+                weight="bold"
+                color="sec"
+                className="flex items-center gap-1"
+              >
                 {Icon && <Icon size={12} className="text-brand" />}
                 {stat.label}
-              </span>
+              </Typography>
             </div>
             {isMiddle && (
               <div className="absolute left-0 top-1/2 h-8 w-px bg-surface-secondary/50 -translate-x-1/2 -translate-y-1/2" />

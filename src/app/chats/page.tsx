@@ -1,4 +1,6 @@
 import { getTravelPartnersAction } from "@/domain/friendship/friendship.actions";
+import { ChatWithDetails } from "@/domain/chat/chat.types";
+import { User } from "@/domain/user/user.schema";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 import { getUserChats } from "@/domain/chat/chat.actions";
@@ -22,8 +24,8 @@ export default async function ChatPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <ChatSearchClient
-        initialChats={initialChats}
-        initialFriends={initialFriends}
+        initialChats={initialChats as unknown as ChatWithDetails[]}
+        initialFriends={initialFriends as unknown as User[]}
         loggedUserId={loggedUser.id}
       />
     </div>
