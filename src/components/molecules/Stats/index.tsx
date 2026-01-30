@@ -17,7 +17,6 @@ export default function Stats({
       className={`flex items-center justify-between px-6 py-4 bg-surface rounded-2xl shadow-card border border-surface-secondary/50 backdrop-blur-sm ${className}`}
     >
       {stats.map((stat, index) => {
-        const Icon = stat.icon;
         const isMiddle = showDividers && index > 0 && index < stats.length - 1;
 
         return (
@@ -27,22 +26,11 @@ export default function Stats({
             style={{ animationDelay: `${index * 50}ms` }}
           >
             <div className="flex flex-col items-center gap-1">
-              <Typography
-                variant="display-sm"
-                weight="bold"
-                color="main"
-                className="leading-tight text-2xl md:text-3xl"
-              >
+              <Typography variant="h1" weight="bold" color="main">
                 {stat.value}
               </Typography>
 
-              <Typography
-                variant="micro"
-                weight="bold"
-                color="sec"
-                className="flex items-center gap-1"
-              >
-                {Icon && <Icon size={12} className="text-brand" />}
+              <Typography variant="micro" weight="bold" color="sec">
                 {stat.label}
               </Typography>
             </div>
