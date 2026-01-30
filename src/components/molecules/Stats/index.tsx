@@ -14,7 +14,7 @@ export default function Stats({
 }: StatsProps) {
   return (
     <div
-      className={`flex items-center justify-between px-6 py-4 bg-surface rounded-2xl shadow-card border border-surface-secondary/50 backdrop-blur-sm ${className}`}
+      className={`flex items-center justify-between px-2 py-4 bg-surface rounded-xl border shadow-card border-surface-secondary/50 backdrop-blur-sm ${className}`}
     >
       {stats.map((stat, index) => {
         const isMiddle = showDividers && index > 0 && index < stats.length - 1;
@@ -30,7 +30,7 @@ export default function Stats({
                 {stat.value}
               </Typography>
 
-              <Typography variant="micro" weight="bold" color="sec">
+              <Typography variant="p" weight="bold" color="sec">
                 {stat.label}
               </Typography>
             </div>

@@ -36,8 +36,6 @@ export function BasicInfoStep({
     formState: { errors },
   } = form;
 
-  console.log("[BasicInfoStep] Component rendered");
-
   const fullNameValue = watch("fullName");
   const monthRef = useRef<HTMLInputElement>(null);
   const dayRef = useRef<HTMLInputElement>(null);
@@ -102,18 +100,13 @@ export function BasicInfoStep({
               placeholder="e.g., New York, NY"
               value={value?.name}
               loadOptions={async (q) => {
-                console.log("[Autocomplete] loadOptions called with:", q);
                 const res = await searchCityAction({ query: q });
-                console.log("[Autocomplete] searchCityAction result:", res);
-                const mapped =
-                  res?.success && res.data
-                    ? res.data.map((c) => ({
-                        ...c,
-                        subtitle: c.subtitle ?? undefined,
-                      }))
-                    : [];
-                console.log("[Autocomplete] mapped options:", mapped);
-                return mapped;
+                return res?.success && res.data
+                  ? res.data.map((c) => ({
+                      ...c,
+                      subtitle: c.subtitle ?? undefined,
+                    }))
+                  : [];
               }}
               onSelect={(val, option) => {
                 const cityOpt = option as CitySearchResult;

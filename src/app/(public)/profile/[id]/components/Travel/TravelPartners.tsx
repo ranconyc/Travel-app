@@ -13,22 +13,18 @@ export default function TravelPartners({ partner }: { partner: User | null }) {
       {!partner ? (
         <AddSection
           title="Traveling without a partner?"
-          link={{ href: "/profile/partner", label: "Link your partner" }}
+          link={{ href: `/profile/partner`, label: "Link your partner" }}
         />
       ) : (
-        <Block className="bg-surface/50 p-md rounded-xl border border-surface flex items-center gap-md">
+        <Block className="flex items-center gap-md">
           <Avatar
             image={partner.avatarUrl || ""}
             alt={partner.name || ""}
             size={40}
           />
           <div>
-            <Typography variant="p" className="text-sm font-bold">
-              {partner.name}
-            </Typography>
-            <Typography variant="p" className="text-xs text-secondary">
-              Frequent travel partner
-            </Typography>
+            <Typography variant="h3">{partner.name}</Typography>
+            <Typography variant="p">Frequent travel partner</Typography>
           </div>
         </Block>
       )}

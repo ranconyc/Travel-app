@@ -14,7 +14,6 @@ function QRCodeButton() {
 
   return (
     <Button
-      size="sm"
       variant="icon"
       onClick={handleClick}
       icon={<QrCode size={20} />}

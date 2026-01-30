@@ -7,12 +7,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const selectVariants = cva(
-  "w-full text-txt-main px-4 h-11 rounded-3xl font-medium border-2 bg-surface appearance-none transition-all focus:outline-none focus:border-brand disabled:bg-surface-secondary disabled:cursor-not-allowed",
+  "w-full text-txt-main px-4 pr-10 h-12 rounded-sm font-medium border bg-surface appearance-none shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand disabled:bg-surface-secondary disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
-        default: "border-stroke",
-        error: "border-error",
+        default: "border-surface-secondary",
+        error: "border-error ring-1 ring-error",
       },
     },
     defaultVariants: {

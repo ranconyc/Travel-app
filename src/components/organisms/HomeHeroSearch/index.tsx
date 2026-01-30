@@ -151,11 +151,7 @@ export default function HomeHeroSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search destination..."
-          className={cn(
-            "w-full h-14 pl-11 pr-xl bg-surface border border-border rounded-xl text-p text-txt-main",
-            "placeholder:text-secondary/60 shadow-sm transition-all",
-            "focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand",
-          )}
+          className={cn("input-base pl-11 pr-xl text-p")}
         />
         {isLoading && (
           <div className="absolute inset-y-0 right-xl flex items-center">

@@ -46,13 +46,6 @@ export function useAutocompleteRemote<T>({
   };
 
   useEffect(() => {
-    console.log(
-      "[useAutocompleteRemote] Effect triggered, query:",
-      query,
-      "loadOptions:",
-      !!loadOptions,
-    );
-
     if (!loadOptions) {
       setRemote([]);
       return;
@@ -61,20 +54,12 @@ export function useAutocompleteRemote<T>({
     // if caller marked "skip next fetch" (e.g. due to selection),
     // we skip once and reset the flag
     if (skipNextRef.current) {
-      console.log("[useAutocompleteRemote] Skipping fetch (skipNextRef)");
       skipNextRef.current = false;
       return;
     }
 
     const q = query.trim();
-    console.log(
-      "[useAutocompleteRemote] Query length:",
-      q.length,
-      "minChars:",
-      minChars,
-    );
     if (q.length <= minChars) {
-      console.log("[useAutocompleteRemote] Query too short, clearing remote");
       setRemote([]);
       return;
     }

@@ -7,6 +7,7 @@ import ChatItem from "./ChatItem";
 
 import PageHeader from "@/components/molecules/PageHeader";
 import Input from "@/components/atoms/Input";
+import Typography from "@/components/atoms/Typography";
 
 import { ChatWithDetails } from "@/domain/chat/chat.types";
 import { User } from "@/domain/user/user.schema";
@@ -70,18 +71,22 @@ export function ChatSearchClient({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search chats..."
-              className="h-12 bg-surface/5 border-surface focus:ring-brand/50"
             />
           </div>
         }
       />
 
-      <main className="flex flex-col flex-1 pb-20">
+      <main className="flex flex-col flex-1 pb-20 p-md">
         {filteredChats.length > 0 ? (
           <div className="flex-1">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-sm px-md mt-md">
+            <Typography
+              variant="label-sm"
+              weight="bold"
+              color="sec"
+              className="uppercase tracking-wider "
+            >
               Recent Chats
-            </h2>
+            </Typography>
             <ul className="flex flex-col w-full">
               {filteredChats.map((chat) => (
                 <ChatItem
@@ -114,9 +119,14 @@ export function ChatSearchClient({
 
         {filteredFriends.length > 0 && (
           <div className="mt-lg">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-md px-md">
+            <Typography
+              variant="label-sm"
+              weight="bold"
+              color="sec"
+              className="uppercase tracking-wider mb-md px-md"
+            >
               {searchQuery.trim() ? "Search Mates" : "Discover Mates"}
-            </h2>
+            </Typography>
             <div className="flex gap-md overflow-x-auto pb-md px-md scrollbar-hide">
               {filteredFriends.map((friend) => (
                 <FriendChatStarter

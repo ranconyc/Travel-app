@@ -21,11 +21,13 @@ import { StyleStep } from "./steps/StyleStep";
 interface OnboardingFormProps {
   onComplete?: () => void;
   className?: string;
+  initialValues?: Partial<OnboardingIdentityFormValues>;
 }
 
 export default function OnboardingForm({
   onComplete,
   className,
+  initialValues,
 }: OnboardingFormProps) {
   const user = useUser();
   const router = useRouter();
@@ -37,30 +39,30 @@ export default function OnboardingForm({
   const currentStep = parseInt(searchParams.get("step") || "0", 10);
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    user?.avatarUrl || null,
+    initialValues?.avatarUrl || user?.avatarUrl || null,
   );
 
   const form = useForm<OnboardingIdentityFormValues>({
     resolver: zodResolver(onboardingIdentitySchema),
     mode: "onChange",
     defaultValues: {
-      fullName: user?.name || "",
-      avatarUrl: user?.avatarUrl || "",
-      birthday: {
+      fullName: initialValues?.fullName ?? user?.name ?? "",
+      avatarUrl: initialValues?.avatarUrl ?? user?.avatarUrl ?? "",
+      birthday: initialValues?.birthday ?? {
         month: "",
         day: "",
         year: "",
       },
-      gender: undefined,
-      location: {
+      gender: initialValues?.gender ?? undefined,
+      location: initialValues?.location ?? {
         name: "",
         placeId: undefined,
         coords: undefined,
       },
-      rhythm: undefined,
-      budget: undefined,
-      currency: undefined,
-      travelStyles: undefined,
+      rhythm: initialValues?.rhythm ?? undefined,
+      budget: initialValues?.budget ?? undefined,
+      currency: initialValues?.currency ?? undefined,
+      travelStyles: initialValues?.travelStyles ?? undefined,
     },
   });
 

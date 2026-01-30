@@ -125,7 +125,7 @@ export default function CountriesIndexPage() {
             placeholder="Search countries..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-stroke bg-surface focus:outline-none focus:ring-2 focus:ring-brand/20"
+            className="input-base"
           />
 
           {/* Region Filter */}

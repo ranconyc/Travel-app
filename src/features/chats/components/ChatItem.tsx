@@ -30,10 +30,10 @@ export default function ChatItem({
   const lastMessageContent = chat.lastMessage?.content || "No messages yet";
 
   return (
-    <li className="list-none border-b border-surface/5 last:border-0 w-full">
+    <li className="list-none border-b border-b-surface last:border-0 w-full">
       <Link
         href={`/chats/${chat.id}`}
-        className="flex items-center gap-md p-md hover:bg-surface/10 transition-colors duration-200"
+        className="flex items-center gap-md py-md hover:bg-surface/10 transition-colors duration-200"
       >
         <Avatar
           image={displayImage || undefined}

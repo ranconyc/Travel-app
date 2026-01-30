@@ -87,7 +87,7 @@ export function CountrySelector({
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full pl-10 pr-10 py-3 rounded-xl border-2 border-surface bg-main text-txt-main placeholder:text-secondary focus:border-brand focus:outline-none transition-colors"
+            className="input-base pl-10 pr-10"
           />
           {searchQuery && (
             <button

@@ -27,12 +27,12 @@ export default function TravelSection({
 
   return (
     <div className="mb-md flex flex-col gap-md">
-      <Typography variant="h2" className="header-1 w-fit capitalize font-bold">
-        Travel
+      <Typography variant="h2" weight="bold">
+        Passport
       </Typography>
-      <TravelHistory travelHistory={travelHistory} isMyProfile={isMyProfile} />
       <TravelPartners partner={travelPartners?.[0] || null} />
       <NextDestinations nextDestinations={nextDestinations || []} />
+      <TravelHistory travelHistory={travelHistory} isMyProfile={isMyProfile} />
     </div>
   );
 }

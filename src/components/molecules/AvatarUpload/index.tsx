@@ -19,7 +19,7 @@ type Props = {
 export default function AvatarUpload({
   src,
   onSelect,
-  size = 96,
+  size = 112,
   disabled = false,
   inputId = "avatar-file",
   className,

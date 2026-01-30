@@ -10,26 +10,26 @@ import { cn } from "@/lib/utils/cn";
 
 // Define button variants with CVA
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-sm font-medium transition-colors cursor-pointer focus:outline-none focus:ring-sm focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none rounded-pill",
+  "inline-flex items-center justify-center gap-sm font-medium transition-colors cursor-pointer focus:outline-none focus:ring-sm focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-50 select-none",
   {
     variants: {
       variant: {
         primary:
-          "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand",
-        secondary: "bg-bg-sub text-txt-main hover:bg-bg-hover",
+          "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
+        secondary: "bg-bg-sub text-txt-main hover:bg-bg-hover rounded-pill",
         outline:
-          "border-2 border-brand text-brand hover:bg-brand/5 bg-transparent",
-        ghost: "text-txt-sec hover:bg-bg-sub hover:text-txt-main",
-        teal: "bg-brand-success hover:opacity-90 text-inverse border-2 border-brand-success",
-        dark: "bg-txt-main text-bg-main hover:opacity-90",
+          "border-2 border-brand text-brand hover:bg-brand/5 bg-transparent rounded-pill",
+        ghost: "text-txt-sec hover:bg-bg-sub hover:text-txt-main rounded-pill",
+        teal: "bg-brand-success hover:opacity-90 text-inverse border-2 border-brand-success rounded-pill",
+        dark: "bg-txt-main text-bg-main hover:opacity-90 rounded-pill",
         "outline-white":
-          "bg-transparent border border-white/30 hover:bg-white/10 text-inverse",
-        // Special case: icon variant has specific dimensions
-        icon: "rounded-full bg-bg-sub/50 backdrop-blur-md text-txt-main hover:bg-bg-sub border border-stroke shadow-soft p-0",
+          "bg-transparent border border-white/30 hover:bg-white/10 text-inverse rounded-pill",
+        // Special case: icon variant has specific dimensions and rounded-full
+        icon: "border border-surface-secondary rounded-full",
         brand:
-          "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand",
+          "bg-brand text-white hover:opacity-90 shadow-soft border-2 border-brand rounded-pill",
         link: "text-brand underline-offset-4 hover:underline bg-transparent p-0 h-auto rounded-none",
-        back: "flex items-center justify-center transition-all disabled:opacity-50 hover:bg-surface-hover",
+        back: "flex items-center justify-center transition-all disabled:opacity-50 hover:bg-surface-hover rounded-full",
       },
       size: {
         sm: "px-lg h-9 text-upheader",
