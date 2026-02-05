@@ -1,26 +1,18 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  MapPin,
-  Clock,
-  Calendar,
-  Globe2,
-  Users,
-  Star,
-  CalendarPlus,
-} from "lucide-react";
+import { MapPin, Star, Users, Globe2 } from "lucide-react";
 import Block from "@/components/atoms/Block";
 import Stats from "@/components/molecules/Stats";
 import { StatItem } from "@/domain/common.schema";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
 import PageHeader from "@/components/organisms/PageHeader";
-import LogisticsSection from "@/app/(public)/countries/[slug]/components/LogisticsSection";
-import CultureSection from "@/app/(public)/countries/[slug]/components/CultureSection";
-import HealthSection from "@/app/(public)/countries/[slug]/components/HealthSection";
 import { calculateMatchScore } from "@/domain/discovery/services/matching.service";
+import PlaceActionRow from "./PlaceActionRow";
+import PlaceAmenities from "./PlaceAmenities";
+import PlaceHours from "./PlaceHours";
+import PlaceGallery from "./PlaceGallery";
+import Typography from "@/components/atoms/Typography";
 
 interface PlaceDetailViewProps {
   activity: any; // Using any to match existing data shape
@@ -83,12 +75,14 @@ export default function PlaceDetailView({
 
   return (
     <div className="bg-main min-h-screen selection:bg-brand selection:text-white">
-      <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-12">
+      <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-8 md:gap-12">
         <PageHeader
           title={activity.name}
-          subtitle={`${activity.city.name}, ${activity.city.country.name}`}
+          subtitle={`${activity.city?.name || "Unknown City"}, ${
+            activity.city?.country?.name || "Unknown Country"
+          }`}
           heroImageSrc={activity.imageHeroUrl}
-          socialQuery={`${activity.name}, ${activity.city.name}`}
+          socialQuery={`${activity.name}, ${activity.city?.name || ""}`}
           type="place"
           badge={
             matchScore && (
@@ -102,73 +96,107 @@ export default function PlaceDetailView({
           }
         />
 
+        {/* Action Buttons */}
+        <section className="-mt-6">
+          <PlaceActionRow
+            websiteUrl={activity.websiteUrl}
+            phoneNumber={activity.phoneNumber}
+            googlePlaceId={activity.googlePlaceId}
+            coords={activity.coords}
+          />
+        </section>
+
         {/* Stats */}
         <Stats stats={stats} />
 
         <div className="flex flex-col gap-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {activity.tags && activity.tags.length > 0 && (
-              <Block>
-                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4">
-                  Tags
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {activity.tags
-                    .slice(0, 3)
-                    .map((tag: string, index: number) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-surface-secondary rounded-full text-sm text-secondary hover:bg-surface-hover transition-colors"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                </div>
-              </Block>
-            )}
-
-            {activity.priceLevel && (
-              <Block>
-                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4">
-                  Price Level
-                </h3>
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: 4 }, (_, i) => (
-                    <span
-                      key={i}
-                      className={`text-lg ${
-                        i < (activity.priceLevel || 0)
-                          ? "text-green-600 dark:text-green-400"
-                          : "text-gray-300 dark:text-gray-600"
-                      }`}
-                    >
-                      $
-                    </span>
-                  ))}
-                </div>
-              </Block>
-            )}
-          </div>
-
-          {activity.bestTimeToVisit && (
+          {/* About & Summary */}
+          {activity.summary && (
             <Block>
-              <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4">
-                Best Time to Visit
-              </h3>
-              <p className="text-p font-bold text-txt-main">
-                {activity.bestTimeToVisit}
+              <Typography
+                variant="h3"
+                className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4"
+              >
+                About
+              </Typography>
+              <p className="text-p text-txt-main leading-relaxed">
+                {activity.summary}
               </p>
             </Block>
           )}
 
-          {activity.summary && (
+          {/* Gallery */}
+          {activity.media && activity.media.length > 0 && (
+            <PlaceGallery
+              media={activity.media}
+              heroImage={activity.imageHeroUrl}
+            />
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left Column: Hours & Price */}
+            <div className="space-y-6">
+              <PlaceHours openingHours={activity.openingHours} />
+
+              {activity.priceLevel && (
+                <Block>
+                  <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4">
+                    Price Level
+                  </h3>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 4 }, (_, i) => (
+                      <span
+                        key={i}
+                        className={`text-lg ${
+                          i < (activity.priceLevel || 0)
+                            ? "text-green-600 dark:text-green-400"
+                            : "text-gray-300 dark:text-gray-600"
+                        }`}
+                      >
+                        $
+                      </span>
+                    ))}
+                  </div>
+                </Block>
+              )}
+            </div>
+
+            {/* Right Column: Amenities & Best Time */}
+            <div className="space-y-6">
+              <PlaceAmenities
+                amenities={activity.amenities}
+                accessibility={activity.accessibility}
+              />
+
+              {activity.bestTimeToVisit && (
+                <Block>
+                  <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4">
+                    Best Time to Visit
+                  </h3>
+                  <p className="text-p font-bold text-txt-main">
+                    {activity.bestTimeToVisit}
+                  </p>
+                </Block>
+              )}
+            </div>
+          </div>
+
+          {/* Tags */}
+          {activity.tags && activity.tags.length > 0 && (
             <Block>
               <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-4">
-                About
+                Tags
               </h3>
-              <p className="text-p text-txt-main leading-relaxed">
-                {activity.summary}
-              </p>
+              <div className="flex flex-wrap gap-2">
+                {activity.tags.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-surface-secondary rounded-full text-sm text-secondary hover:bg-surface-hover transition-colors"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </Block>
           )}
 
@@ -182,10 +210,6 @@ export default function PlaceDetailView({
               </p>
             </Block>
           )}
-
-          <LogisticsSection />
-          <CultureSection />
-          <HealthSection />
         </div>
       </main>
     </div>

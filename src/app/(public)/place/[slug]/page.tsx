@@ -20,13 +20,15 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${activity.name} - ${activity.city.name} | Travel App`,
-    description: `Visit ${activity.name} in ${activity.city.name}. Rating: ${
-      activity.rating || "N/A"
-    } stars. ${activity.summary || ""}`,
+    title: `${activity.name} - ${activity.city?.name || "Travel App"}`,
+    description: `Visit ${activity.name} in ${
+      activity.city?.name || "Unknown City"
+    }. Rating: ${activity.rating || "N/A"} stars. ${activity.summary || ""}`,
     openGraph: {
-      title: `${activity.name} - ${activity.city.name}`,
-      description: `Visit ${activity.name} in ${activity.city.name}.`,
+      title: `${activity.name} - ${activity.city?.name || "Travel App"}`,
+      description: `Visit ${activity.name} in ${
+        activity.city?.name || "Unknown City"
+      }.`,
       images: [activity.imageHeroUrl].filter(Boolean),
     },
   };
@@ -62,6 +64,22 @@ export default async function ActivityPage({
   // Get session for user-specific features
   const session = await getSession();
   const user = session?.user as any;
+
+  // Check for Google Sync freshness (30 days)
+  if (activity && activity.googlePlaceId) {
+    const lastSync = activity.lastGoogleSync
+      ? new Date(activity.lastGoogleSync).getTime()
+      : 0;
+    const daysSinceSync = (Date.now() - lastSync) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceSync > 30) {
+      // Refresh in background
+      const { refreshPlaceData } =
+        await import("@/domain/place/google-place.actions");
+      // Fire and forget - using void to avoid lint expectations
+      void refreshPlaceData(activity.id, activity.googlePlaceId);
+    }
+  }
 
   return <PlaceDetailView activity={activity} user={user} />;
 }

@@ -77,14 +77,8 @@ export default function ReviewItemsList({
 }
 
 function getLink(item: ReviewItem): string {
-  switch (item.type) {
-    case "country":
-      return `/country/${item.entityId}`;
-    case "city":
-      return `/city/${item.entityId}`;
-    case "place":
-      return `/place/${item.slug}`;
-    default:
-      return "#";
+  if (["country", "city", "place"].includes(item.type)) {
+    return `/admin/destinations/${item.entityId}`;
   }
+  return "#";
 }

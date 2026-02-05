@@ -115,8 +115,8 @@ model City {
   isCapital Boolean @default(false)
 
   // NEW FIELDS
-  googlePlaceId String? @unique
-  wikiDataId    String? @unique
+  googlePlaceId String?
+  wikiDataId    String?
   isVerified    Boolean @default(false)
   slug          String  @unique // format: country-city-name
   priority      Int     @default(0)
@@ -227,6 +227,7 @@ model Place {
   needsReview Boolean @default(false)
 
   googleData  Json?
+  lastGoogleSync DateTime?
   priceLevel  Int?
   vibeScores  Json?
 

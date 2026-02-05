@@ -3,6 +3,7 @@
 import { createSafeAction } from "@/lib/safe-action";
 import { FavoriteInputSchema, GetFavoritesSchema } from "./favorite.schema";
 import { toggleFavorite, isFavorited, getFavorites } from "./favorite.service";
+import { getFavoritesWithDetails } from "@/lib/db/favorite.repo";
 
 /**
  * Toggle a favorite (add if not exists, remove if exists).
@@ -32,5 +33,15 @@ export const getFavoritesAction = createSafeAction(
   GetFavoritesSchema,
   async (data, userId) => {
     return await getFavorites(userId, data.type);
+  },
+);
+
+/**
+ * Get the current user's favorites with full entity details.
+ */
+export const getFavoritesWithDetailsAction = createSafeAction(
+  GetFavoritesSchema,
+  async (data, userId) => {
+    return await getFavoritesWithDetails(userId, data.type);
   },
 );

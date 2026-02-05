@@ -1,10 +1,17 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
 import { Heart } from "lucide-react";
 import { FavoriteType } from "@prisma/client";
-import { toggleFavoriteAction } from "@/domain/favorite/favorite.actions";
+import { useFavoriteToggle } from "@/domain/favorite/favorite.hooks";
 import Button from "@/components/atoms/Button";
+import { cva } from "class-variance-authority";
+
+const iconVariants = cva("transition-colors", {
+  variants: {
+    active: { true: "fill-error text-error", false: "text-txt-main" },
+  },
+  defaultVariants: { active: false },
+});
 
 interface FavoriteButtonProps {
   type: FavoriteType;
@@ -13,60 +20,31 @@ interface FavoriteButtonProps {
   className?: string;
 }
 
-import { cva } from "class-variance-authority";
-
-const favoriteIconVariants = cva("transition-colors", {
-  variants: {
-    active: {
-      true: "fill-error text-error",
-      false: "text-txt-main",
-    },
-  },
-  defaultVariants: {
-    active: false,
-  },
-});
-
 export default function FavoriteButton({
   type,
   entityId,
   initialIsFavorited = false,
   className = "",
 }: FavoriteButtonProps) {
-  const [isPending, startTransition] = useTransition();
-  const [optimisticIsFavorited, setOptimisticIsFavorited] = useOptimistic(
+  const { isFavorited, toggle, isPending } = useFavoriteToggle(
+    type,
+    entityId,
     initialIsFavorited,
-    (_, newState: boolean) => newState,
   );
-
-  const handleToggle = () => {
-    startTransition(async () => {
-      // Optimistically toggle
-      setOptimisticIsFavorited(!optimisticIsFavorited);
-
-      const result = await toggleFavoriteAction({ type, entityId });
-
-      // If the action failed, the optimistic state will be corrected on next render
-      if (!result.success) {
-        console.error("Failed to toggle favorite:", result.error);
-      }
-    });
-  };
 
   return (
     <Button
       variant="icon"
-      aria-label={
-        optimisticIsFavorited ? "Remove from favorites" : "Add to favorites"
-      }
-      onClick={handleToggle}
+      aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggle();
+      }}
       disabled={isPending}
       className={className}
       icon={
-        <Heart
-          size={20}
-          className={favoriteIconVariants({ active: optimisticIsFavorited })}
-        />
+        <Heart size={20} className={iconVariants({ active: isFavorited })} />
       }
     />
   );

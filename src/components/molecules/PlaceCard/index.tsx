@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import Link from "next/link";
 import { MapPin, Star } from "lucide-react";
 import { Place } from "@/domain/place/place.schema";
 import {
@@ -93,103 +94,105 @@ function PlaceCard({
   }, [place.name, useUnsplash, imageUrl]);
 
   return (
-    <Card className="group relative overflow-hidden cursor-pointer rounded-3xl w-full aspect-[4/5] shadow-card hover:shadow-xl transition-all duration-300 border-0">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <ImageWithFallback
-          src={imageUrl || ""}
-          alt={place.name}
-          fill
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          fallback={
-            <div className="w-full h-full bg-surface-dark flex items-center justify-center">
-              {isLoading ? (
-                <div className="animate-pulse">
-                  <MapPin className="text-secondary w-12 h-12 opacity-40" />
-                </div>
-              ) : (
-                <MapPin className="text-white w-12 h-12 opacity-20" />
-              )}
-            </div>
-          }
-        />
-        {/* Superior Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-      </div>
+    <Link href={`/place/${place.slug}`}>
+      <Card className="group relative overflow-hidden cursor-pointer rounded-3xl w-full aspect-[4/5] shadow-card hover:shadow-xl transition-all duration-300 border-0">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <ImageWithFallback
+            src={imageUrl || ""}
+            alt={place.name}
+            fill
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            fallback={
+              <div className="w-full h-full bg-surface-dark flex items-center justify-center">
+                {isLoading ? (
+                  <div className="animate-pulse">
+                    <MapPin className="text-secondary w-12 h-12 opacity-40" />
+                  </div>
+                ) : (
+                  <MapPin className="text-white w-12 h-12 opacity-20" />
+                )}
+              </div>
+            }
+          />
+          {/* Superior Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+        </div>
 
-      {/* Floating Badges */}
-      <div className="absolute top-4 left-4 z-10 flex gap-2">
-        {place.rating && (
-          <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-lg">
-            <Star size={14} className="text-yellow-400 fill-yellow-400" />
-            <Typography variant="label-sm" weight="bold" color="white">
-              {place.rating.toFixed(1)}
-            </Typography>
+        {/* Floating Badges */}
+        <div className="absolute top-4 left-4 z-10 flex gap-2">
+          {place.rating && (
+            <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-lg">
+              <Star size={14} className="text-yellow-400 fill-yellow-400" />
+              <Typography variant="label-sm" weight="bold" color="white">
+                {place.rating.toFixed(1)}
+              </Typography>
+            </div>
+          )}
+        </div>
+
+        {matchResult && (
+          <div className="absolute top-4 right-4 z-10">
+            <MatchScoreBadge score={matchResult.score} />
           </div>
         )}
-      </div>
 
-      {matchResult && (
-        <div className="absolute top-4 right-4 z-10">
-          <MatchScoreBadge score={matchResult.score} />
-        </div>
-      )}
+        {/* Content Container */}
+        <div className="relative z-10 h-full flex flex-col justify-end p-5">
+          {/* Main Content */}
+          <div className="space-y-3 mb-1">
+            {/* Title */}
+            <Typography
+              variant="h3"
+              color="white"
+              weight="bold"
+              className="leading-tight drop-shadow-md group-hover:text-primary-100 transition-colors line-clamp-2 min-h-[3rem]"
+            >
+              {place.name}
+            </Typography>
 
-      {/* Content Container */}
-      <div className="relative z-10 h-full flex flex-col justify-end p-5">
-        {/* Main Content */}
-        <div className="space-y-3 mb-1">
-          {/* Title */}
-          <Typography
-            variant="h3"
-            color="white"
-            weight="bold"
-            className="leading-tight drop-shadow-md group-hover:text-primary-100 transition-colors line-clamp-2 min-h-[3rem]"
-          >
-            {place.name}
-          </Typography>
+            {/* Distance & Info */}
+            <div className="flex items-center gap-4 text-white/90">
+              {distance !== undefined && (
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={14} className="text-primary-400" />
+                  <Typography variant="label-sm" weight="medium" color="white">
+                    {distance < 1
+                      ? `${Math.round(distance * 1000)}m away`
+                      : `${distance.toFixed(1)}km away`}
+                  </Typography>
+                </div>
+              )}
 
-          {/* Distance & Info */}
-          <div className="flex items-center gap-4 text-white/90">
-            {distance !== undefined && (
-              <div className="flex items-center gap-1.5">
-                <MapPin size={14} className="text-primary-400" />
-                <Typography variant="label-sm" weight="medium" color="white">
-                  {distance < 1
-                    ? `${Math.round(distance * 1000)}m away`
-                    : `${distance.toFixed(1)}km away`}
-                </Typography>
-              </div>
-            )}
-
-            {place.priceLevel && (
-              <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/10 backdrop-blur-sm border border-white/10">
-                <span className="text-xs font-bold text-white tracking-widest">
-                  {"$".repeat(place.priceLevel)}
-                  <span className="text-white/30">
-                    {"$".repeat(4 - place.priceLevel)}
+              {place.priceLevel && (
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/10 backdrop-blur-sm border border-white/10">
+                  <span className="text-xs font-bold text-white tracking-widest">
+                    {"$".repeat(place.priceLevel)}
+                    <span className="text-white/30">
+                      {"$".repeat(4 - place.priceLevel)}
+                    </span>
                   </span>
-                </span>
-              </div>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
 
-          {/* Tags - Simplified */}
-          <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/10">
-            {place.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className={tagVariants({ intent: "default" })}>
-                {getInterestLabel(tag)}
-              </span>
-            ))}
-            {place.tags.length > 2 && (
-              <span className={tagVariants({ intent: "more" })}>
-                +{place.tags.length - 2}
-              </span>
-            )}
+            {/* Tags - Simplified */}
+            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/10">
+              {place.tags.slice(0, 2).map((tag) => (
+                <span key={tag} className={tagVariants({ intent: "default" })}>
+                  {getInterestLabel(tag)}
+                </span>
+              ))}
+              {place.tags.length > 2 && (
+                <span className={tagVariants({ intent: "more" })}>
+                  +{place.tags.length - 2}
+                </span>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 }
 

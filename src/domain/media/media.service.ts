@@ -11,6 +11,9 @@ export interface CreateMediaData {
   type?: MediaType;
   metadata?: Record<string, string | number | boolean | null>;
   userId: string;
+  placeId?: string;
+  cityId?: string;
+  countryId?: string;
 }
 
 /**
@@ -23,7 +26,10 @@ export async function createMedia(data: CreateMediaData) {
     type: data.type ?? "IMAGE",
     category: data.category ?? "GALLERY",
     metadata: data.metadata ?? undefined,
-    user: { connect: { id: data.userId } }, // Use connect for relations in repo if typed as Prisma input
+    user: { connect: { id: data.userId } },
+    place: data.placeId ? { connect: { id: data.placeId } } : undefined,
+    city: data.cityId ? { connect: { id: data.cityId } } : undefined,
+    country: data.countryId ? { connect: { id: data.countryId } } : undefined,
   });
 }
 

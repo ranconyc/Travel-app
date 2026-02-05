@@ -102,6 +102,7 @@ export type NearestCityResult = {
   radiusKm?: number | null;
   distanceKm: number | null;
   wikiDataId?: string | null;
+  country?: any;
 };
 
 /**

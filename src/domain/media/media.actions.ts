@@ -13,6 +13,49 @@ interface CreateMediaInput {
   metadata?: Record<string, string | number | boolean | null>;
 }
 
+interface CreatePlaceMediaInput extends CreateMediaInput {
+  placeId?: string;
+  cityId?: string;
+  countryId?: string;
+}
+
+/**
+ * Creates a Media record for a Place/City/Country uploaded by a user
+ */
+export async function createPlaceMediaAction(input: CreatePlaceMediaInput) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: "Not authenticated" };
+    }
+
+    const { placeId, cityId, countryId, ...mediaInput } = input;
+
+    const media = await createMedia({
+      url: mediaInput.url,
+      publicId: mediaInput.publicId,
+      type: mediaInput.type || "IMAGE",
+      category: mediaInput.category || "GALLERY",
+      metadata: mediaInput.metadata,
+      userId: session.user.id,
+      placeId,
+      cityId,
+      countryId,
+    });
+
+    if (placeId) {
+      // Optimistic updates handled by client, but good to know
+    }
+
+    revalidatePath(`/profile/${session.user.id}`);
+
+    return { success: true, data: media };
+  } catch (error) {
+    console.error("[createPlaceMediaAction] Error:", error);
+    return { success: false, error: "Failed to create media record" };
+  }
+}
+
 /**
  * Creates a Media record for the authenticated user
  * Used after uploading to Cloudinary to persist media in the database
