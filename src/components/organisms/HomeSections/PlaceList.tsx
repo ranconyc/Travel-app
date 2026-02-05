@@ -4,8 +4,8 @@ import React from "react";
 import { Place } from "@/domain/place/place.schema";
 import PlaceCard from "@/components/molecules/PlaceCard";
 import { useUser } from "@/app/providers/UserProvider";
-import { UserPersonaEnhanced } from "@/services/discovery/enhanced-matching.service";
-import { calculateDistance } from "@/services/discovery/enhanced-matching.service";
+import { UserPersonaEnhanced } from "@/domain/discovery/services/enhanced-matching.service";
+import { calculateDistance } from "@/domain/discovery/services/enhanced-matching.service";
 import SectionList from "@/components/molecules/SectionList";
 
 // Mock user persona for demo - in real app this would come from user context
@@ -50,7 +50,6 @@ export default function PlaceList({ places = [] }: { places?: Place[] }) {
   return (
     <SectionList
       title="Popular Places"
-      href="/discovery"
       data={filteredPlaces}
       isLoading={isLoading}
       emptyText="No places found."

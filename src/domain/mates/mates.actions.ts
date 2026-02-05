@@ -1,15 +1,13 @@
 "use server";
 
-import { z } from "zod";
 import { createSafeAction } from "@/lib/safe-action";
+import { GetMatesSchema } from "./mates.schema";
 import { getMatesPageData } from "./mates.service";
 import { getUserById } from "@/lib/db/user.repo";
 import { User } from "@/domain/user/user.schema";
 
 export const getMatesAction = createSafeAction(
-  z.object({
-    page: z.number().default(1),
-  }),
+  GetMatesSchema,
   async ({ page }, userId) => {
     // 1. Get the current user
     const loggedUser = (await getUserById(userId, {

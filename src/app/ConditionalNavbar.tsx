@@ -16,12 +16,14 @@ export default function ConditionalNavbar({
   const showNavbar =
     pathname !== "/signin" &&
     !pathname?.startsWith("/chats/") &&
+    !pathname?.startsWith("/countries/") &&
+    !pathname?.startsWith("/cities/") &&
+    !pathname?.startsWith("/place/") &&
     pathname !== "/profile/edit" &&
     pathname !== "/profile/reavel" &&
     pathname !== "/profile/travelc" &&
     pathname !== "/profile/travelb" &&
     pathname !== "/profile/persona" &&
-    pathname !== "/profile/travel-persona" &&
     pathname !== "/profile/travel-preferences" &&
     pathname !== "/style" &&
     pathname !== "/profile/onboarding" &&

@@ -39,40 +39,14 @@
   --color-txt-disabled: oklch(82% 0.01 250); /* #CBD5E1 - Action Disabled */
 
   /* =========================================
-     3. FLUID TYPOGRAPHY
-     ========================================= */
-  --font-sora: "Sora", sans-serif;
-  --font-inter: "Inter", sans-serif;
-
-  --text-display-xl: clamp(2.5rem, 5vw, 4rem);
-  --text-display-lg: clamp(2rem, 1.5vw + 1.6rem, 3rem);
-  --text-display-md: clamp(1.625rem, 1.1vw + 1.3rem, 2.25rem);
-  --text-display-sm: clamp(1.375rem, 0.6vw + 1.2rem, 1.75rem);
-  --text-lead: clamp(1.125rem, 0.3vw + 1.05rem, 1.25rem);
-
-  /* Static sizes */
-  --text-body: 1rem;
-  --text-caption: 0.875rem;
-  --text-tiny: 0.75rem;
-  --text-micro: 0.625rem;
-
-  /* Heading aliases (for Tailwind classes) */
-  --text-h1: var(--text-display-lg);
-  --text-h2: var(--text-display-md);
-  --text-h3: var(--text-display-sm);
-  --text-h4: var(--text-display-sm);
-  --text-p: var(--text-body);
-  --text-sm: var(--text-caption);
-
-  /* =========================================
      4. SYSTEMATIC SPACING & RADIUS
      ========================================= */
-  --spacing-xxs: 4px;
+  --spacing-xxs: 2px;
   --spacing-xs: 4px;
-  --spacing-sm: 6px;
-  --spacing-md: 8px;
-  --spacing-lg: 12px;
-  --spacing-xl: 16px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
   --spacing-xxl: 32px;
   --spacing-xll: 64px;
 
@@ -81,9 +55,9 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-xl: 32px;
-  --radius-full: 48px;
   --radius-card: 16px;
   --radius-pill: 12px;
+  --radius-full: 99999px;
 
   /* =========================================
      5. SHADOWS (OKLCH color-mix)
@@ -123,6 +97,31 @@
   --max-width-narrow: 576px;
   --navbar-height: 64px;
   --page-padding: 16px;
+}
+
+:root {
+  /* =========================================
+     FLUID TYPOGRAPHY (Accessible Globally)
+     ========================================= */
+  --text-display-xl: clamp(2.5rem, 5vw, 4rem);
+  --text-display-lg: clamp(2rem, calc(1.5vw + 1.6rem), 3rem);
+  --text-display-md: clamp(1.625rem, calc(1.1vw + 1.3rem), 2.25rem);
+  --text-display-sm: clamp(1.375rem, calc(0.6vw + 1.2rem), 1.75rem);
+  --text-lead: clamp(1.125rem, calc(0.3vw + 1.05rem), 1.25rem);
+
+  /* Static sizes */
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-tiny: 0.75rem;
+  --text-micro: 0.625rem;
+
+  /* Heading aliases */
+  --text-h1: var(--text-display-lg);
+  --text-h2: var(--text-display-md);
+  --text-h3: var(--text-display-sm);
+  --text-h4: var(--text-display-sm);
+  --text-p: var(--text-body);
+  --text-sm: var(--text-caption);
 }
 
 /* =========================================
@@ -182,7 +181,7 @@ p {
    ========================================= */
 
 /* --- Typography Primitives --- */
-@utility text-display-xl {
+.type-display-xl {
   font-size: var(--text-display-xl);
   line-height: 1.1;
   font-weight: 900;
@@ -190,7 +189,7 @@ p {
   letter-spacing: -0.02em;
 }
 
-@utility text-display-lg {
+.type-display-lg {
   font-size: var(--text-display-lg);
   line-height: 1.2;
   font-weight: 700;
@@ -198,7 +197,7 @@ p {
   letter-spacing: -0.02em;
 }
 
-@utility text-display-md {
+.type-display-md {
   font-size: var(--text-display-md);
   line-height: 1.3;
   font-weight: 700;
@@ -206,7 +205,7 @@ p {
   letter-spacing: -0.01em;
 }
 
-@utility text-display-sm {
+.type-display-sm {
   font-size: var(--text-display-sm);
   line-height: 1.4;
   font-weight: 600;
@@ -214,7 +213,7 @@ p {
   letter-spacing: -0.01em;
 }
 
-@utility text-overline {
+.type-overline {
   font-family: var(--font-inter);
   font-size: var(--text-caption);
   text-transform: uppercase;
@@ -222,37 +221,37 @@ p {
   font-weight: 700;
 }
 
-@utility text-lead {
+.type-lead {
   font-size: var(--text-lead);
   line-height: 1.6;
   font-weight: 400;
 }
 
 /* --- Shadow Primitives --- */
-@utility shadow-soft {
+.shadow-soft {
   box-shadow: var(--shadow-sm);
 }
 
-@utility shadow-card {
+.shadow-card {
   box-shadow: var(--shadow-md);
 }
 
-@utility shadow-lg {
+.shadow-lg {
   box-shadow: var(--shadow-lg);
 }
 
-@utility shadow-xl {
+.shadow-xl {
   box-shadow: var(--shadow-xl);
 }
 
 /* --- Surface Primitives --- */
-@utility card-glass {
+.card-glass {
   background-color: color-mix(in oklch, var(--color-surface), transparent 40%);
   backdrop-filter: blur(12px);
   border: 1px solid color-mix(in oklch, var(--color-txt-muted), transparent 80%);
 }
 
-@utility card-elevated {
+.card-elevated {
   background-color: var(--color-surface);
   box-shadow: var(--shadow-md);
   border: 1px solid
@@ -261,7 +260,7 @@ p {
 }
 
 /* --- Input Primitives (Headless) --- */
-@utility input-base {
+.input-base {
   width: 100%;
   height: 3rem;
   padding-inline: 1rem;
@@ -290,52 +289,53 @@ p {
   }
 }
 
-@utility input-error {
+.input-error {
   border-color: var(--color-error);
   box-shadow: 0 0 0 1px var(--color-error);
 }
 
 /* --- Layout Primitives --- */
-@utility container-narrow {
+.container-narrow {
   max-width: 640px;
   margin-inline: auto;
 }
 
-@utility container-medium {
+/* --- Layout Primitives --- */
+.container-medium {
   max-width: 1024px;
   margin-inline: auto;
 }
 
 /* --- Z-Index Primitives --- */
-@utility z-dropdown {
+.z-dropdown {
   z-index: var(--z-dropdown);
 }
-@utility z-sticky {
+.z-sticky {
   z-index: var(--z-sticky);
 }
-@utility z-drawer {
+.z-drawer {
   z-index: var(--z-drawer);
 }
-@utility z-modal {
+.z-modal {
   z-index: var(--z-modal);
 }
-@utility z-popover {
+.z-popover {
   z-index: var(--z-popover);
 }
-@utility z-tooltip {
+.z-tooltip {
   z-index: var(--z-tooltip);
 }
 
 /* --- Animation Primitives --- */
-@utility animate-fade-in {
+.animate-fade-in {
   animation: fadeIn 0.6s ease-out;
 }
 
-@utility animate-slide-up {
+.animate-slide-up {
   animation: slideUp 0.6s ease-out;
 }
 
-@utility animate-scale-in {
+.animate-scale-in {
   animation: scaleIn 0.4s ease-out;
 }
 
@@ -371,64 +371,64 @@ p {
 }
 
 /* --- Color Utility Primitives (OKLCH) --- */
-@utility text-success {
+.text-success {
   color: var(--color-success);
 }
-@utility text-warning {
+.text-warning {
   color: var(--color-warning);
 }
-@utility text-error {
+.text-error {
   color: var(--color-error);
 }
-@utility text-info {
+.text-info {
   color: var(--color-info);
 }
 
-@utility bg-success {
+.bg-success {
   background-color: color-mix(in oklch, var(--color-success), transparent 90%);
 }
-@utility bg-warning {
+.bg-warning {
   background-color: color-mix(in oklch, var(--color-warning), transparent 90%);
 }
-@utility bg-error {
+.bg-error {
   background-color: color-mix(in oklch, var(--color-error), transparent 90%);
 }
-@utility bg-info {
+.bg-info {
   background-color: color-mix(in oklch, var(--color-info), transparent 90%);
 }
 
-@utility border-success {
+.border-success {
   border-color: var(--color-success);
 }
-@utility border-warning {
+.border-warning {
   border-color: var(--color-warning);
 }
-@utility border-error {
+.border-error {
   border-color: var(--color-error);
 }
-@utility border-info {
+.border-info {
   border-color: var(--color-info);
 }
 
-@utility bg-surface-hover {
+.bg-surface-hover {
   background-color: var(--color-surface-hover);
 }
 
 /* --- Interactive State Primitives --- */
-@utility bg-hover {
+.bg-hover {
   background-color: color-mix(in oklch, var(--color-brand), transparent 92%);
 }
-@utility bg-active {
+.bg-active {
   background-color: color-mix(in oklch, var(--color-brand), transparent 88%);
 }
-@utility bg-focus {
+.bg-focus {
   background-color: color-mix(in oklch, var(--color-brand), transparent 80%);
 }
 
-@utility text-disabled {
+.text-disabled {
   color: color-mix(in oklch, var(--color-txt-muted), transparent 70%);
 }
-@utility bg-disabled {
+.bg-disabled {
   background-color: color-mix(
     in oklch,
     var(--color-surface-secondary),
@@ -437,7 +437,7 @@ p {
 }
 
 /* --- Component Utilities --- */
-@utility link-base {
+.link-base {
   color: var(--color-brand);
   text-decoration: none;
   font-weight: 500;
@@ -450,7 +450,7 @@ p {
   }
 }
 
-@utility button-base {
+.button-base {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -468,19 +468,19 @@ p {
 }
 
 /* --- Gradient Primitives --- */
-@utility bg-gradient-brand {
+.bg-gradient-brand {
   background: linear-gradient(135deg, var(--color-blue), var(--color-purple));
 }
 
-@utility bg-gradient-warm {
+.bg-gradient-warm {
   background: linear-gradient(135deg, var(--color-yellow), var(--color-pink));
 }
 
-@utility bg-gradient-success {
+.bg-gradient-success {
   background: linear-gradient(135deg, var(--color-green), oklch(65% 0.15 150));
 }
 
-@utility text-gradient {
+.text-gradient {
   background: linear-gradient(135deg, var(--color-blue), var(--color-purple));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -488,13 +488,13 @@ p {
 }
 
 /* --- Text Utility Shorthands --- */
-@utility text-balance {
+.text-balance {
   text-wrap: balance;
 }
-@utility spacing-tight {
+.spacing-tight {
   letter-spacing: -0.025em;
 }
-@utility spacing-wide {
+.spacing-wide {
   letter-spacing: 0.05em;
 }
 

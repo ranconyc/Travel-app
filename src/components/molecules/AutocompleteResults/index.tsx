@@ -41,7 +41,7 @@ export default function AutocompleteResults({
     <div
       id={`${id}-listbox`}
       role="listbox"
-      className={`absolute left-0 right-0 z-20 mt-1 max-h-50 overflow-auto rounded-md border border-surface-secondary bg-surface shadow-xl ${listClassName}`}
+      className={`absolute top-full mt-1 left-0 right-0 z-20 mb-0 max-h-50 overflow-auto rounded-md border border-surface-secondary bg-surface shadow-xl ${listClassName}`}
     >
       {loading && (
         <div className="px-3 py-2 text-sm text-secondary">Loading…</div>
@@ -75,9 +75,14 @@ export default function AutocompleteResults({
                   }`
             }
           >
-            <div>{highlight ? highlightMatch(opt.label, qVal) : opt.label}</div>
+            <div className="flex items-center gap-2">
+              {opt.emoji && <span className="text-base">{opt.emoji}</span>}
+              <span>
+                {highlight ? highlightMatch(opt.label, qVal) : opt.label}
+              </span>
+            </div>
             {opt.subtitle && (
-              <div className="text-xs text-secondary">{opt.subtitle}</div>
+              <div className="text-xs text-secondary ml-6">{opt.subtitle}</div>
             )}
           </div>
         ))}

@@ -10,16 +10,16 @@ const avatarVariants = cva("relative inline-block overflow-hidden bg-surface", {
   variants: {
     variant: {
       circle: "rounded-full",
-      square: "rounded-xl",
+      square: "rounded-lg",
     },
-    border: {
-      true: "border-2 border-surface shadow-sm",
+    showBorder: {
+      true: "border-2 border-surface-secondary shadow-sm",
       false: "",
     },
   },
   defaultVariants: {
     variant: "circle",
-    border: false,
+    showBorder: true,
   },
 });
 
@@ -41,7 +41,7 @@ export function Avatar({
   className = "",
   style,
   variant,
-  border,
+  showBorder = false,
   initials,
   ...props
 }: AvatarProps) {
@@ -61,7 +61,7 @@ export function Avatar({
         height: size,
         ...style,
       }}
-      className={cn(avatarVariants({ variant, border }), className)}
+      className={cn(avatarVariants({ variant, showBorder }), className)}
       {...props}
     >
       {showImage ? (

@@ -6,8 +6,7 @@ import {
   findUserChats,
   markMessagesAsRead as markReadRepo,
 } from "@/lib/db/chat.repo";
-import { getFriends } from "@/lib/db/friendship.repo";
-import { triggerRealTimeEvent } from "@/lib/pusher";
+
 import { sendPushNotification } from "@/lib/beams";
 
 import { formatDistanceToNow, format, isToday, isYesterday } from "date-fns";
@@ -83,13 +82,9 @@ export async function handleSendMessage(
   const message = await createMessage(chatId, userId, content);
 
   // Trigger real-time event via NotificationService (Centralized)
-  const { notificationService } =
+  const { triggerEvent } =
     await import("@/domain/notification/notification.service");
-  await notificationService.triggerEvent(
-    `chat-${chatId}`,
-    "new-message",
-    message,
-  );
+  await triggerEvent(`chat-${chatId}`, "new-message", message);
 
   // Send Notifications
   const chat = await findChatById(chatId);
@@ -110,13 +105,13 @@ export async function handleSendMessage(
       });
 
       // 2. Persist in-app and trigger Pusher
-      const { notificationService } =
+      const { createNotification } =
         await import("@/domain/notification/notification.service");
       await Promise.all(
         chat.members
           .filter((m) => m.userId !== userId)
           .map((m) =>
-            notificationService.createNotification({
+            createNotification({
               userId: m.userId,
               type: "MESSAGE",
               title: senderName,
@@ -140,8 +135,4 @@ export async function handleCreateOrGetChat(
   otherUserId: string,
 ) {
   return await findOrCreatePrivateChat(userId, otherUserId);
-}
-
-export async function handleGetUserFriends(userId: string) {
-  return await getFriends(userId);
 }

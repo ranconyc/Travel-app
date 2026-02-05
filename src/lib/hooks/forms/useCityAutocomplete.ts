@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { searchCitiesAction } from "@/domain/city/city.search.action";
+import { searchCityAction } from "@/domain/city/city.actions";
 import { PAGINATION } from "@/config/ui-constants";
 import { handleAsyncError } from "@/lib/errors/error-handler";
 
@@ -53,7 +53,7 @@ export function useCityAutocomplete(
       setError(null);
 
       try {
-        const res = await searchCitiesAction({ query, limit });
+        const res = await searchCityAction({ query, limit });
 
         if (!res.success || !res.data) {
           throw new Error("Failed to load cities");

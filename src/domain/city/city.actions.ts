@@ -15,6 +15,7 @@ import {
 import { homeBaseLocationMetaSchema } from "@/domain/user/completeProfile.schema";
 import { CityUpdateSchema } from "@/domain/city/city.schema";
 
+// get all cities in db
 export const getAllCitiesAction = createPublicAction(
   z
     .object({ limit: z.number().optional(), offset: z.number().optional() })
@@ -31,17 +32,28 @@ export const getAllCitiesAction = createPublicAction(
   },
 );
 
+// find or create city from name and coords
+// find or create city from name and coords
 export const findOrCreateCityAction = createPublicAction(
   z.object({
     cityName: z.string(),
     countryCode: z.string(),
     coords: z.object({ lat: z.number(), lng: z.number() }),
+    sourceId: z.string().optional(),
   }),
-  async ({ cityName, countryCode, coords }) => {
-    return await findOrCreateCity(cityName, countryCode, coords);
+  async ({ cityName, countryCode, coords, sourceId }) => {
+    let jsonCityId: number | undefined;
+    if (sourceId && sourceId.startsWith("json_")) {
+      const parsed = parseInt(sourceId.replace("json_", ""), 10);
+      if (!isNaN(parsed)) {
+        jsonCityId = parsed;
+      }
+    }
+    return await findOrCreateCity(cityName, countryCode, coords, jsonCityId);
   },
 );
 
+// ensure country and city from location
 export const ensureCountryAndCityFromLocationAction = createPublicAction(
   homeBaseLocationMetaSchema,
   async (meta) => {
@@ -49,6 +61,7 @@ export const ensureCountryAndCityFromLocationAction = createPublicAction(
   },
 );
 
+// find nearest city from coords
 export const findNearestCityFromCoordsAction = createPublicAction(
   z.object({
     lat: z.number(),
@@ -72,6 +85,7 @@ export type GenerateCityResult = {
   created: boolean;
 };
 
+// generate city from name
 export const generateCityAction = createAdminAction(
   z.object({
     cityName: z.string().min(2, "City name must be at least 2 characters"),
@@ -89,6 +103,7 @@ export const generateCityAction = createAdminAction(
   },
 );
 
+// update city
 export const updateCityAction = createAdminAction(
   z.object({
     id: z.string(),
@@ -99,6 +114,7 @@ export const updateCityAction = createAdminAction(
   },
 );
 
+// search cities
 export const searchCityAction = createPublicAction(
   z.object({ query: z.string().min(2), limit: z.number().optional() }),
   async ({ query, limit }) => {
@@ -106,6 +122,7 @@ export const searchCityAction = createPublicAction(
   },
 );
 
+// delete city
 export const deleteCityAction = createAdminAction(
   z.object({ id: z.string() }),
   async ({ id }) => {
@@ -113,6 +130,7 @@ export const deleteCityAction = createAdminAction(
   },
 );
 
+// get nearby cities
 export const getNearbyCitiesAction = createPublicAction(
   z.object({
     lat: z.number(),

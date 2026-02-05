@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { createSafeAction } from "@/lib/safe-action";
+import { FriendshipTargetSchema } from "./friendship.schema";
 import {
   requestFriendship,
   handleAcceptRequest,
@@ -18,35 +19,35 @@ import {
 /* -------------------------------------------------------------------------- */
 
 export const sendFriendRequestAction = createSafeAction(
-  z.object({ targetUserId: z.string() }),
+  FriendshipTargetSchema,
   async (data, userId) => {
     return await requestFriendship(userId, data.targetUserId);
   },
 );
 
 export const cancelFriendRequestAction = createSafeAction(
-  z.object({ targetUserId: z.string() }),
+  FriendshipTargetSchema,
   async (data, userId) => {
     return await handleCancelRequest(userId, data.targetUserId);
   },
 );
 
 export const acceptFriendRequestAction = createSafeAction(
-  z.object({ targetUserId: z.string() }),
+  FriendshipTargetSchema,
   async (data, userId) => {
     return await handleAcceptRequest(userId, data.targetUserId);
   },
 );
 
 export const denyFriendRequestAction = createSafeAction(
-  z.object({ targetUserId: z.string() }),
+  FriendshipTargetSchema,
   async (data, userId) => {
     return await handleDenyRequest(userId, data.targetUserId);
   },
 );
 
 export const removeFriendAction = createSafeAction(
-  z.object({ targetUserId: z.string() }),
+  FriendshipTargetSchema,
   async (data, userId) => {
     return await handleRemoveFriend(userId, data.targetUserId);
   },
@@ -60,7 +61,7 @@ export const getFriendRequestsAction = createSafeAction(
 );
 
 export const getFriendshipStatusAction = createSafeAction(
-  z.object({ targetUserId: z.string() }),
+  FriendshipTargetSchema,
   async (data, userId) => {
     return await handleGetFriendshipStatus(userId, data.targetUserId);
   },

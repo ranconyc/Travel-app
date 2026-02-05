@@ -1,4 +1,4 @@
-import SelectionCard from "@/components/atoms/SelectionCard";
+import SelectionCard from "@/components/molecules/SelectionCard";
 import { useFormContext } from "react-hook-form";
 
 interface SelectionStepProps {

@@ -14,6 +14,7 @@ type Props = {
   inputId?: string; // optional for multiple instances
   className?: string; // Additional class name for container
   initials?: string;
+  showText?: boolean;
 };
 
 export default function AvatarUpload({
@@ -24,6 +25,7 @@ export default function AvatarUpload({
   inputId = "avatar-file",
   className,
   initials,
+  showText = false,
 }: Props) {
   const previewRef = useRef<string | null>(null);
 
@@ -56,7 +58,6 @@ export default function AvatarUpload({
           alt="Profile Avatar"
           size={size}
           initials={initials}
-          border
           className={cn(disabled ? "opacity-60" : "")}
         />
 
@@ -95,14 +96,16 @@ export default function AvatarUpload({
         />
       </div>
 
-      <div className="text-center space-y-1 mt-2">
-        <Typography variant="caption" color="main" weight="medium">
-          {src ? "Change profile picture" : "Upload profile picture"}
-        </Typography>
-        <Typography variant="caption-sm" color="sec">
-          JPG, PNG or GIF (max. 5MB)
-        </Typography>
-      </div>
+      {showText && (
+        <div className="text-center space-y-1 mt-2">
+          <Typography variant="caption" color="main" weight="medium">
+            {src ? "Change profile picture" : "Upload profile picture"}
+          </Typography>
+          <Typography variant="caption-sm" color="sec">
+            JPG, PNG or GIF (max. 5MB)
+          </Typography>
+        </div>
+      )}
     </div>
   );
 }

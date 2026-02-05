@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiLockService } from "@/services/api-lock.service";
+import { apiLockService } from "@/lib/services/api-lock.service";
 
 export async function GET(req: NextRequest) {
   try {
@@ -10,13 +10,13 @@ export async function GET(req: NextRequest) {
     if (!name || name.trim().length < 2) {
       return NextResponse.json(
         { error: "Missing or invalid query param 'q'" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Create cache key for this query
     const cacheKey = `places-search:${name.toLowerCase().trim()}`;
-    
+
     // Check if we have a cached result (1 hour TTL)
     const cachedResult = apiLockService.getCachedResult(cacheKey);
     if (cachedResult) {
@@ -25,16 +25,17 @@ export async function GET(req: NextRequest) {
     }
 
     // Acquire lock to prevent duplicate API calls for same query
-    if (!apiLockService.acquireLock(cacheKey, 60 * 60 * 1000)) { // 1 hour TTL
+    if (!apiLockService.acquireLock(cacheKey, 60 * 60 * 1000)) {
+      // 1 hour TTL
       return NextResponse.json(
         { error: "Search already in progress, please try again in a moment" },
-        { status: 429 }
+        { status: 429 },
       );
     }
 
     try {
       const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
-        name
+        name,
       )}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
       const response = await fetch(url, { next: { revalidate: 3600 } });
@@ -53,7 +54,7 @@ export async function GET(req: NextRequest) {
     console.error("GET /api/google/places error:", err);
     return NextResponse.json(
       { error: err?.message ?? "Failed to fetch places" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

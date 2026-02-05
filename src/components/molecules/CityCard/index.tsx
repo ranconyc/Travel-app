@@ -75,6 +75,7 @@ export default function CityCard({ city, useUnsplash = true }: CityCardProps) {
         <ImageWithFallback
           src={imageUrl || ""}
           alt={city.name}
+          fill
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           fallback={
             <div className="w-full h-full bg-surface-secondary flex items-center justify-center">

@@ -16,11 +16,11 @@ export async function requestFriendship(
   // Side Effect: Notify addressee
   if (result) {
     const { getUserById } = await import("@/lib/db/user.repo");
-    const { notificationService } =
+    const { createNotification } =
       await import("@/domain/notification/notification.service");
     const requester = await getUserById(requesterId);
 
-    await notificationService.createNotification({
+    await createNotification({
       userId: addresseeId,
       type: "FRIEND_REQUEST",
       title: "New Friend Request",
@@ -53,11 +53,11 @@ export async function handleAcceptRequest(
   // Side Effect: Notify the other user
   if (result) {
     const { getUserById } = await import("@/lib/db/user.repo");
-    const { notificationService } =
+    const { createNotification } =
       await import("@/domain/notification/notification.service");
     const user = await getUserById(currentUserId);
 
-    await notificationService.createNotification({
+    await createNotification({
       userId: targetUserId,
       type: "FRIEND_ACCEPT",
       title: "Friend Request Accepted",

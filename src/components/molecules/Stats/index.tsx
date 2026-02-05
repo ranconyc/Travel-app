@@ -14,7 +14,7 @@ export default function Stats({
 }: StatsProps) {
   return (
     <div
-      className={`flex items-center justify-between px-2 py-4 bg-surface rounded-xl border shadow-card border-surface-secondary/50 backdrop-blur-sm ${className}`}
+      className={`flex items-center justify-between px-md py-md bg-surface rounded-lg border shadow-card border-surface-secondary/50 backdrop-blur-sm ${className}`}
     >
       {stats.map((stat, index) => {
         const isMiddle = showDividers && index > 0 && index < stats.length - 1;
@@ -25,12 +25,20 @@ export default function Stats({
             className={`text-center flex-1 animate-scale-in`}
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="flex flex-col items-center gap-1">
-              <Typography variant="h1" weight="bold" color="main">
+            <div className="flex flex-col items-center gap-xxs">
+              {isMiddle && (
+                <div className="absolute right-0 top-1/2 h-8 w-px bg-surface-secondary/50 -translate-x-1/2 -translate-y-1/2" />
+              )}
+              <Typography
+                variant="display-md"
+                weight="bold"
+                color="main"
+                className=""
+              >
                 {stat.value}
               </Typography>
 
-              <Typography variant="p" weight="bold" color="sec">
+              <Typography variant="label" weight="semibold" color="sec">
                 {stat.label}
               </Typography>
             </div>

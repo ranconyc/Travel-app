@@ -33,14 +33,44 @@ export const {
     }),
   ],
   events: {
-    // Sync provider image to avatarUrl on user creation
+    // Sync provider image and split name to profile on user creation
     createUser: async ({ user }) => {
+      const updates: { avatarUrl?: string } = {};
+
+      // Sync avatar from OAuth provider
       if (user.image && !(user as any).avatarUrl) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { avatarUrl: user.image },
-        });
+        updates.avatarUrl = user.image;
       }
+
+      // Split OAuth name into firstName/lastName
+      let firstName: string | undefined;
+      let lastName: string | undefined;
+
+      if (user.name) {
+        const parts = user.name.trim().split(/\s+/);
+        firstName = parts[0];
+        lastName = parts.length > 1 ? parts.slice(1).join(" ") : undefined;
+      }
+
+      // Update user and create profile in a single transaction
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          ...updates,
+          profile: {
+            upsert: {
+              create: {
+                firstName,
+                lastName,
+              },
+              update: {
+                firstName: firstName || undefined,
+                lastName: lastName || undefined,
+              },
+            },
+          },
+        },
+      });
     },
   },
   callbacks: {
@@ -49,28 +79,51 @@ export const {
         token.uid = user.id;
         token.role = (user as any).role;
         token.currentCityId = (user as any).currentCityId;
-        token.profileCompleted = (user as any).profileCompleted;
         token.isBanned = (user as any).isBanned;
         token.isActive = (user as any).isActive;
       }
 
-      // Always refresh security and status flags from DB to avoid stale cache
+      // Always refresh security, status, and onboarding flags from DB
       if (token.uid && (trigger === "update" || !token.role)) {
         const u = await prisma.user.findUnique({
           where: { id: token.uid as string },
           select: {
             role: true,
             currentCityId: true,
-            profileCompleted: true,
+            name: true,
+            avatarUrl: true,
             isBanned: true,
             isActive: true,
+            profile: {
+              select: {
+                firstName: true,
+                homeBaseCityId: true,
+                birthday: true,
+                gender: true,
+              },
+            },
           },
         });
+
         token.role = u?.role ?? "USER";
         token.currentCityId = u?.currentCityId ?? undefined;
-        token.profileCompleted = u?.profileCompleted ?? false;
         token.isBanned = u?.isBanned ?? false;
         token.isActive = u?.isActive ?? true;
+
+        // Compute needsOnboarding based on actual missing fields
+        const hasName = !!u?.profile?.firstName; // Only check profile.firstName
+        const hasAvatar = !!u?.avatarUrl;
+        const hasHomeBase = !!u?.profile?.homeBaseCityId;
+        const hasBirthday = !!u?.profile?.birthday;
+        const hasGender = !!u?.profile?.gender;
+
+        token.needsOnboarding = !(
+          hasName &&
+          hasAvatar &&
+          hasHomeBase &&
+          hasBirthday &&
+          hasGender
+        );
       }
 
       return token;
@@ -80,8 +133,8 @@ export const {
         session.user.id = token.uid as string;
         (session.user as any).role = token.role as string;
         (session.user as any).currentCityId = token.currentCityId as string;
-        (session.user as any).profileCompleted =
-          token.profileCompleted as boolean;
+        (session.user as any).needsOnboarding =
+          token.needsOnboarding as boolean;
         (session.user as any).isBanned = token.isBanned as boolean;
         (session.user as any).isActive = token.isActive as boolean;
       }

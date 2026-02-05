@@ -10,13 +10,11 @@ import { completeProfileSchema } from "@/domain/user/completeProfile.schema";
 import {
   saveInterestsSchema,
   saveTravelSchema,
-  savePersonaSchema,
   BioInputSchema,
 } from "@/domain/user/user.schema";
 import {
   completeProfile,
   saveUserInterests,
-  updateUserProfilePersona,
   handleUpdateUserLocation,
   handleGenerateBio,
   handleGetAuthenticatedUser,
@@ -27,18 +25,16 @@ import {
   deleteUserAccount,
   getAllUsers,
   updateUserRole,
-  updateVisitedCountries,
 } from "@/lib/db/user.repo";
 
 import { mapUiToDb } from "@/domain/persona/persona.mapper";
 import { InsightsEngine } from "@/domain/persona/insights.engine";
 import { PersonaFormValues } from "@/domain/persona/persona.schema";
+import { onboardingIdentitySchema } from "@/domain/user/onboarding.schema";
 
 /* -------------------------------------------------------------------------- */
 /*                                USER ACTIONS                                */
 /* -------------------------------------------------------------------------- */
-
-// Standardized ActionResponse is imported from @/types/actions
 
 export const upsertUserProfile = createSafeAction(
   UserUpdateSchema,
@@ -85,56 +81,148 @@ export const completeOnboarding = createSafeAction(
   },
 );
 
-import { onboardingIdentitySchema } from "@/domain/user/onboarding.schema";
-
 export const completeIdentityOnboarding = createSafeAction(
   onboardingIdentitySchema,
   async (data, userId) => {
-    // 1. Parse Birthday
+    // === SERVER-SIDE VALIDATIONS ===
+
+    // Check 1: Prevent re-submission if already onboarded
+    const { prisma } = await import("@/lib/db/prisma");
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        profile: {
+          select: {
+            firstName: true,
+            homeBaseCityId: true,
+            birthday: true,
+            gender: true,
+          },
+        },
+        avatarUrl: true,
+      },
+    });
+
+    const profile = existingUser?.profile;
+    const isAlreadyOnboarded =
+      !!profile?.firstName &&
+      !!profile?.homeBaseCityId &&
+      !!profile?.birthday &&
+      !!profile?.gender &&
+      !!existingUser?.avatarUrl;
+
+    if (isAlreadyOnboarded) {
+      throw new Error("Profile is already complete. Use settings to edit.");
+    }
+
+    // Check 2: Validate age >= 18 (business rule - can't be bypassed)
     const { day, month, year } = data.birthday;
-    // UserUpdateSchema expects date string or Date object?
-    // user.service.ts handleUpsertUserProfile converts string to Date.
-    // UserUpdateSchema defines birthday is string | null.
-    const birthdayString = `${year}-${month}-${day}`;
+    const birthDate = new Date(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+    );
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
 
-    // 2. Parse Name
-    const [firstName, ...lastNameParts] = data.fullName.split(" ");
-    const lastName = lastNameParts.join(" ");
+    if (age < 18) {
+      throw new Error("You must be 18 years or older to use this app.");
+    }
 
-    // 3. Update User Profile
-    const { ensureCountryAndCityFromLocation } =
-      await import("@/domain/city/city.service");
+    // === END VALIDATIONS ===
 
-    let homeBaseCityId = undefined;
-    if (data.location.coords) {
-      type CityMeta = Parameters<typeof ensureCountryAndCityFromLocation>[0];
-      const meta: CityMeta = {
-        city: data.location.name,
-        displayName: data.location.name,
-        countryCode: "US", // Placeholder - we really need this from autocomplete
-        country: undefined,
-        lat: data.location.coords.coordinates[1],
-        lon: data.location.coords.coordinates[0],
-        provider: "onboarding",
-        placeId: data.location.placeId || "unknown",
-        boundingBox: undefined,
-      };
+    // 1. Parse Birthday (format: YYYY-MM-DD)
+    const birthdayString = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 
-      try {
-        // Try resolving city if we have enough info
-        // For now, let's use a simpler heuristic or just bypass strict city creation if country is missing?
-        // Actually, if we use findNearestCityFromCoords it handles strictness better.
-        const { findNearestCityFromCoords } =
-          await import("@/domain/city/city.service");
-        const detected = await findNearestCityFromCoords(meta.lat, meta.lon, {
-          createIfMissing: true,
-        });
-        if (detected.id) homeBaseCityId = detected.id;
-      } catch (e) {
-        console.error("City resolution failed", e);
+    // 2. Get Name (already split in form)
+    const firstName = data.firstName;
+    const lastName = data.lastName || "";
+
+    // 3. Resolve City - This is required for onboarding
+    let homeBaseCityId: string | undefined;
+
+    if (!data.location.coords || !data.location.countryCode) {
+      throw new Error("Please select a valid city from the suggestions");
+    }
+
+    const placeId = data.location.placeId;
+    const coords = {
+      lat: data.location.coords.coordinates[1],
+      lng: data.location.coords.coordinates[0],
+    };
+
+    // Step A: Check if city already exists in DB (by placeId)
+    if (placeId && !placeId.startsWith("json_")) {
+      const { prisma } = await import("@/lib/db/prisma");
+      const existingCity = await prisma.city.findUnique({
+        where: { id: placeId },
+        select: { id: true },
+      });
+
+      if (existingCity) {
+        homeBaseCityId = existingCity.id;
       }
     }
 
+    // Step B: If not in DB, check if it's a JSON city
+    if (!homeBaseCityId && placeId?.startsWith("json_")) {
+      const jsonCityId = parseInt(placeId.replace("json_", ""), 10);
+
+      if (!isNaN(jsonCityId)) {
+        const { findOrCreateCity } = await import("@/domain/city/city.service");
+
+        const city = await findOrCreateCity(
+          data.location.name,
+          data.location.countryCode,
+          coords,
+          jsonCityId,
+        );
+
+        if (city?.id) {
+          homeBaseCityId = city.id;
+        }
+      }
+    }
+
+    // Step C: Last resort - use geocoding (LocationIQ) to create city
+    if (!homeBaseCityId) {
+      const { ensureCountryAndCityFromLocation } =
+        await import("@/domain/city/city.service");
+      const { buildCityMeta } = await import("@/domain/city/city.utils");
+
+      const meta = buildCityMeta({
+        name: data.location.name,
+        countryCode: data.location.countryCode,
+        stateCode: data.location.stateCode,
+        stateType: data.location.stateType,
+        lat: coords.lat,
+        lng: coords.lng,
+        provider: "onboarding-geocode",
+        placeId: placeId || "unknown",
+      });
+
+      const locResult = await ensureCountryAndCityFromLocation(meta);
+
+      if (locResult?.city?.id) {
+        homeBaseCityId = locResult.city.id;
+      }
+    }
+
+    // Hard fail if city resolution failed
+    if (!homeBaseCityId) {
+      throw new Error(
+        "We couldn't save your location. Please try selecting a different city.",
+      );
+    }
+
+    // 4. Save Profile
     await handleUpsertUserProfile(userId, {
       firstName,
       lastName,
@@ -158,8 +246,6 @@ export const deleteAccountAction = createSafeAction(
 /* -------------------------------------------------------------------------- */
 /*                            TRAVEL PREFERENCES                              */
 /* -------------------------------------------------------------------------- */
-
-// Standardized ActionResponse used
 
 export const saveInterests = createSafeAction(
   saveInterestsSchema,
@@ -210,14 +296,6 @@ export const saveVisitedCountries = createSafeAction(
     const { handleSaveVisitedCountries } =
       await import("@/domain/user/user.service");
     await handleSaveVisitedCountries(userId, data.countries);
-    return { userId };
-  },
-);
-
-export const saveTravelPersona = createSafeAction(
-  savePersonaSchema,
-  async (data, userId) => {
-    await updateUserProfilePersona(userId, data);
     return { userId };
   },
 );

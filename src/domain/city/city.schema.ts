@@ -11,13 +11,14 @@ export const CitySchema = z.object({
     type: z.literal("Point"),
     coordinates: z.tuple([z.number(), z.number()]), // [lng, lat]
   }),
-  radiusKm: z.number().default(30),
+  radiusKm: z.number().default(0),
   timeZone: z.string().optional().nullable(),
   boundingBox: z.any().optional().nullable(),
   imageHeroUrl: z.string().url().optional().nullable(),
   state: z.string().optional().nullable(),
   district: z.string().optional().nullable(),
   population: z.number().int().optional().nullable(),
+  wikiDataId: z.string().optional().nullable(),
 
   neighborhoods: z.array(z.string()).default([]),
   media: z.any().array().optional().default([]), // For UI displays
@@ -43,9 +44,17 @@ export type DetectedCity = {
   cityName: string | null;
   countryCode: string | null;
   label: string | null;
-  source: "db" | "db-bbox" | "locationiq" | "api-created" | "unknown";
+  source:
+    | "db"
+    | "db-bbox"
+    | "locationiq"
+    | "api-created"
+    | "json"
+    | "json-db-created"
+    | "unknown";
   distanceKm: number | null;
   radiusKm: number | null;
+  wikiDataId?: string | null;
 };
 
 /**
@@ -71,6 +80,7 @@ export type NearestCityResult = {
   imageHeroUrl?: string | null;
   radiusKm?: number | null;
   distanceKm: number | null;
+  wikiDataId?: string | null;
 };
 
 /**
@@ -90,8 +100,12 @@ export type CitySearchResult = {
   subtitle?: string | null;
   lat: number | null;
   lng: number | null;
-  source: "db" | "external";
+  source: "db" | "external" | "json";
   dbCityId?: string;
+  countryCode?: string;
+  stateCode?: string;
+  stateType?: string;
+  wikiDataId?: string;
   meta?: {
     name: string;
     countryName: string;

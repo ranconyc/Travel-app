@@ -28,8 +28,6 @@ export default function MatchAvatars({ size = 112 }: { size?: number }) {
   const profileUser = useProfileUser();
   const loggedUser = useLoggedUser();
   const matchResult = useMatchResult();
-  console.log("loggedUser", loggedUser);
-  console.log("profileUser", profileUser);
 
   if (!profileUser || !loggedUser || !matchResult) return null;
 

@@ -23,7 +23,7 @@ import BioSectionShell from "@/app/(public)/profile/edit/sections/BioSection/Bio
 import { useProfileUpdate } from "@/domain/user/hooks/useProfileUpdate";
 import type { User, Gender } from "@/domain/user/user.schema";
 import Button from "@/components/atoms/Button";
-import AppShell from "@/components/templates/AppShell";
+import AppShell from "@/components/organisms/AppShell";
 import { ChevronRight } from "lucide-react";
 
 function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
@@ -51,6 +51,7 @@ function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
 }
 
 import PersonaEditor from "@/features/persona/components/PersonaEditor";
+import AvatarUpload from "@/components/molecules/AvatarUpload";
 
 export default function CompleteProfileFormClient() {
   const { user, isUpdating, handleUpdate } = useProfileUpdate();
@@ -84,7 +85,7 @@ export default function CompleteProfileFormClient() {
   if (!user) return null;
 
   const footerSlot = (
-    <div className="fixed bottom-0 left-0 right-0 p-md bg-white/80 dark:bg-bg-dark/80 backdrop-blur-md border-t border-stroke z-50">
+    <div className="bg-surface-secondary fixed bottom-0 left-0 right-0 p-md z-50">
       <div className="max-w-narrow mx-auto">
         <Button
           type="submit"
@@ -103,35 +104,16 @@ export default function CompleteProfileFormClient() {
   return (
     <FormProvider {...methods}>
       <AppShell variant="narrow" footerSlot={footerSlot}>
-        <div className="flex flex-col gap-xl pb-32">
-          <AvatarSectionShell />
-
-          <PersonaEditor
-            user={user}
-            title="Travel Persona"
-            description="Fine-tune your rhythm, style, and budget."
+        <div className="">
+          <AvatarUpload
+            src={user?.avatarUrl ?? null}
+            onSelect={(_file, previewUrl) => {
+              methods.setValue("avatarUrl", previewUrl);
+            }}
           />
 
-          <div className="flex justify-center">
-            <Button
-              variant="outline"
-              type="button"
-              onClick={() => router.push("/profile/persona?step=3")}
-              className="w-full flex items-center justify-between px-lg py-xl h-auto rounded-card border-stroke bg-surface hover:bg-bg-sub transition-all"
-            >
-              <div className="flex flex-col items-start gap-1">
-                <span className="font-bold text-txt-main">Edit Interests</span>
-                <span className="text-xs text-txt-sec">
-                  Update your travel tags & hobbies
-                </span>
-              </div>
-              <ChevronRight className="text-txt-sec w-5 h-5" />
-            </Button>
-          </div>
-
-          <div className="space-y-xl">
+          <div className="space-y-xs">
             <NameSectionShell />
-            <BioSectionShell />
             <SocialSectionShell />
             <HomeBaseSectionShell />
             <OccupationSectionShell />

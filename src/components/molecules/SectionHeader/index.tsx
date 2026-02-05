@@ -18,9 +18,7 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className={cn("my-2 flex items-center justify-between", className)}>
-      <Typography variant="h2" weight="bold">
-        {title}
-      </Typography>
+      <Typography variant="display-sm">{title}</Typography>
       {href && (
         <Link
           href={href}

@@ -14,7 +14,7 @@ import { SearchResponse, SearchResult } from "@/types/search";
 import {
   filterAndSortPlaces,
   type EnhancedMatchResult,
-} from "@/services/discovery/enhanced-matching.service";
+} from "@/domain/discovery/services/enhanced-matching.service";
 import { prisma } from "@/lib/db/prisma";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
 
     // Get current user for personalized search
     const user = await getCurrentUser();
-    
+
     // Search across all entity types in parallel
     const [cities, countries, activities] = await Promise.all([
       searchCities(query),
@@ -81,7 +81,8 @@ export async function GET(req: NextRequest) {
           travelStyle: parsedPersona.data.travelStyle,
         };
 
-        const userLocationPoint = GeoPointSchema.safeParse(user.currentLocation).success
+        const userLocationPoint = GeoPointSchema.safeParse(user.currentLocation)
+          .success
           ? (GeoPointSchema.parse(user.currentLocation) as GeoPoint)
           : null;
 
@@ -92,10 +93,10 @@ export async function GET(req: NextRequest) {
           where: {
             isPermanentlyClosed: false,
             OR: [
-              { name: { contains: query, mode: 'insensitive' } },
+              { name: { contains: query, mode: "insensitive" } },
               { tags: { hasSome: [query] } },
-              { address: { contains: query, mode: 'insensitive' } },
-            ]
+              { address: { contains: query, mode: "insensitive" } },
+            ],
           },
           select: {
             id: true,
@@ -115,40 +116,47 @@ export async function GET(req: NextRequest) {
           tags: Array.isArray(p.tags) ? p.tags : [],
         }));
 
-        const matchedPlaces = filterAndSortPlaces(normalizedPlaces, userPersona, {
-          limit: 50,
-        });
+        const matchedPlaces = filterAndSortPlaces(
+          normalizedPlaces,
+          userPersona,
+          {
+            limit: 50,
+          },
+        );
 
-        enhancedActivities = matchedPlaces.map((item: {
-          place: (typeof normalizedPlaces)[number];
-          matchResult: EnhancedMatchResult;
-        }) => {
-          const { place, matchResult } = item;
-          const placePoint = GeoPointSchema.safeParse(place.coords).success
-            ? (GeoPointSchema.parse(place.coords) as GeoPoint)
-            : null;
+        enhancedActivities = matchedPlaces.map(
+          (item: {
+            place: (typeof normalizedPlaces)[number];
+            matchResult: EnhancedMatchResult;
+          }) => {
+            const { place, matchResult } = item;
+            const placePoint = GeoPointSchema.safeParse(place.coords).success
+              ? (GeoPointSchema.parse(place.coords) as GeoPoint)
+              : null;
 
-          const placeLatLng = toLatLng(placePoint);
-          const distanceMeta = userLatLng && placeLatLng
-            ? getDistanceMetadata(userLatLng, placeLatLng)
-            : null;
+            const placeLatLng = toLatLng(placePoint);
+            const distanceMeta =
+              userLatLng && placeLatLng
+                ? getDistanceMetadata(userLatLng, placeLatLng)
+                : null;
 
-          return {
-            id: `place-${place.id}`,
-            label: place.name,
-            subtitle: place.address || "",
-            type: "activity" as const,
-            entityId: place.id,
-            meta: {
-              activityType: "place",
-              matchScore: matchResult.finalScore,
-              rating: place.rating,
-              priceLevel: place.priceLevel,
-              tags: place.tags,
-              distance: distanceMeta?.distanceStr,
-            },
-          };
-        });
+            return {
+              id: `place-${place.id}`,
+              label: place.name,
+              subtitle: place.address || "",
+              type: "activity" as const,
+              entityId: place.id,
+              meta: {
+                activityType: "place",
+                matchScore: matchResult.finalScore,
+                rating: place.rating,
+                priceLevel: place.priceLevel,
+                tags: place.tags,
+                distance: distanceMeta?.distanceStr,
+              },
+            };
+          },
+        );
       } catch (error) {
         console.error("Error enhancing search with match scores:", error);
         // Fall back to original activities if enhancement fails
@@ -156,22 +164,28 @@ export async function GET(req: NextRequest) {
     }
 
     // Combine results with cities first, then countries, and enhanced activities
-    const allResults: SearchResult[] = [...cities, ...countries, ...enhancedActivities];
+    const allResults: SearchResult[] = [
+      ...cities,
+      ...countries,
+      ...enhancedActivities,
+    ];
 
     // Sort results: prioritize places with high match scores
     const sortedResults = allResults.sort((a, b) => {
       // If both have match scores, sort by score (higher first)
-      const aScore = a.type === 'activity' ? (a.meta?.matchScore as number) : undefined;
-      const bScore = b.type === 'activity' ? (b.meta?.matchScore as number) : undefined;
-      
+      const aScore =
+        a.type === "activity" ? (a.meta?.matchScore as number) : undefined;
+      const bScore =
+        b.type === "activity" ? (b.meta?.matchScore as number) : undefined;
+
       if (aScore !== undefined && bScore !== undefined) {
         return bScore - aScore;
       }
-      
+
       // If only one has a match score, prioritize it
       if (aScore !== undefined) return -1;
       if (bScore !== undefined) return 1;
-      
+
       // Otherwise, maintain original order (cities, countries, activities)
       return 0;
     });
@@ -191,7 +205,7 @@ export async function GET(req: NextRequest) {
         results: [],
         totalCount: 0,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -199,19 +213,21 @@ export async function GET(req: NextRequest) {
 // Helper function to calculate distance between two points
 function calculateDistance(point1: any, point2: any): number {
   if (!point1?.coordinates || !point2?.coordinates) return 0;
-  
+
   const [lng1, lat1] = point1.coordinates;
   const [lng2, lat2] = point2.coordinates;
-  
+
   // Haversine formula (simplified)
   const R = 6371; // Earth's radius in km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lng2 - lng1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
   return R * c;
 }

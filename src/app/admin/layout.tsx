@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   Users,
-  Settings,
   LogOut,
   Map,
   Blocks,
@@ -22,7 +21,12 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 
 const ADMIN_LINKS = [
-  { href: "/admin", label: "Dashboard", Icon: LayoutDashboard, key: undefined },
+  {
+    href: "/admin",
+    label: "Dashboard",
+    Icon: LayoutDashboard,
+    key: "dashboard",
+  },
   { href: "/admin/users", label: "Users", Icon: Users, key: "users" },
   {
     href: "/admin/destinations",
@@ -58,10 +62,10 @@ const ADMIN_LINKS = [
     key: "generator",
   },
   {
-    href: "/admin/settings",
-    label: "Settings",
-    Icon: Settings,
-    key: "settings",
+    href: "/admin/cities",
+    label: "Cities",
+    Icon: Globe,
+    key: "cities",
   },
 ];
 

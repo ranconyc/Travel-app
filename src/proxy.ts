@@ -32,7 +32,7 @@ export default auth((req) => {
   }
 
   const role = (req.auth?.user as any)?.role;
-  const isProfileCompleted = (req.auth?.user as any)?.profileCompleted;
+  const needsOnboarding = (req.auth?.user as any)?.needsOnboarding;
   const isBanned = (req.auth?.user as any)?.isBanned;
   const isActive = (req.auth?.user as any)?.isActive;
 
@@ -44,7 +44,7 @@ export default auth((req) => {
       role: role,
       roleType: typeof role,
       isLoggedIn: !!req.auth,
-      isProfileCompleted: (req.auth?.user as any)?.profileCompleted,
+      needsOnboarding,
     });
   }
 
@@ -69,9 +69,9 @@ export default auth((req) => {
     }
   }
 
-  // Gated Onboarding Logic
+  // Gated Onboarding Logic - Force users to complete onboarding
   const isOnboardingRoute = nextUrl.pathname === "/profile/onboarding";
-  if (!isProfileCompleted && !isOnboardingRoute && nextUrl.pathname !== "/") {
+  if (needsOnboarding && !isOnboardingRoute) {
     return NextResponse.redirect(new URL("/profile/onboarding", nextUrl));
   }
 

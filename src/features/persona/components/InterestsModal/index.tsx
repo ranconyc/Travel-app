@@ -1,6 +1,6 @@
 "use client";
 
-import SelectionCard from "@/components/atoms/SelectionCard";
+import SelectionCard from "@/components/molecules/SelectionCard";
 import Button from "@/components/atoms/Button";
 import interests from "@/data/interests.json";
 import { InterestsData } from "@/app/(public)/profile/travel-preferences/_hooks/useTravelPreferencesForm";

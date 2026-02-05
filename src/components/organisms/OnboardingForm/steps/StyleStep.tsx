@@ -3,22 +3,18 @@
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { OnboardingIdentityFormValues } from "@/domain/user/onboarding.schema";
-import { WizardStepHeader } from "@/components/molecules/WizardStepHeader";
-import { SelectionCard } from "@/components/atoms/SelectionCard";
+
+import { SelectionCard } from "@/components/molecules/SelectionCard";
 import ErrorMessage from "@/components/atoms/ErrorMessage";
-import Button from "@/components/atoms/Button";
 import travelStyles from "@/data/travelStyles.json";
 import { ICON_MAP } from "../onboarding.config";
 import { Map as MapIcon } from "lucide-react";
-import { OnboardingFooter } from "../OnboardingFooter";
 
 interface StyleStepProps {
   form: UseFormReturn<OnboardingIdentityFormValues>;
-  onBack: () => void;
-  onNext: (goComplete?: boolean) => void;
 }
 
-export function StyleStep({ form, onBack, onNext }: StyleStepProps) {
+export function StyleStep({ form }: StyleStepProps) {
   const {
     setValue,
     watch,
@@ -28,11 +24,14 @@ export function StyleStep({ form, onBack, onNext }: StyleStepProps) {
 
   return (
     <div className="space-y-3">
-      <WizardStepHeader
-        title="Which travel Style feels most like you?"
-        description="Select the option that matches you the most"
-        onBack={onBack}
-      />
+      <div className="mb-6">
+        <h2 className="text-h3 font-bold text-txt-main mb-2">
+          Which travel Style feels most like you?
+        </h2>
+        <p className="text-p text-txt-sec">
+          Select the option that matches you the most
+        </p>
+      </div>
       <div className="space-y-3">
         {travelStyles.map((item) => {
           const Icon = ICON_MAP[item.icon] || MapIcon;
@@ -56,19 +55,6 @@ export function StyleStep({ form, onBack, onNext }: StyleStepProps) {
           error={errors.travelStyles?.message}
         />
       </div>
-      <OnboardingFooter>
-        <Button
-          type="button"
-          variant="ghost"
-          className="flex-1"
-          onClick={() => onNext(true)}
-        >
-          Skip
-        </Button>
-        <Button type="button" className="flex-1" onClick={() => onNext(true)}>
-          Finish
-        </Button>
-      </OnboardingFooter>
     </div>
   );
 }

@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Twitter, Globe } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Globe,
+  Map,
+} from "lucide-react";
 import { AiFillTikTok, AiFillRedditCircle } from "react-icons/ai";
 
 export type MediaLinksProps = {
@@ -36,6 +43,9 @@ export default function MediaLinks({ links, className = "" }: MediaLinksProps) {
       case "website":
       case "web":
         return <Globe size={ICON_SIZE} />;
+      case "googlemaps":
+      case "maps":
+        return <Map size={ICON_SIZE} />;
       default:
         return <Globe size={ICON_SIZE} />; // Fallback icon
     }

@@ -1,5 +1,22 @@
 import { prisma } from "@/lib/db/prisma";
 import { placeFullInclude } from "./prisma.presets";
+import { Prisma } from "@prisma/client";
+
+export async function countPlaces(where: Prisma.PlaceWhereInput) {
+  return prisma.place.count({ where });
+}
+
+export async function upsertPlace(
+  googlePlaceId: string,
+  update: Prisma.PlaceUpdateInput,
+  create: Prisma.PlaceCreateInput,
+) {
+  return prisma.place.upsert({
+    where: { googlePlaceId },
+    update,
+    create,
+  });
+}
 
 export async function getPlaceBySlug(slug: string) {
   if (!slug) return null;
@@ -62,4 +79,45 @@ export async function deletePlace(id: string) {
     console.error("deletePlace error:", error);
     throw new Error("Failed to delete place");
   }
+}
+
+/**
+ * Get places that need review
+ */
+export async function getPlacesNeedingReview() {
+  return prisma.place.findMany({
+    where: { needsReview: true },
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      autoCreated: true,
+      createdAt: true,
+      city: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+/**
+ * Search places by name or slug
+ */
+export async function searchPlaces(query: string, limit = 5) {
+  return prisma.place.findMany({
+    where: {
+      OR: [
+        { name: { contains: query, mode: "insensitive" } },
+        { slug: { contains: query, mode: "insensitive" } },
+      ],
+    },
+    include: {
+      city: { select: { name: true } },
+      country: { select: { name: true } },
+    },
+    take: limit,
+  });
 }

@@ -114,13 +114,14 @@ model City {
 
   // NEW FIELDS
   googlePlaceId String? @unique
+  wikiDataId    String? @unique
   isVerified    Boolean @default(false)
   slug          String  @unique // format: country-city-name
   priority      Int     @default(0)
 
   // Geo
   coords      Json // GeoJSON Point
-  radiusKm    Int     @default(30)
+  radiusKm    Int     @default(0)
   timeZone    String?
   boundingBox Json? // { sw: [lng, lat], ne: [lng, lat] } - Crucial for map zoom
 

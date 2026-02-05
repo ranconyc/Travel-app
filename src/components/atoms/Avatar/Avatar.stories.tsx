@@ -45,7 +45,7 @@ export const WithBorder: Story = {
   args: {
     alt: "Ran Cohen",
     size: 80,
-    border: true,
+    showBorder: true,
     image:
       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200",
   },

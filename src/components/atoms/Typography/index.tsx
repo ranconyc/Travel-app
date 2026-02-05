@@ -5,36 +5,36 @@ import { cn } from "@/lib/utils";
 const typographyVariants = cva("transition-colors", {
   variants: {
     variant: {
-      // Headlines (Sora)
-      h1: "text-display-lg font-bold font-sora tracking-tight",
-      h2: "text-display-md font-bold font-sora tracking-tight",
-      h3: "text-display-sm font-semibold font-sora tracking-tight",
-      h4: "text-display-sm font-semibold font-sora",
+      // Headlines (Sora) - Mapped to Display tokens per design
+      h1: "type-display-lg font-bold font-sora",
+      h2: "type-display-md font-bold font-sora",
+      h3: "type-display-sm font-semibold font-sora",
+      h4: "type-display-sm font-semibold font-sora",
 
-      // Display (Sora) - For Hero sections
-      "display-xl": "text-display-xl font-black font-sora tracking-tighter",
-      "display-lg": "text-display-lg font-bold font-sora tracking-tight",
-      "display-md": "text-display-md font-bold font-sora tracking-tight",
-      "display-sm": "text-display-sm font-semibold font-sora tracking-tight",
+      // Display (Sora) - Headless utilities
+      "display-xl": "type-display-xl",
+      "display-lg": "type-display-lg",
+      "display-md": "type-display-md",
+      "display-sm": "type-display-sm",
 
       // Body (Inter)
-      p: "text-p font-sans",
-      "body-lg": "text-lg font-sans leading-relaxed",
-      body: "text-p font-sans",
-      "body-sm": "text-sm font-sans leading-relaxed",
+      p: "text-base font-inter leading-relaxed",
+      "body-lg": "text-lg font-inter leading-relaxed",
+      body: "text-base font-inter leading-relaxed",
+      "body-sm": "text-sm font-inter leading-relaxed",
 
       // UI (Inter) - Functional text
-      "ui-lg": "text-lg font-medium font-sans",
-      ui: "text-base font-medium font-sans",
-      "ui-sm": "text-sm font-medium font-sans",
+      "ui-lg": "text-lg font-medium font-inter",
+      ui: "text-base font-medium font-inter",
+      "ui-sm": "text-sm font-medium font-inter",
 
       // Labels & Captions
-      label: "text-label font-semibold uppercase tracking-wider",
-      "label-sm": "text-label-sm font-semibold uppercase tracking-wider",
-      caption: "text-caption font-normal font-sans",
-      "caption-sm": "text-xs font-normal font-sans text-txt-sec",
-      tiny: "text-caption font-sans uppercase font-medium",
-      micro: "text-micro font-sans uppercase font-bold tracking-wider",
+      label: "text-sm font-semibold font-inter uppercase tracking-wider",
+      "label-sm": "text-xs font-semibold font-inter uppercase tracking-wider",
+      caption: "text-sm font-normal font-inter",
+      "caption-sm": "text-xs font-normal font-inter text-txt-muted",
+      tiny: "text-tiny font-inter uppercase font-medium",
+      micro: "text-micro font-inter uppercase font-bold tracking-wider",
     },
     weight: {
       light: "font-light",
@@ -47,13 +47,13 @@ const typographyVariants = cva("transition-colors", {
     color: {
       main: "text-txt-main",
       sec: "text-txt-sec",
+      muted: "text-txt-muted",
       brand: "text-brand",
       error: "text-error",
       inverse: "text-white dark:text-txt-main",
       success: "text-success",
       warning: "text-warning",
       white: "text-white",
-      muted: "text-secondary/60",
     },
     wrap: {
       balance: "text-balance", // Best for headings (2-3 lines)

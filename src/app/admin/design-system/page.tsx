@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import Input from "@/components/atoms/Input";
-import SelectionCard from "@/components/atoms/SelectionCard";
+import SelectionCard from "@/components/molecules/SelectionCard";
 import SelectedItem from "@/components/molecules/SelectedItem";
 
 const Section = ({

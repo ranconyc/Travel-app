@@ -1,3 +1,4 @@
+import "server-only";
 import { prisma } from "@/lib/db/prisma";
 import type { Prisma } from "@prisma/client";
 import { type Coordinates } from "@/domain/common.schema";
@@ -469,4 +470,76 @@ export async function getAllUsers(): Promise<UserBase[]> {
     console.error("getAllUsers error:", error);
     throw new Error("Unable to fetch users");
   }
+}
+
+/**
+ * Get latest registered users
+ */
+export async function findLatestUsers(limit = 5) {
+  return prisma.user.findMany({
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      avatarUrl: true,
+    },
+  });
+}
+
+/**
+ * Get users grouped by current city (for trending cities)
+ */
+export async function getUsersGroupedByCity(limit = 5) {
+  return prisma.user.groupBy({
+    by: ["currentCityId"],
+    where: {
+      currentCityId: { not: null },
+    },
+    _count: {
+      id: true,
+    },
+    orderBy: {
+      _count: {
+        id: "desc",
+      },
+    },
+    take: limit,
+  });
+}
+
+/**
+ * Count total users, optionally filtered by update time
+ */
+export async function countUsers(filter?: { updatedAfter?: Date }) {
+  const where: Prisma.UserWhereInput = {};
+  if (filter?.updatedAfter) {
+    where.updatedAt = { gte: filter.updatedAfter };
+  }
+  return prisma.user.count({ where });
+}
+
+/**
+ * Update user with profile upsert (Handling the atomic update structure)
+ */
+export async function updateUserWithProfile(
+  userId: string,
+  data: Prisma.UserUpdateInput,
+) {
+  return prisma.user.update({
+    where: { id: userId },
+    data,
+  });
+}
+
+/**
+ * Get user profile with persona
+ */
+export async function getUserProfile(userId: string) {
+  return prisma.userProfile.findUnique({
+    where: { userId },
+    select: { persona: true },
+  });
 }

@@ -1,36 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useUser } from "@/app/providers/UserProvider";
 import { useLocation } from "@/app/providers/LocationProvider";
-import { updateUserLocationAction } from "@/domain/user/user.actions";
+import { useUpdateUserLocation } from "@/domain/user/user.hooks";
+import { calculateHaversineDistance } from "@/lib/utils/geo.utils";
 
 const LOCATION_STORAGE_KEY = "last_location";
 const MIN_DISTANCE_KM = 5; // Only update if moved more than 5km
 
-// Calculate distance between two coordinates in km (Haversine formula)
-function calculateDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number,
-): number {
-  const R = 6371; // Earth's radius in km
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
 export default function AutoLocationUpdater() {
   const user = useUser();
   const { location } = useLocation();
+  const { mutateAsync: updateUserLocation } = useUpdateUserLocation();
+  const router = useRouter();
   const hasUpdatedRef = useRef(false);
 
   useEffect(() => {
@@ -48,7 +32,7 @@ export default function AutoLocationUpdater() {
           if (hasLocationInDb && lastLocationStr) {
             try {
               const lastLocation = JSON.parse(lastLocationStr);
-              const distance = calculateDistance(
+              const distance = calculateHaversineDistance(
                 lastLocation.latitude,
                 lastLocation.longitude,
                 location.latitude,
@@ -76,7 +60,7 @@ export default function AutoLocationUpdater() {
             console.log(
               `📍 Auto-updating location... (In DB: ${hasLocationInDb})`,
             );
-            await updateUserLocationAction({
+            await updateUserLocation({
               lat: location.latitude,
               lng: location.longitude,
             });
@@ -88,6 +72,7 @@ export default function AutoLocationUpdater() {
             );
 
             console.log("✅ Location auto-updated successfully");
+            router.refresh(); // Refresh server components
           }
 
           hasUpdatedRef.current = true;
@@ -98,7 +83,7 @@ export default function AutoLocationUpdater() {
 
       updateLocation();
     }
-  }, [location, user]);
+  }, [location, user, updateUserLocation, router]);
 
   // This component doesn't render anything
   return null;

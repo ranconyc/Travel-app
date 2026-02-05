@@ -8,7 +8,7 @@ import IdentityStep from "@/features/persona/components/IdentityStep";
 import HometownStep from "@/features/persona/components/HometownStep";
 import InterestsStep from "@/features/persona/components/InterestsStep";
 
-import AppShell from "@/components/templates/AppShell";
+import AppShell from "@/components/organisms/AppShell";
 import { FormHeader, ProgressIndicator } from "@/components/molecules/forms";
 import { usePersonaForm } from "@/features/persona/hooks/usePersonaForm";
 

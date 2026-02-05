@@ -61,3 +61,13 @@ export const useIsQRCodeModalOpen = () =>
   useProfileStore((state) => state.isQRCodeModalOpen);
 export const useProfileActions = () =>
   useProfileStore((state) => state.actions);
+
+// Derived state selector
+export const useIsLocal = () =>
+  useProfileStore((state) => {
+    if (!state.profileUser) return false;
+    return (
+      state.profileUser.currentCityId ===
+      state.profileUser.profile?.homeBaseCityId
+    );
+  });

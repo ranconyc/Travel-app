@@ -12,6 +12,7 @@ import { LandingView } from "@/features/auth/components/LandingView";
 import { LoginView } from "@/features/auth/components/LoginView";
 import { SignupView } from "@/features/auth/components/SignupView";
 import useAuthView from "@/features/auth/hooks/useAuthView";
+import Logo from "@/components/atoms/Logo";
 
 export default function SignInFormClient() {
   const router = useRouter();
@@ -61,12 +62,10 @@ export default function SignInFormClient() {
 
   return (
     <div
-      className="bg-bg-main h-full w-full p-lg pt-xxl flex flex-col items-center overflow-hidden text-txt-main cursor-pointer"
+      className="bg-bg-main h-full w-full p-lg pt-xxl flex flex-col items-center overflow-hidden cursor-pointer"
       onClick={() => setView("landing")}
     >
-      <Typography variant="h2" className="text-brand font-bold mb-lg">
-        TravelMate
-      </Typography>
+      <Logo />
 
       {registered && (
         <div className="mt-md p-md bg-brand/10 border border-brand/20 rounded-md text-brand text-xs text-center z-20">

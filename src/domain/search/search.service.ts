@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/db/prisma";
 import { saveSearchEvent } from "@/lib/db/search.repo";
 import { SearchResult } from "./search.schema";
+import { getCountryFlagEmoji } from "@/utils/data-helpers";
 
 const LOCATIONIQ_KEY = process.env.LOCATIONIQ_API_KEY;
 
@@ -12,41 +12,13 @@ export async function handleSearchDestinations(
   const normalizedQuery = query.toLowerCase();
 
   // 1. Search Countries
-  const countries = await prisma.country.findMany({
-    where: {
-      OR: [
-        { name: { contains: normalizedQuery, mode: "insensitive" } },
-        { cca3: { contains: normalizedQuery, mode: "insensitive" } },
-        { altSpellings: { hasSome: [normalizedQuery] } },
-      ],
-    },
-    take: 5,
-    select: {
-      id: true,
-      name: true,
-      cca3: true,
-      imageHeroUrl: true,
-      flags: true,
-      region: true,
-    },
-  });
+  const { searchCountriesByNameOrCode } = await import("@/lib/db/country.repo");
+  // We need to implement a more robust search in repo or use this simple one
+  const countries = await searchCountriesByNameOrCode(query, 5);
 
   // 2. Search Cities
-  const cities = await prisma.city.findMany({
-    where: {
-      name: { contains: normalizedQuery, mode: "insensitive" },
-    },
-    take: 5,
-    include: {
-      country: {
-        select: {
-          name: true,
-          cca3: true,
-          flags: true,
-        },
-      },
-    },
-  });
+  const { searchCities } = await import("@/lib/db/cityLocation.repo");
+  const cities = await searchCities(normalizedQuery, 5);
 
   // 3. Map to unified format
   const cityResults: SearchResult[] = cities.map((c) => ({
@@ -56,7 +28,7 @@ export async function handleSearchDestinations(
     slug: c.cityId ?? c.name.toLowerCase().replace(/\s+/g, "-"),
     image: c.imageHeroUrl,
     subText: c.country?.name,
-    flag: (c.country?.flags as any)?.svg || (c.country?.flags as any)?.png,
+    flag: c.country?.code ? getCountryFlagEmoji(c.country.code) : undefined,
   }));
 
   const countryResults: SearchResult[] = countries.map((c) => ({
@@ -66,10 +38,10 @@ export async function handleSearchDestinations(
     slug: c.cca3,
     image: c.imageHeroUrl,
     subText: c.region || "Country",
-    flag: (c.flags as any)?.svg || (c.flags as any)?.png,
+    flag: c.code ? getCountryFlagEmoji(c.code) : undefined,
   }));
 
-  return [...countryResults, ...cityResults];
+  return [...countryResults, ...cityResults]; // Return combined results
 }
 
 interface LocationIQResult {
@@ -108,6 +80,7 @@ export async function handleSearchExternalDestinations(
       type: "EXTERNAL",
       slug: "",
       subText: item.display_name,
+      flag: getCountryFlagEmoji(item.address?.country_code),
       externalData: item,
     }));
   } catch (error) {
@@ -125,58 +98,27 @@ export async function handleSaveExternalDestination(
   try {
     const countryCode = externalItem.address?.country_code?.toUpperCase();
     const countryName = externalItem.address?.country || "Unknown";
-
-    if (!countryCode) return null;
-
-    let country = await prisma.country.findUnique({
-      where: { cca3: countryCode },
-    });
-
-    if (!country) {
-      country = await prisma.country.findFirst({
-        where: { code: countryCode },
-      });
-    }
-
-    if (!country) {
-      country = await prisma.country.create({
-        data: {
-          name: countryName,
-          cca3: countryCode.length === 3 ? countryCode : countryCode + "X",
-          code: countryCode.substring(0, 2),
-          region: "Unknown",
-        },
-      });
-    }
-
     const cityName =
       externalItem.address?.city ||
       externalItem.address?.town ||
       externalItem.name ||
       externalItem.display_name?.split(",")[0];
-    const generatedCityId = cityName.toLowerCase().replace(/[^a-z0-9]/g, "-");
-
     const lat = parseFloat(externalItem.lat);
     const lon = parseFloat(externalItem.lon);
 
-    const existing = await prisma.city.findFirst({
-      where: { cityId: generatedCityId },
-    });
+    if (!countryCode || !cityName) return null;
 
-    if (existing) return existing.cityId;
+    // Use City Service to ensure consistent creation logic
+    const { createCityFromAPI } = await import("@/domain/city/city.service");
+    const city = await createCityFromAPI(
+      cityName,
+      countryCode,
+      lat,
+      lon,
+      undefined, // bbox not available from this partial logic
+    );
 
-    const newCity = await prisma.city.create({
-      data: {
-        cityId: generatedCityId + "-" + Math.floor(Math.random() * 1000),
-        name: cityName,
-        countryRefId: country!.id,
-        coords: { type: "Point", coordinates: [lon, lat] },
-        slug: generatedCityId + "-" + Math.floor(Math.random() * 1000),
-        autoCreated: true,
-      },
-    });
-
-    return newCity.cityId;
+    return city.cityId;
   } catch (err) {
     console.error("Failed to save external destination:", err);
     return null;

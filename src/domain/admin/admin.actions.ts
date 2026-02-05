@@ -1,7 +1,7 @@
 "use server";
 
-import { z } from "zod";
 import { createAdminAction } from "@/lib/safe-action";
+import { AdminVoidSchema } from "./admin.schema";
 import {
   handleGetAdminStats,
   handleGetTopTrendingCities,
@@ -10,22 +10,16 @@ import {
 // Auth checks are now handled by createAdminAction
 
 export const getDashboardStats = createAdminAction(
-  z.object({}).optional(),
+  AdminVoidSchema,
   async () => {
     return await handleGetAdminStats();
   },
 );
 
-export const getTopCities = createAdminAction(
-  z.object({}).optional(),
-  async () => {
-    return await handleGetTopTrendingCities();
-  },
-);
+export const getTopCities = createAdminAction(AdminVoidSchema, async () => {
+  return await handleGetTopTrendingCities();
+});
 
-export const getLatestUsers = createAdminAction(
-  z.object({}).optional(),
-  async () => {
-    return await handleFindLatestUsers();
-  },
-);
+export const getLatestUsers = createAdminAction(AdminVoidSchema, async () => {
+  return await handleFindLatestUsers();
+});

@@ -68,7 +68,7 @@ function HomeBaseSection() {
 
     const res = await fetch(
       `/api/cities/search?q=${encodeURIComponent(trimmed)}`,
-      { signal }
+      { signal },
     );
 
     if (!res.ok) {
@@ -89,13 +89,12 @@ function HomeBaseSection() {
           c.source === "db" || c.source === "external" ? c.source : "external",
         dbCityId: c.dbCityId ? String(c.dbCityId) : undefined,
         meta: c.meta,
-      })
+      }),
     );
   };
 
   // Handle selection from autocomplete
   const handleSelect = (label: string, opt?: AutoOption) => {
-    // console.log("handleSelect", label, opt);
     // Update visible text in the input
     field.onChange(label);
 
@@ -110,12 +109,12 @@ function HomeBaseSection() {
 
     if (cityOpt.source === "db" && cityOpt.dbCityId) {
       // Existing city in DB
-      // console.log("Selected existing city from DB:", cityOpt.dbCityId);
+
       setValue("homeBaseCityId", cityOpt.dbCityId, { shouldDirty: true });
       setValue("homeBaseLocation", null, { shouldDirty: true });
     } else if (cityOpt.source === "external" && cityOpt.meta) {
       // City from external provider – store meta for later creation
-      // console.log("Selected external city, will create in DB:", cityOpt.meta);
+
       // Store the external metadata that will be used to create the city
       setValue("homeBaseCityId", null, { shouldDirty: true });
       setValue(
@@ -137,15 +136,15 @@ function HomeBaseSection() {
                 number,
                 number,
                 number,
-                number
+                number,
               ])
             : undefined,
         },
-        { shouldDirty: true }
+        { shouldDirty: true },
       );
     } else {
       // Fallback: unknown state
-      // console.log("Unknown city option, resetting fields");
+
       setValue("homeBaseCityId", null, { shouldDirty: true });
       setValue("homeBaseLocation", null, { shouldDirty: true });
     }

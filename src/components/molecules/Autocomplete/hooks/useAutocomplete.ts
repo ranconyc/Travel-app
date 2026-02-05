@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useAutocompleteValue } from "./useAutocompleteValue";
 import { useAutocompleteKeyboardNavigation } from "./useAutocompleteKeyboard";
 import { useAutocompleteRemote } from "./useAutocompleteRemote";
@@ -48,6 +48,9 @@ export function useAutocomplete({
   const [activeIndex, setActiveIndex] = useState(-1);
   const [hasTyped, setHasTyped] = useState(false);
 
+  // State to prevent auto-open immediately after selection
+  const [justSelected, setJustSelected] = useState(false);
+
   // 3. Manage remote data fetching
   const { remote, loading, err, skipNextFetch, resetRemote } =
     useAutocompleteRemote<AutoOption>({
@@ -67,13 +70,13 @@ export function useAutocomplete({
     remote,
   });
 
-  // 5. Auto-manage open/activeIndex based on results
-  const [prevMerged, setPrevMerged] = useState(merged);
-  const [prevLoading, setPrevLoading] = useState(loading);
-
-  if (merged !== prevMerged || loading !== prevLoading) {
-    setPrevMerged(merged);
-    setPrevLoading(loading);
+  // 5. Auto-manage open/activeIndex based on results (via useEffect to avoid render-time ref access)
+  useEffect(() => {
+    // Skip auto-open if we just made a selection
+    if (justSelected) {
+      setJustSelected(false);
+      return;
+    }
 
     const shouldBeOpen = merged.length > 0 || (!!qVal && loading);
     if (shouldBeOpen !== open) {
@@ -84,11 +87,13 @@ export function useAutocomplete({
     if (nextIndex !== activeIndex) {
       setActiveIndex(nextIndex);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [merged, loading, qVal]);
 
   // 6. Committing a selection
   const commitSelection = useCallback(
     (opt: AutoOption) => {
+      setJustSelected(true); // Prevent auto-open
       skipNextFetch();
 
       if (!isControlled) {
@@ -97,6 +102,7 @@ export function useAutocomplete({
 
       setOpen(false);
       setActiveIndex(-1);
+      resetRemote(); // Clear stale results
 
       onSelect?.(opt.label, opt);
       onQueryChange?.(opt.label);
@@ -106,6 +112,7 @@ export function useAutocomplete({
       clearOnSelect,
       setInnerValue,
       skipNextFetch,
+      resetRemote,
       onSelect,
       onQueryChange,
     ],

@@ -3,7 +3,7 @@
 import { useFormContext, Controller } from "react-hook-form";
 import { PersonaFormValues } from "@/domain/persona/persona.schema";
 import { Autocomplete } from "@/components/molecules/Autocomplete";
-import { searchCitiesAction } from "@/domain/city/city.search.action";
+import { searchCityAction } from "@/domain/city/city.actions";
 import Typography from "@/components/atoms/Typography";
 
 export default function HometownStep() {
@@ -27,7 +27,7 @@ export default function HometownStep() {
                 value={value || ""}
                 onQueryChange={onChange}
                 loadOptions={async (q) => {
-                  const res = await searchCitiesAction({ query: q, limit: 5 });
+                  const res = await searchCityAction({ query: q, limit: 5 });
                   if (!res.success || !res.data) return [];
                   return res.data.map((c) => ({
                     id: c.id,

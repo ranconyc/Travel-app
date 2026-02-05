@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/db/prisma";
 import world from "@/data/world.json";
 import continentsData from "@/data/continents.json";
 import { updateCountry, deleteCountry } from "@/lib/db/country.repo";
@@ -190,9 +189,8 @@ export async function createCountryFromName(countryName: string) {
   const code2 = rest.cca2.toUpperCase();
 
   // 2) If already exists, just return it
-  const existing = await prisma.country.findUnique({
-    where: { cca3 },
-  });
+  const { findCountryByCode } = await import("@/lib/db/country.repo");
+  const existing = await findCountryByCode(cca3);
 
   if (existing) {
     return { country: existing, created: false };
@@ -202,7 +200,8 @@ export async function createCountryFromName(countryName: string) {
   const data = CountryMapper.toDb(rest, nameTrimmed);
 
   // 4) Save to DB (without capitalId first)
-  const created = await prisma.country.create({ data });
+  const { createCountry } = await import("@/lib/db/country.repo");
+  const created = await createCountry(data);
 
   // 5) Auto-create Capital City if available, then link it back
   if (rest.capital?.[0]) {
@@ -215,12 +214,10 @@ export async function createCountryFromName(countryName: string) {
 
       // Update the country to link to the capital city
       if (capitalCity?.id) {
-        await prisma.country.update({
-          where: { id: created.id },
-          data: {
-            capitalId: capitalCity?.id,
-            capitalName: rest.capital?.[0],
-          },
+        const { updateCountry } = await import("@/lib/db/country.repo");
+        await updateCountry(created.id, {
+          capitalId: capitalCity?.id,
+          capitalName: rest.capital?.[0],
         });
         console.log(
           `✅ Linked capital city ${rest.capital[0]} to ${created.name}`,

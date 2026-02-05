@@ -54,7 +54,7 @@ const MateCard = memo(function MateCard({
       gradient="bg-gradient-to-t from-black/70 via-black/40 to-transparent"
       className={cn("h-full", className)}
     >
-      <div className="p-4 h-full flex flex-col justify-between relative">
+      <div className="p-mdlg h-full flex flex-col justify-between relative">
         {/* Top Section: Match Score */}
         <div className="w-full flex items-center justify-end min-h-[44px]">
           {showMatchScore && (

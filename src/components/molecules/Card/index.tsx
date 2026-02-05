@@ -81,7 +81,7 @@ export default function Card({
   hover,
   image,
   linkHref,
-  aspectRatio, // Let CVA handle this if passed as a known class, or fallback
+  aspectRatio,
   gradient = true,
   priority = false,
 }: CardProps) {

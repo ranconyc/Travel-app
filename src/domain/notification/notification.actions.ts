@@ -1,24 +1,19 @@
 "use server";
 
-import { z } from "zod";
 import { createSafeAction } from "@/lib/safe-action";
-import { prisma } from "@/lib/db/prisma";
+import { getNotifications, markAllAsRead } from "./notification.service";
+import {
+  GetNotificationsSchema,
+  NotificationVoidSchema,
+} from "./notification.schema";
 
 /**
  * Get notifications for the current authenticated user.
  */
 export const getNotificationsAction = createSafeAction(
-  z.object({
-    limit: z.number().optional().default(20),
-  }),
+  GetNotificationsSchema,
   async (data, userId) => {
-    const notifications = await prisma.notification.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: data.limit,
-    });
-
-    return notifications;
+    return await getNotifications(userId, data.limit);
   },
 );
 
@@ -26,12 +21,9 @@ export const getNotificationsAction = createSafeAction(
  * Mark all notifications as read for the current authenticated user.
  */
 export const markAllNotificationsReadAction = createSafeAction(
-  z.object({}),
+  NotificationVoidSchema,
   async (_data, userId) => {
-    await prisma.notification.updateMany({
-      where: { userId, isRead: false },
-      data: { isRead: true },
-    });
+    await markAllAsRead(userId);
 
     return { success: true };
   },

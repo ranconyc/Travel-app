@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 export default function HeroImage({
@@ -17,6 +19,8 @@ export default function HeroImage({
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
             priority
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
           />
           {/* Subtle overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
@@ -28,6 +32,8 @@ export default function HeroImage({
             alt={`${name} placeholder`}
             fill
             className="object-cover opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
           />
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-black/30 to-black/50">
             <div className="text-center">
@@ -39,17 +45,6 @@ export default function HeroImage({
           </div>
         </div>
       )}
-
-      {/* Decorative elements */}
-      <div className="absolute top-4 right-4">
-        <div className="w-2 h-2 bg-brand/50 rounded-full animate-pulse" />
-      </div>
-      <div className="absolute bottom-4 left-4">
-        <div
-          className="w-2 h-2 bg-brand-alt/50 rounded-full animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-      </div>
     </div>
   );
 }

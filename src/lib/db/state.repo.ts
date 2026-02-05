@@ -58,3 +58,34 @@ export async function getAllStates({
     },
   };
 }
+
+/**
+ * Finds a state using name or code within a country.
+ */
+export async function findState(
+  countryRefId: string,
+  name?: string,
+  code?: string,
+) {
+  return prisma.state.findFirst({
+    where: {
+      countryRefId,
+      OR: [
+        { code: { equals: code || undefined, mode: "insensitive" } },
+        { name: { equals: name || undefined, mode: "insensitive" } },
+      ],
+    },
+  });
+}
+
+/**
+ * Creates a new state record.
+ */
+export async function createState(data: {
+  name: string;
+  code: string | null;
+  countryRefId: string;
+  type?: string | null;
+}) {
+  return prisma.state.create({ data });
+}

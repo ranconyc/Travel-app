@@ -8,6 +8,7 @@ const progressIndicatorVariants = cva("flex items-center", {
     variant: {
       bar: "gap-3",
       dots: "gap-2",
+      "step-pill": "gap-2",
     },
   },
   defaultVariants: {
@@ -64,9 +65,28 @@ export default function ProgressIndicator({
         ))}
         {showLabel && (
           <span className="text-xs text-secondary ml-2">
-            Step {currentStep} of {totalSteps}
+            Step {currentStep + 1} of {totalSteps}
           </span>
         )}
+      </div>
+    );
+  }
+
+  if (variant === "step-pill") {
+    return (
+      <div className={cn("flex items-center gap-2", className)} {...props}>
+        {Array.from({ length: totalSteps }).map((_, index) => {
+          const isActive = index === currentStep;
+          return (
+            <div
+              key={index}
+              className={cn(
+                "rounded-full transition-all duration-300",
+                isActive ? "w-8 h-2.5 bg-brand" : "w-2.5 h-2.5 bg-surface",
+              )}
+            />
+          );
+        })}
       </div>
     );
   }
@@ -84,7 +104,7 @@ export default function ProgressIndicator({
       </div>
       {showLabel && (
         <span className="text-xs text-secondary whitespace-nowrap">
-          {currentStep}/{totalSteps}
+          {currentStep + 1}/{totalSteps}
         </span>
       )}
     </div>

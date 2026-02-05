@@ -1,15 +1,16 @@
 import { getSession } from "@/lib/auth/get-current-user";
 import { redirect } from "next/navigation";
 import {
-  getAdminStats,
-  getItemsNeedingReview,
-  getTopSearches,
-  Timeframe,
-} from "@/lib/db/admin.repo";
+  handleGetAdminStats,
+  handleGetItemsNeedingReview,
+  handleGetTopSearches,
+} from "@/domain/admin/admin.service";
+import { Timeframe } from "@/domain/admin/admin.types";
 import StatCard from "@/features/admin/StatCard";
 import ReviewItemsList from "@/features/admin/ReviewItemsList";
 import TopSearchesList from "@/features/admin/TopSearchesList";
 import { Users, Globe, Building2 } from "lucide-react";
+import Typography from "@/components/atoms/Typography";
 
 interface AdminDashboardProps {
   searchParams: Promise<{
@@ -37,20 +38,18 @@ export default async function AdminDashboardPage({
 
   // 2. Fetch Data
   const [stats, reviewItems, topSearches] = await Promise.all([
-    getAdminStats(),
-    getItemsNeedingReview(),
-    getTopSearches(5, timeframe),
+    handleGetAdminStats(),
+    handleGetItemsNeedingReview(),
+    handleGetTopSearches(5, timeframe),
   ]);
 
   return (
     <div className="p-md pb-20 max-w-7xl mx-auto space-y-6">
       <header className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Admin Dashboard
-        </h1>
-        <p className="text-secondary dark:text-gray-400">
+        <Typography variant="h1">Admin Dashboard</Typography>
+        <Typography variant="body" color="sec">
           Overview of platform statistics and content moderation
-        </p>
+        </Typography>
       </header>
 
       {/* Statistics Section */}
@@ -110,11 +109,11 @@ export default async function AdminDashboardPage({
             />
 
             <ReviewItemsList
-              title="Activities Needing Review"
+              title="Places Needing Review"
               items={reviewItems.places.map((a: any) => ({
                 id: a.id,
                 name: a.name,
-                type: "activity",
+                type: "place",
                 slug: a.slug,
                 subtitle: a.city?.name,
                 autoCreated: a.autoCreated,

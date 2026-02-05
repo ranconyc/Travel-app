@@ -71,7 +71,7 @@ export default function SettingsClient({ userId }: { userId: string }) {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-lg mx-auto px-md py-lg">
+      <main className="mx-auto px-md py-lg">
         {/* Settings Items */}
         <div className="bg-surface-secondary rounded-2xl overflow-hidden mb-lg">
           {settingsItems.map((item, index) => (

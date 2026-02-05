@@ -48,7 +48,7 @@ function AvatarSectionClient() {
 
       // Use centralized Cloudinary service
       const { uploadToCloudinary } =
-        await import("@/lib/media/cloudinary.service");
+        await import("@/domain/media/cloudinary.service");
       const result = await uploadToCloudinary(file);
 
       field.onChange(result.secure_url);

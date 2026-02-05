@@ -2,7 +2,7 @@
 
 import React from "react";
 import PageHeader from "@/components/molecules/PageHeader";
-import AppShell from "@/components/templates/AppShell";
+import AppShell from "@/components/organisms/AppShell";
 import { ErrorBoundary } from "@/components/atoms/ErrorBoundary";
 
 interface ChatShellProps {

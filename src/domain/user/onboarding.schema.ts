@@ -3,7 +3,8 @@ import { geoPointSchema } from "@/domain/common.schema";
 
 export const onboardingIdentitySchema = z.object({
   avatarUrl: z.string().optional(),
-  fullName: z.string().min(2, "Name must be at least 2 characters"),
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().optional(),
   gender: z
     .enum(["MALE", "FEMALE", "NON_BINARY"])
     .optional()
@@ -66,7 +67,10 @@ export const onboardingIdentitySchema = z.object({
   location: z.object({
     name: z.string().min(1, "Location is required"),
     placeId: z.string().optional(),
-    coords: geoPointSchema.optional(), // We might need lat/lng directly or GeoPoint
+    countryCode: z.string().optional(),
+    stateCode: z.string().optional(),
+    stateType: z.string().optional(),
+    coords: geoPointSchema.optional(),
   }),
 });
 

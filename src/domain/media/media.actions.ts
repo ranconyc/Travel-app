@@ -1,16 +1,9 @@
 "use server";
 
-import { prisma } from "@/lib/db/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
-
-type MediaCategory =
-  | "AVATAR"
-  | "COVER"
-  | "GALLERY"
-  | "REVIEW_PHOTO"
-  | "OFFICIAL";
-type MediaType = "IMAGE" | "VIDEO" | "VR_360";
+import { createMedia, getUserMedia } from "./media.service";
+import { MediaCategory, MediaType } from "@prisma/client";
 
 interface CreateMediaInput {
   url: string;
@@ -31,15 +24,13 @@ export async function createUserMediaAction(input: CreateMediaInput) {
       return { success: false, error: "Not authenticated" };
     }
 
-    const media = await prisma.media.create({
-      data: {
-        url: input.url,
-        publicId: input.publicId,
-        type: input.type ?? "IMAGE",
-        category: input.category ?? "GALLERY",
-        metadata: input.metadata ?? undefined,
-        userId: session.user.id,
-      },
+    const media = await createMedia({
+      url: input.url,
+      publicId: input.publicId,
+      type: input.type,
+      category: input.category,
+      metadata: input.metadata,
+      userId: session.user.id,
     });
 
     revalidatePath(`/profile/${session.user.id}`);
@@ -78,13 +69,7 @@ export async function getUserMediaAction(options?: {
       return { success: false, error: "Not authenticated" };
     }
 
-    const media = await prisma.media.findMany({
-      where: {
-        userId: session.user.id,
-        ...(options?.category && { category: options.category }),
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const media = await getUserMedia(session.user.id, options?.category);
 
     return { success: true, data: media };
   } catch (error) {

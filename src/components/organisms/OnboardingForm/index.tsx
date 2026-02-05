@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -8,7 +8,10 @@ import {
   onboardingIdentitySchema,
   OnboardingIdentityFormValues,
 } from "@/domain/user/onboarding.schema";
-import { useCompleteIdentityOnboarding } from "@/domain/user/user.hooks";
+import {
+  useCompleteIdentityOnboarding,
+  useProfileDraft,
+} from "@/domain/user/user.hooks";
 import { useUser } from "@/app/providers/UserProvider";
 import { toast } from "sonner";
 
@@ -17,6 +20,10 @@ import { BasicInfoStep } from "./steps/BasicInfoStep";
 import { RhythmStep } from "./steps/RhythmStep";
 import { BudgetStep } from "./steps/BudgetStep";
 import { StyleStep } from "./steps/StyleStep";
+
+import { OnboardingFooter } from "./OnboardingFooter";
+import { OnboardingHeader } from "./OnboardingHeader";
+import Button from "@/components/atoms/Button";
 
 interface OnboardingFormProps {
   onComplete?: () => void;
@@ -37,6 +44,7 @@ export default function OnboardingForm({
 
   // Step Management
   const currentStep = parseInt(searchParams.get("step") || "0", 10);
+  const totalSteps = 4;
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
     initialValues?.avatarUrl || user?.avatarUrl || null,
@@ -46,7 +54,8 @@ export default function OnboardingForm({
     resolver: zodResolver(onboardingIdentitySchema),
     mode: "onChange",
     defaultValues: {
-      fullName: initialValues?.fullName ?? user?.name ?? "",
+      firstName: initialValues?.firstName ?? "",
+      lastName: initialValues?.lastName ?? "",
       avatarUrl: initialValues?.avatarUrl ?? user?.avatarUrl ?? "",
       birthday: initialValues?.birthday ?? {
         month: "",
@@ -71,6 +80,9 @@ export default function OnboardingForm({
     formState: { isSubmitting },
   } = form;
 
+  // Sync with local draft
+  const { clearDraft } = useProfileDraft(form);
+
   // Helper to change step
   const setStep = (step: number) => {
     const params = new URLSearchParams(searchParams);
@@ -78,21 +90,72 @@ export default function OnboardingForm({
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const handleNext = async (goComplete = false) => {
-    await handleSubmit(async (data) => {
-      try {
-        await completeIdentityMutation.mutateAsync(data);
-        if (goComplete) {
-          toast.success("Profile saved!");
-          onComplete?.();
-        } else {
-          setStep(currentStep + 1);
+  const stepFields = {
+    0: ["firstName", "location", "birthday", "gender"],
+    1: ["rhythm"],
+    2: ["budget", "currency"],
+    3: ["travelStyles"],
+  } as const;
+
+  // Validation Guard: Prevent skipping steps
+  useEffect(() => {
+    const validatePreviousSteps = async () => {
+      // If we are on step > 0, check if previous steps are valid
+      if (currentStep > 0) {
+        for (let i = 0; i < currentStep; i++) {
+          const fields = stepFields[i as keyof typeof stepFields];
+          const isValid = await form.trigger(fields as any);
+          if (!isValid) {
+            // If any previous step is invalid, force user back to that step
+            setStep(i);
+            toast.error("Please complete previous steps first");
+            break;
+          }
         }
-      } catch (error) {
-        toast.error("Failed to save progress");
-        console.error(error);
       }
-    })();
+    };
+
+    validatePreviousSteps();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
+  const handleNext = async (goComplete = false) => {
+    const fields = stepFields[currentStep as keyof typeof stepFields];
+    const isValid = await form.trigger(fields as any);
+
+    if (!isValid) return;
+
+    if (goComplete || currentStep === 3) {
+      // 3 is last step
+      await handleSubmit(async (data) => {
+        try {
+          await completeIdentityMutation.mutateAsync(data);
+          toast.success("Profile saved!");
+          clearDraft();
+          onComplete?.();
+        } catch (error) {
+          toast.error("Failed to save progress");
+          console.error(error);
+        }
+      })();
+    } else {
+      setStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setStep(currentStep - 1);
+    }
+  };
+
+  const handleSkip = () => {
+    // Skip logic: just move next
+    setStep(currentStep + 1);
+  };
+
+  const handleClose = () => {
+    router.push("/");
   };
 
   const handleAvatarSelect = (file: File, preview: string) => {
@@ -100,30 +163,64 @@ export default function OnboardingForm({
     // Upload logic placeholder
   };
 
-  const stepProps = {
-    form,
-    onNext: handleNext,
-  };
-
   return (
     <div className={className}>
-      {currentStep === 0 && (
-        <BasicInfoStep
-          {...stepProps}
-          avatarPreview={avatarPreview}
-          onAvatarSelect={handleAvatarSelect}
-          isSubmitting={isSubmitting}
-        />
-      )}
-      {currentStep === 1 && (
-        <RhythmStep {...stepProps} onBack={() => setStep(0)} />
-      )}
-      {currentStep === 2 && (
-        <BudgetStep {...stepProps} onBack={() => setStep(1)} />
-      )}
-      {currentStep === 3 && (
-        <StyleStep {...stepProps} onBack={() => setStep(2)} />
-      )}
+      <OnboardingHeader
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+        onBack={handleBack}
+        onSkip={handleSkip}
+        onClose={handleClose}
+      />
+
+      <div className="pb-lg">
+        {currentStep === 0 && (
+          <BasicInfoStep
+            form={form}
+            avatarPreview={avatarPreview}
+            onAvatarSelect={handleAvatarSelect}
+          />
+        )}
+        {currentStep === 1 && <RhythmStep form={form} />}
+        {currentStep === 2 && <BudgetStep form={form} />}
+        {currentStep === 3 && <StyleStep form={form} />}
+      </div>
+
+      <OnboardingFooter>
+        <div className="flex gap-3 w-full">
+          {currentStep === 0 ? (
+            <div className="flex gap-sm w-full">
+              <Button
+                type="button"
+                variant="ghost"
+                fullWidth
+                onClick={() => handleNext(true)}
+              >
+                Save & Finish
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                loading={isSubmitting}
+                onClick={() => handleNext(false)}
+              >
+                Tell us more
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button
+                type="button"
+                className="flex-2 w-full"
+                onClick={() => handleNext(currentStep === 3)}
+                loading={isSubmitting}
+              >
+                {currentStep === 3 ? "Finish" : "Continue"}
+              </Button>
+            </>
+          )}
+        </div>
+      </OnboardingFooter>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/atoms/Avatar";
-import { useProfileUser } from "../../store/useProfileStore";
+import { useProfileUser, useIsLocal } from "../../store/useProfileStore";
 
 const Badge = ({ title }: { title: string }) => (
   <div className="px-3 py-1 bg-brand font-bold text-micro tracking-widest text-white border uppercase border-brand  rounded-full absolute -bottom-1 left-1/2 -translate-x-1/2 shadow-sm z-10">
@@ -9,14 +9,12 @@ const Badge = ({ title }: { title: string }) => (
 
 export default function ProfileAvatar() {
   const profileUser = useProfileUser();
-
+  const isMyCity = useIsLocal();
   if (!profileUser) return null;
 
   const avatarUrl =
     profileUser.avatarUrl ||
     "https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1577909/";
-  const isMyCity =
-    profileUser.currentCityId === profileUser.profile?.homeBaseCityId;
 
   return (
     <div className="relative">
@@ -25,7 +23,7 @@ export default function ProfileAvatar() {
         alt={profileUser.name || "User"}
         size={150}
         variant="square"
-        border
+        showBorder
       />
       <Badge title={isMyCity ? "local" : "visitor"} />
     </div>

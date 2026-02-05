@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useRef } from "react";
+import React from "react";
 import { UseFormReturn, Controller } from "react-hook-form";
 import { OnboardingIdentityFormValues } from "@/domain/user/onboarding.schema";
 import AvatarUpload from "@/components/molecules/AvatarUpload";
@@ -9,24 +7,20 @@ import { Autocomplete } from "@/components/molecules/Autocomplete";
 import { searchCityAction } from "@/domain/city/city.actions";
 import { CitySearchResult } from "@/domain/city/city.schema";
 import ErrorMessage from "@/components/atoms/ErrorMessage";
-import { SelectionCard } from "@/components/atoms/SelectionCard";
-import Button from "@/components/atoms/Button";
-import { OnboardingFooter } from "../OnboardingFooter";
+import { SelectionCard } from "@/components/molecules/SelectionCard";
+import Typography from "@/components/atoms/Typography";
+import BirthdayInput from "@/components/molecules/BirthdayInput";
 
 interface BasicInfoStepProps {
   form: UseFormReturn<OnboardingIdentityFormValues>;
   avatarPreview: string | null;
   onAvatarSelect: (file: File, preview: string) => void;
-  onNext: (goComplete?: boolean) => void;
-  isSubmitting: boolean;
 }
 
 export function BasicInfoStep({
   form,
   avatarPreview,
   onAvatarSelect,
-  onNext,
-  isSubmitting,
 }: BasicInfoStepProps) {
   const {
     register,
@@ -36,58 +30,55 @@ export function BasicInfoStep({
     formState: { errors },
   } = form;
 
-  const fullNameValue = watch("fullName");
-  const monthRef = useRef<HTMLInputElement>(null);
-  const dayRef = useRef<HTMLInputElement>(null);
-  const yearRef = useRef<HTMLInputElement>(null);
-
-  const handleDateChange = (
-    part: "month" | "day" | "year",
-    val: string,
-    nextRef?: React.RefObject<HTMLInputElement | null>,
-  ) => {
-    if (val && !/^\d*$/.test(val)) return;
-    setValue(`birthday.${part}`, val, { shouldValidate: true });
-    if (part !== "year" && val.length === 2 && nextRef?.current) {
-      nextRef.current.focus();
-    }
-  };
+  const firstNameValue = watch("firstName");
+  const lastNameValue = watch("lastName");
+  const genderValue = watch("gender");
 
   const birthdayError =
     errors.birthday?.month?.message ||
     errors.birthday?.day?.message ||
     errors.birthday?.year?.message;
 
-  const genderValue = watch("gender");
+  // Generate initials from firstName + lastName
+  const initials = [firstNameValue?.[0], lastNameValue?.[0]]
+    .filter(Boolean)
+    .join("");
 
   return (
     <div className="space-y-2">
-      <div className="text-center mb-8">
-        <h2 className="text-h3 text-txt-main mb-2">
+      <div className="text-center">
+        <Typography variant="h3" color="main" className="mb-2">
           Tell us more about yourself
-        </h2>
-        <p className="text-p text-txt-sec">
+        </Typography>
+        <Typography variant="p" color="sec">
           Help us personalize your experience
-        </p>
+        </Typography>
       </div>
 
       <div className="flex justify-center mb-6">
         <AvatarUpload
           src={avatarPreview}
           onSelect={onAvatarSelect}
-          initials={fullNameValue
-            ?.split(" ")
-            .map((n: string) => n[0])
-            .join("")}
+          initials={initials}
         />
       </div>
 
-      <Input
-        label="What is your full name?"
-        placeholder="e.g., Christopher Columbus"
-        error={errors.fullName?.message}
-        {...register("fullName")}
-      />
+      <div className="flex gap-3">
+        <Input
+          id="first-name"
+          label="First name"
+          placeholder="e.g., Christopher"
+          error={errors.firstName?.message}
+          {...register("firstName")}
+        />
+        <Input
+          id="last-name"
+          label="Last name (optional)"
+          placeholder="e.g., Columbus"
+          error={errors.lastName?.message}
+          {...register("lastName")}
+        />
+      </div>
 
       <div className="space-y-2">
         <Controller
@@ -123,6 +114,9 @@ export function BasicInfoStep({
                 onChange({
                   name: val,
                   placeId: cityOpt?.id,
+                  countryCode: cityOpt?.countryCode,
+                  stateCode: cityOpt?.stateCode,
+                  stateType: (cityOpt as any)?.stateType, // Cast until schema update propagates
                   coords,
                 });
               }}
@@ -132,74 +126,12 @@ export function BasicInfoStep({
         />
       </div>
 
-      <div className="space-y-2">
-        <label
-          htmlFor="birthday-month"
-          className="text-sm font-semibold capitalize text-txt-main"
-        >
-          When were you born?
-        </label>
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <Input
-              id="birthday-month"
-              aria-label="Month"
-              {...register("birthday.month")}
-              onChange={(e) => {
-                register("birthday.month").onChange(e);
-                handleDateChange("month", e.target.value, dayRef);
-              }}
-              ref={(e: any) => {
-                register("birthday.month").ref(e);
-                if (monthRef) (monthRef as any).current = e;
-              }}
-              placeholder="MM"
-              variant={birthdayError ? "error" : "default"}
-              maxLength={2}
-              className="text-center"
-            />
-          </div>
-          <div className="flex-1">
-            <Input
-              aria-label="Day"
-              {...register("birthday.day")}
-              onChange={(e) => {
-                register("birthday.day").onChange(e);
-                handleDateChange("day", e.target.value, yearRef);
-              }}
-              ref={(e: any) => {
-                register("birthday.day").ref(e);
-                if (dayRef) (dayRef as any).current = e;
-              }}
-              placeholder="DD"
-              variant={birthdayError ? "error" : "default"}
-              maxLength={2}
-              className="text-center"
-            />
-          </div>
-          <div className="flex-2">
-            <Input
-              aria-label="Year"
-              {...register("birthday.year")}
-              onChange={(e) => {
-                register("birthday.year").onChange(e);
-                handleDateChange("year", e.target.value);
-              }}
-              ref={(e: any) => {
-                register("birthday.year").ref(e);
-                if (yearRef) (yearRef as any).current = e;
-              }}
-              placeholder="YYYY"
-              variant={birthdayError ? "error" : "default"}
-              maxLength={4}
-              className="text-center"
-            />
-          </div>
-        </div>
-        {birthdayError && (
-          <ErrorMessage id="birthday-error" error={String(birthdayError)} />
-        )}
-      </div>
+      <BirthdayInput
+        monthRegistration={register("birthday.month")}
+        dayRegistration={register("birthday.day")}
+        yearRegistration={register("birthday.year")}
+        error={birthdayError}
+      />
 
       <div className="space-y-3">
         <span className="text-sm font-semibold capitalize text-txt-main">
@@ -223,27 +155,6 @@ export function BasicInfoStep({
           className="mt-1"
         />
       </div>
-
-      <OnboardingFooter>
-        <div className="flex flex-col gap-3 w-full">
-          <Button
-            type="button"
-            fullWidth
-            loading={isSubmitting}
-            onClick={() => onNext(false)}
-          >
-            Tell us more
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            fullWidth
-            onClick={() => onNext(true)}
-          >
-            Save & Finish
-          </Button>
-        </div>
-      </OnboardingFooter>
     </div>
   );
 }

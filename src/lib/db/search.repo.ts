@@ -129,3 +129,36 @@ export async function saveSearchEvent(
     };
   }
 }
+
+/**
+ * Get popular search queries
+ */
+export async function getPopularSearches(
+  limit = 10,
+  since?: Date,
+): Promise<{ query: string; count: number }[]> {
+  const topSearches = await prisma.searchEvent.groupBy({
+    by: ["searchQuery"],
+    where: since
+      ? {
+          timestamp: {
+            gte: since,
+          },
+        }
+      : undefined,
+    _count: {
+      searchQuery: true,
+    },
+    orderBy: {
+      _count: {
+        searchQuery: "desc",
+      },
+    },
+    take: limit,
+  });
+
+  return topSearches.map((item) => ({
+    query: item.searchQuery,
+    count: item._count.searchQuery,
+  }));
+}

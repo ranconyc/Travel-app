@@ -7,7 +7,7 @@ import { formatDate } from "@/domain/shared/utils/date";
 interface ReviewItem {
   id: string;
   name: string;
-  type: "country" | "city" | "activity";
+  type: "country" | "city" | "place";
   slug?: string; // for links
   entityId?: string; // alternate for links
   subtitle?: string;
@@ -27,9 +27,7 @@ export default function ReviewItemsList({
   if (items.length === 0) {
     return (
       <Block>
-        <Typography variant="h1" className="font-bold w-fit capitalize">
-          {title}
-        </Typography>
+        <Typography variant="h3">{title}</Typography>
         <div className="flex flex-col items-center justify-center p-8 text-secondary">
           <CheckCircle className="w-12 h-12 mb-2 text-green-500" />
           <p>All caught up! No items to review.</p>
@@ -41,12 +39,12 @@ export default function ReviewItemsList({
   return (
     <Block>
       <div className="flex items-center justify-between mb-md">
-        <Typography variant="h1" className="font-bold w-fit capitalize">
-          {title}
-        </Typography>
-        <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-          {items.length} pending
-        </span>
+        <Typography variant="h3">{title}</Typography>
+        <div className="bg-error/10 border border-error p-md rounded-pill">
+          <Typography variant="body" color="error">
+            {items.length} pending
+          </Typography>
+        </div>
       </div>
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -57,13 +55,11 @@ export default function ReviewItemsList({
                 <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-500" />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  {item.name}
-                </h3>
-                <p className="text-xs text-secondary dark:text-gray-400">
+                <Typography variant="ui">{item.name}</Typography>
+                <Typography variant="body" color="sec">
                   {item.subtitle} {item.autoCreated && "• Auto-created"}
                   {item.createdAt && ` • ${formatDate(item.createdAt)}`}
-                </p>
+                </Typography>
               </div>
             </div>
 
@@ -86,8 +82,8 @@ function getLink(item: ReviewItem): string {
       return `/country/${item.entityId}`;
     case "city":
       return `/city/${item.entityId}`;
-    case "activity":
-      return `/activity/${item.slug}`;
+    case "place":
+      return `/place/${item.slug}`;
     default:
       return "#";
   }

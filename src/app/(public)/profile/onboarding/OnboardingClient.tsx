@@ -14,8 +14,8 @@ export default function OnboardingClient({
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg-main p-4">
-      <div className="w-full max-w-2xl">
+    <div className="relative px-4 bg-bg-main min-h-screen">
+      <div className="w-full max-w-2xl min-h-full">
         <OnboardingForm
           initialValues={initialValues}
           onComplete={() => {

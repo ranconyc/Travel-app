@@ -25,7 +25,7 @@ export default function PageHeader({
   return (
     <header
       className={cn(
-        "bg-bg-main sticky top-0 left-0 right-0 z-50 p-md",
+        "bg-bg sticky top-0 left-0 right-0 z-50 px-lg pb-md",
         className,
       )}
     >

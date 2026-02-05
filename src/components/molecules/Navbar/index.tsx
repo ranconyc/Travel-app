@@ -7,7 +7,7 @@ import {
   MessageCircle,
   TowerControl,
 } from "lucide-react";
-import { useUnreadCount } from "@/lib/hooks/useUnreadCount";
+import { useUnreadCount } from "@/domain/chat/hooks/useUnreadCount";
 import Badge from "@/components/atoms/Badge";
 import { Avatar } from "@/components/atoms/Avatar";
 import { useUser } from "@/app/providers/UserProvider";
@@ -47,7 +47,7 @@ export default function Navbar({
   const totalUnread = unreadCount + unreadNotifications;
 
   return (
-    <nav className="fixed bottom-xs left-12 right-12 z-sticky">
+    <nav className="fixed bottom-xxl left-xxl right-xxl z-sticky">
       <ul className="p-md bg-surface/80 backdrop-blur-sm text-secondary flex items-center justify-around rounded-full shadow-lg">
         {/* Discovery */}
         <li className={navItemVariants({ active: pathname === "/" })}>
@@ -73,10 +73,7 @@ export default function Navbar({
           <Link href="/chats">
             <MessageCircle size={iconsSize} />
             {totalUnread > 0 && (
-              <Badge
-                variant="danger"
-                className="absolute -top-1 -right-1 px-1 py-0 min-w-[20px] h-5 flex items-center justify-center text-[10px] leading-none ring-2 ring-surface rounded-full"
-              >
+              <Badge className="absolute -top-1 -right-1 px-1 py-0 min-w-[20px] h-5 flex items-center justify-center text-[10px] leading-none border-2 border-surface bg-error text-white rounded-full">
                 {totalUnread > 99 ? "99+" : totalUnread}
               </Badge>
             )}

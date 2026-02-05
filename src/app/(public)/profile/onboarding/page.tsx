@@ -16,6 +16,22 @@ function parseBirthday(date: Date | null | undefined) {
   };
 }
 
+/**
+ * Simple fallback to split OAuth name for existing users
+ * (new users get firstName/lastName split at auth time in createUser event)
+ */
+function splitNameFallback(fullName: string | null | undefined): {
+  firstName: string;
+  lastName: string;
+} {
+  if (!fullName) return { firstName: "", lastName: "" };
+  const parts = fullName.trim().split(/\s+/);
+  return {
+    firstName: parts[0] || "",
+    lastName: parts.slice(1).join(" ") || "",
+  };
+}
+
 export default async function OnboardingPage() {
   const user = await getCurrentUser();
 
@@ -23,9 +39,13 @@ export default async function OnboardingPage() {
     redirect("/signin");
   }
 
+  // For existing users without profile.firstName, fallback to splitting user.name
+  const nameFallback = splitNameFallback(user.name);
+
   // Map existing user data to form initial values
   const initialValues: Partial<OnboardingIdentityFormValues> = {
-    fullName: user.name || "",
+    firstName: user.profile?.firstName || nameFallback.firstName,
+    lastName: user.profile?.lastName || nameFallback.lastName,
     avatarUrl: user.avatarUrl || "",
   };
 

@@ -5,7 +5,7 @@ import {
   getScoreColorClass,
   getScoreLabel,
   MatchScoreResult,
-} from "@/services/discovery/matching.service";
+} from "@/domain/discovery/services/matching.service";
 import Typography from "@/components/atoms/Typography";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";

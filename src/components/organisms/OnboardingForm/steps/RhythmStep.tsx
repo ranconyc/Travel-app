@@ -1,23 +1,18 @@
 "use client";
 
-import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { OnboardingIdentityFormValues } from "@/domain/user/onboarding.schema";
-import { WizardStepHeader } from "@/components/molecules/WizardStepHeader";
-import { SelectionCard } from "@/components/atoms/SelectionCard";
+import { SelectionCard } from "@/components/molecules/SelectionCard";
 import ErrorMessage from "@/components/atoms/ErrorMessage";
-import Button from "@/components/atoms/Button";
 import dailyRhythms from "@/data/dailyRhythms.json";
 import { ICON_MAP } from "../onboarding.config";
 import { Sun } from "lucide-react";
 
 interface RhythmStepProps {
   form: UseFormReturn<OnboardingIdentityFormValues>;
-  onBack: () => void;
-  onNext: (goComplete?: boolean) => void;
 }
 
-export function RhythmStep({ form, onBack, onNext }: RhythmStepProps) {
+export function RhythmStep({ form }: RhythmStepProps) {
   const {
     setValue,
     watch,
@@ -26,12 +21,15 @@ export function RhythmStep({ form, onBack, onNext }: RhythmStepProps) {
   const rhythmValue = watch("rhythm");
 
   return (
-    <div className="space-y-3">
-      <WizardStepHeader
-        title="What is your travel Rhythm?"
-        description="Select the option that matches you the most"
-        onBack={onBack}
-      />
+    <div className="">
+      <div className="mb-6">
+        <h2 className="text-h3 font-bold text-txt-main mb-2">
+          What is your travel Rhythm?
+        </h2>
+        <p className="text-p text-txt-sec">
+          Select the option that matches you the most
+        </p>
+      </div>
       <div className="space-y-3">
         {dailyRhythms.map((item) => {
           const Icon = ICON_MAP[item.icon] || Sun;
@@ -51,19 +49,6 @@ export function RhythmStep({ form, onBack, onNext }: RhythmStepProps) {
           );
         })}
         <ErrorMessage id="rhythm-error" error={errors.rhythm?.message} />
-      </div>
-      <div className="flex gap-3 mt-8">
-        <Button
-          type="button"
-          variant="ghost"
-          className="flex-1"
-          onClick={() => onNext(false)}
-        >
-          Skip
-        </Button>
-        <Button type="button" className="flex-2" onClick={() => onNext(false)}>
-          Continue
-        </Button>
       </div>
     </div>
   );

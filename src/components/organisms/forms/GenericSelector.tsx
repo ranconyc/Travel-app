@@ -1,6 +1,6 @@
 "use client";
 
-import SelectionCard from "@/components/atoms/SelectionCard";
+import SelectionCard from "@/components/molecules/SelectionCard";
 
 interface SelectionOption {
   id: string;

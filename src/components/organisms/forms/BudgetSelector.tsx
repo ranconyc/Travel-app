@@ -2,7 +2,7 @@
 
 import React from "react";
 import * as Icons from "lucide-react";
-import SelectionCard from "@/components/atoms/SelectionCard";
+import SelectionCard from "@/components/molecules/SelectionCard";
 import budgetData from "@/data/budget.json";
 
 interface BudgetItem {

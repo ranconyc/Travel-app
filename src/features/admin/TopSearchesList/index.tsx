@@ -2,7 +2,7 @@ import Link from "next/link";
 import Block from "@/components/atoms/Block";
 import Typography from "@/components/atoms/Typography";
 import { Search, TrendingUp } from "lucide-react";
-import { Timeframe } from "@/lib/db/admin.repo";
+import { Timeframe } from "@/domain/admin/admin.types";
 
 interface TopSearchItem {
   query: string;

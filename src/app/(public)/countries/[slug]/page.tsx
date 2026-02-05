@@ -1,13 +1,12 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import PageNavigation from "@/components/molecules/PageNavigation";
+
 import { FinanceSection } from "./components/FinanceSection";
 import CultureSection from "./components/CultureSection";
 import HealthSection from "./components/HealthSection";
 import { getCountryWithCities } from "@/lib/db/country.repo";
-import SocialLinks from "./components/SocialLinks";
-import PageInfo from "@/components/molecules/PageInfo";
+import PageHeader from "@/components/organisms/PageHeader";
 import CitiesSection from "./components/CitiesSection";
-import HeroImage from "@/components/molecules/HeroImage";
 import Stats from "@/components/molecules/Stats";
 import { StatItem } from "@/domain/common.schema";
 import { Globe2, Users } from "lucide-react";
@@ -22,7 +21,7 @@ import Block from "@/components/atoms/Block";
 import FloatingCardList from "@/components/molecules/FloatingCardList";
 import VisaRequirement from "@/components/molecules/VisaRequirement";
 import { type VisaRequirement as VisaRequirementType } from "@/types/visa.types";
-import { visaService } from "@/services/visa.service";
+import { visaService } from "@/domain/country/services/visa.service";
 
 import commonPhrasesData from "@/data/world/common_phrases.json";
 
@@ -32,6 +31,41 @@ export const getGiniInsight = (giniValue: number): string => {
   if (giniValue < 45) return "Moderate Wealth Gap";
   return "Significant Economic Contrast";
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const country = await getCountryWithCities(slug);
+
+  if (!country) {
+    return {
+      title: "Country Not Found",
+    };
+  }
+
+  const cityNameStr =
+    country.cities && country.cities.length > 0
+      ? ` like ${country.cities
+          .slice(0, 3)
+          .map((c) => c.name)
+          .join(", ")}`
+      : "";
+
+  return {
+    title: `${country.name} Travel Guide | Top Cities & Places`,
+    description: `Discover ${country.name}. Explore top destinations${cityNameStr}. Plan your trip with our travel guide.`,
+    openGraph: {
+      title: `${country.name} Travel Guide`,
+      description: `Plan your trip to ${country.name}.`,
+      images: [
+        country.imageHeroUrl || (country.flags as any)?.png || "",
+      ].filter(Boolean),
+    },
+  };
+}
 
 export default async function CountryPage({
   params,
@@ -51,8 +85,6 @@ export default async function CountryPage({
   // Get primary language for common phrases using the country data
   // The DB stores languages as { "heb": "Hebrew" }, so we take the first key ("heb")
   const primaryLanguageCode = Object.keys(country.languages || {})[0];
-
-  console.log("primaryLanguageCode", primaryLanguageCode);
 
   // Geography & Logistics Logic
   // Cast to any for Alpha speed - type definition mismatch fix scheduled for Beta
@@ -101,42 +133,27 @@ export default async function CountryPage({
 
   return (
     <div className="bg-main min-h-screen selection:bg-brand selection:text-white">
-      <PageNavigation
-        title={country.name}
-        locationName={country.subRegion || country.region || ""}
-        showSocial={true}
-      />
       <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-12">
-        <div className="flex flex-col gap-8 mt-8 md:mt-12">
-          {/* Page Info */}
-          <PageInfo
-            title={country.name}
-            subtitle={country.subRegion || country.region || ""}
-          />
-
-          {/* User Location Indicator */}
-          {inThisCountry && (
-            <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
-              <Globe2 size={14} />
-              <span className="text-upheader font-bold uppercase tracking-wider">
-                You are in {country.name}
-              </span>
-            </div>
-          )}
-
-          {/* Hero Image */}
-          <HeroImage
-            src={
-              country.imageHeroUrl ||
-              (country.flags as any)?.svg ||
-              (country.flags as any)?.png
-            }
-            name={country.name}
-          />
-
-          {/* Social Links */}
-          <SocialLinks query={country.name} />
-        </div>
+        <PageHeader
+          title={country.name}
+          subtitle={country.subRegion || country.region || ""}
+          heroImageSrc={
+            country.imageHeroUrl ||
+            (country.flags as any)?.svg ||
+            (country.flags as any)?.png
+          }
+          socialQuery={country.name}
+          badge={
+            inThisCountry && (
+              <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
+                <Globe2 size={14} />
+                <span className="text-upheader font-bold uppercase tracking-wider">
+                  You are in {country.name}
+                </span>
+              </div>
+            )
+          }
+        />
 
         {/* Stats */}
         <Stats stats={stats} />

@@ -12,6 +12,7 @@ export type AutoOption = {
   id: string;
   label: string;
   subtitle?: string;
+  emoji?: string;
 };
 
 export type AutocompleteProps = {
@@ -117,7 +118,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
       <div
         ref={containerRef}
         className={cn(
-          "flex flex-col gap-2 w-full text-left relative",
+          "flex flex-col gap-sm w-full text-left relative",
           className,
         )}
       >
@@ -136,6 +137,7 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
           aria-owns={`${id}-listbox`}
           aria-controls={`${id}-listbox`}
           aria-expanded={open}
+          className="relative"
         >
           <AutocompleteInput
             id={id}
@@ -166,25 +168,25 @@ export const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps>(
             aria-invalid={!!error || undefined}
             aria-describedby={error ? `${id}-error` : undefined}
           />
+
+          <AutocompleteResults
+            open={open}
+            loading={loading}
+            err={err}
+            merged={merged}
+            qVal={qVal}
+            id={id}
+            activeIndex={activeIndex}
+            highlight={highlight}
+            noResultsText={noResultsText}
+            listClassName={listClassName}
+            optionClassName={optionClassName}
+            onSelect={commitSelection}
+            onHover={setActiveIndex}
+          />
         </div>
 
         {selectedOptions && <div className="mt-1">{selectedOptions}</div>}
-
-        <AutocompleteResults
-          open={open}
-          loading={loading}
-          err={err}
-          merged={merged}
-          qVal={qVal}
-          id={id}
-          activeIndex={activeIndex}
-          highlight={highlight}
-          noResultsText={noResultsText}
-          listClassName={listClassName}
-          optionClassName={optionClassName}
-          onSelect={commitSelection}
-          onHover={setActiveIndex}
-        />
 
         <ErrorMessage id={`${id}-error`} error={error} />
       </div>

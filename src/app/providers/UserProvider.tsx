@@ -3,7 +3,7 @@
 import { User } from "@/domain/user/user.schema";
 import { createContext, useContext, useEffect } from "react";
 import { useAuthenticatedUser } from "@/domain/user/user.hooks";
-import { useUnreadCount } from "@/lib/hooks/useUnreadCount";
+import { useUnreadCount } from "@/domain/chat/hooks/useUnreadCount";
 import { Client } from "@pusher/push-notifications-web";
 
 const UserContext = createContext<User | null>(null);
@@ -28,8 +28,6 @@ export function UserProvider({
 function GlobalListeners() {
   useUnreadCount();
   const user = useUser();
-
-  console.log("GlobalListeners mounted");
 
   useEffect(() => {
     if (typeof window === "undefined" || !user) return; // Only run on client and if logged in
@@ -56,9 +54,7 @@ function GlobalListeners() {
       .start()
       .then(() => beamsClient.addDeviceInterest("global"))
       .then(() => beamsClient.addDeviceInterest(`user-${user.id}`)) // Subscribe to user specific channel
-      .then(() =>
-        console.log("[Pusher Beams] Successfully registered and subscribed!"),
-      )
+
       .catch((e: unknown) =>
         console.error("[Pusher Beams] Could not register:", e),
       );

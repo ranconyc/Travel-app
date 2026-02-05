@@ -54,7 +54,7 @@ export function handleAsyncError(
 
   // In production, send to error tracking service
   if (process.env.NODE_ENV === "production") {
-    // TODO: Integrate with Sentry or similar
+    // Placeholder for Sentry integration
     // logToErrorTracking(error, { context: logContext, userMessage });
   }
 }

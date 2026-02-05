@@ -35,6 +35,7 @@ const buttonVariants = cva("button-base focus:ring-2 focus:ring-brand/50", {
       md: "px-xl h-11 text-base",
       lg: "px-xxl h-14 text-lg font-bold",
       icon: "w-11 h-11", // Specific size for icon variant
+      none: "",
     },
     fullWidth: {
       true: "w-full",

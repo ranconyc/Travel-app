@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GooglePlacesService } from "@/domain/discovery/googlePlaces.service";
-import { apiLockService } from "@/services/api-lock.service";
+import {
+  getLockStats,
+  getSyncStatus,
+} from "@/domain/discovery/googlePlaces.service";
+import { apiLockService } from "@/lib/services/api-lock.service";
 
 export async function GET(req: NextRequest) {
   try {
@@ -10,13 +13,13 @@ export async function GET(req: NextRequest) {
 
     // Get overall lock statistics
     const lockStats = apiLockService.getStats();
-    
+
     // Get Google Places service stats
-    const googlePlacesStats = GooglePlacesService.getLockStats();
+    const googlePlacesStats = getLockStats();
 
     let syncStatus = null;
     if (cityId && interestId) {
-      syncStatus = GooglePlacesService.getSyncStatus(cityId, interestId);
+      syncStatus = getSyncStatus(cityId, interestId);
     }
 
     return NextResponse.json({
@@ -29,7 +32,7 @@ export async function GET(req: NextRequest) {
     console.error("GET /api/admin/locks error:", err);
     return NextResponse.json(
       { error: err?.message ?? "Failed to fetch lock statistics" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -44,7 +47,7 @@ export async function DELETE(req: NextRequest) {
       // Clear specific lock
       const lockKey = `sync:${cityId}:${interestId}`;
       (apiLockService as any).locks.delete(lockKey);
-      
+
       return NextResponse.json({
         message: `Cleared lock for ${cityId}:${interestId}`,
         timestamp: new Date().toISOString(),
@@ -52,7 +55,7 @@ export async function DELETE(req: NextRequest) {
     } else {
       // Clear all expired locks
       apiLockService.cleanup();
-      
+
       return NextResponse.json({
         message: "Cleaned up expired locks",
         timestamp: new Date().toISOString(),
@@ -62,7 +65,7 @@ export async function DELETE(req: NextRequest) {
     console.error("DELETE /api/admin/locks error:", err);
     return NextResponse.json(
       { error: err?.message ?? "Failed to clear locks" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -8,7 +8,6 @@ import {
   handleSendMessage,
   handleMarkMessagesAsRead,
   handleCreateOrGetChat,
-  handleGetUserFriends,
 } from "@/domain/chat/chat.service";
 
 /**
@@ -62,15 +61,5 @@ export const createOrGetChat = createSafeAction(
   z.object({ otherUserId: z.string() }),
   async ({ otherUserId }, userId) => {
     return await handleCreateOrGetChat(userId, otherUserId);
-  },
-);
-
-/**
- * Get all accepted friends for the current user
- */
-export const getUserFriends = createSafeAction(
-  z.object({}).optional(),
-  async (_, userId) => {
-    return await handleGetUserFriends(userId);
   },
 );

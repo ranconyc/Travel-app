@@ -11,6 +11,7 @@ import {
 } from "@/domain/city/city.actions";
 import { ActionResponse } from "@/types/actions";
 
+// Generate a new city
 export function useGenerateCity() {
   const queryClient = useQueryClient();
 
@@ -32,6 +33,7 @@ export function useGenerateCity() {
   });
 }
 
+// Get all cities
 export function useCities(options?: { coords?: { lat: number; lng: number } }) {
   const { data, ...queryInfo } = useQuery<City[]>({
     queryKey: ["cities", options?.coords],

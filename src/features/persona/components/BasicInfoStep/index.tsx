@@ -6,7 +6,7 @@ import Input from "@/components/atoms/Input";
 import { PersonaFormValues } from "@/domain/persona/persona.schema";
 import { Autocomplete } from "@/components/molecules/Autocomplete";
 import AvatarCropModal from "@/features/persona/components/AvatarCropModal";
-import { searchCitiesAction } from "@/domain/city/city.search.action";
+import { searchCityAction } from "@/domain/city/city.actions";
 import Image from "next/image";
 import { CameraIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -47,7 +47,7 @@ export default function BasicInfoStep() {
 
     try {
       const { uploadToCloudinary } =
-        await import("@/lib/media/cloudinary.service");
+        await import("@/domain/media/cloudinary.service");
       const result = await uploadToCloudinary(blob);
 
       // Update with the secure URL from Cloudinary
@@ -136,7 +136,7 @@ export default function BasicInfoStep() {
                 value={value || ""}
                 onQueryChange={onChange} // Update form text as user types
                 loadOptions={async (q) => {
-                  const res = await searchCitiesAction({ query: q, limit: 5 });
+                  const res = await searchCityAction({ query: q, limit: 5 });
                   if (!res.success || !res.data) return [];
                   return res.data.map((c) => ({
                     id: c.id,

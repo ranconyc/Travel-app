@@ -36,12 +36,24 @@ export async function getCountryWithCities(cca3: string) {
 }
 
 /**
- * Finds a country by its unique cca3 code.
+ * Finds a country by its code (supports both 2-letter ISO2 and 3-letter CCA3).
  */
-export async function findCountryByCode(cca3: string) {
-  return prisma.country.findUnique({
-    where: { cca3: cca3.toUpperCase() },
+export async function findCountryByCode(countryCode: string) {
+  const code = countryCode.toUpperCase();
+
+  // Try CCA3 first (3-letter like "USA")
+  let country = await prisma.country.findUnique({
+    where: { cca3: code },
   });
+
+  // If not found, try ISO2 code (2-letter like "US")
+  if (!country) {
+    country = await prisma.country.findFirst({
+      where: { code: code },
+    });
+  }
+
+  return country;
 }
 
 // find the border countries by cca3
@@ -85,6 +97,36 @@ export async function updateCountry(
   } catch (error) {
     console.error("updateCountry error:", error);
     throw new Error("Failed to update country");
+  }
+}
+
+// Create new country
+export async function createCountry(data: Prisma.CountryCreateInput) {
+  try {
+    return await prisma.country.create({
+      data,
+    });
+  } catch (error) {
+    console.error("createCountry error:", error);
+    throw new Error("Failed to create country");
+  }
+}
+
+// Upsert country (update if exists, create if not)
+export async function upsertCountry(
+  id: string,
+  update: Prisma.CountryUpdateInput,
+  create: Prisma.CountryCreateInput,
+) {
+  try {
+    return await prisma.country.upsert({
+      where: { id },
+      update,
+      create,
+    });
+  } catch (error) {
+    console.error("upsertCountry error:", error);
+    throw new Error("Failed to upsert country");
   }
 }
 
@@ -146,4 +188,44 @@ export async function findNearbyCountries(
     console.error("findNearbyCountries error:", error);
     return [];
   }
+}
+
+/**
+ * Count total countries
+ */
+export async function countCountries() {
+  return prisma.country.count();
+}
+
+/**
+ * Get countries that need review
+ */
+export async function getCountriesNeedingReview() {
+  return prisma.country.findMany({
+    where: { needsReview: true },
+    select: {
+      id: true,
+      cca3: true,
+      name: true,
+      code: true,
+      autoCreated: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+/**
+ * Search countries by name or code
+ */
+export async function searchCountriesByNameOrCode(query: string, limit = 5) {
+  return prisma.country.findMany({
+    where: {
+      OR: [
+        { name: { contains: query, mode: "insensitive" } },
+        { code: { contains: query, mode: "insensitive" } },
+      ],
+    },
+    take: limit,
+  });
 }

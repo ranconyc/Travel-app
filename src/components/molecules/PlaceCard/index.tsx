@@ -6,7 +6,7 @@ import { Place } from "@/domain/place/place.schema";
 import {
   calculateMatchScore,
   MatchScoreResult,
-} from "@/services/discovery/matching.service";
+} from "@/domain/discovery/services/matching.service";
 import { getInterestLabel } from "@/domain/interests/interests.service";
 import MatchScoreBadge from "@/components/molecules/MatchScoreBadge";
 import Typography from "@/components/atoms/Typography";
@@ -93,7 +93,7 @@ function PlaceCard({
   }, [place.name, useUnsplash, imageUrl]);
 
   return (
-    <Card className="group relative overflow-hidden cursor-pointer rounded-3xl h-full shadow-card hover:shadow-xl transition-all duration-300 border-0">
+    <Card className="group relative overflow-hidden cursor-pointer rounded-3xl w-full aspect-[4/5] shadow-card hover:shadow-xl transition-all duration-300 border-0">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <ImageWithFallback
@@ -144,7 +144,7 @@ function PlaceCard({
             variant="h3"
             color="white"
             weight="bold"
-            className="leading-tight drop-shadow-md group-hover:text-primary-100 transition-colors"
+            className="leading-tight drop-shadow-md group-hover:text-primary-100 transition-colors line-clamp-2 min-h-[3rem]"
           >
             {place.name}
           </Typography>
@@ -174,28 +174,16 @@ function PlaceCard({
             )}
           </div>
 
-          {/* Primary Match Reason */}
-          {primaryReason && (
-            <div className={tagVariants({ intent: "primary" })}>
-              <Typography
-                variant="micro"
-                className="text-primary-100 font-medium"
-              >
-                ✨ {primaryReason}
-              </Typography>
-            </div>
-          )}
-
-          {/* Tags */}
+          {/* Tags - Simplified */}
           <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-white/10">
-            {place.tags.slice(0, 3).map((tag) => (
+            {place.tags.slice(0, 2).map((tag) => (
               <span key={tag} className={tagVariants({ intent: "default" })}>
                 {getInterestLabel(tag)}
               </span>
             ))}
-            {place.tags.length > 3 && (
+            {place.tags.length > 2 && (
               <span className={tagVariants({ intent: "more" })}>
-                +{place.tags.length - 3}
+                +{place.tags.length - 2}
               </span>
             )}
           </div>

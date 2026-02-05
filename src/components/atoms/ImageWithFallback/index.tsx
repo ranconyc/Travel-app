@@ -63,6 +63,8 @@ export default function ImageWithFallback({
       fill={fill}
       className={className}
       onError={() => setError(true)}
+      draggable={false}
+      onContextMenu={(e) => e.preventDefault()}
       {...props}
     />
   );

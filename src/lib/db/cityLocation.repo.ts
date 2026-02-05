@@ -4,10 +4,38 @@ import { Prisma } from "@prisma/client";
 
 import { slugify } from "@/lib/utils/slugify";
 
-// Generate a base slug: "usa-new-york"
-export function makeCityId(cityName: string, countryCode2: string): string {
-  const slug = slugify(cityName);
-  return `${countryCode2.toLowerCase()}-${slug}`;
+/**
+ * Generate a unique city ID in format: city-state-country
+ * Examples:
+ *   - "san-francisco-ca-us" (US city with state)
+ *   - "paris-fr" (non-US city without state)
+ *   - "london-england-gb" (UK city with state/region)
+ */
+export function makeCityId(
+  cityName: string,
+  countryCode2: string,
+  stateCode?: string,
+): string {
+  const citySlug = slugify(cityName);
+  const countrySlug = countryCode2.toLowerCase();
+
+  if (stateCode) {
+    const stateSlug = slugify(stateCode);
+    return `${citySlug}-${stateSlug}-${countrySlug}`;
+  }
+
+  return `${citySlug}-${countrySlug}`;
+}
+
+/**
+ * Generate a SEO-friendly slug for URLs (same as cityId but can be extended)
+ */
+export function makeCitySlug(
+  cityName: string,
+  countryCode2: string,
+  stateCode?: string,
+): string {
+  return makeCityId(cityName, countryCode2, stateCode);
 }
 
 // get city by id
@@ -64,6 +92,7 @@ export async function findNearbyCities(
           name: 1,
           imageHeroUrl: 1,
           radiusKm: 1,
+          wikiDataId: 1,
           distanceKm: { $divide: ["$dist_m", 1000] },
         },
       },
@@ -90,6 +119,7 @@ export async function findNearbyCities(
         imageHeroUrl: row.imageHeroUrl ?? null,
         radiusKm: typeof row.radiusKm === "number" ? row.radiusKm : null,
         distanceKm: typeof row.distanceKm === "number" ? row.distanceKm : null,
+        wikiDataId: row.wikiDataId || null,
         country: fullCity?.country || null,
       };
     },
@@ -134,6 +164,7 @@ export async function findCityByBBox(
       imageHeroUrl: city.imageHeroUrl || null,
       radiusKm: city.radiusKm || null,
       distanceKm: 0,
+      wikiDataId: city.wikiDataId || null,
     };
   } catch (error) {
     console.error("findCityByBBox error:", error);
@@ -190,36 +221,6 @@ export async function deleteCity(id: string) {
 }
 
 /**
- * Finds a state using name or code within a country.
- */
-export async function findState(
-  countryRefId: string,
-  name?: string,
-  code?: string,
-) {
-  return prisma.state.findFirst({
-    where: {
-      countryRefId,
-      OR: [
-        { code: { equals: code || undefined, mode: "insensitive" } },
-        { name: { equals: name || undefined, mode: "insensitive" } },
-      ],
-    },
-  });
-}
-
-/**
- * Creates a new state record.
- */
-export async function createState(data: {
-  name: string;
-  code: string | null;
-  countryRefId: string;
-}) {
-  return prisma.state.create({ data });
-}
-
-/**
  * Finds a city by its name and country code (cca2).
  */
 export async function findCityByCapitalName(name: string, countryCode: string) {
@@ -233,6 +234,7 @@ export async function findCityByCapitalName(name: string, countryCode: string) {
 
 /**
  * Upserts a city record based on its unique cityId.
+ * Note: slug is required for create - we use cityId as slug since it's already in slug format
  */
 export async function upsertCity(
   cityId: string,
@@ -241,7 +243,11 @@ export async function upsertCity(
   return prisma.city.upsert({
     where: { cityId },
     update: data,
-    create: { ...data, cityId } as Prisma.CityUpsertArgs["create"],
+    create: {
+      ...data,
+      cityId,
+      slug: cityId,
+    } as Prisma.CityUpsertArgs["create"],
   });
 }
 
@@ -252,11 +258,50 @@ export async function searchCities(query: string, limit = 10) {
       where: {
         name: { contains: query, mode: "insensitive" },
       },
-      include: { country: true },
+      include: { country: true, state: true },
       take: limit,
     });
   } catch (error) {
     console.error("searchCities error:", error);
     return [];
   }
+}
+
+/**
+ * Get city by UUID with Country included
+ */
+export async function getCityByIdWithCountry(id: string) {
+  return prisma.city.findUnique({
+    where: { id },
+    include: { country: true },
+  });
+}
+
+/**
+ * Count total cities
+ */
+export async function countCities() {
+  return prisma.city.count();
+}
+
+/**
+ * Get cities that need review
+ */
+export async function getCitiesNeedingReview() {
+  return prisma.city.findMany({
+    where: { needsReview: true },
+    select: {
+      id: true,
+      cityId: true,
+      name: true,
+      autoCreated: true,
+      country: {
+        select: {
+          name: true,
+          code: true,
+        },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
 }

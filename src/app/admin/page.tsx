@@ -122,15 +122,6 @@ export default async function AdminDashboardPage() {
             </div>
           </a>
           <a
-            href="/profile/travel-persona"
-            className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
-          >
-            <div className="font-medium text-gray-900">Travel Persona</div>
-            <div className="text-sm text-secondary mt-1">
-              Combined persona form
-            </div>
-          </a>
-          <a
             href="/profile/travel-preferences"
             className="p-md border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
           >

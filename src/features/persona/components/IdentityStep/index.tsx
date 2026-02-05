@@ -43,7 +43,7 @@ export default function IdentityStep() {
 
     try {
       const { uploadToCloudinary } =
-        await import("@/lib/media/cloudinary.service");
+        await import("@/domain/media/cloudinary.service");
       const result = await uploadToCloudinary(blob);
 
       setValue("avatarUrl", result.secure_url);
