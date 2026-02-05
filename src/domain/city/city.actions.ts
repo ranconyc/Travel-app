@@ -110,10 +110,29 @@ export const updateCityAction = createAdminAction(
     data: CityUpdateSchema,
   }),
   async ({ id, data }) => {
-    // Remove relations that match UI types but not Prisma types
+    // Remove relations and non-Prisma fields before saving
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { media, places, country, state, ...cleanData } = data;
-    return await handleUpdateCity(id, cleanData);
+    const {
+      media,
+      places,
+      country,
+      state,
+      // Strip extra editor fields that aren't in Prisma schema
+      countryCode,
+      description,
+      bestSeason,
+      idealDuration,
+      safety,
+      budget,
+      gettingAround,
+      ...cleanData
+    } = data;
+
+    // Cast to the expected Prisma type
+    return await handleUpdateCity(
+      id,
+      cleanData as Parameters<typeof handleUpdateCity>[1],
+    );
   },
 );
 
