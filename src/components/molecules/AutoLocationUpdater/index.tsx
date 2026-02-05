@@ -32,9 +32,19 @@ export default function AutoLocationUpdater() {
 
           // 2. Get last location from localStorage
           const lastLocationStr = localStorage.getItem(LOCATION_STORAGE_KEY);
-          let shouldUpdate = !hasLocationInDb; // Force update if not in DB
+          let shouldUpdate = false;
 
-          if (hasLocationInDb && lastLocationStr) {
+          if (!hasLocationInDb) {
+            // Case A: User has no location in DB -> Must update
+            console.log("📍 No location in DB -> Updating...");
+            shouldUpdate = true;
+          } else if (!lastLocationStr) {
+            // Case B: User has location in DB but not in LocalStorage (New Device / Cleared Cache)
+            // We should update to ensure sync and seed LocalStorage
+            console.log("📍 Location in DB but not LocalStorage -> Syncing...");
+            shouldUpdate = true;
+          } else {
+            // Case C: Have both -> Check distance against LocalStorage (Client source of truth)
             try {
               const lastLocation = JSON.parse(lastLocationStr);
               const distance = calculateHaversineDistance(
@@ -44,15 +54,18 @@ export default function AutoLocationUpdater() {
                 location.longitude,
               );
 
-              // Only update if moved significantly
               if (distance >= MIN_DISTANCE_KM) {
                 console.log(
-                  `📍 Location changed by ${distance.toFixed(2)}km, updating...`,
+                  `📍 Location changed by ${distance.toFixed(
+                    2,
+                  )}km -> Updating...`,
                 );
                 shouldUpdate = true;
               } else {
                 console.log(
-                  `📍 Location unchanged (${distance.toFixed(2)}km), skipping update`,
+                  `📍 Location unchanged (${distance.toFixed(
+                    2,
+                  )}km) -> Skipping`,
                 );
               }
             } catch (e) {
@@ -63,7 +76,7 @@ export default function AutoLocationUpdater() {
 
           if (shouldUpdate) {
             console.log(
-              `📍 Auto-updating location... (In DB: ${hasLocationInDb})`,
+              `📍 Triggering location update... (In DB: ${hasLocationInDb})`,
             );
             await updateUserLocation({
               lat: location.latitude,
