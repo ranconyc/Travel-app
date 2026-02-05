@@ -323,6 +323,7 @@ export const updateUserLocationAction = createSafeAction(
     const { revalidatePath } = await import("next/cache");
     const result = await handleUpdateUserLocation(userId, coords);
     revalidatePath(`/profile/${userId}`);
+    revalidatePath("/"); // Also refresh homepage for nearby recommendations
     return result;
   },
 );
