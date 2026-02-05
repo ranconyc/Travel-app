@@ -17,6 +17,11 @@ export default function AutoLocationUpdater() {
   const router = useRouter();
   const hasUpdatedRef = useRef(false);
 
+  // Reset the update flag when the user changes (e.g., login/logout)
+  useEffect(() => {
+    hasUpdatedRef.current = false;
+  }, [user?.id]);
+
   useEffect(() => {
     // Only update if user is logged in and we have location
     if (user && location && !hasUpdatedRef.current) {

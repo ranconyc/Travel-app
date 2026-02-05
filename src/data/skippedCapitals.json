@@ -1,0 +1,332 @@
+[
+  {
+    "country": "American Samoa",
+    "capital": "Pago Pago",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Anguilla",
+    "capital": "The Valley",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Antigua and Barbuda",
+    "capital": "St. John's",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Argentina",
+    "capital": "Buenos Aires",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Bonaire, Sint Eustatius and Saba",
+    "capital": "Kralendijk",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Brazil",
+    "capital": "Brasilia",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "British Indian Ocean Territory",
+    "capital": "Diego Garcia",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Cameroon",
+    "capital": "Yaounde",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Christmas Island",
+    "capital": "Flying Fish Cove",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Cocos (Keeling) Islands",
+    "capital": "West Island",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Colombia",
+    "capital": "Bogotá",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Cook Islands",
+    "capital": "Avarua",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Costa Rica",
+    "capital": "San Jose",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Curaçao",
+    "capital": "Willemstad",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Falkland Islands",
+    "capital": "Stanley",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Faroe Islands",
+    "capital": "Torshavn",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "French Guiana",
+    "capital": "Cayenne",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "French Southern Territories",
+    "capital": "Port-aux-Francais",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Gibraltar",
+    "capital": "Gibraltar",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Grenada",
+    "capital": "St. George's",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Guam",
+    "capital": "Hagatna",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Guernsey",
+    "capital": "St Peter Port",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Hong Kong S.A.R.",
+    "capital": "Hong Kong",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Iceland",
+    "capital": "Reykjavik",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Indonesia",
+    "capital": "Jakarta",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Jersey",
+    "capital": "Saint Helier",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Kazakhstan",
+    "capital": "Astana",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Libya",
+    "capital": "Tripolis",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Macau S.A.R.",
+    "capital": "Macao",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Madagascar",
+    "capital": "Antananarivo",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Man (Isle of)",
+    "capital": "Douglas, Isle of Man",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Marshall Islands",
+    "capital": "Majuro",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Mauritania",
+    "capital": "Nouakchott",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Mexico",
+    "capital": "Ciudad de México",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Micronesia",
+    "capital": "Palikir",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Monaco",
+    "capital": "Monaco",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Montserrat",
+    "capital": "Plymouth",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "New Caledonia",
+    "capital": "Noumea",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Niue",
+    "capital": "Alofi",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Norfolk Island",
+    "capital": "Kingston",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Northern Mariana Islands",
+    "capital": "Saipan",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Palau",
+    "capital": "Melekeok",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Panama",
+    "capital": "Panama City",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Paraguay",
+    "capital": "Asunción",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Philippines",
+    "capital": "Manila",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Pitcairn Island",
+    "capital": "Adamstown",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Saint Helena",
+    "capital": "Jamestown",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Saint Kitts and Nevis",
+    "capital": "Basseterre",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Saint Pierre and Miquelon",
+    "capital": "Saint-Pierre",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Saint-Barthelemy",
+    "capital": "Gustavia",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Saint-Martin (French part)",
+    "capital": "Marigot",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Sao Tome and Principe",
+    "capital": "Sao Tome",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Serbia",
+    "capital": "Belgrade",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Singapore",
+    "capital": "Singapur",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Sint Maarten (Dutch part)",
+    "capital": "Philipsburg",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "South Georgia",
+    "capital": "Grytviken",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "South Sudan",
+    "capital": "Juba",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Svalbard and Jan Mayen Islands",
+    "capital": "Longyearbyen",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Togo",
+    "capital": "Lome",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Tonga",
+    "capital": "Nuku'alofa",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Turks and Caicos Islands",
+    "capital": "Cockburn Town",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Vanuatu",
+    "capital": "Port Vila",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Vatican City State (Holy See)",
+    "capital": "Vatican City",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Vietnam",
+    "capital": "Hanoi",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Virgin Islands (British)",
+    "capital": "Road Town",
+    "reason": "Not found in JSON cities list"
+  },
+  {
+    "country": "Western Sahara",
+    "capital": "El-Aaiun",
+    "reason": "Not found in JSON cities list"
+  }
+]

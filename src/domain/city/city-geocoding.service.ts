@@ -1,4 +1,3 @@
-import "server-only";
 import { ReverseGeocodeResult } from "@/domain/city/city.schema";
 
 /**
