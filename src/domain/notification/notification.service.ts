@@ -36,7 +36,7 @@ export async function createNotification({
   try {
     // 1. Persist to Database
     const notification = await createNotificationRepo({
-      userId,
+      user: { connect: { id: userId } },
       type,
       title,
       message,

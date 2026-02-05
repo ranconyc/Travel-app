@@ -333,13 +333,17 @@ export async function handleUpdateUserLocation(
 
   // 2. Sync Country if missing
   const countryCode = detected.countryCode;
+  const visitedCountries = (user as any)?.visitedCountries as
+    | string[]
+    | undefined;
+
   if (
     countryCode &&
-    user?.visitedCountries &&
-    !user.visitedCountries.includes(countryCode)
+    visitedCountries &&
+    !visitedCountries.includes(countryCode)
   ) {
     await userRepository.updateVisitedCountries(userId, [
-      ...user.visitedCountries,
+      ...visitedCountries,
       countryCode,
     ]);
   }

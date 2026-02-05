@@ -140,8 +140,10 @@ export async function fetchAndSyncPlaces(cityId: string, interestId: string) {
             slug,
             name: result.name || "Unknown Place",
             googlePlaceId: result.place_id,
-            cityRefId: city.id,
-            countryRefId: city.countryRefId,
+            city: { connect: { id: city.id } },
+            country: city.countryRefId
+              ? { connect: { id: city.countryRefId } }
+              : undefined,
             type: result.types?.[0]?.toUpperCase() || "ESTABLISHMENT",
             categories: result.types || [],
             address: result.vicinity,
