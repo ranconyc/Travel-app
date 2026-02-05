@@ -31,8 +31,9 @@ export default function HomeHeader() {
           "Home"
         ) : (
           <SplitFlapText
+            speed="fast"
             text={user?.currentCity?.name ?? "World"}
-            className="text-display-lg font-bold text-txt-main"
+            className="text-display-md font-bold text-txt-main"
           />
         )
       }

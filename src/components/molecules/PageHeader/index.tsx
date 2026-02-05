@@ -36,9 +36,9 @@ export default function PageHeader({
       </div>
 
       {/* Title Section */}
-      <div className="flex flex-col justify-center mb-lg">
+      <div className="flex flex-col justify-center mb-md">
         {subtitle && (
-          <Typography variant="h3" color="sec" className="normal-case">
+          <Typography variant="ui-lg" color="sec">
             {subtitle}
           </Typography>
         )}

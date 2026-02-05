@@ -38,13 +38,22 @@ export function useCities(options?: { coords?: { lat: number; lng: number } }) {
   const { data, ...queryInfo } = useQuery<City[]>({
     queryKey: ["cities", options?.coords],
     queryFn: async (): Promise<City[]> => {
-      const result = options?.coords
-        ? await getNearbyCitiesAction({
-            ...options.coords,
-            km: 500,
-            limit: 20,
-          })
-        : await getAllCitiesAction({ limit: 20 });
+      let result;
+      if (options?.coords) {
+        result = await getNearbyCitiesAction({
+          ...options.coords,
+          km: 3000,
+          limit: 20,
+        });
+
+        // Fallback to all cities if none found nearby (2026 Resilient UX)
+        if (result.success && (!result.data || result.data.length === 0)) {
+          console.log("No cities found within 3000km, falling back to global.");
+          result = await getAllCitiesAction({ limit: 20 });
+        }
+      } else {
+        result = await getAllCitiesAction({ limit: 20 });
+      }
 
       if (result.success) {
         return (result.data || []) as unknown as City[];

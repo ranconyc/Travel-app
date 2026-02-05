@@ -69,7 +69,7 @@ export async function getAllCities(limit?: number, offset?: number) {
 export async function findNearbyCities(
   lng: number,
   lat: number,
-  km = 120,
+  km = 500, // Increased default for better global coverage
   limit = 10,
 ): Promise<NearestCityResult[]> {
   const meters = km * 1000;
@@ -99,27 +99,34 @@ export async function findNearbyCities(
     ],
   });
 
-  const nearbyCities = res as unknown as any[];
+  const nearbyCities = (res as unknown as any[]) || [];
+  if (nearbyCities.length === 0) return [];
+
+  // Fetch full city details including country
+  const cityIds = nearbyCities
+    .map((city) => city._id?.["$oid"] || city._id)
+    .filter(Boolean);
+
   const citiesWithCountry = await prisma.city.findMany({
-    where: { cityId: { in: nearbyCities.map((city) => city.cityId) } },
+    where: { id: { in: cityIds } },
     include: { country: true },
   });
 
   // Merge the data
-  return (nearbyCities as unknown as any[]).map(
+  return nearbyCities.map(
     (row): NearestCityResult & { id: string; country?: any } => {
-      const cityId = row._id?.["$oid"] || row._id;
-      const fullCity = citiesWithCountry.find((c) => c.id === cityId);
+      const dbId = row._id?.["$oid"] || row._id;
+      const fullCity = citiesWithCountry.find((c) => c.id === dbId);
 
       return {
-        id: cityId,
-        cityId: row.cityId ?? null,
-        name: row.name ?? null,
+        id: dbId,
+        cityId: row.cityId || fullCity?.cityId || null,
+        name: row.name || fullCity?.name || "Unknown City",
         countryCode: fullCity?.country?.code || fullCity?.country?.cca3 || null,
-        imageHeroUrl: row.imageHeroUrl ?? null,
+        imageHeroUrl: row.imageHeroUrl || fullCity?.imageHeroUrl || null,
         radiusKm: typeof row.radiusKm === "number" ? row.radiusKm : null,
         distanceKm: typeof row.distanceKm === "number" ? row.distanceKm : null,
-        wikiDataId: row.wikiDataId || null,
+        wikiDataId: row.wikiDataId || fullCity?.wikiDataId || null,
         country: fullCity?.country || null,
       };
     },
@@ -246,7 +253,7 @@ export async function upsertCity(
     create: {
       ...data,
       cityId,
-      slug: cityId,
+      slug: (data as any).slug || cityId,
     } as Prisma.CityUpsertArgs["create"],
   });
 }

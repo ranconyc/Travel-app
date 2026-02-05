@@ -270,25 +270,66 @@ export async function saveUserInterests(
 export async function handleUpdateUserLocation(
   userId: string,
   coords: { lat: number; lng: number },
+  ipCountry?: string, // 2026 Best Practice: IP-based Country
 ): Promise<{ detected: DetectedCity }> {
   const { lat, lng } = coords;
+  const isDev = process.env.NODE_ENV === "development";
 
+  // 1. Resolve Current City
   const detected = await findNearestCityFromCoords(lat, lng, {
     createIfMissing: true,
     searchRadiusKm: 120,
   });
 
-  console.log("detected", detected);
-
   if (!detected || !detected.id) {
     throw new Error("Could not identify city");
+  }
+
+  // 2. Security Check: IP Cross-Reference (Anti-Spoofing)
+  if (!isDev && ipCountry && detected.countryCode) {
+    // Basic verification: Do they match? (Case-insensitive)
+    if (ipCountry.toUpperCase() !== detected.countryCode.toUpperCase()) {
+      console.warn(
+        `[Security] Location mismatch for user ${userId}. GPS: ${detected.countryCode}, IP: ${ipCountry}`,
+      );
+      // We don't throw here to avoid a hard break, but we mark it or log it.
+      // In a strict 2026 app, we could throw:
+      // throw new Error("Location verification failed. VPN or Spoofing detected.");
+    }
   }
 
   const { getActiveVisit, createCityVisit, closeCityVisit } =
     await import("@/lib/db/cityVisit.repo");
   const activeVisit = await getActiveVisit(userId);
-  console.log("activeVisit", activeVisit);
 
+  // 3. Security Check: Velocity (Teleportation check)
+  if (!isDev && activeVisit && activeVisit.cityId !== detected.id) {
+    const { calculateHaversineDistance } =
+      await import("@/lib/utils/geo.utils");
+    const lastCoords = activeVisit.entryCoords as any; // [lng, lat]
+    if (lastCoords?.coordinates) {
+      const distance = calculateHaversineDistance(
+        lastCoords.coordinates[1],
+        lastCoords.coordinates[0],
+        lat,
+        lng,
+      );
+
+      const timeDiffHours =
+        (new Date().getTime() - new Date(activeVisit.startDate).getTime()) /
+        (1000 * 60 * 60);
+
+      // Rule: Can't travel faster than 1000km/h (approx. max flight speed)
+      if (timeDiffHours > 0 && distance / timeDiffHours > 1000) {
+        console.warn(
+          `[Security] Velocity check failed for ${userId}. Distance: ${distance}km, Time: ${timeDiffHours}h`,
+        );
+        // throw new Error("Teleportation detected. Please try again later.");
+      }
+    }
+  }
+
+  // 4. Update Stamps / Visits
   if (!activeVisit) {
     await createCityVisit(
       userId,

@@ -9,6 +9,7 @@ import { calculateHaversineDistance } from "@/lib/utils/geo.utils";
 
 const LOCATION_STORAGE_KEY = "last_location";
 const MIN_DISTANCE_KM = 5; // Only update if moved more than 5km
+const MIN_TIME_MS = 15 * 60 * 1000; // 15 minutes throttle for battery saving
 
 export default function AutoLocationUpdater() {
   const user = useUser();
@@ -44,7 +45,7 @@ export default function AutoLocationUpdater() {
             console.log("📍 Location in DB but not LocalStorage -> Syncing...");
             shouldUpdate = true;
           } else {
-            // Case C: Have both -> Check distance against LocalStorage (Client source of truth)
+            // Case C: Have both -> Check distance and time against LocalStorage
             try {
               const lastLocation = JSON.parse(lastLocationStr);
               const distance = calculateHaversineDistance(
@@ -54,13 +55,30 @@ export default function AutoLocationUpdater() {
                 location.longitude,
               );
 
+              const isDev = process.env.NODE_ENV === "development";
+              const now = Date.now();
+              const lastTimestamp = lastLocation.timestamp || 0;
+              const timePassed = now - lastTimestamp;
+              const isTimeThrottled = timePassed < MIN_TIME_MS;
+
               if (distance >= MIN_DISTANCE_KM) {
-                console.log(
-                  `📍 Location changed by ${distance.toFixed(
-                    2,
-                  )}km -> Updating...`,
-                );
-                shouldUpdate = true;
+                if (isTimeThrottled && !isDev) {
+                  console.log(
+                    `📍 Location changed (${distance.toFixed(
+                      2,
+                    )}km) but throttled (${Math.round(
+                      timePassed / 1000 / 60,
+                    )}m passed). Saving battery.`,
+                  );
+                  shouldUpdate = false;
+                } else {
+                  console.log(
+                    `📍 Location changed by ${distance.toFixed(
+                      2,
+                    )}km -> Updating...`,
+                  );
+                  shouldUpdate = true;
+                }
               } else {
                 console.log(
                   `📍 Location unchanged (${distance.toFixed(
@@ -83,10 +101,13 @@ export default function AutoLocationUpdater() {
               lng: location.longitude,
             });
 
-            // Store new location in localStorage
+            // Store new location with timestamp in localStorage
             localStorage.setItem(
               LOCATION_STORAGE_KEY,
-              JSON.stringify(location),
+              JSON.stringify({
+                ...location,
+                timestamp: Date.now(),
+              }),
             );
 
             console.log("✅ Location auto-updated successfully");

@@ -320,8 +320,13 @@ export const updateUserLocationAction = createSafeAction(
     lng: z.number(),
   }),
   async (coords, userId) => {
+    const { headers } = await import("next/headers");
     const { revalidatePath } = await import("next/cache");
-    const result = await handleUpdateUserLocation(userId, coords);
+
+    const headerList = await headers();
+    const ipCountry = headerList.get("x-vercel-ip-country") || undefined;
+
+    const result = await handleUpdateUserLocation(userId, coords, ipCountry);
     revalidatePath(`/profile/${userId}`);
     revalidatePath("/"); // Also refresh homepage for nearby recommendations
     return result;

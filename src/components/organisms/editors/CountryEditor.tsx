@@ -199,6 +199,9 @@ export default function CountryEditor({ id, initialData }: Props) {
                   onImageUploaded={(url) =>
                     setData({ ...data, imageHeroUrl: url })
                   }
+                  entityType="country"
+                  entityId={id}
+                  defaultSearchQuery={data.name}
                 />
               </div>
 

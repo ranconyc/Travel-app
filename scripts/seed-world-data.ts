@@ -148,6 +148,7 @@ async function main() {
             native: stateData.native || null,
             code: stateData.iso2 || null,
             type: stateData.type || null,
+            slug: `${stateData.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${country.code.toLowerCase()}`,
             countryRefId: country.id, // Link to MongoDB ID
             translations: cleanTranslations(stateData.translations),
             coords: stateData.latitude
@@ -166,6 +167,7 @@ async function main() {
             native: stateData.native || null,
             code: stateData.iso2 || null,
             type: stateData.type || null,
+            slug: `${stateData.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${country.code.toLowerCase()}`,
             countryRefId: country.id,
             translations: cleanTranslations(stateData.translations),
             coords: stateData.latitude
@@ -214,6 +216,7 @@ async function main() {
               citiesToInsert.push({
                 externalId: cityData.id,
                 cityId: cityId,
+                slug: `${country.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${citySlug}`,
                 name: cityData.name,
                 countryRefId: country.id,
                 stateId: state.id,

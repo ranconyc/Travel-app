@@ -33,6 +33,7 @@ export default async function CityLayout({
     <>
       <PageNavigation
         title={city.name}
+        type="city"
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         locationName={
           (city as unknown as { country?: { name?: string } }).country?.name ||

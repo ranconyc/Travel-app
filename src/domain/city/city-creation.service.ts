@@ -121,6 +121,7 @@ export async function createCityFromJson(jsonCityId: number) {
   const stateName: string | null = jsonCity.stateName || null;
   const stateId = await ensureStateForCountry(
     country.id,
+    country.code,
     jsonCity.stateName,
     jsonCity.stateCode,
     jsonCity.stateType,
@@ -138,6 +139,9 @@ export async function createCityFromJson(jsonCityId: number) {
     type: "Point",
     coordinates: [jsonCity.longitude, jsonCity.latitude],
   };
+
+  const citySlug = jsonCity.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const slug = `${country.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${citySlug}`;
 
   // Enrich with LocationIQ data (BoundingBox, etc.)
   let boundingBoxJson = null;
@@ -177,6 +181,7 @@ export async function createCityFromJson(jsonCityId: number) {
     timeZone: jsonCity.timezone,
     externalId: jsonCityId, // Set the JSON ID to prevent duplicates
     wikiDataId: jsonCity.wikiDataId || null,
+    slug: slug,
   });
 
   return city;
@@ -221,6 +226,7 @@ async function generateUniqueCityId(params: {
  */
 async function ensureStateForCountry(
   countryId: string,
+  countryCode: string,
   stateName?: string | null,
   stateCode?: string | null,
   stateType?: string | null,
@@ -237,11 +243,16 @@ async function ensureStateForCountry(
     return existingState.id;
   }
 
+  const stateSlug = (stateName || stateCode || "unknown")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-");
+
   const newState = await createState({
     name: stateName || stateCode || "Unknown State",
     code: stateCode || null,
     countryRefId: countryId,
     type: stateType || null,
+    slug: `${stateSlug}-${countryCode.toLowerCase()}`,
   });
 
   return newState.id;
@@ -308,6 +319,7 @@ export async function ensureCountryAndCityFromLocation(
 
     const stateRefId = await ensureStateForCountry(
       country.id,
+      country.code,
       meta.state,
       meta.stateCode,
       meta.stateType,
@@ -318,6 +330,7 @@ export async function ensureCountryAndCityFromLocation(
       countryRefId: country.id,
       stateId: stateRefId,
       stateName: meta.state,
+      slug: `${country.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${cityName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
       coords: coordsJson,
       boundingBox: boundingBoxJson,
       radiusKm,

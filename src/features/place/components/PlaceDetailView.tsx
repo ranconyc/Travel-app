@@ -89,6 +89,7 @@ export default function PlaceDetailView({
           subtitle={`${activity.city.name}, ${activity.city.country.name}`}
           heroImageSrc={activity.imageHeroUrl}
           socialQuery={`${activity.name}, ${activity.city.name}`}
+          type="place"
           badge={
             matchScore && (
               <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">

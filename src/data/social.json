@@ -3,7 +3,7 @@
     "name": "instagram",
     "iconName": "Instagram",
     "profileURL": "https://www.instagram.com/",
-    "groupsURL": "https://www.instagram.com/explore/tags/",
+    "groupsURL": "https://www.instagram.com/explore/search/keyword/?q=",
     "locationURL": "https://www.instagram.com/explore/locations/",
     "color": "#E4405F"
   },

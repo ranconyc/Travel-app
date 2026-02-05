@@ -67,7 +67,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
           setIsLoading(false);
           resolve(null);
         },
-        { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
       );
     });
   };

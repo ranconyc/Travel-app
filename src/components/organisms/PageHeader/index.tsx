@@ -7,6 +7,7 @@ interface PageHeaderProps {
   subtitle?: string;
   heroImageSrc?: string | null;
   socialQuery: string;
+  type?: "country" | "city" | "place";
   badge?: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ export default function PageHeader({
   subtitle,
   heroImageSrc,
   socialQuery,
+  type = "place",
   badge,
 }: PageHeaderProps) {
   return (
@@ -29,7 +31,7 @@ export default function PageHeader({
       <HeroImage src={heroImageSrc} name={title} />
 
       {/* Social Links */}
-      <SocialLinks query={socialQuery} />
+      <SocialLinks query={socialQuery} type={type} />
     </div>
   );
 }

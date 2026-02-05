@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db/prisma";
 import { notFound } from "next/navigation";
 import DestinationEditorClient from "./DestinationEditorClient";
 
-type EntityType = "country" | "city" | "place";
+type EntityType = "country" | "city" | "place" | "state";
 
 async function findEntity(
   id: string,
@@ -20,6 +20,13 @@ async function findEntity(
     include: { country: true },
   });
   if (city) return { type: "city", data: city };
+
+  // Try State
+  const state = await prisma.state.findUnique({
+    where: { id },
+    include: { country: true, cities: { take: 10 } },
+  });
+  if (state) return { type: "state", data: state };
 
   // Try Place
   const place = await prisma.place.findUnique({

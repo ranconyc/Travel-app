@@ -34,6 +34,7 @@ export default async function CountryLayout({
     <>
       <PageNavigation
         title={country.name}
+        type="country"
         locationName={country.subRegion || country.region || ""}
         rightContent={
           <FavoriteButton

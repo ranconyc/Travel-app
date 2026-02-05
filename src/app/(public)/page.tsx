@@ -58,9 +58,21 @@ export default async function Home() {
   await queryClient.prefetchQuery({
     queryKey: ["cities", coords],
     queryFn: async () => {
-      const result = coords
-        ? await getNearbyCitiesAction({ ...coords, km: 500, limit: 20 })
-        : await getAllCitiesAction({ limit: 20 });
+      let result;
+      if (coords) {
+        result = await getNearbyCitiesAction({
+          ...coords,
+          km: 3000,
+          limit: 20,
+        });
+
+        // Fallback to global if nearby is empty (Resilient SSR)
+        if (result.success && (!result.data || result.data.length === 0)) {
+          result = await getAllCitiesAction({ limit: 20 });
+        }
+      } else {
+        result = await getAllCitiesAction({ limit: 20 });
+      }
       return result.success ? result.data : [];
     },
   });

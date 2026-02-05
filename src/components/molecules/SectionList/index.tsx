@@ -42,13 +42,13 @@ export default function SectionList<T>({
         title={title}
         href={href}
         linkText={linkText}
-        className={cn(isFloating ? "pl-md" : "")}
+        className={cn(isFloating ? "pl-lg" : "")}
       />
 
       <HorizontalList
         noScrollbar={noScrollbar}
         gap={gap}
-        className={cn(isFloating ? "px-md" : "")}
+        className={cn(isFloating ? "px-lg" : "")}
       >
         {isLoading ? (
           <>

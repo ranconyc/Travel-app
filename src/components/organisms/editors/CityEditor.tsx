@@ -146,6 +146,9 @@ export default function CityEditor({ id, initialData }: Props) {
                   onImageUploaded={(url) =>
                     setData({ ...data, imageHeroUrl: url })
                   }
+                  entityType="city"
+                  entityId={id}
+                  defaultSearchQuery={data.name}
                 />
               </div>
 

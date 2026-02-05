@@ -97,11 +97,10 @@
   --max-width-narrow: 576px;
   --navbar-height: 64px;
   --page-padding: 16px;
-}
 
-:root {
   /* =========================================
-     FLUID TYPOGRAPHY (Accessible Globally)
+     9. FLUID TYPOGRAPHY (Tailwind v4 Theme)
+     Moving here enables text-display-xl etc.
      ========================================= */
   --text-display-xl: clamp(2.5rem, 5vw, 4rem);
   --text-display-lg: clamp(2rem, calc(1.5vw + 1.6rem), 3rem);

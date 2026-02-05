@@ -6,7 +6,6 @@ import CultureSection from "./components/CultureSection";
 import HealthSection from "./components/HealthSection";
 import { getCountryWithCities } from "@/lib/db/country.repo";
 import PageHeader from "@/components/organisms/PageHeader";
-import CitiesSection from "./components/CitiesSection";
 import Stats from "@/components/molecules/Stats";
 import { StatItem } from "@/domain/common.schema";
 import { Globe2, Users } from "lucide-react";
@@ -15,12 +14,12 @@ import { getCurrentUser } from "@/lib/auth/get-current-user";
 import LogisticsSection from "./components/LogisticsSection";
 import { Country } from "@/domain/country/country.schema";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
+import { formatCountryTimezoneMetadata } from "@/domain/shared/utils/date";
 import StateSection from "./components/StateSection";
 import LanguageSection from "@/components/organisms/LanguageSection";
 import Block from "@/components/atoms/Block";
 import FloatingCardList from "@/components/molecules/FloatingCardList";
 import VisaRequirement from "@/components/molecules/VisaRequirement";
-import { type VisaRequirement as VisaRequirementType } from "@/types/visa.types";
 import { visaService } from "@/domain/country/services/visa.service";
 
 import commonPhrasesData from "@/data/world/common_phrases.json";
@@ -101,14 +100,13 @@ export default async function CountryPage({
         )
       : null;
 
-  const distanceLabel = distanceMeta?.flightStr
-    ? `~ ${distanceMeta.flightStr}`
-    : distanceMeta?.distanceStr || "N/A";
+  const travelValue = distanceMeta?.travelValue || "N/A";
+  const travelLabel = distanceMeta?.travelLabel || "Away";
 
   const stats: StatItem[] = [
     {
-      value: distanceLabel,
-      label: "Away",
+      value: travelValue,
+      label: travelLabel,
       icon: Globe2,
     },
     {
@@ -143,6 +141,7 @@ export default async function CountryPage({
             (country.flags as any)?.png
           }
           socialQuery={country.name}
+          type="country"
           badge={
             inThisCountry && (
               <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
@@ -182,30 +181,50 @@ export default async function CountryPage({
           </div>
         )}
 
-        <div className="flex flex-col gap-lg">
-          <div className="grid grid-cols-2 gap-md">
-            {giniValue && (
-              <Block>
-                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
-                  Social Equality
-                </h3>
-                <p className="text-p font-bold text-txt-main">
-                  {getGiniInsight(giniValue as number)}
-                </p>
-              </Block>
-            )}
+        <div className="flex gap-lg">
+          {(() => {
+            const logistics = (country.logistics as any) || {};
+            const tzData = formatCountryTimezoneMetadata(
+              logistics.timezones,
+              country.capitalCity?.timeZone,
+            );
 
-            {country.capitalName && (
+            if (!tzData.localTime && !tzData.rangeLabel) return null;
+
+            return (
               <Block>
                 <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
-                  Capital
+                  Timezone
                 </h3>
-                <p className="text-p font-bold text-txt-main">
-                  {country.capitalName}
-                </p>
+                <div className="flex flex-col">
+                  <p className="text-p font-bold text-txt-main">
+                    {tzData.localTime || tzData.rangeLabel}
+                  </p>
+                  <p className="text-micro text-secondary font-medium tracking-tight">
+                    {tzData.spansTimezones
+                      ? `Spans ${tzData.count} zones · ${tzData.rangeLabel}`
+                      : tzData.timezoneName}
+                    {tzData.relativeContext && ` · ${tzData.relativeContext}`}
+                  </p>
+                </div>
               </Block>
-            )}
-          </div>
+            );
+          })()}
+        </div>
+
+        <div className="flex gap-lg overflow-x-scroll">
+          {/* Visa Requirements */}
+          {visaRequirements && <VisaRequirement visa={visaRequirements} />}
+          {giniValue && (
+            <Block>
+              <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                Social Equality
+              </h3>
+              <p className="text-p font-bold text-txt-main">
+                {getGiniInsight(giniValue as number)}
+              </p>
+            </Block>
+          )}
 
           <FinanceSection />
 
@@ -225,9 +244,6 @@ export default async function CountryPage({
           )}
 
           <LogisticsSection />
-
-          {/* Visa Requirements */}
-          {visaRequirements && <VisaRequirement visa={visaRequirements} />}
 
           <CultureSection />
           <HealthSection />

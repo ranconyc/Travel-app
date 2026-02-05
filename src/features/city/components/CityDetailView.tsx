@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { MapPin, Clock, Calendar, Globe2, Users } from "lucide-react";
 import { formatPopulation } from "@/domain/shared/utils/formatNumber";
 import Block from "@/components/atoms/Block";
 import Stats from "@/components/molecules/Stats";
 import { StatItem } from "@/domain/common.schema";
 import { getDistanceMetadata } from "@/domain/shared/utils/geo";
+import { formatTimezoneMetadata } from "@/domain/shared/utils/date";
 import PageHeader from "@/components/organisms/PageHeader";
 import LogisticsSection from "@/app/(public)/countries/[slug]/components/LogisticsSection";
 import CultureSection from "@/app/(public)/countries/[slug]/components/CultureSection";
@@ -40,19 +39,25 @@ export default function CityDetailView({
         )
       : null;
 
-  const distanceLabel = distanceMeta?.distanceStr || "N/A";
+  const travelValue = distanceMeta?.travelValue || "N/A";
+  const travelLabel = distanceMeta?.travelLabel || "Away";
 
   const stats: StatItem[] = [
-    {
-      value: distanceLabel,
-      label: "Away",
-      icon: Globe2,
-    },
-    {
-      value: formatPopulation(city.population || 0),
-      label: "Population",
-      icon: Users,
-    },
+    ...(distanceMeta
+      ? [
+          {
+            value: travelValue,
+            label: travelLabel,
+            icon: Globe2,
+          },
+        ]
+      : [
+          {
+            value: formatPopulation(city.population || 0),
+            label: "Population",
+            icon: Users,
+          },
+        ]),
     {
       value: city.idealDuration || "3-4 days",
       label: "Duration",
@@ -80,6 +85,7 @@ export default function CityDetailView({
             (city.country?.flags as any)?.png
           }
           socialQuery={`${city.name}, ${countryName}`}
+          type="city"
           badge={
             inThisCity && (
               <div className="flex items-center gap-sm bg-brand/10 text-brand px-md py-xs rounded-full w-fit border border-brand/20 animate-fade-in shadow-sm">
@@ -193,7 +199,25 @@ export default function CityDetailView({
               <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
                 Timezone
               </h3>
-              <p className="text-p font-bold text-txt-main">{city.timeZone}</p>
+              {(() => {
+                const tz = formatTimezoneMetadata(city.timeZone);
+                if (!tz)
+                  return (
+                    <p className="text-p font-bold text-txt-main">
+                      {city.timeZone}
+                    </p>
+                  );
+                return (
+                  <div className="flex flex-col">
+                    <p className="text-p font-bold text-txt-main">
+                      {tz.localTime}
+                    </p>
+                    <p className="text-micro text-secondary font-medium tracking-tight">
+                      {tz.timezoneName} · {tz.relativeContext}
+                    </p>
+                  </div>
+                );
+              })()}
             </Block>
           )}
 

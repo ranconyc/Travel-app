@@ -6,6 +6,7 @@ export const StateSchema = z.object({
   name: z.string(),
   native: z.string().optional().nullable(),
   code: z.string().optional().nullable(),
+  slug: z.string(),
   type: z.string().optional().nullable(),
   countryRefId: z.string(),
   coords: z

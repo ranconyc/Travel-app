@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   searchDestinationsAction,
@@ -82,7 +82,7 @@ export function useCitySearch() {
       // Generate session ID for tracking
       const sessionId = `session-${Date.now()}`;
 
-      // Track search event
+      // Track search event (click)
       await trackSearchEvent({
         searchQuery: query,
         resultCount: results.length,
@@ -120,6 +120,23 @@ export function useCitySearch() {
     },
     [query, results.length, router],
   );
+
+  // Debounced Intent Tracking
+  useEffect(() => {
+    if (!query || query.length < 3) return;
+
+    const sessionId = `session-intent-${Date.now()}`;
+    const timer = setTimeout(() => {
+      trackSearchEvent({
+        searchQuery: query,
+        resultCount: results.length,
+        sessionId,
+        pagePath: window.location.pathname,
+      });
+    }, 2000); // 2 second pause in typing records "intent"
+
+    return () => clearTimeout(timer);
+  }, [query, results.length]);
 
   // Trigger external search
   const handleExternalSearch = useCallback(() => {

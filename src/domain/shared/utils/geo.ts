@@ -201,6 +201,43 @@ export function formatDistanceWithFlightHint(
 }
 
 /**
+ * Format distance into a travel mode label (Walk, Drive, Flight).
+ * 2026 Logic:
+ * - < 2 km: "15 min walk away"
+ * - 2-800 km: "45 min drive away"
+ * - > 800 km: "10 hr flight away"
+ */
+export function formatTravelModeLabel(
+  distance: number,
+  unit: DistanceUnit = "KM",
+): { value: string; label: string } {
+  if (!Number.isFinite(distance)) return { value: "", label: "" };
+
+  const km = distanceToKm(distance, unit);
+  if (km <= 0) return { value: "", label: "" };
+
+  // 1) Walk (< 2km)
+  if (km < 2) {
+    const min = Math.max(1, Math.round((km / 5) * 60)); // 5km/h walking speed
+    return { value: `${min} min`, label: "walk away" };
+  }
+
+  // 2) Drive (2km - 800km)
+  if (km < 800) {
+    const totalMinutes = (km / 80) * 60; // 80km/h average driving speed
+    if (totalMinutes < 60) {
+      return { value: `${Math.round(totalMinutes)} min`, label: "drive away" };
+    }
+    const hours = Math.round(totalMinutes / 60);
+    return { value: `${hours} hr`, label: "drive away" };
+  }
+
+  // 3) Flight (> 800km)
+  const flightHours = estimateFlightTimeHoursFromDistance(distance, unit);
+  return { value: `${Math.round(flightHours)} hr`, label: "flight away" };
+}
+
+/**
  * Calculate radius from bounding box.
  * Returns null if bounding box is invalid.
  */
@@ -245,6 +282,8 @@ export default function calculateBoundingBox(
 export type DistanceMetadata = {
   distanceStr: string; // e.g. "12,450 km"
   flightStr: string; // e.g. "~15h flight"
+  travelValue: string; // e.g. "16 hr"
+  travelLabel: string; // e.g. "flight away"
   isFlight: boolean; // True if distance > 3000km (implies flight mode)
   fullLabel: string; // "12,450 km (~15h flight)" or just "12,450 km"
 };
@@ -279,6 +318,12 @@ export function getDistanceMetadata(
   // Calculate Flight Time
   const flightStr = formatFlightTimeLabelFromDistance(roundedDistance, unit);
 
+  // Calculate Travel Mode
+  const { value: travelValue, label: travelLabel } = formatTravelModeLabel(
+    roundedDistance,
+    unit,
+  );
+
   // Threshold: > 3000km usually implies flight context visually
   const isFlight = roundedDistance >= 3000;
 
@@ -291,6 +336,8 @@ export function getDistanceMetadata(
   return {
     distanceStr,
     flightStr,
+    travelValue,
+    travelLabel,
     isFlight,
     fullLabel,
   };

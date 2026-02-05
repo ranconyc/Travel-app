@@ -79,11 +79,32 @@ export async function findState(
 }
 
 /**
+ * Finds a state by its slug.
+ */
+export async function getStateBySlug(slug: string) {
+  return prisma.state.findUnique({
+    where: { slug },
+    include: {
+      country: true,
+      cities: {
+        include: {
+          media: true,
+        },
+        orderBy: {
+          priority: "desc",
+        },
+      },
+    },
+  });
+}
+
+/**
  * Creates a new state record.
  */
 export async function createState(data: {
   name: string;
   code: string | null;
+  slug: string;
   countryRefId: string;
   type?: string | null;
 }) {

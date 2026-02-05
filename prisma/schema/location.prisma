@@ -82,12 +82,14 @@ model State {
   name         String
   native       String?
   code         String?  // "BDS", "CA"
+  slug         String   @unique
   type         String?  // "province", "state", etc.
   
   countryRefId String   @db.ObjectId
   country      Country  @relation(fields: [countryRefId], references: [id], onDelete: Cascade)
 
   coords       Json?    // { type: "Point", coordinates: [lng, lat] }
+  imageHeroUrl String?  // Hero image URL from Cloudinary
   translations Json?
 
   cities       City[]

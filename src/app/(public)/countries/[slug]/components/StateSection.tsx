@@ -3,6 +3,7 @@ import { State } from "@/domain/state/state.schema";
 import { Country } from "@/domain/country/country.schema";
 import SectionList from "@/components/molecules/SectionList";
 import DestinationCard from "@/components/molecules/DestinationCard";
+import { slugify } from "@/lib/utils/slugify";
 
 export default function StateSection({ country }: { country: Country }) {
   const states = country.states || [];
@@ -30,7 +31,7 @@ export default function StateSection({ country }: { country: Country }) {
       renderItem={(state: State) => (
         <DestinationCard
           key={state.id}
-          href="#"
+          href={`/${state.type?.toLowerCase() || "state"}/${state.slug}`}
           title={state.name}
           subtitle={state.type || undefined}
           aspectRatio="aspect-video"

@@ -140,6 +140,7 @@ export const countryFullInclude = {
   },
   places: true,
   media: true,
+  capitalCity: true,
 } satisfies Prisma.CountryInclude;
 
 /**
