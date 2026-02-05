@@ -216,7 +216,9 @@ export async function createCountryFromName(countryName: string) {
       if (capitalCity?.id) {
         const { updateCountry } = await import("@/lib/db/country.repo");
         await updateCountry(created.id, {
-          capitalId: capitalCity?.id,
+          capitalCity: capitalCity?.id
+            ? { connect: { id: capitalCity.id } }
+            : undefined,
           capitalName: rest.capital?.[0],
         });
         console.log(

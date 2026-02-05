@@ -139,16 +139,41 @@ export async function createCityFromJson(jsonCityId: number) {
     coordinates: [jsonCity.longitude, jsonCity.latitude],
   };
 
+  // Enrich with LocationIQ data (BoundingBox, etc.)
+  let boundingBoxJson = null;
+  let radiusKm = 15;
+
+  try {
+    const { reverseGeocodeLocationIQ } =
+      await import("@/domain/city/city-geocoding.service");
+    const enriched = await reverseGeocodeLocationIQ(
+      jsonCity.latitude,
+      jsonCity.longitude,
+    );
+
+    if (enriched.boundingBox) {
+      boundingBoxJson = {
+        south: enriched.boundingBox[0],
+        north: enriched.boundingBox[1],
+        west: enriched.boundingBox[2],
+        east: enriched.boundingBox[3],
+      };
+      radiusKm = estimateRadiusKmFromBBox(enriched.boundingBox);
+    }
+  } catch (error) {
+    console.warn("Failed to enrich city with LocationIQ data:", error);
+  }
+
   const city = await upsertCity(cityId, {
     name: jsonCity.name,
     countryRefId: country.id,
     stateId: stateId,
     stateName: stateName,
     coords: coordsJson,
-    boundingBox: null,
-    radiusKm: 15,
+    boundingBox: boundingBoxJson,
+    radiusKm: radiusKm,
     autoCreated: true,
-    needsReview: false,
+    needsReview: true,
     timeZone: jsonCity.timezone,
     externalId: jsonCityId, // Set the JSON ID to prevent duplicates
     wikiDataId: jsonCity.wikiDataId || null,

@@ -110,7 +110,10 @@ export const updateCityAction = createAdminAction(
     data: CityUpdateSchema,
   }),
   async ({ id, data }) => {
-    return await handleUpdateCity(id, data);
+    // Remove relations that match UI types but not Prisma types
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { media, places, country, state, ...cleanData } = data;
+    return await handleUpdateCity(id, cleanData);
   },
 );
 
