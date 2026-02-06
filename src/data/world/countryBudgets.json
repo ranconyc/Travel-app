@@ -4,19 +4,37 @@
       "budget": 50,
       "moderate": 120,
       "luxury": 300,
-      "tip": "Tipping 10-15% is customary in restaurants. Round up taxi fares."
+      "tip": "Tipping 10-15% is customary in restaurants. Round up taxi fares.",
+      "tipping": {
+        "restaurant": "10-15%",
+        "taxi": "Round up",
+        "hotel": "₪10-20 per service"
+      },
+      "paymentCulture": "digital"
     },
     "THA": {
       "budget": 30,
       "moderate": 75,
       "luxury": 200,
-      "tip": "Tipping is not traditional but appreciated in tourist areas. 10% for good service."
+      "tip": "Tipping is not traditional but appreciated in tourist areas. 10% for good service.",
+      "tipping": {
+        "restaurant": "10%",
+        "taxi": "Round up",
+        "notes": "Not expected but appreciated"
+      },
+      "paymentCulture": "mixed"
     },
     "JPN": {
       "budget": 80,
       "moderate": 150,
       "luxury": 400,
-      "tip": "Tipping is not customary and can be considered rude. Excellent service is standard."
+      "tip": "Tipping is not customary and can be considered rude. Excellent service is standard.",
+      "tipping": {
+        "restaurant": "Not expected",
+        "taxi": "Not expected",
+        "notes": "Tipping can be offensive"
+      },
+      "paymentCulture": "mixed"
     },
     "FRA": {
       "budget": 70,
@@ -46,13 +64,25 @@
       "budget": 70,
       "moderate": 140,
       "luxury": 350,
-      "tip": "10-15% is standard if service charge not included. Round up in pubs."
+      "tip": "10-15% is standard if service charge not included. Round up in pubs.",
+      "tipping": {
+        "restaurant": "10-15%",
+        "taxi": "Round up",
+        "notes": "Check if service charge included"
+      },
+      "paymentCulture": "digital"
     },
     "USA": {
       "budget": 80,
       "moderate": 160,
       "luxury": 400,
-      "tip": "15-20% is expected in restaurants. Tip bartenders, servers, and hotel staff."
+      "tip": "15-20% is expected in restaurants. Tip bartenders, servers, and hotel staff.",
+      "tipping": {
+        "restaurant": "15-20%",
+        "taxi": "15-20%",
+        "hotel": "$2-5 per service"
+      },
+      "paymentCulture": "digital"
     },
     "MEX": {
       "budget": 40,

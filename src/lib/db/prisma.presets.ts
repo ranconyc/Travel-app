@@ -82,6 +82,7 @@ export const extendedUserSelect = {
  */
 export const cityWithCountryInclude = {
   country: true,
+  state: true,
 } satisfies Prisma.CityInclude;
 
 /**

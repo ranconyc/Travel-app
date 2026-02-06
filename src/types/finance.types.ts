@@ -36,5 +36,20 @@ export interface CountryBudgetData {
   budget: number;
   moderate: number;
   luxury: number;
-  tip: string;
+  tip?: string; // legacy single-string format
+  tipping?: TippingInfo;
+  paymentCulture?: "cash" | "digital" | "mixed";
+}
+
+export interface TippingInfo {
+  restaurant?: string;
+  taxi?: string;
+  hotel?: string;
+  notes?: string;
+}
+
+export interface ExchangeRates {
+  base: string;
+  lastUpdated: string;
+  rates: Record<string, number>;
 }

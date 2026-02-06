@@ -20,6 +20,12 @@ const buttonVariants = cva("button-base focus:ring-2 focus:ring-brand/50", {
         "bg-transparent text-brand border-2 border-brand hover:bg-brand/5 active:bg-brand/10",
       ghost: "text-txt-sec hover:bg-surface-hover hover:text-txt-main",
       teal: "bg-success text-white hover:opacity-90 border border-transparent",
+      success:
+        "bg-success text-white hover:opacity-90 active:scale-[0.98] shadow-soft border border-transparent",
+      warning:
+        "bg-warning text-white hover:opacity-90 active:scale-[0.98] shadow-soft border border-transparent",
+      error:
+        "bg-error text-white hover:opacity-90 active:scale-[0.98] shadow-soft border border-transparent",
       dark: "bg-txt-main text-surface hover:opacity-90",
       "outline-white":
         "bg-transparent text-white border border-white/30 hover:bg-white/10",

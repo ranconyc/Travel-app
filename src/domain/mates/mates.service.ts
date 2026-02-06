@@ -1,4 +1,8 @@
-import { getPaginatedUsers, getUsersForMatching } from "@/lib/db/user.repo";
+import {
+  getPaginatedUsers,
+  getUsersForMatching,
+  countActiveUsers,
+} from "@/lib/db/user.repo";
 import { calculateMatchesBatch } from "@/domain/match/match.service";
 import { User } from "@/domain/user/user.schema";
 
@@ -7,8 +11,10 @@ const MATES_PER_PAGE = 20;
 export async function getMatesPageData(loggedUser: User, currentPage: number) {
   const skip = (currentPage - 1) * MATES_PER_PAGE;
 
-  // 1. Fetch Paginated Users (Global approach first for simplicity,
-  // as 100km radius with 100 users might often be empty)
+  // 1. Get total count for accurate pagination
+  const totalMates = await countActiveUsers(loggedUser.id);
+
+  // 2. Fetch Paginated Users (Global approach - show all users worldwide)
   const usersBase = await getPaginatedUsers({
     take: MATES_PER_PAGE,
     skip,
@@ -20,10 +26,10 @@ export async function getMatesPageData(loggedUser: User, currentPage: number) {
       matesWithMatch: [],
       pagination: {
         currentPage,
-        totalPages: 0,
+        totalPages: Math.ceil(totalMates / MATES_PER_PAGE),
         hasNextPage: false,
         hasPrevPage: currentPage > 1,
-        totalMates: 0,
+        totalMates,
       },
       meta: { isGlobal: true },
     };
@@ -31,31 +37,29 @@ export async function getMatesPageData(loggedUser: User, currentPage: number) {
 
   const mateIds = usersBase.map((u) => u.id);
 
-  // 2. Get full data for matching
+  // 3. Get full data for matching
   const matesFull = await getUsersForMatching(mateIds, { strategy: "full" });
 
-  // 3. Calculate matches
+  // 4. Calculate matches
   const matesWithMatch = calculateMatchesBatch(
     loggedUser,
     matesFull as User[],
     "current",
   );
 
-  // Note: For a real launch, we'd need a separate count query for accurate pagination
-  // But for 100 users, we can estimate or use a high fixed count.
-  // I'll keep it simple for now as requested.
+  const totalPages = Math.ceil(totalMates / MATES_PER_PAGE);
 
   return {
     matesWithMatch,
     pagination: {
       currentPage,
-      totalPages: 5, // Placeholder for 100 users / 20 per page
-      hasNextPage: matesWithMatch.length === MATES_PER_PAGE,
+      totalPages,
+      hasNextPage: currentPage < totalPages,
       hasPrevPage: currentPage > 1,
-      totalMates: 100, // Approximate
+      totalMates,
     },
     meta: {
-      isGlobal: true, // We'll expand this later to tiered logic
+      isGlobal: true, // Always global for early-stage app
     },
   };
 }

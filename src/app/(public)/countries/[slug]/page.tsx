@@ -19,7 +19,6 @@ import StateSection from "./components/StateSection";
 import LanguageSection from "@/components/organisms/LanguageSection";
 import Block from "@/components/atoms/Block";
 import FloatingCardList from "@/components/molecules/FloatingCardList";
-import VisaRequirement from "@/components/molecules/VisaRequirement";
 import VisaStatusChecker from "@/components/molecules/VisaStatusChecker";
 import { visaService } from "@/domain/country/services/visa.service";
 
@@ -141,7 +140,7 @@ export default async function CountryPage({
 
   return (
     <div className="bg-main min-h-screen selection:bg-brand selection:text-white">
-      <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-12">
+      <main className="pb-xxl px-4 md:px-6 max-w-4xl mx-auto min-h-screen flex flex-col gap-lg">
         <PageHeader
           title={country.name}
           subtitle={country.subRegion || country.region || ""}
@@ -223,18 +222,18 @@ export default async function CountryPage({
         </div>
 
         <div className="flex flex-col gap-lg">
-          {/* Personalized Visa Status - SSR computed */}
-          {userVisaStatus && (
+          {/* Visa Status & Requirements - Shows personalized status when logged in */}
+          {visaRequirements && (
             <VisaStatusChecker
-              status={userVisaStatus}
-              countryName={country.name}
+              visa={visaRequirements}
+              userStatus={userVisaStatus}
               passportCountry={userPassportCountryName}
+              destinationCountryName={country.name}
             />
           )}
 
-          {/* General Visa Requirements */}
+          {/* Other Info Cards */}
           <div className="flex gap-lg overflow-x-scroll">
-            {visaRequirements && <VisaRequirement visa={visaRequirements} />}
             {giniValue && (
               <Block>
                 <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">

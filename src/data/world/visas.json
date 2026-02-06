@@ -1,5 +1,73 @@
 {
   "visaRequirements": {
+    "FRA": {
+      "type": "ETIAS",
+      "status": "warning",
+      "title": "Schengen ETIAS System",
+      "description": "Mandatory digital pre-authorization for all visa-exempt travelers entering the Schengen Area.",
+      "cost": { "amount": 20, "currency": "EUR" },
+      "stay": "90/180 Days",
+      "processingTime": "4-96 Hours",
+      "officialLink": "https://travel-europe.europa.eu/etias",
+      "documentsRequired": [
+        "Biometric Passport",
+        "Travel Insurance",
+        "Financial Proof"
+      ],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [
+          "USA",
+          "CAN",
+          "GBR",
+          "AUS",
+          "JPN",
+          "KOR",
+          "SGP",
+          "NZL",
+          "ISR",
+          "BRA"
+        ],
+        "eVisaPassports": [],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["CHN", "IND", "RUS", "TUR", "ZAF", "PHL"]
+      },
+      "updates2026": "ETIAS is now live. Travelers under 18 or over 70 are exempt from the €20 fee.",
+      "passportValidityRequired": 3,
+      "notes": "Covers all 30 Schengen/ETIAS member countries."
+    },
+    "ESP": {
+      "type": "ETIAS",
+      "status": "warning",
+      "title": "Spain Entry Authorization",
+      "description": "Spain strictly enforces ETIAS for all visa-exempt nationalities including US and UK citizens.",
+      "cost": { "amount": 20, "currency": "EUR" },
+      "stay": "90 Days",
+      "processingTime": "24 Hours",
+      "officialLink": "https://travel-europe.europa.eu/etias",
+      "documentsRequired": ["Biometric Passport", "Return Ticket"],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [
+          "USA",
+          "CAN",
+          "GBR",
+          "AUS",
+          "JPN",
+          "KOR",
+          "ISR",
+          "ARG",
+          "MEX",
+          "BRA"
+        ],
+        "eVisaPassports": [],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["CHN", "IND", "TUR", "ZAF", "MAR"]
+      },
+      "updates2026": "Effective Oct 2026: ETIAS soft-launch is complete; physical biometric checks are faster with the new automated gates.",
+      "passportValidityRequired": 3,
+      "notes": "You may be asked for proof of accommodation (Carta de Invitación if staying with friends)."
+    },
     "USA": {
       "type": "ESTA / Mobile Vetting",
       "status": "error",
@@ -46,7 +114,8 @@
           "AUS",
           "KOR",
           "SGP",
-          "ESP"
+          "ESP",
+          "ISR"
         ],
         "eVisaPassports": [],
         "onArrivalPassports": [],
@@ -65,20 +134,55 @@
       "passportValidityRequired": 6,
       "notes": "Citizens of Canada and Bermuda do not require an ESTA and are fully visa-exempt."
     },
-    "FRA": {
+    "CHN": {
+      "type": "Visa Free (30 Days)",
+      "status": "success",
+      "title": "China Unilateral Exemption",
+      "description": "China has expanded its 30-day visa-free entry for tourism and business to over 40 countries through 2026.",
+      "cost": { "amount": 0, "currency": "CNY" },
+      "stay": "30 Days",
+      "processingTime": "Instant",
+      "officialLink": "https://www.visaforchina.cn/",
+      "documentsRequired": ["Passport", "Hotel Reservation", "Return Flight"],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [
+          "FRA",
+          "DEU",
+          "ITA",
+          "ESP",
+          "GBR",
+          "AUS",
+          "SGP",
+          "MYS",
+          "THA",
+          "KOR",
+          "JPN",
+          "AUT",
+          "BEL",
+          "LUX",
+          "NLD",
+          "CHE",
+          "IRL"
+        ],
+        "eVisaPassports": [],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["USA", "CAN", "ISR", "IND", "BRA", "TUR"]
+      },
+      "updates2026": "Visa-free policy extended until Dec 31, 2026. Includes 240-hour transit-free options for most Western passports.",
+      "passportValidityRequired": 6,
+      "notes": "Register with local police within 24 hours of arrival (usually handled by hotels)."
+    },
+    "ITA": {
       "type": "ETIAS",
       "status": "warning",
-      "title": "Schengen ETIAS System",
-      "description": "Mandatory digital pre-authorization for all visa-exempt travelers entering the Schengen Area.",
+      "title": "Italy Travel Authorization",
+      "description": "Italy requires all visa-free travelers to obtain an ETIAS before departure.",
       "cost": { "amount": 20, "currency": "EUR" },
-      "stay": "90/180 Days",
-      "processingTime": "4-96 Hours",
+      "stay": "90 Days",
+      "processingTime": "96 Hours",
       "officialLink": "https://travel-europe.europa.eu/etias",
-      "documentsRequired": [
-        "Biometric Passport",
-        "Travel Insurance",
-        "Financial Proof"
-      ],
+      "documentsRequired": ["Biometric Passport"],
       "restrictions": {
         "forbiddenPassports": [],
         "visaFreePassports": [
@@ -87,19 +191,82 @@
           "GBR",
           "AUS",
           "JPN",
-          "KOR",
-          "SGP",
-          "NZL",
           "ISR",
-          "BRA"
+          "BRA",
+          "NZL",
+          "SGP"
         ],
         "eVisaPassports": [],
         "onArrivalPassports": [],
-        "visaRequiredPassports": ["CHN", "IND", "RUS", "TUR", "ZAF", "PHL"]
+        "visaRequiredPassports": ["CHN", "IND", "TUR", "RUS", "EGY", "TUN"]
       },
-      "updates2026": "ETIAS is now live. Travelers under 18 or over 70 are exempt from the €20 fee.",
+      "updates2026": "ETIAS fee is now mandatory. Digital arrival gates are now standard at Fiumicino and Malpensa.",
       "passportValidityRequired": 3,
-      "notes": "Covers all 30 Schengen/ETIAS member countries."
+      "notes": "Always carry your ETIAS confirmation (digital or print)."
+    },
+    "TUR": {
+      "type": "e-Visa / Visa Free",
+      "status": "info",
+      "title": "Turkey Entry Policy 2026",
+      "description": "Most Western nations are now visa-free, while others must use the e-Visa portal.",
+      "cost": { "amount": 60, "currency": "USD" },
+      "stay": "90 Days",
+      "processingTime": "24 Hours",
+      "officialLink": "https://www.evisa.gov.tr/",
+      "documentsRequired": ["Passport"],
+      "restrictions": {
+        "forbiddenPassports": ["CYP"],
+        "visaFreePassports": [
+          "DEU",
+          "FRA",
+          "GBR",
+          "ITA",
+          "ESP",
+          "ISR",
+          "JPN",
+          "KOR",
+          "BRA",
+          "CHN"
+        ],
+        "eVisaPassports": ["USA", "CAN", "AUS", "MEX", "ZAF"],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["IND", "NGA", "PAK", "AFG"]
+      },
+      "updates2026": "Effective Jan 2, 2026: Ordinary Chinese passports are now fully visa-exempt for 90 days.",
+      "passportValidityRequired": 6,
+      "notes": "Turkish e-Visas are only valid for tourism and trade; work/study requires a consulate visa."
+    },
+    "MEX": {
+      "type": "FMM Digital",
+      "status": "success",
+      "title": "Mexico Electronic Authorization",
+      "description": "Mexico uses a digital FMM form. Visa-free for holders of valid US, UK, or Schengen visas.",
+      "cost": { "amount": 0, "currency": "USD" },
+      "stay": "180 Days",
+      "processingTime": "Instant",
+      "officialLink": "https://www.inm.gob.mx/sae/publico/solicitud.html",
+      "documentsRequired": ["Passport", "FMM QR Code"],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [
+          "USA",
+          "CAN",
+          "GBR",
+          "JPN",
+          "ESP",
+          "FRA",
+          "DEU",
+          "ITA",
+          "ISR",
+          "AUS"
+        ],
+        "eVisaPassports": ["RUS", "TUR", "UKR"],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["CHN", "IND", "BRA", "VNM", "PHL"]
+      },
+      "updates2026": "Reciprocity visas for Brazil are still in effect. The Maya Train route now features automated immigration kiosks.",
+      "passportValidityRequired": 6,
+      "notes": "Ensure your passport is stamped or QR scanned to avoid issues when exciting."
     },
     "GBR": {
       "type": "UK-ETA",
@@ -122,7 +289,8 @@
           "ESP",
           "AUS",
           "JPN",
-          "KOR"
+          "KOR",
+          "ISR"
         ],
         "onArrivalPassports": [],
         "visaRequiredPassports": [
@@ -139,23 +307,58 @@
       "passportValidityRequired": 6,
       "notes": "Irish citizens are exempt due to the Common Travel Area."
     },
-    "THA": {
-      "type": "ETA / Digital Arrival",
+    "DEU": {
+      "type": "ETIAS",
       "status": "warning",
-      "title": "Thailand Entry (TDAC/ETA)",
-      "description": "Visa-exempt tourists must submit a Digital Arrival Card (TDAC) and obtain a free ETA.",
+      "title": "Germany Travel Authorization",
+      "description": "Germany mandates ETIAS for all visa-exempt visitors entering for tourism or business.",
+      "cost": { "amount": 20, "currency": "EUR" },
+      "stay": "90 Days",
+      "processingTime": "48 Hours",
+      "officialLink": "https://travel-europe.europa.eu/etias",
+      "documentsRequired": ["Biometric Passport"],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [
+          "USA",
+          "CAN",
+          "GBR",
+          "AUS",
+          "JPN",
+          "ISR",
+          "BRA",
+          "NZL"
+        ],
+        "eVisaPassports": [],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["CHN", "IND", "TUR", "RUS", "ZAF", "THA"]
+      },
+      "updates2026": "Lufthansa and other airlines now check for ETIAS status during digital check-in.",
+      "passportValidityRequired": 3,
+      "notes": "Carry proof of sufficient funds (€45 per day of stay)."
+    },
+    "THA": {
+      "type": "TDAC (Digital Arrival)",
+      "status": "warning",
+      "title": "Thailand Entry (TDAC)",
+      "description": "All foreign nationals must submit a Digital Arrival Card (TDAC) before entry. No fee required.",
       "cost": { "amount": 0, "currency": "THB" },
       "stay": "60 Days",
       "processingTime": "24 Hours",
       "officialLink": "https://www.thaievisa.go.th/",
-      "documentsRequired": [
-        "Passport",
-        "Digital Arrival Card QR",
-        "Return Flight"
-      ],
+      "documentsRequired": ["Passport", "TDAC QR Code", "Return Flight"],
       "restrictions": {
         "forbiddenPassports": [],
-        "visaFreePassports": [],
+        "visaFreePassports": [
+          "ISR",
+          "KOR",
+          "JPN",
+          "SGP",
+          "MYS",
+          "IDN",
+          "PHL",
+          "VNM"
+        ],
         "eVisaPassports": [
           "USA",
           "CAN",
@@ -165,35 +368,40 @@
           "CHN",
           "IND",
           "RUS",
-          "AUS"
+          "AUS",
+          "ESP"
         ],
         "onArrivalPassports": ["BRA", "MEX"],
         "visaRequiredPassports": ["AFG", "NGA", "IRQ"]
       },
-      "updates2026": "The 300 THB tourism levy is now collected automatically via airfare.",
+      "updates2026": "TDAC has replaced the ETA and paper TM6 cards. The 300 THB tourism levy is collected via airfare.",
       "passportValidityRequired": 6,
       "notes": "Stay duration for visa-exempt entry is now standardized at 60 days."
     },
-    "BRA": {
-      "type": "e-Visa",
-      "status": "warning",
-      "title": "Brazil e-Visa 2026",
-      "description": "Reciprocity visas reinstated for several Western nations.",
-      "cost": { "amount": 81, "currency": "USD" },
-      "stay": "90 Days",
-      "processingTime": "5 Business Days",
-      "officialLink": "https://brazil.vfsevisa.com/",
-      "documentsRequired": ["Passport", "Passport Photo", "Proof of Income"],
+    "IRN": {
+      "type": "Visa Required",
+      "status": "error",
+      "title": "Iran Entry Policy",
+      "description": "Strict entry requirements and travel bans for specific nationalities.",
+      "cost": { "amount": 100, "currency": "EUR" },
+      "stay": "30 Days",
+      "processingTime": "2 Weeks",
+      "officialLink": "https://evisa.mfa.ir/",
+      "documentsRequired": [
+        "Passport",
+        "Travel Insurance",
+        "Detailed Itinerary"
+      ],
       "restrictions": {
-        "forbiddenPassports": [],
-        "visaFreePassports": ["ARG", "URY", "CHL", "PRY", "ESP", "DEU", "GBR"],
-        "eVisaPassports": ["USA", "CAN", "AUS", "MEX", "FRA"],
+        "forbiddenPassports": ["ISR"],
+        "visaFreePassports": ["TUR", "ARM", "AZE", "OMN", "QAT"],
+        "eVisaPassports": ["CHN", "RUS", "DEU", "FRA"],
         "onArrivalPassports": [],
-        "visaRequiredPassports": ["CHN", "IND", "VNM"]
+        "visaRequiredPassports": ["USA", "CAN", "GBR"]
       },
-      "updates2026": "Visa requirement officially expanded to include France and Mexico as of Jan 1, 2026.",
+      "updates2026": "Entry for Israeli passport holders remains strictly prohibited.",
       "passportValidityRequired": 6,
-      "notes": "Print a physical copy of the e-Visa; digital copies may be rejected by some airlines."
+      "notes": "Journalists and dual nationals may face additional vetting."
     }
   }
 }

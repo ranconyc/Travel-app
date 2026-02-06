@@ -20,7 +20,7 @@ export const LanguageSection = ({ data }: { data: LanguageData }) => {
   if (!data?.languages && !data?.commonPhrases) return null;
 
   return (
-    <div className="flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary">
+    <div className="flex flex-col gap-6 p-6 bg-surface rounded-3xl border border-surface-secondary shrink-0 w-[312px]">
       <div className="flex items-center gap-3 mb-2">
         <div className="bg-purple-500/10 p-2 rounded-full">
           <MessageCircle className="w-6 h-6 text-purple-500" />

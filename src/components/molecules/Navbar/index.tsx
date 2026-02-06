@@ -73,7 +73,7 @@ export default function Navbar({
           <Link href="/chats">
             <MessageCircle size={iconsSize} />
             {totalUnread > 0 && (
-              <Badge className="absolute -top-1 -right-1 px-1 py-0 min-w-[20px] h-5 flex items-center justify-center text-[10px] leading-none border-2 border-surface bg-error text-white rounded-full">
+              <Badge className="absolute -top-1 -right-1 px-1 py-0 min-w-[20px] h-5 flex items-center justify-center text-[10px] font-bold leading-none border-2 border-surface bg-[oklch(55%_0.25_25)] text-white rounded-full">
                 {totalUnread > 99 ? "99+" : totalUnread}
               </Badge>
             )}

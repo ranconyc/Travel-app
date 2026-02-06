@@ -34,10 +34,20 @@ export const cityLiteSchema = z.object({
   name: z.string(),
   countryRefId: z.string().nullable(),
   imageHeroUrl: z.string().url().nullable(),
+  stateName: z.string().nullable().optional(),
+  state: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      code: z.string().nullable(),
+    })
+    .optional()
+    .nullable(),
   country: z
     .object({
       id: z.string(),
       name: z.string(),
+      code: z.string(),
     })
     .optional()
     .nullable(),
@@ -133,9 +143,16 @@ export type ProfileUser = User & {
   homeBaseCity?: {
     id: string;
     name: string;
+    stateName?: string | null;
+    state?: {
+      id: string;
+      name: string;
+      code?: string | null;
+    } | null;
     country?: {
       id: string;
       name: string;
+      code: string;
     } | null;
   } | null;
 };

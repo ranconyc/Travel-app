@@ -24,12 +24,7 @@ export default function CityList() {
       }
       skeletonCount={6}
       emptyText="No cities found."
-      renderItem={(city) => (
-        <CityCard
-          key={city.id}
-          city={city}
-        />
-      )}
+      renderItem={(city) => <CityCard key={city.id} city={city} />}
     />
   );
 }

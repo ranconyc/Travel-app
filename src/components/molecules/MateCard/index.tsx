@@ -52,7 +52,7 @@ const MateCard = memo(function MateCard({
       }}
       priority={priority}
       gradient="bg-gradient-to-t from-black/70 via-black/40 to-transparent"
-      className={cn("h-full", className)}
+      className={cn("h-full aspect-[3/4]", className)}
     >
       <div className="p-mdlg h-full flex flex-col justify-between relative">
         {/* Top Section: Match Score */}

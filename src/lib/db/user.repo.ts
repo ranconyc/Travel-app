@@ -130,6 +130,27 @@ export async function getPaginatedUsers(options: {
 }
 
 /**
+ * Count active, non-banned users (for pagination).
+ * Excludes a specific user ID (typically the logged-in user).
+ */
+export async function countActiveUsers(
+  excludeUserId?: string,
+): Promise<number> {
+  try {
+    return await prisma.user.count({
+      where: {
+        id: excludeUserId ? { not: excludeUserId } : undefined,
+        isBanned: false,
+        isActive: true,
+      },
+    });
+  } catch (error) {
+    console.error("countActiveUsers error:", error);
+    throw new Error("Unable to count users");
+  }
+}
+
+/**
  * Fetches all users with full relations.
  * Use only when you need complete user data (e.g., admin user management).
  */
