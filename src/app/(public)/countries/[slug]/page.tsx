@@ -20,6 +20,7 @@ import LanguageSection from "@/components/organisms/LanguageSection";
 import Block from "@/components/atoms/Block";
 import FloatingCardList from "@/components/molecules/FloatingCardList";
 import VisaRequirement from "@/components/molecules/VisaRequirement";
+import VisaStatusChecker from "@/components/molecules/VisaStatusChecker";
 import { visaService } from "@/domain/country/services/visa.service";
 
 import commonPhrasesData from "@/data/world/common_phrases.json";
@@ -79,7 +80,7 @@ export default async function CountryPage({
   if (!country) return notFound();
 
   // Get visa requirements for this country using the visa service
-  const visaRequirements = visaService.getVisaRequirement(country.code);
+  const visaRequirements = visaService.getVisaRequirement(country.cca3);
 
   // Get primary language for common phrases using the country data
   // The DB stores languages as { "heb": "Hebrew" }, so we take the first key ("heb")
@@ -91,6 +92,15 @@ export default async function CountryPage({
   const inThisCountry = userWithCity?.currentCity?.country?.id === country?.id;
   const userCoords = (userWithCity?.currentCity?.coords as any)?.coordinates;
   const countryCoords = (country.coords as any)?.coordinates;
+
+  // SSR: Get personalized visa status based on user's passport (homebase country)
+  const userPassportCode =
+    (userWithCity?.profile?.homeBaseCity?.country as any)?.cca3 || null;
+  const userPassportCountryName =
+    (userWithCity?.profile?.homeBaseCity?.country as any)?.name || null;
+  const userVisaStatus = userPassportCode
+    ? visaService.getUserVisaStatus(country.cca3, userPassportCode)
+    : null;
 
   const distanceMeta =
     userCoords && countryCoords
@@ -212,41 +222,52 @@ export default async function CountryPage({
           })()}
         </div>
 
-        <div className="flex gap-lg overflow-x-scroll">
-          {/* Visa Requirements */}
-          {visaRequirements && <VisaRequirement visa={visaRequirements} />}
-          {giniValue && (
-            <Block>
-              <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
-                Social Equality
-              </h3>
-              <p className="text-p font-bold text-txt-main">
-                {getGiniInsight(giniValue as number)}
-              </p>
-            </Block>
-          )}
-
-          <FinanceSection />
-
-          {country.languages && (
-            <LanguageSection
-              {...(country.languages as any)}
-              primaryLanguageCode={primaryLanguageCode}
-              commonPhrases={
-                primaryLanguageCode &&
-                (commonPhrasesData.commonPhrases as any)[primaryLanguageCode]
-                  ? (commonPhrasesData.commonPhrases as any)[
-                      primaryLanguageCode
-                    ]
-                  : []
-              }
+        <div className="flex flex-col gap-lg">
+          {/* Personalized Visa Status - SSR computed */}
+          {userVisaStatus && (
+            <VisaStatusChecker
+              status={userVisaStatus}
+              countryName={country.name}
+              passportCountry={userPassportCountryName}
             />
           )}
 
-          <LogisticsSection />
+          {/* General Visa Requirements */}
+          <div className="flex gap-lg overflow-x-scroll">
+            {visaRequirements && <VisaRequirement visa={visaRequirements} />}
+            {giniValue && (
+              <Block>
+                <h3 className="text-upheader font-bold text-secondary uppercase tracking-wider mb-xs">
+                  Social Equality
+                </h3>
+                <p className="text-p font-bold text-txt-main">
+                  {getGiniInsight(giniValue as number)}
+                </p>
+              </Block>
+            )}
 
-          <CultureSection />
-          <HealthSection />
+            <FinanceSection />
+
+            {country.languages && (
+              <LanguageSection
+                {...(country.languages as any)}
+                primaryLanguageCode={primaryLanguageCode}
+                commonPhrases={
+                  primaryLanguageCode &&
+                  (commonPhrasesData.commonPhrases as any)[primaryLanguageCode]
+                    ? (commonPhrasesData.commonPhrases as any)[
+                        primaryLanguageCode
+                      ]
+                    : []
+                }
+              />
+            )}
+
+            <LogisticsSection />
+
+            <CultureSection />
+            <HealthSection />
+          </div>
         </div>
       </main>
     </div>

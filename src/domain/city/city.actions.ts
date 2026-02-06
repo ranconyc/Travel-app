@@ -113,18 +113,24 @@ export const updateCityAction = createAdminAction(
     // Remove relations and non-Prisma fields before saving
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
-      media,
-      places,
-      country,
-      state,
+      media: _media,
+      places: _places,
+      country: _country,
+      state: _state,
       // Strip extra editor fields that aren't in Prisma schema
-      countryCode,
-      description,
-      bestSeason,
-      idealDuration,
-      safety,
-      budget,
-      gettingAround,
+      countryCode: _countryCode,
+      description: _description,
+      bestSeason: _bestSeason,
+      idealDuration: _idealDuration,
+      safety: _safety,
+      budget: _budget,
+      gettingAround: _gettingAround,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      id: _id, // Exclude id from data
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      countryRefId: _countryRefId,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      tags: _tags, // Strip tags as it's not in Prisma City model
       ...cleanData
     } = data;
 

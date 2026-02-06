@@ -34,7 +34,10 @@ export async function handleUpsertUserProfile(
   // 2. Perform Atomic Update
   return await userRepository.updateUserWithProfile(userId, {
     ...(profileData.firstName && { name: profileData.firstName }),
-    ...(profileData.avatarUrl && { avatarUrl: profileData.avatarUrl }),
+    ...(profileData.avatarUrl && {
+      avatarUrl: profileData.avatarUrl,
+      avatarPublicId: profileData.avatarPublicId,
+    }),
     ...(profileData.profileCompleted !== undefined && {
       profileCompleted: profileData.profileCompleted,
     }),
@@ -103,7 +106,7 @@ export async function completeProfile(
       : (data.gender as "MALE" | "FEMALE" | "NON_BINARY");
 
   try {
-    await userRepository.updateFullProfile(userId, {
+    await userRepository.updateUserWithProfile(userId, {
       profileCompleted: true,
       name: `${data.firstName} ${data.lastName}`.trim(),
       profile: {
@@ -131,7 +134,11 @@ export async function completeProfile(
     });
 
     if (data.avatarUrl) {
-      await userRepository.updateUserAvatar(userId, data.avatarUrl);
+      await userRepository.updateUserAvatar(
+        userId,
+        data.avatarUrl,
+        data.avatarPublicId || undefined,
+      );
     }
   } catch (error) {
     console.error("completeProfile error:", error);

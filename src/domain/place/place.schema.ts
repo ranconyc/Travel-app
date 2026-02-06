@@ -78,6 +78,7 @@ export const PlaceSchema = z.object({
 
   // Media
   imageHeroUrl: z.string().url().optional().nullable(),
+  imageHeroPublicId: z.string().optional().nullable(),
   media: z.array(z.any()).optional(),
 
   // CMS Content

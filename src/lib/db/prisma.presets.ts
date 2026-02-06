@@ -154,6 +154,7 @@ export const countrySummarySelect = {
   imageHeroUrl: true,
   region: true,
   subRegion: true,
+  flags: true,
 } satisfies Prisma.CountrySelect;
 
 /**

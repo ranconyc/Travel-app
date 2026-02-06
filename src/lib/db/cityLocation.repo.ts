@@ -55,7 +55,7 @@ export async function getAllCities(limit?: number, offset?: number) {
   try {
     return await prisma.city.findMany({
       orderBy: { name: "asc" },
-      include: { country: true },
+      include: { country: true, media: true },
       take: limit,
       skip: offset,
     });

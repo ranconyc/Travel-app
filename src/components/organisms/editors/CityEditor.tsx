@@ -31,8 +31,18 @@ const EXTRA_FIELDS = [
 const JSON_FIELDS = ["budget", "gettingAround", "coords", "boundingBox"];
 
 // Fields to check for data health (non-JSON Prisma fields only)
-const REQUIRED_FIELDS = ["name", "slug", "cityId"];
-const RECOMMENDED_FIELDS = ["imageHeroUrl", "timeZone", "population"];
+// Fields to check for data health (non-JSON Prisma fields only)
+const REQUIRED_FIELDS = ["name", "countryRefId", "coords", "population"];
+const RECOMMENDED_FIELDS = [
+  "imageHeroUrl",
+  "description",
+  "weather",
+  "bestTimeToVisit",
+  "budget",
+  "safety",
+  "internetSpeed",
+  "timeZone",
+];
 
 function getMissingFields(data: Record<string, unknown>): {
   required: string[];
@@ -162,8 +172,12 @@ export default function CityEditor({ id, initialData }: Props) {
                 <ImageUploader
                   label="Hero Image"
                   currentImageUrl={data.imageHeroUrl}
-                  onImageUploaded={(url) =>
-                    setData({ ...data, imageHeroUrl: url })
+                  onImageUploaded={(url, publicId) =>
+                    setData({
+                      ...data,
+                      imageHeroUrl: url,
+                      imageHeroPublicId: publicId,
+                    })
                   }
                   entityType="city"
                   entityId={id}

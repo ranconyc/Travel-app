@@ -38,12 +38,36 @@ const EXTRA_FIELDS = [
 const ARRAY_FIELDS = ["categories", "amenities", "vibe", "highlights", "tags"];
 const JSON_FIELDS = ["coords", "openingHours", "entryPrice"];
 
-function getMissingFields(data: any): string[] {
-  const missing: string[] = [];
-  if (!data.name) missing.push("name");
-  if (!data.description) missing.push("description");
-  if (!data.imageHeroUrl) missing.push("imageHeroUrl");
-  return missing;
+const REQUIRED_FIELDS = ["name", "cityRefId", "type", "coords"];
+const RECOMMENDED_FIELDS = [
+  "imageHeroUrl",
+  "googlePlaceId",
+  "websiteUrl",
+  "phoneNumber",
+  "openingHours",
+  "priceLevel",
+  "rating",
+  "reviewCount",
+  "summary",
+  "amenities",
+];
+
+function getMissingFields(data: any): {
+  required: string[];
+  recommended: string[];
+} {
+  const required: string[] = [];
+  const recommended: string[] = [];
+
+  REQUIRED_FIELDS.forEach((field) => {
+    if (!data[field]) required.push(field);
+  });
+
+  RECOMMENDED_FIELDS.forEach((field) => {
+    if (!data[field]) recommended.push(field);
+  });
+
+  return { required, recommended };
 }
 
 export default function PlaceEditor({ id, initialData }: Props) {
@@ -51,8 +75,13 @@ export default function PlaceEditor({ id, initialData }: Props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const missingFields = getMissingFields(data);
-  const completeness = Math.max(0, 100 - missingFields.length * 20);
+  const { required: missingRequired, recommended: missingRecommended } =
+    getMissingFields(data);
+  const totalMissing = missingRequired.length + missingRecommended.length;
+  const totalFields = REQUIRED_FIELDS.length + RECOMMENDED_FIELDS.length;
+  const completeness = Math.round(
+    ((totalFields - totalMissing) / totalFields) * 100,
+  );
 
   const handleSave = async () => {
     setLoading(true);
@@ -151,8 +180,12 @@ export default function PlaceEditor({ id, initialData }: Props) {
                 <ImageUploader
                   label="Hero Image"
                   currentImageUrl={data.imageHeroUrl}
-                  onImageUploaded={(url) =>
-                    setData({ ...data, imageHeroUrl: url })
+                  onImageUploaded={(url, publicId) =>
+                    setData({
+                      ...data,
+                      imageHeroUrl: url,
+                      imageHeroPublicId: publicId,
+                    })
                   }
                 />
               </div>
@@ -231,9 +264,10 @@ export default function PlaceEditor({ id, initialData }: Props) {
           <div className="bg-surface rounded-xl p-6 shadow-sm border border-border">
             <h3 className="font-bold text-lg mb-md flex items-center gap-2">
               Data Health
-              {missingFields.length === 0 && (
-                <CheckCircle className="text-success" size={18} />
-              )}
+              {missingRequired.length === 0 &&
+                missingRecommended.length === 0 && (
+                  <CheckCircle className="text-success" size={18} />
+                )}
             </h3>
             <div className="mb-6">
               <div className="flex justify-between text-sm mb-1">
@@ -242,22 +276,69 @@ export default function PlaceEditor({ id, initialData }: Props) {
               </div>
               <div className="h-2 w-full bg-surface-secondary rounded-full overflow-hidden">
                 <div
-                  className={`h-full ${completeness > 80 ? "bg-success" : completeness > 50 ? "bg-warning" : "bg-error"}`}
+                  className={`h-full ${missingRequired.length === 0 ? (completeness > 80 ? "bg-success" : "bg-warning") : "bg-error"}`}
                   style={{ width: `${completeness}%` }}
                 />
               </div>
             </div>
-            <div className="text-xs text-secondary">
-              {missingFields.length > 0 ? (
-                <ul className="list-disc pl-4 space-y-1">
-                  {missingFields.map((field) => (
-                    <li key={field} className="text-error">
-                      Missing {field}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-success">All required fields present.</p>
+            <div className="text-xs space-y-3">
+              {/* Complete Fields */}
+              {REQUIRED_FIELDS.filter((f) => data[f]).length > 0 && (
+                <div>
+                  <p className="font-medium text-success mb-1">✓ Complete:</p>
+                  <ul className="list-none pl-0 space-y-0.5">
+                    {REQUIRED_FIELDS.filter((f) => data[f]).map((field) => (
+                      <li
+                        key={field}
+                        className="text-secondary flex items-center gap-1"
+                      >
+                        <CheckCircle size={12} className="text-success" />{" "}
+                        {field}
+                      </li>
+                    ))}
+                    {RECOMMENDED_FIELDS.filter((f) => data[f]).map((field) => (
+                      <li
+                        key={field}
+                        className="text-secondary flex items-center gap-1"
+                      >
+                        <CheckCircle size={12} className="text-success" />{" "}
+                        {field}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Missing Required */}
+              {missingRequired.length > 0 && (
+                <div>
+                  <p className="font-medium text-error mb-1">
+                    ✗ Missing (Required):
+                  </p>
+                  <ul className="list-none pl-0 space-y-0.5">
+                    {missingRequired.map((field) => (
+                      <li key={field} className="text-error">
+                        {field}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Missing Recommended */}
+              {missingRecommended.length > 0 && (
+                <div>
+                  <p className="font-medium text-warning mb-1">
+                    ○ Missing (Recommended):
+                  </p>
+                  <ul className="list-none pl-0 space-y-0.5">
+                    {missingRecommended.map((field) => (
+                      <li key={field} className="text-secondary">
+                        {field}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           </div>

@@ -54,7 +54,7 @@ export const fetchGooglePlaceDetailsAction = createAdminAction(
     placeId: z.string(),
   }),
   async ({ placeId }) => {
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,geometry,website,international_phone_number,opening_hours,price_level,rating,user_ratings_total,photos,place_id,utc_offset,types&key=${process.env.GOOGLE_PLACES_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_address,geometry,website,international_phone_number,opening_hours,price_level,rating,user_ratings_total,photos,place_id,utc_offset,types,business_status,reviews&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
     const response = await fetch(url);
     const data = await response.json();

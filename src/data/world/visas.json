@@ -1,96 +1,199 @@
 {
   "visaRequirements": {
-    "TH": {
-      "type": "EVisa",
-      "allowedStay": "60 Days",
-      "status": "warning",
-      "title": "General Entry Policy",
-      "description": "Most international visitors can apply for an e-visa or get an exemption for tourism.",
-      "cost": { "amount": 35, "currency": "USD" },
-      "processingTime": "3-5 Business Days",
-      "officialLink": "https://www.thaievisa.go.th/",
-      "documentsRequired": ["Valid Passport (6 months)", "Return Ticket", "Proof of Stay"],
-      "notes": "Rules vary based on your nationality. Check official e-visa portal."
-    },
-    "FR": {
-      "type": "VisaFree",
-      "allowedStay": "90 Days",
-      "status": "success",
-      "title": "Schengen Policy",
-      "description": "Travelers from visa-exempt countries can enter for up to 90 days for tourism.",
-      "documentsRequired": ["Valid Passport (6 months)", "Travel Insurance", "Proof of Funds"],
-      "notes": "Applies to the entire Schengen area."
-    },
-    "US": {
-      "type": "VisaRequired",
-      "allowedStay": "90 Days",
+    "USA": {
+      "type": "ESTA / Mobile Vetting",
       "status": "error",
-      "title": "Standard Visa Policy",
-      "description": "Many nationalities require a B1/B2 visa or an ESTA authorization before travel.",
-      "cost": { "amount": 185, "currency": "USD" },
-      "processingTime": "2-4 Weeks",
+      "title": "US Entry Policy 2026",
+      "description": "All visa-exempt travelers must use the CBP One mobile app. Stricter vetting is now in place for 39 countries.",
+      "cost": { "amount": 21, "currency": "USD" },
+      "stay": "90 Days",
+      "processingTime": "72 Hours",
       "officialLink": "https://esta.cbp.dhs.gov/",
-      "documentsRequired": ["Valid Passport", "DS-160 Form", "Interview (usually)"],
-      "notes": "Check if your country is part of the Visa Waiver Program (ESTA)."
+      "documentsRequired": [
+        "Biometric Passport",
+        "CBP Mobile App",
+        "Social Media History"
+      ],
+      "restrictions": {
+        "forbiddenPassports": [
+          "AFG",
+          "IRN",
+          "SYR",
+          "LBY",
+          "SOM",
+          "YEM",
+          "PRK",
+          "MMR",
+          "MLI",
+          "PSE",
+          "BFA",
+          "TCD",
+          "ERI",
+          "HTI",
+          "LAO",
+          "NER",
+          "COG",
+          "SLE",
+          "SSD"
+        ],
+        "visaFreePassports": [
+          "CAN",
+          "BMU",
+          "GBR",
+          "FRA",
+          "DEU",
+          "JPN",
+          "AUS",
+          "KOR",
+          "SGP",
+          "ESP"
+        ],
+        "eVisaPassports": [],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": [
+          "CHN",
+          "IND",
+          "BRA",
+          "TUR",
+          "ZAF",
+          "MEX",
+          "PHL",
+          "VNM"
+        ]
+      },
+      "updates2026": "Effective Jan 2026: The full entry ban now covers 19 nations. All ESTA applications must be submitted via mobile.",
+      "passportValidityRequired": 6,
+      "notes": "Citizens of Canada and Bermuda do not require an ESTA and are fully visa-exempt."
     },
-    "JP": {
-      "type": "VisaFree",
-      "allowedStay": "90 Days",
-      "status": "success",
-      "title": "General Tourism Policy",
-      "description": "Visa-free entry is available for many nationalities for short-term tourism.",
-      "documentsRequired": ["Valid Passport", "Return Flight Ticket"],
-      "notes": "Always check for the latest entry requirements before flying."
-    },
-    "TR": {
-      "type": "EVisa",
-      "allowedStay": "90 Days",
+    "FRA": {
+      "type": "ETIAS",
       "status": "warning",
-      "title": "E-Visa System",
-      "description": "Most travelers need to obtain an e-Visa online before arrival.",
-      "cost": { "amount": 50, "currency": "USD" },
-      "processingTime": "48-72 Hours",
-      "officialLink": "https://www.evisa.gov.tr/",
-      "documentsRequired": ["Valid Passport", "Credit/Debit Card"],
-      "notes": "Ensure your passport is valid for at least 6 months."
+      "title": "Schengen ETIAS System",
+      "description": "Mandatory digital pre-authorization for all visa-exempt travelers entering the Schengen Area.",
+      "cost": { "amount": 20, "currency": "EUR" },
+      "stay": "90/180 Days",
+      "processingTime": "4-96 Hours",
+      "officialLink": "https://travel-europe.europa.eu/etias",
+      "documentsRequired": [
+        "Biometric Passport",
+        "Travel Insurance",
+        "Financial Proof"
+      ],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [
+          "USA",
+          "CAN",
+          "GBR",
+          "AUS",
+          "JPN",
+          "KOR",
+          "SGP",
+          "NZL",
+          "ISR",
+          "BRA"
+        ],
+        "eVisaPassports": [],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["CHN", "IND", "RUS", "TUR", "ZAF", "PHL"]
+      },
+      "updates2026": "ETIAS is now live. Travelers under 18 or over 70 are exempt from the €20 fee.",
+      "passportValidityRequired": 3,
+      "notes": "Covers all 30 Schengen/ETIAS member countries."
     },
-    "IL": {
-      "type": "VisaFree",
-      "allowedStay": "90 Days",
-      "status": "success",
-      "title": "Standard Entry",
-      "description": "Visa exemption is granted to many countries for tourism purposes.",
-      "documentsRequired": ["Valid Passport", "Entry Card (issued at airport)"],
-      "notes": "Israel does not stamp passports; an entry card is provided."
-    },
-    "AE": {
-      "type": "VisaOnArrival",
-      "allowedStay": "30-90 Days",
+    "GBR": {
+      "type": "UK-ETA",
       "status": "warning",
-      "title": "UAE Entry Policy",
-      "description": "Visa on arrival or pre-arranged e-visa is required for most visitors.",
-      "cost": { "amount": 100, "currency": "AED" },
-      "officialLink": "https://smartservices.icp.gov.ae/",
-      "documentsRequired": ["Passport (6 months validity)", "Photo"],
-      "notes": "Requirements depend on your port of entry (Dubai/Abu Dhabi)."
+      "title": "United Kingdom ETA",
+      "description": "Full enforcement of 'No Permission, No Travel.' All non-visa nationals must have an ETA.",
+      "cost": { "amount": 10, "currency": "GBP" },
+      "stay": "180 Days",
+      "processingTime": "48 Hours",
+      "officialLink": "https://www.gov.uk/guidance/electronic-travel-authorisation-eta",
+      "documentsRequired": ["Biometric Passport", "UK ETA App"],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": ["IRL"],
+        "eVisaPassports": [
+          "USA",
+          "CAN",
+          "FRA",
+          "DEU",
+          "ESP",
+          "AUS",
+          "JPN",
+          "KOR"
+        ],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": [
+          "TUR",
+          "ZAF",
+          "CHN",
+          "IND",
+          "COL",
+          "PSE",
+          "NRU"
+        ]
+      },
+      "updates2026": "Effective Feb 25, 2026: ETA is now mandatory for all 85 previously visa-exempt nationalities.",
+      "passportValidityRequired": 6,
+      "notes": "Irish citizens are exempt due to the Common Travel Area."
     },
-    "ES": {
-      "type": "VisaFree",
-      "allowedStay": "90 Days",
-      "status": "success",
-      "title": "Schengen Area",
-      "description": "Spain follows the general Schengen visa-free policy for eligible nations.",
-      "documentsRequired": ["Passport", "Travel Insurance"],
-      "notes": "90/180 day rule applies."
+    "THA": {
+      "type": "ETA / Digital Arrival",
+      "status": "warning",
+      "title": "Thailand Entry (TDAC/ETA)",
+      "description": "Visa-exempt tourists must submit a Digital Arrival Card (TDAC) and obtain a free ETA.",
+      "cost": { "amount": 0, "currency": "THB" },
+      "stay": "60 Days",
+      "processingTime": "24 Hours",
+      "officialLink": "https://www.thaievisa.go.th/",
+      "documentsRequired": [
+        "Passport",
+        "Digital Arrival Card QR",
+        "Return Flight"
+      ],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": [],
+        "eVisaPassports": [
+          "USA",
+          "CAN",
+          "GBR",
+          "FRA",
+          "DEU",
+          "CHN",
+          "IND",
+          "RUS",
+          "AUS"
+        ],
+        "onArrivalPassports": ["BRA", "MEX"],
+        "visaRequiredPassports": ["AFG", "NGA", "IRQ"]
+      },
+      "updates2026": "The 300 THB tourism levy is now collected automatically via airfare.",
+      "passportValidityRequired": 6,
+      "notes": "Stay duration for visa-exempt entry is now standardized at 60 days."
+    },
+    "BRA": {
+      "type": "e-Visa",
+      "status": "warning",
+      "title": "Brazil e-Visa 2026",
+      "description": "Reciprocity visas reinstated for several Western nations.",
+      "cost": { "amount": 81, "currency": "USD" },
+      "stay": "90 Days",
+      "processingTime": "5 Business Days",
+      "officialLink": "https://brazil.vfsevisa.com/",
+      "documentsRequired": ["Passport", "Passport Photo", "Proof of Income"],
+      "restrictions": {
+        "forbiddenPassports": [],
+        "visaFreePassports": ["ARG", "URY", "CHL", "PRY", "ESP", "DEU", "GBR"],
+        "eVisaPassports": ["USA", "CAN", "AUS", "MEX", "FRA"],
+        "onArrivalPassports": [],
+        "visaRequiredPassports": ["CHN", "IND", "VNM"]
+      },
+      "updates2026": "Visa requirement officially expanded to include France and Mexico as of Jan 1, 2026.",
+      "passportValidityRequired": 6,
+      "notes": "Print a physical copy of the e-Visa; digital copies may be rejected by some airlines."
     }
-  },
-  "defaultRequirement": {
-    "type": "VisaCheckRequired",
-    "allowedStay": "Varies",
-    "status": "info",
-    "title": "Verify Entry Requirements",
-    "description": "Visa rules depend heavily on your citizenship. Please verify with the official embassy.",
-    "documentsRequired": ["Valid Passport (6 months)", "Proof of Return"],
-    "notes": "Policies change frequently due to international agreements."
   }
 }

@@ -19,6 +19,7 @@ export const CitySchema = z.object({
   timeZone: z.string().optional().nullable(),
   boundingBox: z.any().optional().nullable(),
   imageHeroUrl: z.string().url().optional().nullable(),
+  imageHeroPublicId: z.string().optional().nullable(),
 
   // State relations
   stateName: z.string().optional().nullable(),

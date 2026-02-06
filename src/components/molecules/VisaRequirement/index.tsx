@@ -109,7 +109,7 @@ export default function VisaRequirement({
               <span
                 className={`font-medium ${colors.text} ${visa.status === "success" ? "text-green-700 dark:text-green-300" : ""}`}
               >
-                {visa.status === "success" ? "✓ " : ""}Stay: {visa.allowedStay}
+                {visa.status === "success" ? "✓ " : ""}Stay: {visa.stay}
               </span>
               {visa.processingTime && (
                 <span className={`flex items-center gap-1 ${colors.text}`}>

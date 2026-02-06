@@ -10,6 +10,7 @@ model Country {
   name          String   // "Israel"
   officialName  String?  // "State of Israel"
   imageHeroUrl  String?
+  imageHeroPublicId String?
 
   // Demographics
   population    Int?     // 10119400
@@ -90,6 +91,7 @@ model State {
 
   coords       Json?    // { type: "Point", coordinates: [lng, lat] }
   imageHeroUrl String?  // Hero image URL from Cloudinary
+  imageHeroPublicId String?
   translations Json?
 
   cities       City[]
@@ -129,6 +131,7 @@ model City {
 
   // Media
   imageHeroUrl String?
+  imageHeroPublicId String?
   media        Media[]
 
   // Meta
@@ -216,6 +219,7 @@ model Place {
   
   // Media
   imageHeroUrl String? // Quick access cover
+  imageHeroPublicId String?
   media        Media[] // Full gallery
 
   // CMS Content

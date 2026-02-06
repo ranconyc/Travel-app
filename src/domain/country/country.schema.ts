@@ -8,6 +8,7 @@ export const CountrySchema = z.object({
   name: z.string(),
   officialName: z.string().optional().nullable(),
   imageHeroUrl: z.string().url().optional().nullable(),
+  imageHeroPublicId: z.string().optional().nullable(),
 
   // Demographics
   population: z.number().optional(),

@@ -57,6 +57,8 @@ export default function OnboardingForm({
       firstName: initialValues?.firstName ?? "",
       lastName: initialValues?.lastName ?? "",
       avatarUrl: initialValues?.avatarUrl ?? user?.avatarUrl ?? "",
+      avatarPublicId:
+        initialValues?.avatarPublicId ?? user?.avatarPublicId ?? "",
       birthday: initialValues?.birthday ?? {
         month: "",
         day: "",
@@ -158,9 +160,39 @@ export default function OnboardingForm({
     router.push("/");
   };
 
-  const handleAvatarSelect = (file: File, preview: string) => {
+  const handleAvatarSelect = async (file: File, preview: string) => {
     setAvatarPreview(preview);
-    // Upload logic placeholder
+    form.setValue("avatarUrl", preview);
+
+    try {
+      // 1. Get Signature
+      const signRes = await fetch("/api/admin/images/sign");
+      if (!signRes.ok) throw new Error("Failed to sign upload");
+      const signData = await signRes.json();
+
+      // 2. Upload to Cloudinary
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("api_key", signData.apiKey);
+      formData.append("timestamp", signData.timestamp.toString());
+      formData.append("signature", signData.signature);
+      formData.append("folder", "avatars");
+
+      const uploadRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,
+        { method: "POST", body: formData },
+      );
+
+      if (!uploadRes.ok) throw new Error("Upload failed");
+      const data = await uploadRes.json();
+
+      // 3. Update Form
+      form.setValue("avatarUrl", data.secure_url);
+      form.setValue("avatarPublicId", data.public_id);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to upload avatar");
+    }
   };
 
   return (

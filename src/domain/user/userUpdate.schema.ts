@@ -18,6 +18,7 @@ export const UserUpdateSchema = z.object({
     .optional(),
   lastName: z.string().optional(),
   avatarUrl: z.string().url().optional().nullable(),
+  avatarPublicId: z.string().optional().nullable(),
 
   // Demographics
   birthday: z.string().optional().nullable(),

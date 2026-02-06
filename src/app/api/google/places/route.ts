@@ -34,8 +34,36 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+      let query = name;
+
+      // Handle Google Maps Short Links or Raw IDs
+      let potentialShortLink = name;
+
+      // If it looks like a raw short ID (alphanumeric, no spaces, 10-25 chars), construct URL
+      if (/^[A-Za-z0-9_-]{10,25}$/.test(name)) {
+        potentialShortLink = `https://maps.app.goo.gl/${name}`;
+      }
+
+      if (
+        potentialShortLink.includes("maps.app.goo.gl") ||
+        potentialShortLink.includes("goo.gl/maps")
+      ) {
+        try {
+          const response = await fetch(potentialShortLink, {
+            method: "HEAD",
+            redirect: "manual",
+          });
+          const location = response.headers.get("location");
+          if (location) {
+            query = location;
+          }
+        } catch (e) {
+          console.warn("Failed to expand short URL", e);
+        }
+      }
+
       const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
-        name,
+        query,
       )}&key=${process.env.GOOGLE_PLACES_API_KEY}`;
 
       const response = await fetch(url, { next: { revalidate: 3600 } });

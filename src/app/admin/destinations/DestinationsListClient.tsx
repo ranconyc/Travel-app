@@ -8,24 +8,28 @@ type Props = {
   countries: any[];
   cities: any[];
   places: any[];
+  states: any[];
 };
 
 export default function DestinationsListClient({
   countries,
   cities,
   places,
+  states,
 }: Props) {
-  const [activeTab, setActiveTab] = useState<"countries" | "cities" | "places">(
-    "countries",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "countries" | "states" | "cities" | "places"
+  >("countries");
   const [search, setSearch] = useState("");
 
   const filteredData = (
     activeTab === "countries"
       ? countries
-      : activeTab === "cities"
-        ? cities
-        : places
+      : activeTab === "states"
+        ? states
+        : activeTab === "cities"
+          ? cities
+          : places
   ).filter(
     (item) =>
       (item.name || "").toLowerCase().includes(search.toLowerCase()) ||
@@ -39,7 +43,7 @@ export default function DestinationsListClient({
       {/* Search & Tabs */}
       <div className="flex flex-col md:flex-row gap-md items-center justify-between">
         <div className="bg-surface rounded-full p-1 flex items-center border border-border">
-          {(["countries", "cities", "places"] as const).map((tab) => (
+          {(["countries", "states", "cities", "places"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -80,17 +84,23 @@ export default function DestinationsListClient({
           (filteredData as any[]).map((item) => (
             <Link
               key={item.id}
-              href={`/admin/destinations/${item.id}`}
-              className="group block bg-surface border border-border rounded-xl hover:border-brand hover:shadow-sm transition-all p-md md:px-4 md:py-3"
+              href={`/admin/destinations/${item.id}`} // Pass ID directly
+              className="group block bg-surface border border-border rounded-lg hover:border-brand hover:shadow-sm transition-all p-md md:px-4 md:py-3"
             >
               <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr,1fr] gap-3 md:gap-0 items-start md:items-center">
                 {/* Name */}
                 <div className="flex items-center gap-3">
-                  {item.imageHeroUrl ? (
+                  {item.imageHeroUrl ||
+                  item.media?.[0]?.url ||
+                  item.flags?.svg ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <div className="relative w-10 h-10 md:w-8 md:h-8 rounded-lg overflow-hidden flex-shrink-0 bg-surface-secondary">
                       <img
-                        src={item.imageHeroUrl}
+                        src={
+                          item.imageHeroUrl ||
+                          item.media?.[0]?.url ||
+                          item.flags?.svg
+                        }
                         alt=""
                         className="w-full h-full object-cover"
                       />
@@ -115,7 +125,9 @@ export default function DestinationsListClient({
                       ? item.cca3
                       : activeTab === "cities"
                         ? item.cityId
-                        : item.id}
+                        : activeTab === "states"
+                          ? item.code || item.slug
+                          : item.id}
                   </span>
                 </div>
 

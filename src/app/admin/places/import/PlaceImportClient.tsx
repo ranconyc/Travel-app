@@ -115,6 +115,17 @@ export default function PlaceImportClient() {
         rating: details.rating || 0,
         reviewCount: details.user_ratings_total || 0,
         categories: details.types || [],
+
+        // New Fields Mapped
+        openingHours: details.opening_hours || null,
+        isPermanentlyClosed: details.business_status === "CLOSED_PERMANENTLY",
+        googleData: {
+          photos: details.photos || [],
+          reviews: details.reviews || [],
+          utc_offset: details.utc_offset,
+          business_status: details.business_status,
+        },
+        imageHeroUrl: null, // We store photos in googleData, frontend can handle display
         autoCreated: false,
         lastGoogleSync: new Date(),
         needsReview: true,

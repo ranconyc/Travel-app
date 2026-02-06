@@ -18,6 +18,7 @@ export async function PATCH(
         slug: body.slug,
         type: body.type,
         imageHeroUrl: body.imageHeroUrl,
+        imageHeroPublicId: body.imageHeroPublicId,
         coords: body.coords,
       },
     });

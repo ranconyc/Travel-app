@@ -75,7 +75,7 @@ export type HomeBaseLocationMeta = z.infer<typeof homeBaseLocationMetaSchema>;
  */
 export const completeProfileSchema = z.object({
   avatarUrl: z.string().url().nullable().optional(),
-  imagePublicId: z.string().nullable().optional(),
+  avatarPublicId: z.string().nullable().optional(),
 
   firstName: z
     .string()

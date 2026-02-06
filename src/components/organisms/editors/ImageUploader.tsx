@@ -7,7 +7,7 @@ import ImagePickerModal from "@/components/organisms/ImagePickerModal";
 
 interface ImageUploaderProps {
   currentImageUrl?: string;
-  onImageUploaded: (url: string) => void;
+  onImageUploaded: (url: string, publicId?: string) => void;
   label?: string;
   entityType?: "country" | "city" | "state";
   entityId?: string;
@@ -65,7 +65,7 @@ export default function ImageUploader({
 
       const result = await uploadRes.json();
 
-      onImageUploaded(result.secure_url);
+      onImageUploaded(result.secure_url, result.public_id);
       toast.success("Image uploaded successfully");
     } catch (error) {
       console.error("Image upload error:", error);
@@ -147,8 +147,8 @@ export default function ImageUploader({
       <ImagePickerModal
         isOpen={showImagePicker}
         onClose={() => setShowImagePicker(false)}
-        onImageSelected={(cloudinaryUrl) => {
-          onImageUploaded(cloudinaryUrl);
+        onImageSelected={(cloudinaryUrl, publicId) => {
+          onImageUploaded(cloudinaryUrl, publicId);
           toast.success("Image selected and saved!");
         }}
         defaultQuery={defaultSearchQuery}

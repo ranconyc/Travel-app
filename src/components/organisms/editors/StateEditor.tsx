@@ -18,6 +18,7 @@ type Props = {
     slug?: string;
     type?: string;
     imageHeroUrl?: string;
+    imageHeroPublicId?: string;
     coords?: unknown;
     country?: { name: string; code: string };
   };
@@ -205,8 +206,12 @@ export default function StateEditor({ id, initialData }: Props) {
                 <ImageUploader
                   label="Hero Image"
                   currentImageUrl={data.imageHeroUrl}
-                  onImageUploaded={(url) =>
-                    setData({ ...data, imageHeroUrl: url })
+                  onImageUploaded={(url, publicId) =>
+                    setData({
+                      ...data,
+                      imageHeroUrl: url,
+                      imageHeroPublicId: publicId,
+                    })
                   }
                   entityType="state"
                   entityId={id}

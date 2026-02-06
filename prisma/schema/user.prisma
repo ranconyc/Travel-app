@@ -13,7 +13,8 @@ model User {
   role             Role      @default(USER)
   name             String?
   passwordHash     String?
-  avatarUrl        String?   
+  avatarUrl        String?
+  avatarPublicId   String?   
   emailVerified    DateTime?
   profileCompleted Boolean   @default(false)
   isBanned         Boolean   @default(false)

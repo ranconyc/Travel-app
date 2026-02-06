@@ -230,6 +230,7 @@ export const completeIdentityOnboarding = createSafeAction(
       birthday: birthdayString,
       homeBaseCityId,
       avatarUrl: data.avatarUrl,
+      avatarPublicId: data.avatarPublicId,
     });
 
     return { success: true };

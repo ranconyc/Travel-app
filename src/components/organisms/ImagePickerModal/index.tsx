@@ -18,7 +18,11 @@ export interface ImageResult {
 interface ImagePickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onImageSelected: (cloudinaryUrl: string, attribution: ImageResult) => void;
+  onImageSelected: (
+    cloudinaryUrl: string,
+    publicId: string,
+    attribution: ImageResult,
+  ) => void;
   defaultQuery?: string;
   entityType?: "country" | "city" | "state";
   entityId?: string;
@@ -96,7 +100,7 @@ export default function ImagePickerModal({
         setError(data.error);
         setSelectedImage(null);
       } else {
-        onImageSelected(data.cloudinaryUrl, image);
+        onImageSelected(data.cloudinaryUrl, data.publicId, image);
         onClose();
       }
     } catch (err) {

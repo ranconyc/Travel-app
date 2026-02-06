@@ -417,10 +417,14 @@ export async function updateFullProfile(userId: string, data: any) {
 /**
  * Specifically updates the avatar URL for a user.
  */
-export async function updateUserAvatar(userId: string, avatarUrl: string) {
+export async function updateUserAvatar(
+  userId: string,
+  avatarUrl: string,
+  avatarPublicId?: string,
+) {
   return prisma.user.update({
     where: { id: userId },
-    data: { avatarUrl },
+    data: { avatarUrl, avatarPublicId },
   });
 }
 

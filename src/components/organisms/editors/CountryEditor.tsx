@@ -52,12 +52,27 @@ const JSON_FIELDS = [
 ];
 
 // Fields to check for data health (non-JSON Prisma fields only)
-const REQUIRED_FIELDS = ["name", "code", "cca3"];
+// Fields to check for data health (non-JSON Prisma fields only)
+const REQUIRED_FIELDS = [
+  "name",
+  "code",
+  "cca3",
+  "region",
+  "capitalName",
+  "population",
+];
 const RECOMMENDED_FIELDS = [
   "imageHeroUrl",
-  "region",
-  "population",
-  "capitalName",
+  "subRegion",
+  "areaKm2",
+  "officialName",
+  "flags",
+  "coatOfArms",
+  "maps",
+  "languages",
+  "currencies",
+  "timezones",
+  "description",
 ];
 
 function getMissingFields(data: any): {
@@ -218,8 +233,12 @@ export default function CountryEditor({ id, initialData }: Props) {
                 <ImageUploader
                   label="Hero Image"
                   currentImageUrl={data.imageHeroUrl}
-                  onImageUploaded={(url) =>
-                    setData({ ...data, imageHeroUrl: url })
+                  onImageUploaded={(url, publicId) =>
+                    setData({
+                      ...data,
+                      imageHeroUrl: url,
+                      imageHeroPublicId: publicId,
+                    })
                   }
                   entityType="country"
                   entityId={id}

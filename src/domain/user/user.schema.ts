@@ -75,6 +75,7 @@ export const userSchema = z.object({
   name: z.string().nullable(),
   emailVerified: z.date().nullable(),
   avatarUrl: z.string().url().nullable().optional(),
+  avatarPublicId: z.string().nullable().optional(),
   passwordHash: z.string().nullable().optional(), // Optional as it's sensitive
   profileCompleted: z.boolean().default(false),
 

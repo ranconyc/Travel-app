@@ -3,6 +3,7 @@ import { geoPointSchema } from "@/domain/common.schema";
 
 export const onboardingIdentitySchema = z.object({
   avatarUrl: z.string().optional(),
+  avatarPublicId: z.string().optional(),
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().optional(),
   gender: z

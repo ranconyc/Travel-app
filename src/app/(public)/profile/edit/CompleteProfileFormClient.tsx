@@ -36,6 +36,7 @@ function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
       : "",
     gender: (user?.profile?.gender as Gender | "") ?? "",
     avatarUrl: user?.avatarUrl ?? null,
+    avatarPublicId: user?.avatarPublicId ?? null,
     homeBase: user?.profile?.homeBaseCity?.name
       ? `${user.profile.homeBaseCity.name}${
           user.profile.homeBaseCity.country?.name
@@ -53,8 +54,12 @@ function mapUserToDefaults(user: User | null): CompleteProfileFormValues {
 import PersonaEditor from "@/features/persona/components/PersonaEditor";
 import AvatarUpload from "@/components/molecules/AvatarUpload";
 
+import { toast } from "sonner";
+import { useState } from "react";
+
 export default function CompleteProfileFormClient() {
   const { user, isUpdating, handleUpdate } = useProfileUpdate();
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const router = useRouter();
 
   const defaultValues = useMemo(() => mapUserToDefaults(user), [user]);
@@ -70,6 +75,45 @@ export default function CompleteProfileFormClient() {
       methods.reset(mapUserToDefaults(user));
     }
   }, [user, methods]);
+
+  const handleAvatarSelect = async (file: File, previewUrl: string) => {
+    // 1. Optimistic update
+    methods.setValue("avatarUrl", previewUrl);
+    setUploadingAvatar(true);
+
+    try {
+      // 2. Get Signature
+      const signRes = await fetch("/api/admin/images/sign");
+      if (!signRes.ok) throw new Error("Failed to sign upload");
+      const signData = await signRes.json();
+
+      // 3. Upload to Cloudinary
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("api_key", signData.apiKey);
+      formData.append("timestamp", signData.timestamp.toString());
+      formData.append("signature", signData.signature);
+      formData.append("folder", "avatars");
+
+      const uploadRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`,
+        { method: "POST", body: formData },
+      );
+
+      if (!uploadRes.ok) throw new Error("Upload failed");
+      const data = await uploadRes.json();
+
+      // 4. Update Form with Real URL and Public ID
+      methods.setValue("avatarUrl", data.secure_url);
+      methods.setValue("avatarPublicId", data.public_id);
+      toast.success("Avatar uploaded!");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to upload avatar");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   const onSubmit = async (values: CompleteProfileFormValues) => {
     const success = await handleUpdate(values);
@@ -89,8 +133,8 @@ export default function CompleteProfileFormClient() {
       <div className="max-w-narrow mx-auto">
         <Button
           type="submit"
-          loading={isUpdating}
-          disabled={isUpdating}
+          loading={isUpdating || uploadingAvatar}
+          disabled={isUpdating || uploadingAvatar}
           className="w-full shadow-xl"
           size="lg"
           onClick={methods.handleSubmit(onSubmit)}
@@ -107,9 +151,7 @@ export default function CompleteProfileFormClient() {
         <div className="">
           <AvatarUpload
             src={user?.avatarUrl ?? null}
-            onSelect={(_file, previewUrl) => {
-              methods.setValue("avatarUrl", previewUrl);
-            }}
+            onSelect={handleAvatarSelect}
           />
 
           <div className="space-y-xs">
